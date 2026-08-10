@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tên của bạn — bio</title>
+<meta name="description" content="Trang bio cá nhân">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-a: #fbe7cf;
+    --bg-b: #f6d3c7;
+    /* Card chính: trong suốt hoàn toàn để hòa vào nền video */
+    --paper: transparent;
+    /* Titlebar: giữ đục màu như bản gốc */
+    --paper-dim: #f9ecdd;
+    --ink: #4a3336;
+    --ink-soft: #8a6b62;
+    --raspberry: #cf6478;
+    --mustard: #e2a85c;
+    --sage: #86a179;
+    --tape: rgba(245,227,186,0.55);
+    --line: rgba(74,51,54,0.14);
+    --shadow: 0 20px 44px -22px rgba(74,51,54,0.32);
+    --texture: radial-gradient(circle at 12% -6%, rgba(255,255,255,0.35), transparent 52%),
+               radial-gradient(circle at 100% 108%, rgba(207,100,120,0.07), transparent 58%),
+               radial-gradient(circle at 90% 0%, rgba(226,168,92,0.06), transparent 46%);
+    --scan: repeating-linear-gradient(to bottom, rgba(74,51,54,0) 0px, rgba(74,51,54,0) 2px, rgba(74,51,54,0.015) 3px);
+  }
+
+  * { box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'DM Sans', sans-serif;
+    color:var(--ink);
+    background: var(--bg-a);
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    body{
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5, auto;
+    }
+    a, button{
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5, pointer;
+    }
+    .disc-player,
+    .progress-bar-container{
+      cursor: pointer !important;
+    }
+  }
+
+  #gate{
+    position:fixed; inset:0; z-index:100;
+    width:100%; border:none;
+    background:#0d0b0a;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    overflow:hidden;
+    transition: opacity 0.7s cubic-bezier(.4,0,.2,1), filter 0.7s cubic-bezier(.4,0,.2,1);
+  }
+  #gate.hidden{
+    opacity:0;
+    filter: blur(14px);
+    pointer-events:none;
+  }
+  #gate::before{
+    content:"";
+    position:absolute; inset:-20%;
+    background: radial-gradient(circle at 50% 45%, rgba(207,100,120,0.18), transparent 55%);
+    opacity:0.7;
+    animation: gate-breathe 5s ease-in-out infinite;
+  }
+  @keyframes gate-breathe{
+    0%,100%{ transform: scale(1); opacity:0.5; }
+    50%{ transform: scale(1.15); opacity:0.85; }
+  }
+  .gate-text{
+    position:relative;
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(20px, 4.5vw, 28px);
+    letter-spacing: 0.02em;
+    color: #f3ece2;
+    opacity: 0.88;
+    animation: gate-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes gate-pulse{ 50%{ opacity: 0.4; } }
+
+  @media (prefers-reduced-motion: reduce){
+    .gate-text{ animation: none; }
+    #gate::before{ animation: none; }
+  }
+
+  #main{ position:relative; min-height:100vh; }
+
+  .bg-video-wrap{
+    position:fixed; inset:0; z-index:0; overflow:hidden;
+    background: linear-gradient(160deg, var(--bg-a), var(--bg-b));
+  }
+  .bg-video-wrap video{
+    position:absolute; top:50%; left:50%;
+    min-width:100%; min-height:100%;
+    width:auto; height:auto;
+    transform: translate(-50%,-50%);
+    object-fit: cover;
+    object-position: 68% center;
+    filter: saturate(0.9) brightness(1.05);
+  }
+  @media (max-aspect-ratio: 3/4){
+    .bg-video-wrap video{ object-position: 82% center; }
+  }
+  .bg-video-wrap::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(165deg, rgba(251,231,207,0.35), rgba(246,211,199,0.32));
+    mix-blend-mode: soft-light;
+  }
+  .bg-video-wrap::before{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,248,238,0.12), rgba(74,51,54,0.16) 85%);
+    z-index:1;
+  }
+
+  main{
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+    padding: 48px 20px 80px;
+  }
+
+  .dock{
+    display:flex; gap:14px;
+    width: fit-content;
+    margin: 0 auto;
+    opacity:0;
+    translate: 0 16px;
+    transition: opacity 0.6s ease;
+  }
+  .dock.in{ opacity:1; translate: 0 0; }
+  .dock.in .dock-item{
+    animation: dock-pop 0.6s cubic-bezier(.34,1.56,.64,1) backwards;
+  }
+  .dock.in .dock-item:nth-child(1){ animation-delay: 0.05s; }
+  .dock.in .dock-item:nth-child(2){ animation-delay: 0.12s; }
+  .dock.in .dock-item:nth-child(3){ animation-delay: 0.19s; }
+  .dock.in .dock-item:nth-child(4){ animation-delay: 0.26s; }
+  .dock.in .dock-item:nth-child(5){ animation-delay: 0.33s; }
+  @keyframes dock-pop{
+    0%{ opacity:0; transform: translateY(18px) scale(0.5); }
+    60%{ opacity:1; transform: translateY(-4px) scale(1.08); }
+    100%{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+.dock-item{
+  width:40px; height:40px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  text-decoration:none;
+  background: transparent;
+  box-shadow: none;
+  overflow:hidden;
+  flex-shrink:0;
+  translate: 0 0;
+  transition: translate 0.35s cubic-bezier(.34,1.56,.64,1), rotate 0.35s cubic-bezier(.34,1.56,.64,1), filter 0.2s ease;
+}
+.dock-item:hover{
+  translate: 0 -7px;
+  animation: dock-wiggle 0.5s ease;
+}
+@keyframes dock-wiggle{
+  0%,100%{ rotate: 0deg; }
+  25%{ rotate: -10deg; }
+  75%{ rotate: 10deg; }
+}
+.dock-item:active{
+  translate: 0 -2px;
+  transition-duration: 0.1s;
+}
+.dock-item img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+  filter: drop-shadow(0 3px 6px rgba(74,51,54,0.28));
+  transition: filter 0.25s ease;
+}
+.dock-item:hover img{
+  filter: drop-shadow(0 6px 10px rgba(74,51,54,0.4));
+}
+  .dock-item:focus-visible{ outline:2px solid var(--raspberry); outline-offset:3px; }
+  .dock-avatar{
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+  }
+
+  .dock-wrap{
+    position:relative; z-index:2;
+    display:flex; justify-content:center;
+    padding: 0 20px 56px;
+  }
+
+  @media (max-width: 380px){
+    .dock{ gap:8px; padding:8px 10px; }
+    .dock-item{ width:42px; height:42px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .dock-item{ transition:none; animation:none !important; }
+    .dock.in .dock-item{ animation: none; opacity:1; }
+  }
+
+  /* ===== CARD: giao diện kiểu cửa sổ terminal, giờ trong suốt để lộ video nền ===== */
+  .card{
+    position:relative;
+    width:100%;
+    max-width: 480px;
+    background: none;
+    border-radius: 14px;
+    border: none;
+    padding: 0 0 36px;
+    box-shadow: none;
+    opacity:0;
+    transform: translateY(28px) scale(0.98);
+    transition: opacity 0.8s cubic-bezier(.2,.8,.2,1), transform 0.8s cubic-bezier(.2,.8,.2,1);
+  }
+  .card.in{ opacity:1; transform: translateY(0) scale(1); }
+
+  .titlebar{
+    display:flex; align-items:center; gap:10px;
+    padding: 12px 18px;
+    background: var(--paper-dim);
+    background-image: var(--texture);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    position:relative; z-index:2;
+  }
+  .titlebar .dots{ display:flex; gap:6px; flex-shrink:0; }
+  .titlebar .dot{ width:11px; height:11px; border-radius:50%; box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12); animation: dot-blink 2.6s ease-in-out infinite; }
+  .titlebar .dot.r{ background: var(--raspberry); animation-delay: 0s; }
+  .titlebar .dot.y{ background: var(--mustard); animation-delay: 0.3s; }
+  .titlebar .dot.g{ background: var(--sage); animation-delay: 0.6s; }
+  @keyframes dot-blink{
+    0%, 100%{ opacity: 1; }
+    50%{ opacity: 0.3; }
+  }
+
+  .discord-status{
+    display:flex; align-items:center; gap:6px;
+    flex-shrink:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing:0.03em;
+    color: var(--ink-soft);
+  }
+  .status-led{
+    width:7px; height:7px; border-radius:50%;
+    background: rgba(74,51,54,0.28);
+    box-shadow: 0 0 0 2px rgba(74,51,54,0.08);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    flex-shrink:0;
+  }
+  .discord-status.online{ color: var(--sage); }
+  .discord-status.online .status-led{
+    background: var(--sage);
+    box-shadow: 0 0 0 3px rgba(134,161,121,0.18), 0 0 8px rgba(134,161,121,0.55);
+    animation: led-pulse 2s ease-in-out infinite;
+  }
+  @keyframes led-pulse{
+    50%{ box-shadow: 0 0 0 4px rgba(134,161,121,0.12), 0 0 12px rgba(134,161,121,0.7); }
+  }
+  .discord-status.offline .status-led{ background: rgba(74,51,54,0.28); box-shadow: 0 0 0 2px rgba(74,51,54,0.08); }
+  @media (prefers-reduced-motion: reduce){
+    .discord-status.online .status-led{ animation:none; }
+  }
+  .titlebar .path{
+    flex:1;
+    text-align:right;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+
+  .card-inner{ padding: 26px 30px 0; position:relative; z-index:2; }
+
+  .reveal{
+    opacity:0;
+    translate: 0 12px;
+    filter: blur(3px);
+    transition: opacity 0.6s ease, translate 0.6s cubic-bezier(.2,.8,.2,1), filter 0.6s ease;
+    transition-delay: calc(var(--i, 0) * 90ms + 150ms);
+  }
+  .card.in .reveal{
+    opacity:1; translate: 0 0; filter: blur(0);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ transition: opacity 0.3s ease; transform:none !important; filter:none !important; }
+  }
+
+  .music-box{
+    position:relative;
+    display:grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    background-color: rgba(255,255,255,0.20);
+    background-image: linear-gradient(135deg, rgba(134,161,121,0.14), rgba(255,255,255,0.10)), var(--texture);
+    background-blend-mode: normal, normal;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 10px;
+    margin: 0 0 22px;
+    overflow:hidden;
+    box-shadow: 0 8px 18px -14px rgba(74,51,54,0.4), inset 0 1px 0 rgba(255,255,255,0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: box-shadow 0.3s ease;
+  }
+  .music-box::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(120deg, rgba(193,79,102,0.04), transparent 45%, rgba(221,157,63,0.08));
+    pointer-events:none;
+  }
+  .music-box.is-playing{
+    box-shadow: 0 8px 18px -14px rgba(74,51,54,0.4), inset 0 1px 0 rgba(255,255,255,0.35), 0 0 0 1px rgba(134,161,121,0.25);
+  }
+
+  .music-nav{
+    display:flex; align-items:center; gap:5px; position:relative; z-index:1;
+  }
+  .music-nav button{
+    width:20px; height:20px; border:none; border-radius:5px;
+    background: rgba(74,51,54,0.07);
+    color: var(--ink);
+    font-size:10px; font-weight:700;
+    font-family:'IBM Plex Mono', monospace;
+    cursor:pointer; transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), background 0.2s ease;
+  }
+  .music-nav button:hover{ transform: translateY(-1px) scale(1.12); background: rgba(74,51,54,0.12); }
+  .music-nav button:active{ transform: scale(0.9); }
+  .music-nav button:focus-visible{ outline:2px solid var(--raspberry); outline-offset:2px; }
+
+  .disc-player{
+    position:relative;
+    width:48px; height:48px;
+    border-radius:50%;
+    background:
+      repeating-radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1.6px, transparent 3.2px),
+      radial-gradient(circle at 30% 30%, #4c2a2d, #1e1214 55%, #120c0d 100%);
+    box-shadow: 0 10px 18px -10px rgba(74,51,54,0.6), inset 0 0 0 1px rgba(255,255,255,0.08);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    border:none;
+    padding:0;
+    flex-shrink:0;
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease;
+    z-index:1;
+  }
+  .disc-player:hover{ box-shadow: 0 12px 22px -12px rgba(74,51,54,0.72); transform: scale(1.06); }
+  .disc-player:active{ transform: scale(0.96); }
+  .disc-player.spinning{ animation: disc-spin 3s linear infinite; }
+  @keyframes disc-spin{ to{ transform: rotate(360deg); } }
+  .disc-player .disc-label{
+    position:relative;
+    width:38px; height:38px; border-radius:50%;
+    background: linear-gradient(135deg, var(--raspberry), var(--mustard));
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 0 2px rgba(255,248,238,0.18);
+    overflow:hidden;
+  }
+  .disc-player .disc-label::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.55) 48%, transparent 62%);
+    background-size: 220% 220%;
+    background-position: -60% -60%;
+    transition: background-position 0.6s ease;
+  }
+  .disc-player.spinning .disc-label::after{
+    animation: disc-shine 3s linear infinite;
+  }
+  @keyframes disc-shine{
+    0%{ background-position: -60% -60%; }
+    100%{ background-position: 160% 160%; }
+  }
+  .disc-player .ring{
+    position:absolute; inset:4px;
+    border-radius:50%;
+    border:1px dashed rgba(255,248,238,0.18);
+  }
+
+  .music-info{ flex:1; min-width:0; position:relative; z-index:1; }
+  .music-topline{
+    display:flex; align-items:flex-start;
+    gap:6px;
+    min-width:0;
+  }
+  .music-title{
+    margin:0; font-family:'IBM Plex Mono', monospace; font-weight:500;
+    font-size:11.5px; color:var(--ink);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  .music-title::before{ content:"♪ "; color: var(--raspberry); }
+  .status-dot{
+    width:7px; height:7px; border-radius:50%;
+    background: linear-gradient(135deg, var(--sage), #99ad8b);
+    box-shadow: 0 0 0 3px rgba(124,148,115,0.15);
+    flex-shrink:0;
+    opacity:0.65;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    margin-top: 4px;
+  }
+  .music-box.is-playing .status-dot{
+    opacity:1; transform: scale(1.08);
+    box-shadow: 0 0 0 4px rgba(124,148,115,0.16), 0 0 14px rgba(124,148,115,0.35);
+    animation: dot-breathe 1.8s ease-in-out infinite;
+  }
+  @keyframes dot-breathe{
+    50%{ transform: scale(1.25); }
+  }
+  .music-sub{
+    margin:3px 0 0;
+    font-family:'IBM Plex Mono', monospace; font-size:10px;
+    letter-spacing:0.04em; color: var(--ink-soft);
+  }
+  .music-sub::before{ content:"> "; color: var(--raspberry); }
+
+  .visualizer-bars {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 34px;
+    width: 68px;
+    padding: 0 2px;
+  }
+  .bar {
+    flex: 1;
+    height: var(--bar-height, 4px);
+    background: var(--raspberry);
+    border-radius: 2px 2px 0 0;
+    transition: height 0.04s linear, opacity 0.2s ease;
+    opacity: 0.85;
+  }
+  .music-box:not(.is-playing) .bar {
+    height: 4px !important;
+    opacity: 0.25;
+  }
+  .bar:nth-child(3n+1){ background: var(--raspberry); }
+  .bar:nth-child(3n+2){ background: var(--mustard); }
+  .bar:nth-child(3n){ background: var(--sage); }
+
+  .disc-player:focus-visible{ outline:2px solid var(--raspberry); outline-offset:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .disc-player.spinning{ animation: none; }
+    .disc-player{ transition:none; }
+    .disc-player.spinning .disc-label::after{ animation:none; }
+  }
+
+  .photo-wrap{
+    position:relative;
+    width: 196px;
+    margin: -78px auto 28px;
+    display:flex; align-items:center; justify-content:center;
+    perspective: 700px;
+  }
+  .photo-shadow{
+    position:absolute;
+    width: 76%; height: 72%;
+    top: 12%;
+    border-radius: 6px;
+    background: radial-gradient(circle, rgba(74,51,54,0.22), rgba(74,51,54,0.05) 60%, transparent 75%);
+    filter: blur(12px);
+    transform: translateY(18px) rotate(-4deg);
+    transition: transform 0.3s ease;
+  }
+  .photo-frame{
+    position:relative;
+    width: 176px;
+    background-color: rgba(255,254,252,0.55);
+    background-image: var(--texture);
+    padding: 10px 10px 26px;
+    border-radius: 6px;
+    box-shadow: 0 16px 26px -14px rgba(74,51,54,0.5), 0 2px 0 rgba(255,255,255,0.35) inset;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    rotate: -4deg;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: rotate 0.4s cubic-bezier(.2,.8,.2,1), transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease;
+  }
+  .photo-frame::after{
+    position:absolute; left:10px; right:10px; bottom:7px;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9px; letter-spacing:0.04em;
+    color: var(--ink-soft);
+  }
+  .photo-frame:hover{
+    rotate: 0deg;
+    box-shadow: 0 20px 30px -14px rgba(74,51,54,0.6), 0 2px 0 rgba(255,255,255,0.6) inset;
+  }
+  .photo-frame.is-playing{
+    box-shadow: 0 16px 26px -14px rgba(74,51,54,0.55), 0 2px 0 rgba(255,255,255,0.6) inset, 0 0 0 3px rgba(124,148,115,0.28);
+  }
+  .album-cover{
+    display:block;
+    width: 156px; height: 156px;
+    object-fit:cover;
+    border-radius: 2px;
+    background: linear-gradient(135deg, var(--raspberry), var(--mustard));
+    filter: sepia(0.1) saturate(1.08) contrast(1.03);
+    pointer-events:none;
+  }
+
+  .eyebrow{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: none;
+    color: var(--ink-soft); margin: 0 0 6px;
+  }
+  .eyebrow::before{ content:"$ whoami"; display:block; color: var(--raspberry); margin-bottom:3px; opacity:0.75; }
+
+  h1{
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(32px, 8vw, 42px);
+    margin: 0 0 4px; line-height:1.05;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  }
+  h1 em{ font-style: italic; font-weight:500; color: var(--raspberry); }
+  h1 .type-cursor{
+    color: var(--raspberry);
+    font-family:'IBM Plex Mono', monospace;
+    animation: cursor-blink 1s steps(1) infinite;
+  }
+  @keyframes cursor-blink{ 50%{ opacity:0; } }
+  h1 .char{
+    display:inline-block;
+    opacity:0;
+    transform: translateY(6px);
+  }
+  .card.in h1 .char{
+    animation: char-in 0.45s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+
+  @keyframes char-in{
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .location{
+    text-align:center; font-size: 14px; color: var(--ink-soft); margin: 0 0 22px;
+  }
+  .location::before{ content:"📍 "; }
+
+  .divider{
+    display:flex; align-items:center; justify-content:center; gap:0;
+    margin: 0 0 24px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--line);
+    letter-spacing: 3px;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .divider span{ display:none; }
+  .divider::before{
+    content:"────────────────────────────────";
+    color: rgba(74,51,54,0.22);
+  }
+
+  .bio{
+    text-align:left; font-size: 14.5px; line-height:1.75; color: var(--ink);
+    max-width: 100%; margin: 0 auto 26px;
+    font-family:'IBM Plex Mono', monospace;
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-left: 3px solid var(--raspberry);
+    border-radius: 8px;
+    padding: 14px 16px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .bio::before{
+    content:"# about.txt";
+    display:block;
+    font-size:10px;
+    color: var(--ink-soft);
+    margin-bottom:8px;
+    letter-spacing:0.04em;
+    opacity:0.8;
+  }
+
+  /* ===== Hiệu ứng riêng: bio "hiện hình" từ trạng thái mờ nhoè ===== */
+  .bio.reveal{
+    opacity:0;
+    translate: 0 8px;
+    filter: blur(14px);
+    transform: scale(0.97);
+    transition: opacity 0.9s cubic-bezier(.2,.8,.2,1),
+                translate 0.9s cubic-bezier(.2,.8,.2,1),
+                filter 0.9s cubic-bezier(.2,.8,.2,1),
+                transform 0.9s cubic-bezier(.2,.8,.2,1);
+  }
+  .card.in .bio.reveal{
+    opacity:1; translate: 0 0; filter: blur(0); transform: scale(1);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .bio.reveal{ transition: opacity 0.3s ease; filter:none !important; transform:none !important; }
+  }
+
+  .links{ display:flex; flex-direction:column; gap: 12px; }
+  .link{
+    position:relative;
+    display:flex; align-items:center; gap:12px;
+    text-decoration:none; color: var(--ink);
+    background: rgba(255,255,255,0.30);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-family:'DM Sans', sans-serif; font-weight:500; font-size: 15px;
+    box-shadow: 0 6px 14px -8px rgba(74,51,54,0.25);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: translate 0.22s cubic-bezier(.2,.8,.2,1), rotate 0.22s cubic-bezier(.2,.8,.2,1), box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+    overflow:hidden;
+  }
+  .link::after{
+    content:"";
+    position:absolute; left:18px; right:18px; bottom:9px;
+    height:1px;
+    background: var(--raspberry);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .link::before{
+    content:"$";
+    position:absolute; top:8px; right:12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:700;
+    color: rgba(74,51,54,0.22);
+    transition: color 0.22s ease;
+  }
+  .link .shine{
+    content:"";
+    position:absolute;
+    top:0; left:-60%;
+    width:40%; height:100%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform: skewX(-18deg);
+    pointer-events:none;
+    transition: left 0.65s ease;
+  }
+  .link:hover .shine{ left: 130%; }
+  .link:hover::before{ color: var(--raspberry); }
+  .link:nth-child(2){ rotate: 0.6deg; }
+  .link:nth-child(3){ rotate: -0.6deg; }
+  .link:nth-child(4){ rotate: 0.4deg; }
+  .link:hover{
+    translate: 0 -3px;
+    rotate: 0deg;
+    box-shadow: 0 14px 24px -10px rgba(74,51,54,0.32);
+    background: var(--tape);
+    border-color: rgba(74,51,54,0.16);
+  }
+  .link:active{
+    translate: 0 -1px;
+    transition-duration: 0.1s;
+  }
+  .link:hover::after{ transform: scaleX(1); }
+  .link .icon{
+    width: 34px; height:34px; flex-shrink:0; border-radius: 10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; color:#fff8ee;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .link:hover .icon{ transform: rotate(-8deg) scale(1.08); }
+  .link.instagram .icon{ background: linear-gradient(135deg,#e0973a,var(--raspberry)); }
+  .link.tiktok .icon{ background: var(--ink); }
+  .link.email .icon{ background: var(--sage); }
+  .link.facebook .icon{ background: #5f7fb0; }
+
+  .now{
+    margin-top: 26px; padding: 14px 16px; border-radius: 12px;
+    background: rgba(124,148,115,0.14);
+    border: 1px dashed rgba(124,148,115,0.5);
+    box-shadow: 0 10px 18px -14px rgba(74,51,54,0.3);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-size: 13.5px; color: var(--ink-soft); text-align:left;
+  }
+  .now::before{
+    content:"$ cat status.log";
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    color: var(--ink-soft);
+    margin-bottom:6px;
+    opacity:0.7;
+  }
+  .now strong{ color: var(--sage); font-family:'IBM Plex Mono', monospace; font-weight:500; }
+
+  footer{
+    display:flex; align-items:center; gap:10px;
+    text-align:left; margin-top: 22px;
+    margin-left: -30px; margin-right: -30px;
+    padding: 12px 18px;
+    background: var(--paper-dim);
+    background-image: var(--texture);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing:0.08em; color: var(--ink-soft);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.25s ease, box-shadow 0.25s ease, translate 0.2s cubic-bezier(.34,1.56,.64,1);
+  }
+  footer:hover{
+    background: var(--tape);
+    box-shadow: var(--shadow), 0 0 0 1px rgba(207,100,120,0.3);
+    translate: 0 -2px;
+  }
+  footer:active{ translate: 0 0; transition-duration: 0.08s; }
+  footer:focus-visible{ outline:2px solid var(--raspberry); outline-offset:3px; }
+  .foot-dots{ display:flex; gap:6px; flex-shrink:0; }
+  .foot-dots .dot{ width:9px; height:9px; border-radius:50%; box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12); animation: dot-blink 2.6s ease-in-out infinite; }
+  .foot-dots .dot.r{ background: var(--raspberry); animation-delay: 0.15s; }
+  .foot-dots .dot.y{ background: var(--mustard); animation-delay: 0.45s; }
+  .foot-dots .dot.g{ background: var(--sage); animation-delay: 0.75s; }
+  .foot-text{ flex:1; min-width:0; }
+  .foot-text::before{ content:"// "; opacity:0.75; }
+  .foot-text .ftchar{
+    display:inline-block;
+    opacity:0;
+    transform: translateY(4px);
+  }
+  .card.in .foot-text .ftchar{
+    animation: char-in 0.35s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .foot-badge{
+    display:flex; align-items:center; gap:4px;
+    flex-shrink:0;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(74,51,54,0.07);
+    color: var(--ink-soft);
+    font-size: 9.5px;
+    letter-spacing:0.03em;
+    transition: background 0.2s ease;
+  }
+  footer:hover .foot-badge{ background: rgba(255,255,255,0.5); }
+  .foot-badge svg{ color: var(--raspberry); flex-shrink:0; display:block; }
+  .foot-cursor{
+    flex-shrink:0;
+    color: var(--raspberry);
+    font-weight:600;
+    animation: cursor-blink 1s steps(1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .foot-cursor{ animation:none; }
+    .foot-text .ftchar{ animation:none !important; opacity:1; transform:none; }
+    footer{ transition:none; }
+    .titlebar .dot, .foot-dots .dot{ animation:none; }
+  }
+
+  .music-progress-wrap {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(74,51,54,0.1);
+  }
+  .time-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--ink-soft);
+    min-width: 28px;
+    text-align: center;
+  }
+  .progress-bar-container {
+    flex: 1;
+    height: 6px;
+    background: rgba(74,51,54,0.08);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: height 0.15s ease;
+  }
+  .progress-bar-container:hover {
+    height: 8px;
+  }
+  .progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--raspberry);
+    border-radius: 3px;
+    pointer-events: none;
+    transition: width 0.1s linear;
+  }
+
+  @media (prefers-reduced-motion: reduce){ .link{ transition:none; } }
+  @media (max-width: 380px){
+    .card-inner{ padding: 22px 20px 0; }
+    .titlebar .path{ display:none; }
+    footer{ margin-left: -20px; margin-right: -20px; }
+    .foot-badge span{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<button id="gate" aria-label="Click to enter">
+  <span class="gate-text">click to enter</span>
+</button>
+
+<div id="main" hidden>
+
+  <div class="bg-video-wrap">
+    <video id="bg-video" autoplay muted loop playsinline
+           onerror="this.closest('.bg-video-wrap').classList.add('novideo')">
+      <source src="bg.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <audio id="bg-music" crossorigin="anonymous">
+    <source src="song1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.bioConfig = {
+      defaultIndex: 0,
+      avatar: 'avatar1.gif',
+      discordId: '1473247060298961040',
+      tracks: [
+        {
+          title: 'Nguyễn Văn Mười - MCK',
+          file: 'song2.mp3',
+          disc: 'images2.png'
+        },
+        {
+          title: '♫ ĐẢO NGHỊCH - THAZH X ĐÔNG REMIX',
+          file: 'song1.mp3',
+          disc: 'OIP.webp'
+        },
+
+      ]
+    };
+  </script>
+
+  <main>
+    <div class="card">
+      <div class="titlebar" aria-hidden="true">
+        <div class="dots">
+          <span class="dot r"></span>
+          <span class="dot y"></span>
+          <span class="dot g"></span>
+        </div>
+        <span class="discord-status offline" id="discord-status">
+          <span class="status-led" id="discord-led"></span>
+          <span id="discord-status-text">đang kiểm tra…</span>
+        </span>
+        <span class="path">bio@terminal — 80x24</span>
+      </div>
+
+      <div class="card-inner">
+        <div class="photo-wrap reveal" style="--i:1">
+          <div class="photo-shadow" aria-hidden="true"></div>
+          <div class="photo-frame" id="avatar-frame">
+            <img id="album-cover" class="album-cover" src="images1.png" alt="Ảnh đại diện">
+          </div>
+        </div>
+
+        <p class="eyebrow reveal" style="--i:2">xin chào, mình là</p>
+        <h1 class="reveal" id="name-heading" style="--i:2">Tên <em>của bạn</em></h1>
+        <p class="location reveal" style="--i:2">Thành phố, Việt Nam</p>
+        <div class="divider reveal" style="--i:3"><span>❊</span></div>
+
+        <p class="bio reveal" style="--i:4">
+          Nothing Here.
+        </p>
+
+        <div class="music-box reveal" style="--i:5" id="music-box">
+          <button class="disc-player" id="disc-player" type="button" aria-pressed="false" aria-label="Phát nhạc nền">
+            <div class="ring"></div>
+            <span class="disc-label" id="disc-label"></span>
+          </button>
+          <div class="music-info">
+            <div class="music-topline">
+              <p class="music-title" id="music-title">Tên bài hát — nghệ sĩ</p>
+              <span class="status-dot" aria-hidden="true"></span>
+            </div>
+            <p class="music-sub" id="disc-tip">bấm để phát nhạc</p>
+          </div>
+          <div class="music-nav" aria-label="Chuyển bài">
+            <button type="button" id="music-prev" aria-label="Bài trước">◀</button>
+            <button type="button" id="music-next" aria-label="Bài tiếp theo">▶</button>
+          </div>
+          <div class="visualizer-bars" aria-hidden="true">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </div>
+        <div class="music-progress-wrap">
+          <span id="current-time" class="time-label">0:00</span>
+          <div class="progress-bar-container" id="progress-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+          <span id="duration-time" class="time-label">0:00</span>
+        </div>
+        </div>
+
+        <div class="now reveal" style="--i:6">
+          <strong>đang làm gì:</strong> điền một câu ngắn về việc bạn đang bận rộn/quan tâm gần đây
+        </div>
+
+        <footer class="reveal" id="footer-bar" style="--i:7" role="button" tabindex="0" aria-label="Đổi dòng chữ footer">
+          <span class="dots foot-dots" aria-hidden="true">
+            <span class="dot r"></span>
+            <span class="dot y"></span>
+            <span class="dot g"></span>
+          </span>
+          <span class="foot-text" id="foot-text">cập nhật lần cuối · tháng 8, 2026</span>
+          <span class="foot-badge" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="10" height="10">
+              <line x1="0" y1="8" x2="5" y2="8" stroke="currentColor" stroke-width="1.4"/>
+              <line x1="11" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.4"/>
+              <circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            </svg>
+            <span>v1.0</span>
+          </span>
+          <span class="foot-cursor" aria-hidden="true">_</span>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <div class="dock-wrap">
+    <nav class="dock" id="dock" aria-label="Mạng xã hội">
+      <a class="dock-item discord" href="#" target="_blank" rel="noopener" aria-label="Discord"  style="pointer-events:none;">
+        <span class="dock-avatar"><img src="discord.png" alt="Discord"></span>
+      </a>
+      <a class="dock-item youtube" href="#" target="_blank" rel="noopener" aria-label="YouTube"  style="pointer-events:none;">
+        <span class="dock-avatar"><img src="youtube.png" alt="YouTube"></span>
+      </a>
+      <a class="dock-item facebook" href="#" target="_blank" rel="noopener" aria-label="Facebook"  style="pointer-events:none;">
+        <span class="dock-avatar"><img src="facebook.png" alt="Facebook"></span>
+      </a>
+      <a class="dock-item roblox" href="#" target="_blank" rel="noopener" aria-label="Roblox"  style="pointer-events:none;">
+        <span class="dock-avatar"><img src="roblox.png" alt="roblox"></span>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<script>
+  const gate = document.getElementById('gate');
+  const main = document.getElementById('main');
+  const bgVideo = document.getElementById('bg-video');
+  const music = document.getElementById('bg-music');
+  const disc = document.getElementById('disc-player');
+  const discLabel = document.getElementById('disc-label');
+  const discTip = document.getElementById('disc-tip');
+  const musicBox = document.getElementById('music-box');
+  const musicTitle = document.getElementById('music-title');
+  const albumCover = document.getElementById('album-cover');
+  const avatarFrame = document.getElementById('avatar-frame');
+  const musicPrev = document.getElementById('music-prev');
+  const musicNext = document.getElementById('music-next');
+  const visualizerBars = [...document.querySelectorAll('.bar')];
+  const card = document.querySelector('.card');
+  const dock = document.getElementById('dock');
+  const bioConfig = window.bioConfig || {};
+  const tracks = Array.isArray(bioConfig.tracks) && bioConfig.tracks.length ? bioConfig.tracks : [{
+    title: 'Tên bài hát — nghệ sĩ',
+    file: 'song1.mp3',
+    disc: 'images1.png'
+  }];
+  let currentTrackIndex = Number.isInteger(bioConfig.defaultIndex) ? bioConfig.defaultIndex : 0;
+
+  if (tracks.length <= 1) {
+    document.querySelector('.music-nav').style.display = 'none';
+  }
+
+  if (albumCover && bioConfig.avatar) {
+    albumCover.src = bioConfig.avatar;
+  }
+
+  /* ============ HIỆU ỨNG GÕ CHỮ CHO TIÊU ĐỀ (h1) ============ */
+  (function typewriterHeading(){
+    const heading = document.getElementById('name-heading');
+    if (!heading) return;
+    const originalHTML = heading.innerHTML;
+    const walker = document.createDocumentFragment();
+    const temp = document.createElement('div');
+    temp.innerHTML = originalHTML;
+
+    let charIndex = 0;
+    function wrapChars(node, parent){
+      node.childNodes.forEach(child => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          [...child.textContent].forEach(ch => {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.style.animationDelay = (charIndex * 28) + 'ms';
+            span.textContent = ch === ' ' ? '\u00A0' : ch;
+            parent.appendChild(span);
+            charIndex++;
+          });
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+          const clone = document.createElement(child.tagName);
+          [...child.attributes].forEach(a => clone.setAttribute(a.name, a.value));
+          parent.appendChild(clone);
+          wrapChars(child, clone);
+        }
+      });
+    }
+    heading.innerHTML = '';
+    wrapChars(temp, heading);
+    const cursorSpan = document.createElement('span');
+    cursorSpan.className = 'type-cursor';
+    cursorSpan.textContent = '_';
+    heading.appendChild(cursorSpan);
+  })();
+  /* ============ HẾT HIỆU ỨNG GÕ CHỮ ============ */
+
+  /* ============ GÕ CHỮ + EASTER EGG CHO FOOTER ============ */
+  (function footerTypewriter(){
+    const footerBar = document.getElementById('footer-bar');
+    const footText = document.getElementById('foot-text');
+    if (!footerBar || !footText) return;
+
+    const messages = [
+      'cập nhật lần cuối · tháng 8, 2026',
+      'made by coding',
+      'bấm cái tbm',
+      'bấm cmm',
+      'cút'
+    ];
+    let msgIndex = 0;
+
+    function renderText(text){
+      footText.innerHTML = '';
+      [...text].forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.className = 'ftchar';
+        span.style.animationDelay = (i * 22) + 'ms';
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        footText.appendChild(span);
+      });
+    }
+
+    renderText(messages[msgIndex]);
+
+    function nextMessage(){
+      msgIndex = (msgIndex + 1) % messages.length;
+      renderText(messages[msgIndex]);
+    }
+
+    footerBar.addEventListener('click', nextMessage);
+    footerBar.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        nextMessage();
+      }
+    });
+  })();
+  /* ============ HẾT PHẦN FOOTER ============ */
+
+  /* ============ NGHIÊNG KHUNG ẢNH THEO CHUỘT (PARALLAX) ============ */
+  (function photoParallax(){
+    if (!avatarFrame) return;
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches === false) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const wrap = avatarFrame.closest('.photo-wrap');
+    let raf = null;
+
+    wrap.addEventListener('mousemove', (e) => {
+      const rect = avatarFrame.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rotX = (-dy * 10).toFixed(2);
+        const rotY = (dx * 10).toFixed(2);
+        avatarFrame.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px) scale(1.03)`;
+      });
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+      if (raf) cancelAnimationFrame(raf);
+      avatarFrame.style.transform = '';
+    });
+  })();
+  /* ============ HẾT PARALLAX ẢNH ============ */
+
+function applyTrack(index, autoplay) {
+  if (!tracks.length) return;
+  const wasPlaying = autoplay !== undefined ? autoplay : !music.paused;
+  currentTrackIndex = (index + tracks.length) % tracks.length;
+  const track = tracks[currentTrackIndex];
+
+  if (track.title) musicTitle.textContent = track.title;
+
+  if (discLabel) {
+    discLabel.style.backgroundImage = track.disc ? `url('${track.disc}')` : '';
+  }
+
+  if (track.file) {
+    const source = music.querySelector('source');
+    source.src = track.file;
+    music.load();
+    if (wasPlaying) {
+      music.play().catch(() => {});
+    }
+  }
+}
+
+  if (tracks.length) {
+    applyTrack(currentTrackIndex);
+  }
+
+  function setMusicState(isPlaying) {
+    musicBox.classList.toggle('is-playing', isPlaying);
+    disc.classList.toggle('spinning', isPlaying);
+    avatarFrame.classList.toggle('is-playing', isPlaying);
+    disc.setAttribute('aria-pressed', String(isPlaying));
+    discTip.textContent = isPlaying ? 'đang phát — bấm để tắt' : 'bấm để phát nhạc';
+  }
+
+  let audioCtx = null;
+  let analyser = null;
+  let sourceNode = null;
+  let freqData = null;
+
+  function setupAudioAnalyser() {
+    if (audioCtx) return;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new Ctx();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.smoothingTimeConstant = 0.75;
+      sourceNode = audioCtx.createMediaElementSource(music);
+      sourceNode.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      freqData = new Uint8Array(analyser.frequencyBinCount);
+    } catch (e) {
+      console.warn('Web Audio API không khả dụng, dùng lại hiệu ứng giả lập:', e);
+      audioCtx = null; analyser = null; freqData = null;
+    }
+  }
+
+  const barHeights = new Array(visualizerBars.length).fill(4);
+  const MIN_H = 4;
+  const MAX_H = 34;
+
+  function animateVisualizerBars() {
+    if (analyser && !music.paused) {
+      analyser.getByteFrequencyData(freqData);
+
+      let sum = 0;
+      for (let i = 0; i < freqData.length; i++) sum += freqData[i];
+      const avg = sum / freqData.length;
+      const volumeRatio = avg / 255;
+
+      const easeSpeed = 0.12 + volumeRatio * 0.45;
+
+      visualizerBars.forEach((bar, index) => {
+        const binIndex = Math.floor((index / visualizerBars.length) * (freqData.length * 0.7));
+        const raw = freqData[binIndex] || 0;
+        const ratio = raw / 255;
+
+        const targetHeight = MIN_H + ratio * (MAX_H - MIN_H);
+
+        barHeights[index] += (targetHeight - barHeights[index]) * easeSpeed;
+        bar.style.setProperty('--bar-height', `${barHeights[index]}px`);
+      });
+    } else {
+      visualizerBars.forEach((bar, index) => {
+        barHeights[index] += (MIN_H - barHeights[index]) * 0.2;
+        bar.style.setProperty('--bar-height', `${barHeights[index]}px`);
+      });
+    }
+    requestAnimationFrame(animateVisualizerBars);
+  }
+
+  /* ============ TRẠNG THÁI DISCORD (LANYARD WEBSOCKET — realtime) ============ */
+  const discordStatusEl = document.getElementById('discord-status');
+  const discordStatusText = document.getElementById('discord-status-text');
+
+  function setDiscordStatus(discordStatus) {
+    const isOnline = discordStatus === 'online' || discordStatus === 'idle' || discordStatus === 'dnd';
+    discordStatusEl.classList.remove('online', 'offline');
+    discordStatusEl.classList.add(isOnline ? 'online' : 'offline');
+    discordStatusText.textContent = isOnline ? 'now online' : 'now offline';
+  }
+
+  function startLanyardSocket() {
+    const id = bioConfig.discordId;
+    if (!id || id === 'YOUR_DISCORD_USER_ID') {
+      discordStatusText.textContent = 'chưa cấu hình';
+      return;
+    }
+
+    let socket;
+    let heartbeatTimer;
+    let reconnectTimer;
+    let hasReceivedData = false;
+
+    fetch(`https://api.lanyard.rest/v1/users/${id}`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && !hasReceivedData) setDiscordStatus(json.data.discord_status);
+      })
+      .catch(() => {});
+
+    function connect() {
+      socket = new WebSocket('wss://api.lanyard.rest/socket');
+
+      socket.addEventListener('message', (event) => {
+        const msg = JSON.parse(event.data);
+
+        if (msg.op === 1) {
+          clearInterval(heartbeatTimer);
+          heartbeatTimer = setInterval(() => {
+            if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({ op: 3 }));
+          }, msg.d.heartbeat_interval);
+
+          socket.send(JSON.stringify({ op: 2, d: { subscribe_to_id: id } }));
+          return;
+        }
+
+        if (msg.op === 0 && (msg.t === 'INIT_STATE' || msg.t === 'PRESENCE_UPDATE')) {
+          hasReceivedData = true;
+          setDiscordStatus(msg.d.discord_status);
+        }
+      });
+
+      socket.addEventListener('close', () => {
+        clearInterval(heartbeatTimer);
+        reconnectTimer = setTimeout(connect, 3000);
+      });
+
+      socket.addEventListener('error', () => {
+        socket.close();
+      });
+    }
+
+    connect();
+  }
+
+  startLanyardSocket();
+  /* ============ HẾT PHẦN TRẠNG THÁI DISCORD ============ */
+
+  gate.addEventListener('click', () => {
+    gate.classList.add('hidden');
+    setTimeout(() => {
+      gate.hidden = true;
+      main.hidden = false;
+      requestAnimationFrame(() => { card.classList.add('in'); dock.classList.add('in'); });
+      bgVideo.play().catch(()=>{});
+
+      setupAudioAnalyser();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+
+      music.play().then(() => {
+        setMusicState(true);
+      }).catch(() => {
+        setMusicState(false);
+      });
+    }, 600);
+  });
+
+  music.addEventListener('play', () => {
+    setMusicState(true);
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+  });
+  music.addEventListener('pause', () => setMusicState(false));
+
+  disc.addEventListener('click', () => {
+    setupAudioAnalyser();
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    if (music.paused) {
+      music.play().catch(() => {});
+    } else {
+      music.pause();
+    }
+  });
+
+ musicPrev.addEventListener('click', () => {
+  applyTrack(currentTrackIndex - 1, true);
+ });
+
+ musicNext.addEventListener('click', () => {
+  applyTrack(currentTrackIndex + 1, true);
+ });
+
+ music.addEventListener('ended', () => {
+  applyTrack(currentTrackIndex + 1, true);
+ });
+
+  animateVisualizerBars();
+
+  const progressContainer = document.getElementById('progress-container');
+  const progressFill = document.getElementById('progress-fill');
+  const currentTimeEl = document.getElementById('current-time');
+  const durationTimeEl = document.getElementById('duration-time');
+
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+
+  music.addEventListener('loadedmetadata', () => {
+    durationTimeEl.textContent = formatTime(music.duration);
+  });
+
+  music.addEventListener('timeupdate', () => {
+    if (music.duration) {
+      const percent = (music.currentTime / music.duration) * 100;
+      progressFill.style.width = `${percent}%`;
+      currentTimeEl.textContent = formatTime(music.currentTime);
+    }
+  });
+
+  let isSeeking = false;
+
+  function scrub(e) {
+    const rect = progressContainer.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    if (music.duration && width > 0) {
+      let percent = Math.max(0, Math.min(1, clickX / width));
+      music.currentTime = percent * music.duration;
+    }
+  }
+
+  progressContainer.addEventListener('mousedown', (e) => {
+    isSeeking = true;
+    scrub(e);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isSeeking) {
+      scrub(e);
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    isSeeking = false;
+  });
+</script>
+
+</body>
+</html>
