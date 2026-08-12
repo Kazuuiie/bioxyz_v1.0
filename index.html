@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kazuuiie_VN — bio</title>
+<title>Kazuuiie — bio</title>
 <meta name="description" content="Trang bio cá nhân">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -217,6 +217,152 @@
     color: var(--ink-soft);
   }
 
+  /* ============ DISCORD MINI PROFILE ============ */
+  .discord-mini-profile{
+    position: relative;
+    overflow: hidden;
+    display:flex; flex-direction:column;
+    width:100%;
+    margin: 0 auto 20px;
+    padding: 10px 14px 10px 10px;
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-left: 3px solid var(--raspberry);
+    border-radius: 8px;
+    box-sizing:border-box;
+  }
+  .dmp-top{ display:flex; align-items:center; gap:12px; width:100%; position: relative; z-index: 1; }
+  .dmp-avatar-wrap{ position:relative; width:46px; height:46px; flex-shrink:0; }
+  .dmp-avatar{
+    width:46px; height:46px; border-radius:50%; object-fit:cover; display:block;
+    background: var(--bg-b);
+    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12);
+  }
+  .dmp-decoration{
+    position:absolute; inset:-6px;
+    width:58px; height:58px;
+    pointer-events:none;
+  }
+
+  /* Styling cho nút ... */
+  .toggle-act-btn {
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    padding: 4px 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, background 0.2s, transform 0.2s;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .toggle-act-btn:hover {
+    color: var(--ink);
+    background: rgba(74, 51, 54, 0.08);
+  }
+
+  .toggle-act-btn.is-disabled {
+    opacity: 0.4;
+  }
+
+  /* Khóa panel khi người dùng chủ động tắt */
+  .dmp-activity-panel.user-collapsed {
+    max-height: 0px !important;
+    opacity: 0 !important;
+    margin-top: 0px !important;
+    pointer-events: none;
+  }
+
+  /* Chấm trạng thái kiểu Discord gốc */
+  .dmp-status-dot{
+    position:absolute; right:-2px; bottom:-2px;
+    width:15px; height:15px; border-radius:50%;
+    background: var(--paper-dim);
+    box-sizing:border-box; z-index:2;
+  }
+  .dmp-status-dot::before{
+    content:""; position:absolute; inset:2.5px; border-radius:50%;
+    background:#80848e;
+  }
+  .dmp-status-dot.online::before{ background:#23a55a; }
+  .dmp-status-dot.idle::before{ background:#f0b232; }
+  .dmp-status-dot.dnd::before{ background:#f23f43; }
+  .dmp-status-dot.offline::before{ background:#80848e; }
+  .dmp-status-dot.idle::after{
+    content:""; position:absolute; width:6.5px; height:6.5px; border-radius:50%;
+    background: var(--paper-dim); top:1.5px; left:1.5px;
+  }
+  .dmp-status-dot.dnd::after{
+    content:""; position:absolute; width:6.5px; height:2px; border-radius:1px;
+    background:#fff8ee; top:6.5px; left:4.2px;
+  }
+
+  .dmp-info{ display:flex; flex-direction:column; gap:3px; min-width:0; text-align:left; flex:1; }
+  .dmp-name-row{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .dmp-username{
+    font-family:'DM Sans', sans-serif; font-weight:700;
+    font-size: 14px; color: var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;
+  }
+  .dmp-badges{ display:inline-flex; align-items:center; gap:4px; }
+  .dmp-badge{
+    font-size: 12px; line-height:1;
+    filter: drop-shadow(0 1px 1px rgba(74,51,54,0.2));
+  }
+  .dmp-activity{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    color: var(--ink-soft);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  .dmp-activity-panel{
+    width:100%; overflow:hidden;
+    max-height:0; opacity:0; margin-top:0;
+    transition: max-height 0.42s cubic-bezier(.2,.8,.2,1), opacity 0.32s ease, margin-top 0.42s ease;
+  }
+  .dmp-activity-panel.open{ opacity:1; margin-top:10px; }
+  .dmp-activity-card{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 10px;
+    background: rgba(74,51,54,0.06);
+    border: 1px solid rgba(74,51,54,0.08);
+    border-radius:8px;
+  }
+  .dmp-act-img-wrap{ position:relative; width:40px; height:40px; flex-shrink:0; }
+  .dmp-act-img{
+    width:40px; height:40px; border-radius:9px; object-fit:cover; display:block;
+    background: var(--bg-b);
+  }
+  .dmp-act-img-small{
+    position:absolute; right:-4px; bottom:-4px; width:17px; height:17px; border-radius:50%;
+    border:2px solid var(--paper-dim); object-fit:cover; background: var(--bg-b);
+  }
+  .dmp-act-text{ min-width:0; text-align:left; flex:1; }
+  .dmp-act-name{
+    margin:0; font-family:'DM Sans', sans-serif; font-weight:700;
+    font-size:12.5px; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .dmp-act-details, .dmp-act-state{
+    margin:2px 0 0; font-family:'DM Sans', sans-serif; font-size:11.5px;
+    color: var(--ink-soft);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .dmp-act-time{
+    margin:4px 0 0; font-family:'IBM Plex Mono', monospace; font-size:10px;
+    color: var(--ink-soft); opacity:0.85;
+  }
+
+/* Phóng to nhẹ khi di chuột vào chấm */
+.dmp-status-dot:hover {
+  transform: scale(1.25);
+}
+
+
   .card-inner{ padding: 26px 30px 0; position:relative; z-index:2; }
 
   .reveal{
@@ -283,12 +429,11 @@
     color: rgba(255,248,238,0.62);
   }
 
-  /* VISUALIZER CHÍNH: DÍNH SÁT NHAU (gap: 0) */
   .music-bars {
     display: flex;
     align-items: flex-end; 
     justify-content: center;
-    gap: 2px; /* Đã cho dính sát nhau */
+    gap: 2px;
     height: 18px;
     padding: 0 2px;
     flex-shrink: 0;
@@ -341,7 +486,6 @@
   }
   .progress-bar-fill { width: 0%; height: 100%; background: #fff8ee; border-radius: 2px; }
 
-  /* THANH ĐIỀU HƯỚNG & ÂM LƯỢNG */
   .music-nav{
     position:relative; z-index:1;
     display:flex; align-items:center; justify-content:center; gap:18px; margin-top:10px;
@@ -383,7 +527,6 @@
     background: #1db954; border-radius: 4px; pointer-events: none;
   }
 
-  /* TRACK LIST PANEL & SCROLLBAR FIX */
   .track-list-panel {
     position: relative; margin-top: 10px; width: 100%; max-height: 0px; 
     overflow-y: hidden; background: rgba(0, 0, 0, 0.25); border-radius: 10px;
@@ -395,7 +538,6 @@
     border-color: rgba(255, 255, 255, 0.1);
   }
   
-  /* Cấu hình Scrollbar cho danh sách */
   .track-list-panel::-webkit-scrollbar {
     width: 4px;
   }
@@ -436,11 +578,10 @@
   .track-item .t-title{ margin:0; min-width:0; font-family:'DM Sans', sans-serif; font-size:12px; color:#fff8ee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .track-item.active .t-title{ color:#1DB954; font-weight:700; }
 
-  /* VISUALIZER MINI BÊN BÀI HÁT: DÍNH SÁT NHAU (gap: 0) & ẨN MẶC ĐỊNH */
   .mini-bars {
     display: none;
     align-items: flex-end;
-    gap: 2px; /* Dính sát nhau */
+    gap: 2px;
     height: 12px;
     margin-left: auto;
     flex-shrink: 0;
@@ -448,7 +589,6 @@
     border-radius: 1px;
   }
   
-  /* Chỉ hiện khi bài đó active VÀ nhạc đang chạy */
   .music-box.is-playing .track-item.active .mini-bars {
     display: flex;
   }
@@ -586,10 +726,6 @@
           <span class="dot y"></span>
           <span class="dot g"></span>
         </div>
-        <span class="discord-status offline" id="discord-status">
-          <span class="status-led" id="discord-led"></span>
-          <span id="discord-status-text">đang kiểm tra…</span>
-        </span>
         <span class="path">bio@terminal — 80x24</span>
       </div>
 
@@ -605,6 +741,45 @@
         <h1 class="reveal" id="name-heading" style="--i:2">Name <em>Kazuuiie_VN</em></h1>
         <p class="location reveal" style="--i:2">Việt Nam</p>
         <div class="divider reveal" style="--i:3"><span>❊</span></div>
+
+        <div class="discord-mini-profile reveal" style="--i:3.5" id="discord-mini-profile">
+          <div class="dmp-top">
+            <div class="dmp-avatar-wrap">
+              <img id="dmp-avatar" class="dmp-avatar" src="" alt="avatar Discord">
+              <img id="dmp-decoration" class="dmp-decoration" src="" alt="" style="display:none">
+              <span id="dmp-status-dot" class="dmp-status-dot offline" aria-hidden="true"></span>
+            </div>
+            <div class="dmp-info">
+              <div class="dmp-name-row">
+                <span id="dmp-username" class="dmp-username">—</span>
+                <span id="dmp-badges" class="dmp-badges"></span>
+              </div>
+              <span id="dmp-activity" class="dmp-activity">đang kết nối…</span>
+            </div>
+            <button type="button" id="toggle-activity-btn" class="toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" title="Ẩn/Hiện hoạt động">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="dmp-activity-panel" id="dmp-activity-panel">
+            <div class="dmp-activity-card">
+              <div class="dmp-act-img-wrap">
+                <img id="dmp-act-img" class="dmp-act-img" src="" alt="" style="display:none">
+                <img id="dmp-act-img-small" class="dmp-act-img-small" src="" alt="" style="display:none">
+              </div>
+              <div class="dmp-act-text">
+                <p id="dmp-act-name" class="dmp-act-name"></p>
+                <p id="dmp-act-details" class="dmp-act-details" style="display:none"></p>
+                <p id="dmp-act-state" class="dmp-act-state" style="display:none"></p>
+                <p id="dmp-act-time" class="dmp-act-time"></p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <p class="bio reveal" style="--i:4">Nothing Here.</p>
 
@@ -701,10 +876,10 @@
 
   <div class="dock-wrap">
     <nav class="dock" id="dock" aria-label="Mạng xã hội">
-      <a class="dock-item discord" href="#" target="_blank" rel="noopener" pointer-events: none;><span class="dock-avatar"><img src="discord.png" alt="Discord" ></span></a>
-      <a class="dock-item youtube" href="#" target="_blank" rel="noopener" pointer-events: none;><span class="dock-avatar"><img src="youtube.png" alt="YouTube"></span></a>
-      <a class="dock-item facebook" href="#" target="_blank" rel="noopener" pointer-events: none;><span class="dock-avatar"><img src="facebook.png" alt="Facebook"></span></a>
-      <a class="dock-item roblox" href="#" target="_blank" rel="noopener" pointer-events: none;><span class="dock-avatar"><img src="roblox.png" alt="roblox"></span></a>
+      <a class="dock-item discord" href="#" target="_blank" rel="noopener"><span class="dock-avatar"><img src="discord.png" alt="Discord" ></span></a>
+      <a class="dock-item youtube" href="#" target="_blank" rel="noopener"><span class="dock-avatar"><img src="youtube.png" alt="YouTube"></span></a>
+      <a class="dock-item facebook" href="#" target="_blank" rel="noopener"><span class="dock-avatar"><img src="facebook.png" alt="Facebook"></span></a>
+      <a class="dock-item roblox" href="#" target="_blank" rel="noopener"><span class="dock-avatar"><img src="roblox.png" alt="roblox"></span></a>
     </nav>
   </div>
 </div>
