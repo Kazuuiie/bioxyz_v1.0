@@ -658,3 +658,66 @@ if (statusDot) {
 
   connectLanyardSocket();
 })();
+
+/* ============ FOOTER TERMINAL NÂNG CẤP ============ */
+(function initFooterTerminal() {
+  const footEl = document.getElementById('footer-bar');
+  const typedEl = document.getElementById('foot-typed');
+  if (!footEl || !typedEl) return;
+
+  const REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Danh sách các dòng sẽ lần lượt hiện ra mỗi lần bấm — sửa/thêm nội dung tại đây
+  const lines = [
+    'cập nhật lần cuối · tháng 8, 2026',
+    'hmm ✦',
+    'hmm ✦'
+  ];
+
+  let currentIndex = 0;
+  let generation = 0;
+  let running = false;
+
+  function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+  async function typeText(text, gen, erase) {
+    const chars = Array.from(text);
+    if (REDUCED_MOTION) {
+      typedEl.textContent = erase ? '' : text;
+      return;
+    }
+    let i = erase ? chars.length : 0;
+    while (true) {
+      if (gen !== generation) return;
+      typedEl.textContent = chars.slice(0, i).join('');
+      if (!erase) { i++; if (i > chars.length) return; } else { i--; if (i < 0) return; }
+      await sleep(erase ? 16 : 40);
+    }
+  }
+
+  async function goToNextLine() {
+    if (running) return;
+    running = true;
+    generation++;
+    const gen = generation;
+    const nextIndex = (currentIndex + 1) % lines.length;
+
+    await typeText(lines[currentIndex], gen, true);
+    if (gen !== generation) { running = false; return; }
+    await typeText(lines[nextIndex], gen, false);
+    if (gen === generation) {
+      currentIndex = nextIndex;
+      running = false;
+    }
+  }
+
+  footEl.addEventListener('click', goToNextLine);
+  footEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      goToNextLine();
+    }
+  });
+
+  typedEl.textContent = lines[currentIndex];
+})();
