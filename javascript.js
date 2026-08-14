@@ -158,8 +158,68 @@ function setMusicState(isPlaying) {
   if (discTip) discTip.textContent = isPlaying ? 'đang phát — bấm để tắt' : 'bấm để phát nhạc';
 }
 
+/* ============ HẠT SÁNG TRÔI NỔI TRÊN MÀN HÌNH GATE ============ */
+const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const gateParticles = document.getElementById('gate-particles');
+if (gateParticles && !prefersReducedMotion) {
+  const colors = ['#cf6478', '#e2a85c', '#86a179', '#f3ece2'];
+  const count = 14;
+  let frag = document.createDocumentFragment();
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('span');
+    const size = (Math.random() * 3 + 2).toFixed(1);
+    const duration = (Math.random() * 6 + 7).toFixed(1);
+    const delay = (Math.random() * 9).toFixed(1);
+    const drift = Math.round((Math.random() - 0.5) * 90);
+    p.style.left = (Math.random() * 100).toFixed(1) + '%';
+    p.style.setProperty('--s', size + 'px');
+    p.style.setProperty('--c', colors[i % colors.length]);
+    p.style.setProperty('--d', duration + 's');
+    p.style.setProperty('--delay', '-' + delay + 's');
+    p.style.setProperty('--x', drift + 'px');
+    frag.appendChild(p);
+  }
+  gateParticles.appendChild(frag);
+}
+
+/* ============ HIỆU ỨNG VỠ ÁNH SÁNG KHI BẤM VÀO GATE ============ */
+function spawnGateBurst(x, y) {
+  if (prefersReducedMotion) return;
+  const burst = document.createElement('div');
+  burst.className = 'gate-burst';
+  const size = 260;
+  burst.style.left = x + 'px';
+  burst.style.top = y + 'px';
+  burst.style.width = size + 'px';
+  burst.style.height = size + 'px';
+  document.body.appendChild(burst);
+  burst.addEventListener('animationend', () => burst.remove());
+
+  const colors = ['#f3ece2', '#cf6478', '#e2a85c', '#86a179'];
+  const shardCount = 14;
+  for (let i = 0; i < shardCount; i++) {
+    const shard = document.createElement('div');
+    shard.className = 'gate-shard';
+    const angle = (Math.PI * 2 * i) / shardCount + Math.random() * 0.3;
+    const dist = 70 + Math.random() * 90;
+    const s = 3 + Math.random() * 4;
+    shard.style.left = x + 'px';
+    shard.style.top = y + 'px';
+    shard.style.width = s + 'px';
+    shard.style.height = s + 'px';
+    shard.style.background = colors[i % colors.length];
+    shard.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+    shard.style.setProperty('--dy', (Math.sin(angle) * dist).toFixed(1) + 'px');
+    document.body.appendChild(shard);
+    shard.addEventListener('animationend', () => shard.remove());
+  }
+}
+
 if (gate) {
-  gate.addEventListener('click', () => {
+  gate.addEventListener('click', (e) => {
+    const cx = e.clientX || window.innerWidth / 2;
+    const cy = e.clientY || window.innerHeight / 2;
+    spawnGateBurst(cx, cy);
     gate.classList.add('hidden');
     setTimeout(() => {
       gate.hidden = true;
@@ -171,6 +231,26 @@ if (gate) {
       if (bgVideo) bgVideo.play().catch(()=>{});
       if (music) music.play().then(() => setMusicState(true)).catch(() => setMusicState(false));
     }, 600);
+  });
+}
+
+/* ============ NGHIÊNG NHẸ THẺ BIO THEO CHUỘT (DESKTOP) ============ */
+if (card && window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches && !prefersReducedMotion) {
+  let tiltRAF = null;
+  card.addEventListener('mouseenter', () => card.classList.add('tilt-ready'));
+  card.addEventListener('mousemove', (e) => {
+    if (!card.classList.contains('in')) return;
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    if (tiltRAF) cancelAnimationFrame(tiltRAF);
+    tiltRAF = requestAnimationFrame(() => {
+      card.style.transform = `translateY(0) scale(1) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 6).toFixed(2)}deg)`;
+    });
+  });
+  card.addEventListener('mouseleave', () => {
+    if (tiltRAF) cancelAnimationFrame(tiltRAF);
+    card.style.transform = 'translateY(0) scale(1) rotateX(0deg) rotateY(0deg)';
   });
 }
 
@@ -282,13 +362,30 @@ if (volumeBtn) {
 let audioCtx, analyser, source;
 let isAudioContextInit = false;
 
+// Cache sẵn các phần tử cần cập nhật mỗi khung hình, tránh querySelectorAll
+// (và cấp phát mảng mới) 60 lần/giây — đây là nguồn gây lag chính trước đó.
+const mainBarsCache = document.querySelectorAll('.music-bars .bar');
+let miniBarsPerTrack = []; // miniBarsPerTrack[trackIndex] = [m-bar, m-bar, m-bar]
+let allMiniBarsFlat = [];
+let visualizerDataArray = null;
+let barsAreReset = true; // tránh ghi style lặp lại khi đã ở trạng thái nghỉ
+
+function cacheTrackMiniBars(){
+  if (!trackListEl) return;
+  const items = trackListEl.querySelectorAll('.track-item');
+  miniBarsPerTrack = Array.from(items).map(item => Array.from(item.querySelectorAll('.m-bar')));
+  allMiniBarsFlat = miniBarsPerTrack.flat();
+}
+cacheTrackMiniBars();
+
 function initVisualizer() {
   if (isAudioContextInit || !music) return;
 
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   audioCtx = new AudioContext();
   analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 256; 
+  analyser.fftSize = 256;
+  visualizerDataArray = new Uint8Array(analyser.frequencyBinCount);
 
   source = audioCtx.createMediaElementSource(music);
   source.connect(analyser);
@@ -298,43 +395,46 @@ function initVisualizer() {
   renderFrame();
 }
 
+const SAMPLE_INDICES = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
+const MINI_INDICES = [1, 4, 8];
+
+function resetBarsOnce(){
+  if (barsAreReset) return;
+  mainBarsCache.forEach(bar => bar.style.transform = 'scaleY(0.08)');
+  allMiniBarsFlat.forEach(mb => mb.style.transform = 'scaleY(0.1)');
+  barsAreReset = true;
+}
+
 function renderFrame() {
   requestAnimationFrame(renderFrame);
 
-  const bars = document.querySelectorAll('.music-bars .bar');
-  const allMiniBars = document.querySelectorAll('.mini-bars .m-bar');
-  const activeMiniBars = document.querySelectorAll('.track-item.active .mini-bars .m-bar');
-
   if (!analyser || music.paused) {
-    bars.forEach(bar => bar.style.transform = 'scaleY(0.08)');
-    allMiniBars.forEach(mb => mb.style.transform = 'scaleY(0.1)');
+    resetBarsOnce();
     return;
   }
+  barsAreReset = false;
 
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
-  analyser.getByteFrequencyData(dataArray);
+  analyser.getByteFrequencyData(visualizerDataArray);
 
-  const sampleIndices = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
-
-  bars.forEach((bar, index) => {
-    const sampleIndex = sampleIndices[index];
-    const value = dataArray[sampleIndex] || 0;
+  mainBarsCache.forEach((bar, index) => {
+    const value = visualizerDataArray[SAMPLE_INDICES[index]] || 0;
     let scale = (value / 255) * 0.85;
     scale = Math.max(0.08, Math.min(1.0, scale));
     bar.style.transform = `scaleY(${scale})`;
   });
 
-  allMiniBars.forEach(mb => mb.style.transform = 'scaleY(0.1)');
-
-  if (activeMiniBars.length > 0) {
-    const miniIndices = [1, 4, 8];
-    activeMiniBars.forEach((mBar, index) => {
-      const val = dataArray[miniIndices[index]] || 0;
-      let miniScale = (val / 255) * 0.9;
-      miniScale = Math.max(0.1, Math.min(1.0, miniScale));
-      mBar.style.transform = `scaleY(${miniScale})`;
-    });
+  // Chỉ cập nhật mini-bars của danh sách phát khi panel đang mở và có bài đang active —
+  // tránh ghi style vào các phần tử đang ẩn (display:none) mỗi khung hình.
+  if (trackListPanel && trackListPanel.classList.contains('open')) {
+    const activeMiniBars = miniBarsPerTrack[currentTrackIndex];
+    if (activeMiniBars && activeMiniBars.length) {
+      activeMiniBars.forEach((mBar, index) => {
+        const val = visualizerDataArray[MINI_INDICES[index]] || 0;
+        let miniScale = (val / 255) * 0.9;
+        miniScale = Math.max(0.1, Math.min(1.0, miniScale));
+        mBar.style.transform = `scaleY(${miniScale})`;
+      });
+    }
   }
 }
 
