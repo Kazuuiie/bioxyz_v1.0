@@ -422,7 +422,82 @@
     border-left: 3px solid var(--raspberry);
     border-radius: 8px;
     box-sizing:border-box;
+    --dmp-nameplate: none;
+    --dmp-nameplate-color: rgba(20,13,15,.9);
+    transition: background .3s ease, border-color .3s ease;
   }
+
+  /* ---- Nameplate thật lấy từ Discord (asset động + màu palette) ---- */
+  .discord-mini-profile::before,
+  .discord-mini-profile::after{
+    content:"";
+    position:absolute; inset:0;
+    z-index:0;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .35s ease;
+  }
+  .discord-mini-profile::before{
+    background-image: var(--dmp-nameplate);
+    background-color: var(--dmp-nameplate-color);
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.06);
+  }
+  .discord-mini-profile::after{
+    background: linear-gradient(115deg, rgba(20,13,15,.85) 12%, rgba(20,13,15,.45) 55%, rgba(20,13,15,.72) 100%);
+  }
+  .discord-mini-profile .dmp-nameplate-video{
+    position:absolute; inset:0;
+    z-index:0;
+    width:100%; height:100%;
+    object-fit: cover;
+    opacity:0;
+    pointer-events:none;
+    transform: scale(1.06);
+    transition: opacity .35s ease;
+  }
+  .discord-mini-profile.has-nameplate{
+    border-left-color: transparent;
+    background: #14100f;
+  }
+  .discord-mini-profile.has-nameplate::before,
+  .discord-mini-profile.has-nameplate::after,
+  .discord-mini-profile.has-nameplate .dmp-nameplate-video{
+    opacity:1;
+  }
+  .discord-mini-profile.has-nameplate .dmp-username{ color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55); }
+  .discord-mini-profile.has-nameplate .dmp-activity{ color:rgba(255,255,255,.78); }
+  .discord-mini-profile.has-nameplate .dmp-status-dot{ background:#14100f; }
+  .discord-mini-profile.has-nameplate .dmp-avatar{ box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 0 0 2px #14100f; }
+  .discord-mini-profile.has-nameplate .dmp-activity-card{
+    background: rgba(0,0,0,.32);
+    border-color: rgba(255,255,255,.12);
+  }
+  .discord-mini-profile.has-nameplate .dmp-act-name{ color:#fff; }
+  .discord-mini-profile.has-nameplate .dmp-act-details,
+  .discord-mini-profile.has-nameplate .dmp-act-state,
+  .discord-mini-profile.has-nameplate .dmp-act-time{ color:rgba(255,255,255,.72); }
+
+  /* ---- Hàng icon: mic / tai nghe / cài đặt (giống thanh user Discord) ---- */
+  .dmp-icons{
+    display:flex; align-items:center; gap:2px;
+    margin-left:auto; position:relative; z-index:1;
+    flex-shrink:0;
+  }
+  .dmp-icon{
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:transparent; border:none; padding:0; margin:0;
+    color: var(--ink-soft);
+    transition: color .2s, background .2s;
+  }
+  button.dmp-icon{ cursor:pointer; }
+  .dmp-icon:hover{ background: rgba(74,51,54,0.08); color: var(--ink); }
+  .dmp-icons .toggle-act-btn{ margin-left:0; }
+
+  .discord-mini-profile.has-nameplate .dmp-icon{ color: rgba(255,255,255,.82); }
+  .discord-mini-profile.has-nameplate .dmp-icon:hover{ background: rgba(255,255,255,.16); color:#fff; }
   .dmp-top{ display:flex; align-items:center; gap:12px; width:100%; position: relative; z-index: 1; }
   .dmp-avatar-wrap{ position:relative; width:46px; height:46px; flex-shrink:0; }
   .dmp-avatar{
@@ -963,6 +1038,13 @@
       defaultIndex: 0,
       avatar: 'avatar1.gif',
       discordId: '1473247060298961040',
+      // Worker lấy Nameplate thật trực tiếp từ Discord (video động + màu palette),
+      // luôn cập nhật khi bạn đổi nameplate trên Discord.
+      // Ví dụ: 'https://ten-worker-cua-ban.workers.dev'
+      discordNameplateWorkerUrl: 'https://gentle-dust-08b8.ten870865.workers.dev/',
+      // Dự phòng/đơn giản: dán thẳng link ảnh/video nameplate tĩnh nếu không dùng Worker
+      // hoặc khi fetch Worker lỗi. Để trống ('') nếu không có file dự phòng.
+      discordNameplateStaticUrl: '',
       tracks: [
         {
           title: 'Nguyễn Văn Mười - MCK',
@@ -1008,7 +1090,7 @@
         </div>
 
         <p class="eyebrow reveal" style="--i:2">xin chào, mình là</p>
-        <h1 class="reveal" id="name-heading" style="--i:2"><em>Kazuuiie</em></h1>
+        <h1 class="reveal" id="name-heading" style="--i:2">Name <em>Kazuuiie</em></h1>
         <p class="location reveal" style="--i:2">Việt Nam</p>
         <div class="divider reveal" style="--i:3"><span>❊</span></div>
 
@@ -1026,13 +1108,15 @@
               </div>
               <span id="dmp-activity" class="dmp-activity">đang kết nối…</span>
             </div>
-            <button type="button" id="toggle-activity-btn" class="toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" title="Ẩn/Hiện hoạt động">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <circle cx="12" cy="5" r="2"/>
-                <circle cx="12" cy="12" r="2"/>
-                <circle cx="12" cy="19" r="2"/>
-              </svg>
-            </button>
+            <div class="dmp-icons">
+              <button type="button" id="toggle-activity-btn" class="dmp-icon toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" title="Ẩn/Hiện hoạt động">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                  <circle cx="5" cy="12" r="2.2"></circle>
+                  <circle cx="12" cy="12" r="2.2"></circle>
+                  <circle cx="19" cy="12" r="2.2"></circle>
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div class="dmp-activity-panel" id="dmp-activity-panel">
@@ -1051,7 +1135,7 @@
           </div>
         </div>
 
-        <p class="bio reveal" style="--i:4">Tôi Muốn RTX 5090</p>
+        <p class="bio reveal" style="--i:4">Nothing Here.</p>
 
         <!-- SPOTIFY MUSIC BOX -->
         <div class="music-box reveal" style="--i:5" id="music-box">

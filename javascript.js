@@ -451,6 +451,78 @@ if (music) {
 
 /* ============ DISCORD STATUS THẬT (LANYARD API) ============ */
 (function () {
+  const dmpRoot = document.getElementById('discord-mini-profile');
+
+  // Nameplate thật lấy từ Discord (collectibles.nameplate) qua Cloudflare Worker:
+  // video động (.webm) làm nền chính, ảnh tĩnh (.png) làm fallback, và màu palette
+  // (crimson, berry, sky, teal, forest, bubble_gum, violet, cobalt, clover, lemon, white)
+  // tô nền khi không load được asset.
+  const DMP_PALETTE_COLORS = {
+    crimson: '#c53434',
+    berry: '#c2266d',
+    sky: '#3b82c4',
+    teal: '#1f9a8e',
+    forest: '#2f7d4f',
+    bubble_gum: '#e85fa0',
+    violet: '#8b5cf6',
+    cobalt: '#3654c9',
+    clover: '#4ca94c',
+    lemon: '#d9b23c',
+    white: '#e8e8e8'
+  };
+
+  function applyDmpNameplate({ videoUrl, staticUrl, palette } = {}) {
+    if (!dmpRoot || (!videoUrl && !staticUrl)) return;
+
+    if (palette && DMP_PALETTE_COLORS[palette]) {
+      dmpRoot.style.setProperty('--dmp-nameplate-color', DMP_PALETTE_COLORS[palette]);
+    }
+
+    if (staticUrl) {
+      dmpRoot.style.setProperty('--dmp-nameplate', `url('${staticUrl}')`);
+    }
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (videoUrl && !prefersReducedMotion) {
+      const video = document.createElement('video');
+      video.className = 'dmp-nameplate-video';
+      video.src = videoUrl;
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.setAttribute('aria-hidden', 'true');
+      video.onerror = () => video.remove();
+      dmpRoot.prepend(video);
+      video.play().catch(() => {});
+    }
+
+    dmpRoot.classList.add('has-nameplate');
+  }
+
+  if (dmpRoot && bioConfig.discordNameplateWorkerUrl) {
+    fetch(bioConfig.discordNameplateWorkerUrl)
+      .then(res => res.json())
+      .then(data => {
+        if (data && (data.nameplateUrl || data.nameplateStaticUrl)) {
+          applyDmpNameplate({
+            videoUrl: data.nameplateUrl,
+            staticUrl: data.nameplateStaticUrl,
+            palette: data.nameplatePalette
+          });
+        } else if (bioConfig.discordNameplateStaticUrl) {
+          applyDmpNameplate({ staticUrl: bioConfig.discordNameplateStaticUrl });
+        }
+      })
+      .catch(() => {
+        if (bioConfig.discordNameplateStaticUrl) {
+          applyDmpNameplate({ staticUrl: bioConfig.discordNameplateStaticUrl });
+        }
+      });
+  } else if (dmpRoot && bioConfig.discordNameplateStaticUrl) {
+    applyDmpNameplate({ staticUrl: bioConfig.discordNameplateStaticUrl });
+  }
+
   const discordId = bioConfig.discordId;
   if (!discordId) return;
 
@@ -459,7 +531,6 @@ if (music) {
   const dmpUsername = document.getElementById('dmp-username');
   const dmpBadges = document.getElementById('dmp-badges');
   const dmpActivity = document.getElementById('dmp-activity');
-  const dmpRoot = document.getElementById('discord-mini-profile');
 
   const STATUS_LABEL = {
     online: ' Trực tuyến',
