@@ -412,24 +412,102 @@
   /* ============ DISCORD MINI PROFILE ============ */
   .discord-mini-profile{
     position: relative;
-    overflow: hidden;
     display:flex; flex-direction:column;
     width:100%;
-    margin: 0 auto 20px;
-    padding: 10px 14px 10px 10px;
-    background: rgba(255,255,255,0.22);
-    border: 1px solid rgba(255,255,255,0.35);
+    margin: 0 auto 22px;
+    padding: 0 0 10px 0;
+    background: rgba(255,255,255,0.24);
+    /* 2 lớp: highlight tròn mờ ở góc trên-trái (như ánh sáng chiếu vào mặt
+       kính) nằm trên lớp gradient chéo nhạt — cùng kiểu ánh sáng mà
+       .music-box::before đang dùng, để đồng bộ cảm giác "kính" giữa 2 khối. */
+    background-image:
+      radial-gradient(circle at 14% -12%, rgba(255,255,255,0.55), transparent 52%),
+      linear-gradient(150deg, rgba(255,255,255,0.22), rgba(255,255,255,0));
+    border: 1px solid rgba(255,255,255,0.4);
     border-left: 3px solid var(--raspberry);
-    border-radius: 8px;
+    border-radius: 14px;
     box-sizing:border-box;
-    --dmp-nameplate: none;
-    --dmp-nameplate-color: rgba(20,13,15,.9);
-    transition: background .3s ease, border-color .3s ease;
+    overflow: hidden;
+    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset;
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    transition: background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .discord-mini-profile:hover{
+    box-shadow: 0 20px 38px -20px rgba(74,51,54,0.46), 0 1px 0 rgba(255,255,255,0.5) inset;
+  }
+  /* Viền màu theo trạng thái online/idle/dnd — cùng kỹ thuật với
+     .music-box.is-playing (thêm 1 vòng màu mảnh vào box-shadow), giúp cả
+     card "sống" theo đúng màu chấm trạng thái thay vì luôn tĩnh 1 kiểu. */
+  .discord-mini-profile:has(.dmp-status-dot.online){
+    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(35,165,90,0.3);
+  }
+  .discord-mini-profile:has(.dmp-status-dot.idle){
+    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(240,178,50,0.3);
+  }
+  .discord-mini-profile:has(.dmp-status-dot.dnd){
+    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(242,63,67,0.3);
+  }
+  .discord-mini-profile::before{
+    content:"$ discord --whoami";
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing:0.05em;
+    color: var(--ink-soft);
+    opacity:0.65;
+    padding: 9px 14px 7px;
+  }
+  .discord-mini-profile.has-nameplate{
+    border-color: rgba(255,255,255,0.14);
+    border-left-color: transparent;
+    /* Trước đây chỉ zone nameplate (avatar+tên) có nền tối, còn activity panel
+       bên dưới bỏ trong suốt — nên khi nền trang là ảnh/video sặc sỡ, nửa dưới
+       card bị "ăn" màu lung tung theo hình nền, tạo cảm giác lệch tông so với
+       nửa trên (tối). Giờ phủ thêm 1 lớp gradient tối nhẹ + blur mạnh hơn lên
+       TOÀN BỘ card khi có nameplate, để cả khối liền một tông màu với zone
+       nameplate ở trên — cân bằng và dễ đọc chữ hơn hẳn. */
+    background-color: transparent;
+    background-image:
+      radial-gradient(circle at 14% -12%, rgba(255,255,255,0.12), transparent 48%),
+      linear-gradient(180deg, rgba(20,16,15,0.58) 0%, rgba(20,16,15,0.74) 100%);
+    backdrop-filter: blur(18px) saturate(1.05);
+    -webkit-backdrop-filter: blur(18px) saturate(1.05);
+    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55);
+  }
+  .discord-mini-profile.has-nameplate:has(.dmp-status-dot.online){
+    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(35,165,90,0.35);
+  }
+  .discord-mini-profile.has-nameplate:has(.dmp-status-dot.idle){
+    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(240,178,50,0.35);
+  }
+  .discord-mini-profile.has-nameplate:has(.dmp-status-dot.dnd){
+    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(242,63,67,0.35);
+  }
+  .discord-mini-profile.has-nameplate::before{ color: rgba(255,248,238,0.55); }
+  .discord-mini-profile.has-nameplate .dmp-nameplate-zone{
+    background: #14100f;
   }
 
-  /* ---- Nameplate thật lấy từ Discord (asset động + màu palette) ---- */
-  .discord-mini-profile::before,
-  .discord-mini-profile::after{
+  /* ---- Zone nameplate: CHỈ bọc quanh hàng avatar/tên (dmp-top), không bọc
+     activity panel. Vì vậy chiều cao của zone này cố định — khi bấm nút "..."
+     để mở/đóng activity panel bên dưới, nameplate (ảnh/video nền) không còn
+     bị kéo giãn/phóng to theo và không còn che mất activity panel nữa. ---- */
+  .dmp-nameplate-zone{
+    position: relative;
+    overflow: hidden;
+    /* padding-bottom = 8px: đủ chỗ cho .dmp-decoration (inset:-6px, tức tràn
+       ra ngoài dmp-avatar-wrap 6px mỗi cạnh) và dmp-status-dot (bottom:-2px)
+       không bị overflow:hidden của zone cắt mất phần dưới nữa. Trước đây
+       bottom = 0 nên viền trang trí (decoration) quanh avatar bị cắt phẳng
+       ở cạnh dưới, trông như bị mất một mảnh. Chỉ đổi padding của zone (zone
+       chỉ bọc dmp-top) — không đụng .dmp-activity-panel nên activity card
+       không bị ảnh hưởng gì. */
+    padding: 10px 14px 8px 10px;
+    --dmp-nameplate: none;
+    --dmp-nameplate-color: rgba(20,13,15,.9);
+  }
+  .dmp-nameplate-zone::before,
+  .dmp-nameplate-zone::after{
     content:"";
     position:absolute; inset:0;
     z-index:0;
@@ -437,17 +515,17 @@
     pointer-events:none;
     transition: opacity .35s ease;
   }
-  .discord-mini-profile::before{
+  .dmp-nameplate-zone::before{
     background-image: var(--dmp-nameplate);
     background-color: var(--dmp-nameplate-color);
     background-size: cover;
     background-position: center;
     transform: scale(1.06);
   }
-  .discord-mini-profile::after{
+  .dmp-nameplate-zone::after{
     background: linear-gradient(115deg, rgba(20,13,15,.85) 12%, rgba(20,13,15,.45) 55%, rgba(20,13,15,.72) 100%);
   }
-  .discord-mini-profile .dmp-nameplate-video{
+  .dmp-nameplate-zone .dmp-nameplate-video{
     position:absolute; inset:0;
     z-index:0;
     width:100%; height:100%;
@@ -457,13 +535,9 @@
     transform: scale(1.06);
     transition: opacity .35s ease;
   }
-  .discord-mini-profile.has-nameplate{
-    border-left-color: transparent;
-    background: #14100f;
-  }
-  .discord-mini-profile.has-nameplate::before,
-  .discord-mini-profile.has-nameplate::after,
-  .discord-mini-profile.has-nameplate .dmp-nameplate-video{
+  .discord-mini-profile.has-nameplate .dmp-nameplate-zone::before,
+  .discord-mini-profile.has-nameplate .dmp-nameplate-zone::after,
+  .discord-mini-profile.has-nameplate .dmp-nameplate-zone .dmp-nameplate-video{
     opacity:1;
   }
   .discord-mini-profile.has-nameplate .dmp-username{ color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55); }
@@ -471,13 +545,22 @@
   .discord-mini-profile.has-nameplate .dmp-status-dot{ background:#14100f; }
   .discord-mini-profile.has-nameplate .dmp-avatar{ box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 0 0 2px #14100f; }
   .discord-mini-profile.has-nameplate .dmp-activity-card{
-    background: rgba(0,0,0,.32);
-    border-color: rgba(255,255,255,.12);
+    background: transparent;
+    border: none;
   }
-  .discord-mini-profile.has-nameplate .dmp-act-name{ color:#fff; }
+  /* Nền activity panel giờ ăn theo gradient tối chung của cả card (khai báo
+     ở .discord-mini-profile.has-nameplate phía trên) thay vì để trong suốt
+     hoàn toàn — nên chữ trong panel cũng phải đổi sang tông sáng cho tương
+     phản đủ đọc, giống hệt cách .dmp-activity đã làm ở trên. */
   .discord-mini-profile.has-nameplate .dmp-act-details,
   .discord-mini-profile.has-nameplate .dmp-act-state,
-  .discord-mini-profile.has-nameplate .dmp-act-time{ color:rgba(255,255,255,.72); }
+  .discord-mini-profile.has-nameplate .dmp-act-time{
+    color: rgba(255,248,238,.72);
+  }
+  .discord-mini-profile.has-nameplate .dmp-act-img{
+    box-shadow: 0 4px 12px -3px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
+  }
+
 
   /* ---- Hàng icon: mic / tai nghe / cài đặt (giống thanh user Discord) ---- */
   .dmp-icons{
@@ -490,20 +573,35 @@
     display:flex; align-items:center; justify-content:center;
     background:transparent; border:none; padding:0; margin:0;
     color: var(--ink-soft);
-    transition: color .2s, background .2s;
+    transition: color .2s ease, background .2s ease, transform .2s cubic-bezier(.34,1.56,.64,1);
   }
   button.dmp-icon{ cursor:pointer; }
-  .dmp-icon:hover{ background: rgba(74,51,54,0.08); color: var(--ink); }
+  .dmp-icon:hover{ background: rgba(74,51,54,0.08); color: var(--ink); transform: scale(1.08); }
+  .dmp-icon:active{ transform: scale(0.94); }
   .dmp-icons .toggle-act-btn{ margin-left:0; }
 
   .discord-mini-profile.has-nameplate .dmp-icon{ color: rgba(255,255,255,.82); }
   .discord-mini-profile.has-nameplate .dmp-icon:hover{ background: rgba(255,255,255,.16); color:#fff; }
-  .dmp-top{ display:flex; align-items:center; gap:12px; width:100%; position: relative; z-index: 1; }
+  .dmp-top{ display:flex; align-items:center; gap:13px; width:100%; position: relative; z-index: 1; }
   .dmp-avatar-wrap{ position:relative; width:46px; height:46px; flex-shrink:0; }
   .dmp-avatar{
     width:46px; height:46px; border-radius:50%; object-fit:cover; display:block;
     background: var(--bg-b);
-    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12);
+    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35);
+    transition: box-shadow .4s ease;
+  }
+  /* Quầng sáng mềm sau avatar theo màu trạng thái — .dmp-avatar không
+     position:absolute nên box-shadow của nó luôn vẽ dưới lớp .dmp-decoration
+     và .dmp-status-dot (2 cái đó có position:absolute), tức quầng sáng nằm
+     đúng phía sau viền trang trí, không đè lên. */
+  .dmp-avatar-wrap:has(.dmp-status-dot.online) .dmp-avatar{
+    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(35,165,90,0.16), 0 0 18px 4px rgba(35,165,90,0.22);
+  }
+  .dmp-avatar-wrap:has(.dmp-status-dot.idle) .dmp-avatar{
+    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(240,178,50,0.14), 0 0 18px 4px rgba(240,178,50,0.18);
+  }
+  .dmp-avatar-wrap:has(.dmp-status-dot.dnd) .dmp-avatar{
+    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(242,63,67,0.14), 0 0 18px 4px rgba(242,63,67,0.18);
   }
   .dmp-decoration{
     position:absolute; inset:-6px;
@@ -522,7 +620,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s, background 0.2s, transform 0.2s;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s cubic-bezier(.34,1.56,.64,1);
     flex-shrink: 0;
     margin-left: auto;
   }
@@ -530,7 +628,9 @@
   .toggle-act-btn:hover {
     color: var(--ink);
     background: rgba(74, 51, 54, 0.08);
+    transform: scale(1.1);
   }
+  .toggle-act-btn:active{ transform: scale(0.92); }
 
   .toggle-act-btn.is-disabled {
     opacity: 0.4;
@@ -550,6 +650,7 @@
     width:15px; height:15px; border-radius:50%;
     background: var(--paper-dim);
     box-sizing:border-box; z-index:2;
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1);
   }
   .dmp-status-dot::before{
     content:""; position:absolute; inset:2.5px; border-radius:50%;
@@ -572,52 +673,84 @@
     background:#fff8ee; top:6.5px; left:4.2px;
   }
 
-  .dmp-info{ display:flex; flex-direction:column; gap:3px; min-width:0; text-align:left; flex:1; }
+  .dmp-info{ display:flex; flex-direction:column; gap:4px; min-width:0; text-align:left; flex:1; }
   .dmp-name-row{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .dmp-username{
     font-family:'DM Sans', sans-serif; font-weight:700;
-    font-size: 14px; color: var(--ink);
+    font-size: 14.5px; letter-spacing: 0.005em; color: var(--ink);
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;
+    transition: color .3s ease;
   }
   .dmp-badges{ display:inline-flex; align-items:center; gap:4px; }
   .dmp-badge{
     font-size: 12px; line-height:1;
     filter: drop-shadow(0 1px 1px rgba(74,51,54,0.2));
+    transition: transform .2s ease;
   }
+  .dmp-badge:hover{ transform: translateY(-1px) scale(1.12); }
   .dmp-activity{
     font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    color: var(--ink-soft);
+    color: var(--ink-soft); letter-spacing: 0.01em;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    transition: color .3s ease;
   }
 
   .dmp-activity-panel{
     width:100%; overflow:hidden;
     max-height:0; opacity:0; margin-top:0;
-    transition: max-height 0.42s cubic-bezier(.2,.8,.2,1), opacity 0.32s ease, margin-top 0.42s ease;
+    padding: 0 14px 0 10px;
+    box-sizing: border-box;
+    border-top: 1px solid transparent;
+    transition: max-height 0.42s cubic-bezier(.2,.8,.2,1), opacity 0.32s ease, margin-top 0.42s ease, border-color 0.32s ease;
   }
-  .dmp-activity-panel.open{ opacity:1; margin-top:10px; }
+  /* Chỉ hiện 1 đường kẻ mảnh phân cách khi panel mở — thay cho khung hộp riêng
+     trước đây, để cả khối chỉ còn đúng 1 viền ngoài cùng (viền của
+     .discord-mini-profile) giống hệt kiểu khung .bio (about.txt). */
+  .dmp-activity-panel.open{
+    opacity:1; margin-top:10px; padding-top:10px;
+    border-top-color: rgba(74,51,54,0.12);
+  }
+  .discord-mini-profile.has-nameplate .dmp-activity-panel.open{
+    border-top-color: rgba(255,255,255,.16);
+  }
+  /* Nhãn nhỏ kiểu terminal phía trên activity card, cùng ngôn ngữ thị giác
+     với "$ discord --whoami" và .now::before ("$ cat status.log") — chỉ là
+     ::before thuần CSS nên không đụng tới cấu trúc/JS. */
+  .dmp-activity-panel.open .dmp-activity-card::before{
+    content:"▸ hoạt động";
+    display:block; width:100%;
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px;
+    letter-spacing:0.08em; color: var(--raspberry);
+    opacity:0.7; margin-bottom:8px;
+  }
+  .discord-mini-profile.has-nameplate .dmp-activity-panel.open .dmp-activity-card::before{
+    color: rgba(255,248,238,.7);
+  }
   .dmp-activity-card{
-    display:flex; align-items:center; gap:10px;
-    padding:8px 10px;
-    background: rgba(74,51,54,0.06);
-    border: 1px solid rgba(74,51,54,0.08);
-    border-radius:8px;
+    display:flex; align-items:center; flex-wrap:wrap; gap:10px;
+    padding:0;
+    background: transparent;
+    border: none;
+    border-radius:0;
   }
   .dmp-act-img-wrap{ position:relative; width:40px; height:40px; flex-shrink:0; }
   .dmp-act-img{
     width:40px; height:40px; border-radius:9px; object-fit:cover; display:block;
     background: var(--bg-b);
+    box-shadow: 0 4px 10px -4px rgba(74,51,54,0.4);
   }
   .dmp-act-img-small{
     position:absolute; right:-4px; bottom:-4px; width:17px; height:17px; border-radius:50%;
     border:2px solid var(--paper-dim); object-fit:cover; background: var(--bg-b);
+    box-shadow: 0 2px 5px -1px rgba(74,51,54,0.35);
   }
   .dmp-act-text{ min-width:0; text-align:left; flex:1; }
   .dmp-act-name{
     margin:0; font-family:'DM Sans', sans-serif; font-weight:700;
-    font-size:12.5px; color:var(--ink);
+    font-size:12.5px; color: var(--raspberry);
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
+  .discord-mini-profile.has-nameplate .dmp-act-name{ color:#fff; }
   .dmp-act-details, .dmp-act-state{
     margin:2px 0 0; font-family:'DM Sans', sans-serif; font-size:11.5px;
     color: var(--ink-soft);
@@ -1095,27 +1228,31 @@
         <div class="divider reveal" style="--i:3"><span>❊</span></div>
 
         <div class="discord-mini-profile reveal" style="--i:3.5" id="discord-mini-profile">
-          <div class="dmp-top">
-            <div class="dmp-avatar-wrap">
-              <img id="dmp-avatar" class="dmp-avatar" src="" alt="avatar Discord">
-              <img id="dmp-decoration" class="dmp-decoration" src="" alt="" style="display:none">
-              <span id="dmp-status-dot" class="dmp-status-dot offline" aria-hidden="true"></span>
-            </div>
-            <div class="dmp-info">
-              <div class="dmp-name-row">
-                <span id="dmp-username" class="dmp-username">—</span>
-                <span id="dmp-badges" class="dmp-badges"></span>
+          <!-- Zone cố định: nameplate (ảnh/video nền Discord) chỉ áp dụng trong
+               vùng này. Không bọc activity-panel để tránh bị phóng to khi mở panel. -->
+          <div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
+            <div class="dmp-top">
+              <div class="dmp-avatar-wrap">
+                <img id="dmp-avatar" class="dmp-avatar" src="" alt="avatar Discord">
+                <img id="dmp-decoration" class="dmp-decoration" src="" alt="" style="display:none">
+                <span id="dmp-status-dot" class="dmp-status-dot offline" aria-hidden="true"></span>
               </div>
-              <span id="dmp-activity" class="dmp-activity">đang kết nối…</span>
-            </div>
-            <div class="dmp-icons">
-              <button type="button" id="toggle-activity-btn" class="dmp-icon toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" title="Ẩn/Hiện hoạt động">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                  <circle cx="5" cy="12" r="2.2"></circle>
-                  <circle cx="12" cy="12" r="2.2"></circle>
-                  <circle cx="19" cy="12" r="2.2"></circle>
-                </svg>
-              </button>
+              <div class="dmp-info">
+                <div class="dmp-name-row">
+                  <span id="dmp-username" class="dmp-username">—</span>
+                  <span id="dmp-badges" class="dmp-badges"></span>
+                </div>
+                <span id="dmp-activity" class="dmp-activity">đang kết nối…</span>
+              </div>
+              <div class="dmp-icons">
+                <button type="button" id="toggle-activity-btn" class="dmp-icon toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" title="Ẩn/Hiện hoạt động">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                    <circle cx="5" cy="12" r="2.2"></circle>
+                    <circle cx="12" cy="12" r="2.2"></circle>
+                    <circle cx="19" cy="12" r="2.2"></circle>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 

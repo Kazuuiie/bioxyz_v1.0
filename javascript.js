@@ -310,16 +310,52 @@ const volumeBtn = document.getElementById('volume-btn');
 const volumeSliderContainer = document.getElementById('volume-slider-container');
 const volumeSliderFill = document.getElementById('volume-slider-fill');
 const volWave = document.querySelector('.vol-wave');
-let lastVolume = 1;
 
-function updateVolume(val) {
+// Lưu mức âm lượng vào localStorage để lần sau vào lại trang vẫn giữ nguyên
+// mức đã chỉnh, thay vì luôn reset về 100% mặc định. Bọc try/catch vì
+// localStorage có thể bị chặn (chế độ ẩn danh, cookie bị tắt...) — lỗi đó
+// không được làm hỏng phần nghe nhạc.
+const VOLUME_STORAGE_KEY = 'bio-music-volume';
+const LAST_VOLUME_STORAGE_KEY = 'bio-music-last-volume';
+
+function loadStoredVolume() {
+  try {
+    const raw = localStorage.getItem(VOLUME_STORAGE_KEY);
+    const val = parseFloat(raw);
+    if (!isNaN(val) && val >= 0 && val <= 1) return val;
+  } catch (e) { /* localStorage không khả dụng — bỏ qua, dùng mặc định */ }
+  return 1;
+}
+
+function loadStoredLastVolume(fallback) {
+  try {
+    const raw = localStorage.getItem(LAST_VOLUME_STORAGE_KEY);
+    const val = parseFloat(raw);
+    if (!isNaN(val) && val > 0 && val <= 1) return val;
+  } catch (e) { /* bỏ qua */ }
+  return fallback;
+}
+
+function saveVolume(val) {
+  try { localStorage.setItem(VOLUME_STORAGE_KEY, String(val)); } catch (e) { /* bỏ qua */ }
+}
+
+function saveLastVolume(val) {
+  try { localStorage.setItem(LAST_VOLUME_STORAGE_KEY, String(val)); } catch (e) { /* bỏ qua */ }
+}
+
+const initialVolume = loadStoredVolume();
+let lastVolume = loadStoredLastVolume(initialVolume > 0 ? initialVolume : 1);
+
+function updateVolume(val, persist = true) {
   val = Math.max(0, Math.min(1, val));
   if (music) music.volume = val;
   if (volumeSliderFill) volumeSliderFill.style.width = `${val * 100}%`;
   if (volWave) volWave.style.display = val === 0 ? 'none' : 'block';
+  if (persist) saveVolume(val);
 }
 
-updateVolume(1);
+updateVolume(initialVolume, false);
 let isDraggingVol = false;
 
 function handleVolMove(e) {
@@ -351,6 +387,7 @@ if (volumeBtn) {
     const currentVol = music ? music.volume : 1;
     if (currentVol > 0) {
       lastVolume = currentVol;
+      saveLastVolume(lastVolume);
       updateVolume(0);
     } else {
       updateVolume(lastVolume || 1);
@@ -452,6 +489,10 @@ if (music) {
 /* ============ DISCORD STATUS THẬT (LANYARD API) ============ */
 (function () {
   const dmpRoot = document.getElementById('discord-mini-profile');
+  // Zone riêng chỉ bọc quanh hàng avatar/tên — nameplate (ảnh/video) được gắn
+  // vào ĐÂY thay vì vào dmpRoot, để chiều cao của nó không đổi khi activity
+  // panel bên dưới mở/đóng (tránh bị "phóng to" đè lên panel).
+  const dmpZone = document.getElementById('dmp-nameplate-zone') || dmpRoot;
 
   // Nameplate thật lấy từ Discord (collectibles.nameplate) qua Cloudflare Worker:
   // video động (.webm) làm nền chính, ảnh tĩnh (.png) làm fallback, và màu palette
@@ -493,7 +534,9 @@ if (music) {
       video.playsInline = true;
       video.setAttribute('aria-hidden', 'true');
       video.onerror = () => video.remove();
-      dmpRoot.prepend(video);
+      // Gắn vào zone cố định (không phải toàn bộ dmpRoot) để video không bị
+      // giãn theo chiều cao khi activity panel mở ra.
+      dmpZone.prepend(video);
       video.play().catch(() => {});
     }
 
