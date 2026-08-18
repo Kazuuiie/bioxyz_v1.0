@@ -968,6 +968,20 @@
     display:flex; align-items:center; justify-content:center; font-size:13px; cursor:pointer;
   }
   .track-list-close:hover{ color:#fff8ee; background: rgba(255,255,255,0.12); }
+
+  .track-category-filters{
+    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;
+  }
+  .category-chip{
+    padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.05); color: rgba(255,248,238,0.65);
+    font-family:'DM Sans', sans-serif; font-size:10.5px; font-weight:600;
+    cursor:pointer; user-select:none; transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    white-space:nowrap; line-height:1.4;
+  }
+  .category-chip:hover{ background: rgba(255,255,255,0.12); color:#fff8ee; }
+  .category-chip.active{ background: rgba(29,185,84,0.22); border-color: rgba(29,185,84,0.5); color:#1DB954; }
+
   .track-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
   
   .track-item{
@@ -979,8 +993,18 @@
   .track-item .t-index{ width:16px; text-align:center; font-family:'DM Sans', sans-serif; font-size:11px; color: rgba(255,248,238,0.4); }
   .track-item.active .t-index{ color:#1DB954; font-weight: bold; }
   .track-item .t-cover{ width:32px; height:32px; border-radius:6px; object-fit:cover; flex-shrink:0; }
+  .track-item .t-info{ display:flex; flex-direction:column; min-width:0; gap:1px; }
   .track-item .t-title{ margin:0; min-width:0; font-family:'DM Sans', sans-serif; font-size:12px; color:#fff8ee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .track-item.active .t-title{ color:#1DB954; font-weight:700; }
+  .track-item .t-category{
+    font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:0.05em;
+    text-transform:uppercase; color: rgba(255,248,238,0.4);
+  }
+  .track-item.active .t-category{ color: rgba(29,185,84,0.75); }
+  .track-list-empty{
+    text-align:center; padding:16px 0; font-family:'DM Sans', sans-serif;
+    font-size:11.5px; color: rgba(255,248,238,0.45);
+  }
 
   .mini-bars {
     display: none;
@@ -1178,26 +1202,52 @@
       // Dự phòng/đơn giản: dán thẳng link ảnh/video nameplate tĩnh nếu không dùng Worker
       // hoặc khi fetch Worker lỗi. Để trống ('') nếu không có file dự phòng.
       discordNameplateStaticUrl: '',
+      // category: mã thể loại tuỳ ý (vd: 'bth', 'fonk', 'remix', 'rap', 'lofi'...).
+      // Nhãn hiển thị được ánh xạ trong CATEGORY_LABELS bên javascript.js —
+      // thêm mã mới ở đó nếu muốn có tên tiếng Việt đẹp, không thêm thì code
+      // sẽ tự viết hoa chữ cái đầu để hiển thị.
       tracks: [
         {
           title: 'Nguyễn Văn Mười - MCK',
           file: 'song2.mp3',
-          disc: 'images2.png'
+          disc: 'images2.png',
+          category: 'bth'
         },
         {
           title: 'ĐẢO NGHỊCH - 胡明宇(REMIX)',
           file: 'song1.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d2721ed222151ab6869fa714'
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d2721ed222151ab6869fa714',
+          category: 'remix'
         },
         {
           title: 'Wrong Times - Puppy,Dangrangto',
           file: 'Wrong Times.mp3',
-          disc:'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02566178ff844ca2b57f959374'
+          disc:'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02566178ff844ca2b57f959374',
+          category: 'bth'
         },
         {
-          title: 'Có công mài "Sắc" - Ngô Lan Hương | Drill Mix (Prod, By Hades)',
+          title: 'Có Công Mài "Sắc" - Ngô Lan Hương | Drill Mix (Prod, By Hades)',
           file: 'cocongmaisac.mp3',
-          disc:'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ebcdc310f026bb7600fb085d'
+          disc:'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ebcdc310f026bb7600fb085d',
+          category: 'remix'
+        },
+        {
+          title: 'Đường Tôi Chở Em Về - buitruonglinh',
+          file: 'duongtoichoemve.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0222029966c28f9d19ab54143c',
+          category: 'bth'
+        },
+        {
+          title: '3 1 0 7 - W/n ft. Nâu, Duongg',
+          file: '3107.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02adc789d731eff56c9b448737',
+          category: 'bth'
+        },
+        {
+          title: 'Dù Cho Mai Về Sau - buitruonglinh',
+          file: 'duchomaivesau.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ff2d5a6f74d5141af7a371ea',
+          category: 'bth'
         }
       ]
     };
@@ -1345,6 +1395,7 @@
               <span>Danh sách phát</span>
               <button type="button" class="track-list-close" id="track-list-close" aria-label="Đóng danh sách">✕</button>
             </div>
+            <div class="track-category-filters" id="track-category-filters" role="tablist" aria-label="Lọc theo thể loại"></div>
             <ul class="track-list" id="track-list"></ul>
           </div>
         </div>

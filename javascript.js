@@ -49,6 +49,45 @@ const tracks = Array.isArray(bioConfig.tracks) && bioConfig.tracks.length ? bioC
 }];
 let currentTrackIndex = Number.isInteger(bioConfig.defaultIndex) ? bioConfig.defaultIndex : 0;
 
+/* ============ CATEGORY (THỂ LOẠI NHẠC) ============ */
+// Thêm mã ở đây để có nhãn tiếng Việt đẹp cho category mới trong bioConfig.tracks.
+// Mã không có trong danh sách này sẽ tự viết hoa chữ cái đầu để hiển thị.
+const CATEGORY_LABELS = {
+  bth: 'Bình thường',
+  fonk: 'Phonk',
+  remix: 'Remix',
+  rap: 'Rap',
+  lofi: 'Lo-fi',
+  drill: 'Drill',
+  edm: 'EDM',
+  ballad: 'Ballad',
+  chill: 'Chill'
+};
+function getCategoryLabel(cat) {
+  if (!cat) return 'Khác';
+  return CATEGORY_LABELS[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1));
+}
+
+let currentCategory = 'all';
+const trackCategoryFiltersEl = document.getElementById('track-category-filters');
+
+function renderCategoryFilters() {
+  if (!trackCategoryFiltersEl) return;
+  const cats = Array.from(new Set(tracks.map((t) => t.category).filter(Boolean)));
+  if (!cats.length) {
+    trackCategoryFiltersEl.innerHTML = '';
+    return;
+  }
+  const chips = ['all', ...cats];
+  trackCategoryFiltersEl.innerHTML = chips
+    .map((c) => `
+      <button type="button" class="category-chip${c === currentCategory ? ' active' : ''}" data-category="${escapeHtml(c)}" role="tab" aria-selected="${c === currentCategory}">
+        ${c === 'all' ? 'Tất cả' : escapeHtml(getCategoryLabel(c))}
+      </button>
+    `)
+    .join('');
+}
+
 if (albumCover && bioConfig.avatar) {
   albumCover.src = bioConfig.avatar;
 }
@@ -81,11 +120,24 @@ function escapeHtml(str){
 
 function renderTrackList(){
   if (!trackListEl) return;
-  trackListEl.innerHTML = tracks.map((t, i) => `
+
+  const filtered = tracks
+    .map((t, i) => ({ t, i }))
+    .filter(({ t }) => currentCategory === 'all' || t.category === currentCategory);
+
+  if (!filtered.length) {
+    trackListEl.innerHTML = '<li class="track-list-empty">Không có bài hát nào trong mục này</li>';
+    return;
+  }
+
+  trackListEl.innerHTML = filtered.map(({ t, i }) => `
     <li class="track-item${i === currentTrackIndex ? ' active' : ''}" data-index="${i}">
       <span class="t-index">${i + 1}</span>
       <img class="t-cover" src="${t.disc || ''}" alt="" loading="lazy">
-      <p class="t-title">${escapeHtml(t.title || 'Không tên')}</p>
+      <div class="t-info">
+        <p class="t-title">${escapeHtml(t.title || 'Không tên')}</p>
+        ${t.category ? `<span class="t-category">${escapeHtml(getCategoryLabel(t.category))}</span>` : ''}
+      </div>
       <div class="mini-bars">
         <span class="m-bar"></span>
         <span class="m-bar"></span>
@@ -114,7 +166,19 @@ function closeTrackList(){
   if (trackMenuBtn) trackMenuBtn.setAttribute('aria-expanded', 'false');
 }
 
+if (trackCategoryFiltersEl) {
+  trackCategoryFiltersEl.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const chip = e.target.closest('.category-chip');
+    if (!chip) return;
+    currentCategory = chip.dataset.category;
+    renderCategoryFilters();
+    renderTrackList();
+  });
+}
+
 if (trackMenuBtn && trackListPanel) {
+  renderCategoryFilters();
   renderTrackList();
 
   trackMenuBtn.addEventListener('click', (e) => {
@@ -137,16 +201,6 @@ if (trackMenuBtn && trackListPanel) {
       closeTrackList();
     });
   }
-
-  document.addEventListener('click', (e) => {
-    if (!trackListPanel.classList.contains('open')) return;
-    if (trackListPanel.contains(e.target) || trackMenuBtn.contains(e.target)) return;
-    closeTrackList();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeTrackList();
-  });
 }
 
 if (tracks.length) {
