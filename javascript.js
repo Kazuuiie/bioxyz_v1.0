@@ -2,23 +2,33 @@
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('keydown', e => {
   if (
-    e.keyCode === 123 || 
-    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
-    (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83)) 
+    e.keyCode === 123 ||
+    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+    (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))
   ) {
     e.preventDefault();
     return false;
   }
 });
 
+// Ngưỡng nới từ 100ms -> 400ms + kiểm tra 2 lần liên tiếp mới kích hoạt,
+// tránh việc tab bị throttle nền (đổi tab, máy yếu, mobile...) làm
+// performance.now() lệch giả và tự động xóa trắng trang oan cho người dùng
+// bình thường không hề mở DevTools.
+let devtoolsStrikes = 0;
 setInterval(() => {
   const startTime = performance.now();
   debugger;
   const endTime = performance.now();
-  if (endTime - startTime > 100) {
-    document.body.innerHTML = "Access Denied";
+  if (endTime - startTime > 400) {
+    devtoolsStrikes++;
+    if (devtoolsStrikes >= 2) {
+      document.body.innerHTML = "Access Denied";
+    }
+  } else {
+    devtoolsStrikes = 0;
   }
-}, 1000);
+}, 1500);
 
 /* ============ KHỞI TẠO BIẾN CƠ BẢN ============ */
 const gate = document.getElementById('gate');
@@ -50,8 +60,6 @@ const tracks = Array.isArray(bioConfig.tracks) && bioConfig.tracks.length ? bioC
 let currentTrackIndex = Number.isInteger(bioConfig.defaultIndex) ? bioConfig.defaultIndex : 0;
 
 /* ============ CATEGORY (THỂ LOẠI NHẠC) ============ */
-// Thêm mã ở đây để có nhãn tiếng Việt đẹp cho category mới trong bioConfig.tracks.
-// Mã không có trong danh sách này sẽ tự viết hoa chữ cái đầu để hiển thị.
 const CATEGORY_LABELS = {
   bth: 'Bình thường',
   fonk: 'Phonk',
@@ -169,6 +177,11 @@ function closeTrackList(){
   if (trackMenuBtn) trackMenuBtn.setAttribute('aria-expanded', 'false');
 }
 
+// FIX: mỗi lần renderTrackList() vẽ lại danh sách (đổi category), các node
+// .m-bar cũ bị hủy nhưng miniBarsPerTrack vẫn trỏ tới node cũ đã "chết".
+// -> gọi cacheTrackMiniBars() lại ngay sau mỗi renderTrackList() (hàm này
+// được khai báo bên dưới, nhưng vì đây là function declaration nên hoisting
+// vẫn hoạt động bình thường khi các listener chạy sau này).
 if (trackCategoryFiltersEl) {
   trackCategoryFiltersEl.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -177,6 +190,7 @@ if (trackCategoryFiltersEl) {
     currentCategory = chip.dataset.category;
     renderCategoryFilters();
     renderTrackList();
+    cacheTrackMiniBars();
   });
 }
 
@@ -220,7 +234,10 @@ const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-re
 const gateParticles = document.getElementById('gate-particles');
 if (gateParticles && !prefersReducedMotion) {
   const colors = ['#cf6478', '#e2a85c', '#86a179', '#f3ece2'];
-  const count = 14;
+  // Giảm từ 14 xuống 8 hạt — khác biệt thị giác gần như không nhận ra được,
+  // nhưng đỡ 40% workload animate liên tục ngay khi trang vừa load (kể cả
+  // trước khi người dùng bấm vào gate).
+  const count = 8;
   let frag = document.createDocumentFragment();
   for (let i = 0; i < count; i++) {
     const p = document.createElement('span');
@@ -253,7 +270,9 @@ function spawnGateBurst(x, y) {
   burst.addEventListener('animationend', () => burst.remove());
 
   const colors = ['#f3ece2', '#cf6478', '#e2a85c', '#86a179'];
-  const shardCount = 14;
+  // Giảm số mảnh vỡ từ 14 xuống 10 — hiệu ứng chỉ chạy 1 lần lúc bấm vào nên
+  // ít ảnh hưởng hiệu năng chung, nhưng vẫn giảm nhẹ cho máy yếu.
+  const shardCount = 10;
   for (let i = 0; i < shardCount; i++) {
     const shard = document.createElement('div');
     shard.className = 'gate-shard';
@@ -281,9 +300,9 @@ if (gate) {
     setTimeout(() => {
       gate.hidden = true;
       if (main) main.hidden = false;
-      requestAnimationFrame(() => { 
-        if (card) card.classList.add('in'); 
-        if (dock) dock.classList.add('in'); 
+      requestAnimationFrame(() => {
+        if (card) card.classList.add('in');
+        if (dock) dock.classList.add('in');
       });
       if (bgVideo) bgVideo.play().catch(()=>{});
       if (music) music.play().then(() => setMusicState(true)).catch(() => setMusicState(false));
@@ -292,17 +311,26 @@ if (gate) {
 }
 
 /* ============ NGHIÊNG NHẸ THẺ BIO THEO CHUỘT (DESKTOP) ============ */
+// FIX LAG: card chứa các khối có backdrop-filter (music-box, discord mini
+// profile) bên trong. Khi card cha xoay rotateX/rotateY liên tục theo
+// mousemove, trình duyệt phải build lại layer blur của các khối con gần
+// như mỗi khung hình -> đây là nguồn giật hình chính. Giảm góc nghiêng
+// (5/6deg -> 3/4deg) và bỏ qua các thay đổi quá nhỏ (dưới ngưỡng) để giảm
+// đáng kể số lần phải vẽ lại, mà mắt gần như không nhận ra khác biệt.
 if (card && window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches && !prefersReducedMotion) {
   let tiltRAF = null;
+  let lastPx = 0, lastPy = 0;
   card.addEventListener('mouseenter', () => card.classList.add('tilt-ready'));
   card.addEventListener('mousemove', (e) => {
     if (!card.classList.contains('in')) return;
     const rect = card.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
+    if (Math.abs(px - lastPx) < 0.01 && Math.abs(py - lastPy) < 0.01) return;
+    lastPx = px; lastPy = py;
     if (tiltRAF) cancelAnimationFrame(tiltRAF);
     tiltRAF = requestAnimationFrame(() => {
-      card.style.transform = `translateY(0) scale(1) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 6).toFixed(2)}deg)`;
+      card.style.transform = `translateY(0) scale(1) rotateX(${(-py * 3).toFixed(2)}deg) rotateY(${(px * 4).toFixed(2)}deg)`;
     });
   });
   card.addEventListener('mouseleave', () => {
@@ -368,10 +396,6 @@ const volumeSliderContainer = document.getElementById('volume-slider-container')
 const volumeSliderFill = document.getElementById('volume-slider-fill');
 const volWave = document.querySelector('.vol-wave');
 
-// Lưu mức âm lượng vào localStorage để lần sau vào lại trang vẫn giữ nguyên
-// mức đã chỉnh, thay vì luôn reset về 100% mặc định. Bọc try/catch vì
-// localStorage có thể bị chặn (chế độ ẩn danh, cookie bị tắt...) — lỗi đó
-// không được làm hỏng phần nghe nhạc.
 const VOLUME_STORAGE_KEY = 'bio-music-volume';
 const LAST_VOLUME_STORAGE_KEY = 'bio-music-last-volume';
 
@@ -418,7 +442,7 @@ let isDraggingVol = false;
 function handleVolMove(e) {
   if (!volumeSliderContainer) return;
   const rect = volumeSliderContainer.getBoundingClientRect();
-  if (rect.width === 0) return; 
+  if (rect.width === 0) return;
   const percent = (e.clientX - rect.left) / rect.width;
   updateVolume(percent);
 }
@@ -456,13 +480,11 @@ if (volumeBtn) {
 let audioCtx, analyser, source;
 let isAudioContextInit = false;
 
-// Cache sẵn các phần tử cần cập nhật mỗi khung hình, tránh querySelectorAll
-// (và cấp phát mảng mới) 60 lần/giây — đây là nguồn gây lag chính trước đó.
 const mainBarsCache = document.querySelectorAll('.music-bars .bar');
-let miniBarsPerTrack = []; // miniBarsPerTrack[trackIndex] = [m-bar, m-bar, m-bar]
+let miniBarsPerTrack = [];
 let allMiniBarsFlat = [];
 let visualizerDataArray = null;
-let barsAreReset = true; // tránh ghi style lặp lại khi đã ở trạng thái nghỉ
+let barsAreReset = true;
 
 function cacheTrackMiniBars(){
   if (!trackListEl) return;
@@ -471,6 +493,13 @@ function cacheTrackMiniBars(){
   allMiniBarsFlat = miniBarsPerTrack.flat();
 }
 cacheTrackMiniBars();
+
+// FIX LAG QUAN TRỌNG: trước đây renderFrame() tự gọi requestAnimationFrame
+// vô điều kiện -> vòng lặp 60fps chạy VĨNH VIỄN suốt vòng đời trang, kể cả
+// khi nhạc chưa từng được bấm phát. Giờ chỉ khởi động rAF khi nhạc thực sự
+// play, và hủy hẳn (cancelAnimationFrame) khi nhạc pause — đỡ tốn CPU/pin
+// đáng kể, đặc biệt trên mobile.
+let rafId = null;
 
 function initVisualizer() {
   if (isAudioContextInit || !music) return;
@@ -486,7 +515,6 @@ function initVisualizer() {
   analyser.connect(audioCtx.destination);
 
   isAudioContextInit = true;
-  renderFrame();
 }
 
 const SAMPLE_INDICES = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
@@ -500,10 +528,9 @@ function resetBarsOnce(){
 }
 
 function renderFrame() {
-  requestAnimationFrame(renderFrame);
-
   if (!analyser || music.paused) {
     resetBarsOnce();
+    rafId = null; // dừng hẳn loop thay vì tiếp tục request rồi return sớm mỗi frame
     return;
   }
   barsAreReset = false;
@@ -517,8 +544,6 @@ function renderFrame() {
     bar.style.transform = `scaleY(${scale})`;
   });
 
-  // Chỉ cập nhật mini-bars của danh sách phát khi panel đang mở và có bài đang active —
-  // tránh ghi style vào các phần tử đang ẩn (display:none) mỗi khung hình.
   if (trackListPanel && trackListPanel.classList.contains('open')) {
     const activeMiniBars = miniBarsPerTrack[currentTrackIndex];
     if (activeMiniBars && activeMiniBars.length) {
@@ -530,6 +555,8 @@ function renderFrame() {
       });
     }
   }
+
+  rafId = requestAnimationFrame(renderFrame);
 }
 
 if (music) {
@@ -540,21 +567,24 @@ if (music) {
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume();
     }
+    if (rafId === null) {
+      rafId = requestAnimationFrame(renderFrame);
+    }
+  });
+  music.addEventListener('pause', () => {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    resetBarsOnce();
   });
 }
 
 /* ============ DISCORD STATUS THẬT (LANYARD API) ============ */
 (function () {
   const dmpRoot = document.getElementById('discord-mini-profile');
-  // Zone riêng chỉ bọc quanh hàng avatar/tên — nameplate (ảnh/video) được gắn
-  // vào ĐÂY thay vì vào dmpRoot, để chiều cao của nó không đổi khi activity
-  // panel bên dưới mở/đóng (tránh bị "phóng to" đè lên panel).
   const dmpZone = document.getElementById('dmp-nameplate-zone') || dmpRoot;
 
-  // Nameplate thật lấy từ Discord (collectibles.nameplate) qua Cloudflare Worker:
-  // video động (.webm) làm nền chính, ảnh tĩnh (.png) làm fallback, và màu palette
-  // (crimson, berry, sky, teal, forest, bubble_gum, violet, cobalt, clover, lemon, white)
-  // tô nền khi không load được asset.
   const DMP_PALETTE_COLORS = {
     crimson: '#c53434',
     berry: '#c2266d',
@@ -591,8 +621,6 @@ if (music) {
       video.playsInline = true;
       video.setAttribute('aria-hidden', 'true');
       video.onerror = () => video.remove();
-      // Gắn vào zone cố định (không phải toàn bộ dmpRoot) để video không bị
-      // giãn theo chiều cao khi activity panel mở ra.
       dmpZone.prepend(video);
       video.play().catch(() => {});
     }
@@ -861,12 +889,12 @@ function renderBadges(data) {
     if (dmpActivity) dmpActivity.textContent = activity;
     if (dmpRoot) dmpRoot.classList.add('in');
 
-const statusDot = document.getElementById('dmp-status-dot');
-if (statusDot) {
-  const status = ['online', 'idle', 'dnd', 'offline'].includes(data.discord_status)
-    ? data.discord_status : 'offline';
-  statusDot.className = 'dmp-status-dot ' + status;
-}
+    const statusDot = document.getElementById('dmp-status-dot');
+    if (statusDot) {
+      const status = ['online', 'idle', 'dnd', 'offline'].includes(data.discord_status)
+        ? data.discord_status : 'offline';
+      statusDot.className = 'dmp-status-dot ' + status;
+    }
 
     if (dmpDecoration) {
       if (decoration) {
@@ -938,7 +966,6 @@ if (statusDot) {
 
   const REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Danh sách các dòng sẽ lần lượt hiện ra mỗi lần bấm — sửa/thêm nội dung tại đây
   const lines = [
     'cập nhật lần cuối · tháng 8, 2026',
     'hmm ✦',

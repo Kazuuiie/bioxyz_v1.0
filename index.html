@@ -52,10 +52,6 @@
     position:fixed; inset:0; z-index:99;
     pointer-events:none;
     opacity:0.035;
-    /* Bỏ mix-blend-mode: multiply — nó buộc trình duyệt blend lại TOÀN BỘ trang
-       mỗi khi có bất kỳ animation nào chạy bên dưới (orb, hạt sáng, con trỏ nhấp
-       nháy...), tức gần như liên tục. Không có blend-mode thì lớp noise này chỉ
-       là một ảnh mờ phủ lên trên, rẻ hơn nhiều cho GPU mà độ nhám nhìn vẫn tương tự. */
     background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
   }
 
@@ -134,7 +130,6 @@
     border-radius:50%;
     background: var(--c, #e2a85c);
     opacity:0;
-    /* box-shadow rẻ hơn filter:drop-shadow (không cần dựng lại toàn bộ layer mỗi khung hình) */
     box-shadow: 0 0 5px var(--c, #e2a85c);
     will-change: transform, opacity;
     animation: gate-float var(--d, 9s) ease-in var(--delay, 0s) infinite;
@@ -277,15 +272,15 @@
   .orb-1{ width:260px; height:260px; top:6%; left:-6%; background: radial-gradient(circle, var(--raspberry), transparent 70%); animation-duration: 18s; }
   .orb-2{ width:220px; height:220px; bottom:8%; right:-5%; background: radial-gradient(circle, var(--mustard), transparent 70%); animation-duration: 21s; animation-delay: -6s; }
   .orb-3{ width:180px; height:180px; bottom:32%; left:4%; background: radial-gradient(circle, var(--sage), transparent 70%); animation-duration: 15s; animation-delay: -3s; }
-  /* Chỉ dùng translate (không scale) — scale cùng với filter:blur buộc trình duyệt
-     vẽ lại vùng blur mỗi khung hình, translate thì chỉ dịch chuyển layer đã dựng sẵn. */
   @keyframes orb-float{
     0%,100%{ transform: translateZ(0) translate(0,0); }
     33%{ transform: translateZ(0) translate(26px,-32px); }
     66%{ transform: translateZ(0) translate(-20px,20px); }
   }
   @media (max-width: 640px){
-    .orb-3{ display:none; } /* bớt 1 lớp blur trên máy yếu/di động */
+    .orb-3{ display:none; }
+    /* Bớt thêm 1 lớp blur nữa trên mobile để nhẹ máy hơn nữa */
+    .orb-2{ display:none; }
   }
 
   main{
@@ -417,9 +412,6 @@
     margin: 0 auto 22px;
     padding: 0 0 10px 0;
     background: rgba(255,255,255,0.24);
-    /* 2 lớp: highlight tròn mờ ở góc trên-trái (như ánh sáng chiếu vào mặt
-       kính) nằm trên lớp gradient chéo nhạt — cùng kiểu ánh sáng mà
-       .music-box::before đang dùng, để đồng bộ cảm giác "kính" giữa 2 khối. */
     background-image:
       radial-gradient(circle at 14% -12%, rgba(255,255,255,0.55), transparent 52%),
       linear-gradient(150deg, rgba(255,255,255,0.22), rgba(255,255,255,0));
@@ -429,16 +421,17 @@
     box-sizing:border-box;
     overflow: hidden;
     box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset;
-    backdrop-filter: blur(10px) saturate(1.1);
-    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    /* FIX LAG: giảm blur 10px -> 6px. .discord-mini-profile nằm bên trong
+       .card (có preserve-3d + tilt theo chuột), nên backdrop-filter càng
+       nặng thì trình duyệt càng phải build lại layer nhiều khi card xoay.
+       Giảm nhẹ blur gần như không khác biệt bằng mắt nhưng đỡ đáng kể GPU. */
+    backdrop-filter: blur(6px) saturate(1.05);
+    -webkit-backdrop-filter: blur(6px) saturate(1.05);
     transition: background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
   }
   .discord-mini-profile:hover{
     box-shadow: 0 20px 38px -20px rgba(74,51,54,0.46), 0 1px 0 rgba(255,255,255,0.5) inset;
   }
-  /* Viền màu theo trạng thái online/idle/dnd — cùng kỹ thuật với
-     .music-box.is-playing (thêm 1 vòng màu mảnh vào box-shadow), giúp cả
-     card "sống" theo đúng màu chấm trạng thái thay vì luôn tĩnh 1 kiểu. */
   .discord-mini-profile:has(.dmp-status-dot.online){
     box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(35,165,90,0.3);
   }
@@ -460,18 +453,14 @@
   .discord-mini-profile.has-nameplate{
     border-color: rgba(255,255,255,0.14);
     border-left-color: transparent;
-    /* Trước đây chỉ zone nameplate (avatar+tên) có nền tối, còn activity panel
-       bên dưới bỏ trong suốt — nên khi nền trang là ảnh/video sặc sỡ, nửa dưới
-       card bị "ăn" màu lung tung theo hình nền, tạo cảm giác lệch tông so với
-       nửa trên (tối). Giờ phủ thêm 1 lớp gradient tối nhẹ + blur mạnh hơn lên
-       TOÀN BỘ card khi có nameplate, để cả khối liền một tông màu với zone
-       nameplate ở trên — cân bằng và dễ đọc chữ hơn hẳn. */
     background-color: transparent;
     background-image:
       radial-gradient(circle at 14% -12%, rgba(255,255,255,0.12), transparent 48%),
       linear-gradient(180deg, rgba(20,16,15,0.58) 0%, rgba(20,16,15,0.74) 100%);
-    backdrop-filter: blur(18px) saturate(1.05);
-    -webkit-backdrop-filter: blur(18px) saturate(1.05);
+    /* FIX LAG: giảm blur 18px -> 10px — đây là lớp nặng nhất trong cả trang
+       (blur lớn + saturate) và chỉ bật khi có nameplate thật từ Discord. */
+    backdrop-filter: blur(10px) saturate(1.02);
+    -webkit-backdrop-filter: blur(10px) saturate(1.02);
     box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55);
   }
   .discord-mini-profile.has-nameplate:has(.dmp-status-dot.online){
@@ -488,20 +477,9 @@
     background: #14100f;
   }
 
-  /* ---- Zone nameplate: CHỈ bọc quanh hàng avatar/tên (dmp-top), không bọc
-     activity panel. Vì vậy chiều cao của zone này cố định — khi bấm nút "..."
-     để mở/đóng activity panel bên dưới, nameplate (ảnh/video nền) không còn
-     bị kéo giãn/phóng to theo và không còn che mất activity panel nữa. ---- */
   .dmp-nameplate-zone{
     position: relative;
     overflow: hidden;
-    /* padding-bottom = 8px: đủ chỗ cho .dmp-decoration (inset:-6px, tức tràn
-       ra ngoài dmp-avatar-wrap 6px mỗi cạnh) và dmp-status-dot (bottom:-2px)
-       không bị overflow:hidden của zone cắt mất phần dưới nữa. Trước đây
-       bottom = 0 nên viền trang trí (decoration) quanh avatar bị cắt phẳng
-       ở cạnh dưới, trông như bị mất một mảnh. Chỉ đổi padding của zone (zone
-       chỉ bọc dmp-top) — không đụng .dmp-activity-panel nên activity card
-       không bị ảnh hưởng gì. */
     padding: 10px 14px 8px 10px;
     --dmp-nameplate: none;
     --dmp-nameplate-color: rgba(20,13,15,.9);
@@ -548,10 +526,6 @@
     background: transparent;
     border: none;
   }
-  /* Nền activity panel giờ ăn theo gradient tối chung của cả card (khai báo
-     ở .discord-mini-profile.has-nameplate phía trên) thay vì để trong suốt
-     hoàn toàn — nên chữ trong panel cũng phải đổi sang tông sáng cho tương
-     phản đủ đọc, giống hệt cách .dmp-activity đã làm ở trên. */
   .discord-mini-profile.has-nameplate .dmp-act-details,
   .discord-mini-profile.has-nameplate .dmp-act-state,
   .discord-mini-profile.has-nameplate .dmp-act-time{
@@ -561,8 +535,27 @@
     box-shadow: 0 4px 12px -3px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
   }
 
+  /* Tắt hẳn backdrop-filter trên mobile: máy yếu nhất, và khác biệt thị
+     giác của blur trên nền đã đủ tối/nhạt gần như không ai nhận ra.
+     Bù lại bằng nền đặc hơn một chút để giữ độ tương phản với chữ. */
+  @media (max-width: 640px){
+    .discord-mini-profile,
+    .discord-mini-profile.has-nameplate,
+    .music-box{
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .discord-mini-profile{
+      background-color: rgba(255,255,255,0.5);
+    }
+    .discord-mini-profile.has-nameplate{
+      background-color: rgba(20,16,15,0.78);
+    }
+    .music-box{
+      background-color: rgba(18,16,15,0.7);
+    }
+  }
 
-  /* ---- Hàng icon: mic / tai nghe / cài đặt (giống thanh user Discord) ---- */
   .dmp-icons{
     display:flex; align-items:center; gap:2px;
     margin-left:auto; position:relative; z-index:1;
@@ -590,10 +583,6 @@
     box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35);
     transition: box-shadow .4s ease;
   }
-  /* Quầng sáng mềm sau avatar theo màu trạng thái — .dmp-avatar không
-     position:absolute nên box-shadow của nó luôn vẽ dưới lớp .dmp-decoration
-     và .dmp-status-dot (2 cái đó có position:absolute), tức quầng sáng nằm
-     đúng phía sau viền trang trí, không đè lên. */
   .dmp-avatar-wrap:has(.dmp-status-dot.online) .dmp-avatar{
     box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(35,165,90,0.16), 0 0 18px 4px rgba(35,165,90,0.22);
   }
@@ -609,7 +598,6 @@
     pointer-events:none;
   }
 
-  /* Styling cho nút ... */
   .toggle-act-btn {
     background: transparent;
     border: none;
@@ -636,7 +624,6 @@
     opacity: 0.4;
   }
 
-  /* Khóa panel khi người dùng chủ động tắt */
   .dmp-activity-panel.user-collapsed {
     max-height: 0px !important;
     opacity: 0 !important;
@@ -656,10 +643,23 @@
     content:""; position:absolute; inset:2.5px; border-radius:50%;
     background:#80848e;
   }
-  .dmp-status-dot.online::before{ background:#23a55a; animation: status-glow 2s ease-in-out infinite; }
-  @keyframes status-glow{
-    0%,100%{ box-shadow: 0 0 0 0 rgba(35,165,90,0.55); }
-    50%{ box-shadow: 0 0 0 4px rgba(35,165,90,0); }
+  .dmp-status-dot.online::before{ background:#23a55a; }
+  /* FIX LAG: hiệu ứng glow trước đây animate box-shadow trực tiếp, buộc
+     trình duyệt PAINT lại (không composite được) mỗi khung hình animation.
+     Thay bằng 1 vòng tròn ::after phóng to + mờ dần bằng transform/opacity
+     — 2 thuộc tính này chạy trên GPU compositor, rẻ hơn nhiều, nhìn ra hiệu
+     ứng gần như giống hệt bản cũ. */
+  .dmp-status-dot.online{ position:absolute; }
+  .dmp-status-dot.online::after{
+    content:"";
+    position:absolute; inset:2.5px; border-radius:50%;
+    background: rgba(35,165,90,0.55);
+    animation: status-glow-ring 2s ease-out infinite;
+    pointer-events:none;
+  }
+  @keyframes status-glow-ring{
+    0%{ transform: scale(1); opacity:0.55; }
+    100%{ transform: scale(1.9); opacity:0; }
   }
   .dmp-status-dot.idle::before{ background:#f0b232; }
   .dmp-status-dot.dnd::before{ background:#f23f43; }
@@ -703,9 +703,6 @@
     border-top: 1px solid transparent;
     transition: max-height 0.42s cubic-bezier(.2,.8,.2,1), opacity 0.32s ease, margin-top 0.42s ease, border-color 0.32s ease;
   }
-  /* Chỉ hiện 1 đường kẻ mảnh phân cách khi panel mở — thay cho khung hộp riêng
-     trước đây, để cả khối chỉ còn đúng 1 viền ngoài cùng (viền của
-     .discord-mini-profile) giống hệt kiểu khung .bio (about.txt). */
   .dmp-activity-panel.open{
     opacity:1; margin-top:10px; padding-top:10px;
     border-top-color: rgba(74,51,54,0.12);
@@ -713,9 +710,6 @@
   .discord-mini-profile.has-nameplate .dmp-activity-panel.open{
     border-top-color: rgba(255,255,255,.16);
   }
-  /* Nhãn nhỏ kiểu terminal phía trên activity card, cùng ngôn ngữ thị giác
-     với "$ discord --whoami" và .now::before ("$ cat status.log") — chỉ là
-     ::before thuần CSS nên không đụng tới cấu trúc/JS. */
   .dmp-activity-panel.open .dmp-activity-card::before{
     content:"▸ hoạt động";
     display:block; width:100%;
@@ -761,7 +755,6 @@
     color: var(--ink-soft); opacity:0.85;
   }
 
-/* Phóng to nhẹ khi di chuột vào chấm */
 .dmp-status-dot:hover {
   transform: scale(1.25);
 }
@@ -790,8 +783,10 @@
     padding: 14px 16px;
     margin: 0 0 22px;
     box-shadow: 0 14px 28px -18px rgba(74, 51, 54, 0.45);
-    backdrop-filter: blur(14px) saturate(1.15);
-    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    /* FIX LAG: giảm blur 14px -> 8px, cùng lý do như .discord-mini-profile
+       ở trên — khối này cũng nằm trong .card có tilt 3D. */
+    backdrop-filter: blur(8px) saturate(1.1);
+    -webkit-backdrop-filter: blur(8px) saturate(1.1);
   }
   .music-box::before{
     content:""; position:absolute; inset:0;
@@ -1094,9 +1089,6 @@
     padding: 12px 18px; background: var(--paper-dim); background-image: var(--texture);
     border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
     font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft);
-    /* .card-inner có padding trái/phải 30px — kéo footer ra bằng margin âm
-       để nó rộng bằng .titlebar (vốn nằm ngoài padding đó). Đổi 30px này nếu
-       bạn đổi padding của .card-inner ở trên. */
     margin-left: -30px;
     margin-right: -30px;
     width: calc(100% + 60px);
@@ -1195,17 +1187,8 @@
       defaultIndex: 0,
       avatar: 'avatar1.gif',
       discordId: '1473247060298961040',
-      // Worker lấy Nameplate thật trực tiếp từ Discord (video động + màu palette),
-      // luôn cập nhật khi bạn đổi nameplate trên Discord.
-      // Ví dụ: 'https://ten-worker-cua-ban.workers.dev'
       discordNameplateWorkerUrl: 'https://gentle-dust-08b8.ten870865.workers.dev/',
-      // Dự phòng/đơn giản: dán thẳng link ảnh/video nameplate tĩnh nếu không dùng Worker
-      // hoặc khi fetch Worker lỗi. Để trống ('') nếu không có file dự phòng.
       discordNameplateStaticUrl: '',
-      // category: mã thể loại tuỳ ý (vd: 'bth', 'fonk', 'remix', 'rap', 'lofi'...).
-      // Nhãn hiển thị được ánh xạ trong CATEGORY_LABELS bên javascript.js —
-      // thêm mã mới ở đó nếu muốn có tên tiếng Việt đẹp, không thêm thì code
-      // sẽ tự viết hoa chữ cái đầu để hiển thị.
       tracks: [
         {
           title: 'Id Thang Máy - W/n ft.267',
@@ -1298,8 +1281,6 @@
         <div class="divider reveal" style="--i:3"><span>❊</span></div>
 
         <div class="discord-mini-profile reveal" style="--i:3.5" id="discord-mini-profile">
-          <!-- Zone cố định: nameplate (ảnh/video nền Discord) chỉ áp dụng trong
-               vùng này. Không bọc activity-panel để tránh bị phóng to khi mở panel. -->
           <div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
             <div class="dmp-top">
               <div class="dmp-avatar-wrap">
@@ -1444,10 +1425,6 @@
 
   <div class="dock-wrap">
     <nav class="dock" id="dock" aria-label="Mạng xã hội">
-      <!-- Icon đang TẮT link (onclick="return false;" chặn hành vi mặc định).
-           Khi có link thật, xoá onclick="return false;" và đổi href="#" thành
-           URL của bạn, ví dụ href="https://discord.gg/xxxxx", rồi thêm lại
-           target="_blank" rel="noopener" để mở tab mới. -->
       <a class="dock-item discord" href="#" onclick="return false;" data-tip="Discord"><span class="dock-avatar"><img src="discord.png" alt="Discord" ></span></a>
       <a class="dock-item youtube" href="#" onclick="return false;" data-tip="YouTube"><span class="dock-avatar"><img src="youtube.png" alt="YouTube"></span></a>
       <a class="dock-item facebook" href="#" onclick="return false;" data-tip="Facebook"><span class="dock-avatar"><img src="facebook.png" alt="Facebook"></span></a>
