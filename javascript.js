@@ -62,6 +62,9 @@ const CATEGORY_LABELS = {
   edm: 'EDM',
   ballad: 'Ballad',
   chill: 'Chill'
+  nhactrung: 'Nhạc Trung',
+  nhactrung-remix: 'Nhạc Trung - Remix'
+  nhacnhat: 'Nhạc Nhật'
 };
 function getCategoryLabel(cat) {
   if (!cat) return 'Khác';
