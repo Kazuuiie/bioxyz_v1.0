@@ -61,9 +61,9 @@ const CATEGORY_LABELS = {
   drill: 'Drill',
   edm: 'EDM',
   ballad: 'Ballad',
-  chill: 'Chill'
+  chill: 'Chill',
   nhactrung: 'Nhạc Trung',
-  nhactrung-remix: 'Nhạc Trung - Remix'
+  nhactrungremix: 'Nhạc Trung Remix',
   nhacnhat: 'Nhạc Nhật'
 };
 function getCategoryLabel(cat) {
