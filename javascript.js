@@ -1022,7 +1022,7 @@ function renderBadges(data) {
         'backdrop-filter:blur(6px);pointer-events:none;';
       document.body.appendChild(el);
     }
-    el.textContent = '👁 ' + count.toLocaleString('vi-VN') + ' lượt xem';
+    el.textContent = '👁 ' + count.toLocaleString('vi-VN') + ' views';
   }
 
   checkOwnerFromUrl();
