@@ -373,10 +373,14 @@ if (music) {
     if (durationTimeEl) durationTimeEl.textContent = formatTime(music.duration);
   });
 
+  // FIX LAG: dùng transform: scaleX() thay vì width. Đổi width buộc trình
+  // duyệt tính lại layout + paint lại mỗi lần timeupdate bắn ra (rất thường
+  // xuyên khi đang phát nhạc). transform chỉ cần composite lại trên GPU,
+  // mượt hơn nhiều — đặc biệt rõ trên máy yếu/mobile.
   music.addEventListener('timeupdate', () => {
     if (music.duration) {
-      const percent = (music.currentTime / music.duration) * 100;
-      if (progressFill) progressFill.style.width = `${percent}%`;
+      const percent = music.currentTime / music.duration;
+      if (progressFill) progressFill.style.transform = `scaleX(${percent})`;
       if (currentTimeEl) currentTimeEl.textContent = formatTime(music.currentTime);
     }
   });
@@ -428,10 +432,13 @@ function saveLastVolume(val) {
 const initialVolume = loadStoredVolume();
 let lastVolume = loadStoredLastVolume(initialVolume > 0 ? initialVolume : 1);
 
+// FIX LAG: dùng transform: scaleX() thay vì width cho thanh âm lượng, cùng
+// lý do như progress bar ở trên — tránh trình duyệt phải tính lại layout
+// mỗi lần kéo/chỉnh âm lượng.
 function updateVolume(val, persist = true) {
   val = Math.max(0, Math.min(1, val));
   if (music) music.volume = val;
-  if (volumeSliderFill) volumeSliderFill.style.width = `${val * 100}%`;
+  if (volumeSliderFill) volumeSliderFill.style.transform = `scaleX(${val})`;
   if (volWave) volWave.style.display = val === 0 ? 'none' : 'block';
   if (persist) saveVolume(val);
 }
