@@ -983,3 +983,43 @@ function renderBadges(data) {
 
   typedEl.textContent = lines[currentIndex];
 })();
+/* ============ VIEW COUNTER — CHỈ CHỦ TRANG THẤY ============ */
+(function () {
+  const VIEW_API = 'https://views.ten870865.workers.dev/'; // đổi thành URL worker của bạn
+  const OWNER_KEY = 'doi-thanh-chuoi-bi-mat-cua-ban'; // đổi thành chuỗi bí mật riêng
+  const OWNER_STORAGE_KEY = 'bio_is_owner';
+
+  function isOwner() {
+    const params = new URLSearchParams(location.search);
+    if (params.get('key') === OWNER_KEY) {
+      try { localStorage.setItem(OWNER_STORAGE_KEY, '1'); } catch (e) {}
+      params.delete('key');
+      const clean = location.pathname + (params.toString() ? '?' + params.toString() : '');
+      history.replaceState({}, '', clean); // xóa ?key=... khỏi thanh địa chỉ
+      return true;
+    }
+    try { return localStorage.getItem(OWNER_STORAGE_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function showViewCount(count) {
+    let el = document.getElementById('owner-view-count');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'owner-view-count';
+      el.style.cssText = 'position:fixed;bottom:12px;right:12px;z-index:200;' +
+        'font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;' +
+        'background:rgba(20,16,15,.72);color:#fff8ee;padding:6px 12px;border-radius:20px;' +
+        'backdrop-filter:blur(6px);pointer-events:none;';
+      document.body.appendChild(el);
+    }
+    el.textContent = '👁 ' + count.toLocaleString('vi-VN') + ' lượt xem';
+  }
+
+  // Ghi nhận lượt xem cho MỌI người (đây là phần đếm thật)
+  fetch(VIEW_API + '/hit', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (isOwner()) showViewCount(data.count); // chỉ bạn mới thấy số
+    })
+    .catch(() => {});
+})();
