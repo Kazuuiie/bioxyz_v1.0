@@ -229,66 +229,23 @@ function setMusicState(isPlaying) {
   if (discTip) discTip.textContent = isPlaying ? 'đang phát — bấm để tắt' : 'bấm để phát nhạc';
 }
 
-/* ============ HẠT SÁNG TRÔI NỔI TRÊN MÀN HÌNH GATE ============ */
+/* ============ GATE ĐÃ ĐƠN GIẢN HÓA ============
+   Bỏ hẳn hiệu ứng hạt sáng bay (chạy vô hạn ngay từ lúc load trang) và
+   hiệu ứng 10 mảnh vỡ bay ra khi bấm — giờ chỉ còn 1 vòng tròn nổ đơn giản,
+   chạy đúng 1 lần và tự dọn dẹp ngay sau đó. */
 const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const gateParticles = document.getElementById('gate-particles');
-if (gateParticles && !prefersReducedMotion) {
-  const colors = ['#cf6478', '#e2a85c', '#86a179', '#f3ece2'];
-  // Giảm từ 14 xuống 8 hạt — khác biệt thị giác gần như không nhận ra được,
-  // nhưng đỡ 40% workload animate liên tục ngay khi trang vừa load (kể cả
-  // trước khi người dùng bấm vào gate).
-  const count = 8;
-  let frag = document.createDocumentFragment();
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('span');
-    const size = (Math.random() * 3 + 2).toFixed(1);
-    const duration = (Math.random() * 6 + 7).toFixed(1);
-    const delay = (Math.random() * 9).toFixed(1);
-    const drift = Math.round((Math.random() - 0.5) * 90);
-    p.style.left = (Math.random() * 100).toFixed(1) + '%';
-    p.style.setProperty('--s', size + 'px');
-    p.style.setProperty('--c', colors[i % colors.length]);
-    p.style.setProperty('--d', duration + 's');
-    p.style.setProperty('--delay', '-' + delay + 's');
-    p.style.setProperty('--x', drift + 'px');
-    frag.appendChild(p);
-  }
-  gateParticles.appendChild(frag);
-}
 
-/* ============ HIỆU ỨNG VỠ ÁNH SÁNG KHI BẤM VÀO GATE ============ */
 function spawnGateBurst(x, y) {
   if (prefersReducedMotion) return;
   const burst = document.createElement('div');
   burst.className = 'gate-burst';
-  const size = 260;
+  const size = 220;
   burst.style.left = x + 'px';
   burst.style.top = y + 'px';
   burst.style.width = size + 'px';
   burst.style.height = size + 'px';
   document.body.appendChild(burst);
   burst.addEventListener('animationend', () => burst.remove());
-
-  const colors = ['#f3ece2', '#cf6478', '#e2a85c', '#86a179'];
-  // Giảm số mảnh vỡ từ 14 xuống 10 — hiệu ứng chỉ chạy 1 lần lúc bấm vào nên
-  // ít ảnh hưởng hiệu năng chung, nhưng vẫn giảm nhẹ cho máy yếu.
-  const shardCount = 10;
-  for (let i = 0; i < shardCount; i++) {
-    const shard = document.createElement('div');
-    shard.className = 'gate-shard';
-    const angle = (Math.PI * 2 * i) / shardCount + Math.random() * 0.3;
-    const dist = 70 + Math.random() * 90;
-    const s = 3 + Math.random() * 4;
-    shard.style.left = x + 'px';
-    shard.style.top = y + 'px';
-    shard.style.width = s + 'px';
-    shard.style.height = s + 'px';
-    shard.style.background = colors[i % colors.length];
-    shard.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
-    shard.style.setProperty('--dy', (Math.sin(angle) * dist).toFixed(1) + 'px');
-    document.body.appendChild(shard);
-    shard.addEventListener('animationend', () => shard.remove());
-  }
 }
 
 if (gate) {
