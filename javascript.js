@@ -985,20 +985,30 @@ function renderBadges(data) {
 })();
 /* ============ VIEW COUNTER — CHỈ CHỦ TRANG THẤY ============ */
 (function () {
-  const VIEW_API = 'https://views.ten870865.workers.dev/'; // đổi thành URL worker của bạn
-  const OWNER_KEY = 'doi-thanh-chuoi-bi-mat-cua-ban'; // đổi thành chuỗi bí mật riêng
+  const VIEW_API = 'https://views.ten870865.workers.dev';
   const OWNER_STORAGE_KEY = 'bio_is_owner';
+  const OWNER_URLKEY_STORAGE = 'bio_owner_key';
 
-  function isOwner() {
+  function checkOwnerFromUrl() {
     const params = new URLSearchParams(location.search);
-    if (params.get('key') === OWNER_KEY) {
-      try { localStorage.setItem(OWNER_STORAGE_KEY, '1'); } catch (e) {}
+    const key = params.get('key');
+    if (key) {
+      try {
+        localStorage.setItem(OWNER_STORAGE_KEY, '1');
+        localStorage.setItem(OWNER_URLKEY_STORAGE, key);
+      } catch (e) {}
       params.delete('key');
       const clean = location.pathname + (params.toString() ? '?' + params.toString() : '');
-      history.replaceState({}, '', clean); // xóa ?key=... khỏi thanh địa chỉ
-      return true;
+      history.replaceState({}, '', clean);
     }
+  }
+
+  function isOwner() {
     try { return localStorage.getItem(OWNER_STORAGE_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function getStoredKey() {
+    try { return localStorage.getItem(OWNER_URLKEY_STORAGE) || ''; } catch (e) { return ''; }
   }
 
   function showViewCount(count) {
@@ -1015,11 +1025,15 @@ function renderBadges(data) {
     el.textContent = '👁 ' + count.toLocaleString('vi-VN') + ' lượt xem';
   }
 
-  // Ghi nhận lượt xem cho MỌI người (đây là phần đếm thật)
-  fetch(VIEW_API + '/hit', { method: 'POST' })
-    .then(r => r.json())
-    .then(data => {
-      if (isOwner()) showViewCount(data.count); // chỉ bạn mới thấy số
-    })
-    .catch(() => {});
+  checkOwnerFromUrl();
+
+  fetch(VIEW_API + '/hit', { method: 'POST' }).catch(() => {});
+
+  if (isOwner()) {
+    const key = getStoredKey();
+    fetch(VIEW_API + '/count?key=' + encodeURIComponent(key))
+      .then(r => r.json())
+      .then(data => { if (typeof data.count === 'number') showViewCount(data.count); })
+      .catch(() => {});
+  }
 })();
