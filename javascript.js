@@ -983,7 +983,7 @@ function renderBadges(data) {
 
   typedEl.textContent = lines[currentIndex];
 })();
-/* ============ VIEW COUNTER — CHỈ CHỦ TRANG THẤY ============ */
+/* ============ VIEW COUNTER — CHỈ CHỦ TRANG THẤY, KHÔNG TÍNH LƯỢT CỦA CHỦ ============ */
 (function () {
   const VIEW_API = 'https://views.ten870865.workers.dev';
   const OWNER_STORAGE_KEY = 'bio_is_owner';
@@ -1027,9 +1027,15 @@ function renderBadges(data) {
 
   checkOwnerFromUrl();
 
-  fetch(VIEW_API + '/hit', { method: 'POST' }).catch(() => {});
+  const ownerNow = isOwner();
 
-  if (isOwner()) {
+  // Chỉ tăng đếm nếu KHÔNG PHẢI chủ trang
+  if (!ownerNow) {
+    fetch(VIEW_API + '/hit', { method: 'POST' }).catch(() => {});
+  }
+
+  // Chỉ chủ trang mới thấy số (và số này không bị cộng thêm lượt của chính họ)
+  if (ownerNow) {
     const key = getStoredKey();
     fetch(VIEW_API + '/count?key=' + encodeURIComponent(key))
       .then(r => r.json())
