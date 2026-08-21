@@ -246,13 +246,19 @@
     transform: translate(-50%,-50%);
     object-fit: cover;
     object-position: 68% center;
-    filter: saturate(0.9) brightness(1.05);
   }
+  /* FIX GPU: đã bỏ filter (saturate/brightness) trên thẻ <video> và
+     mix-blend-mode trên lớp phủ. Cả 2 thứ này trước đây buộc trình duyệt
+     tính lại theo TỪNG khung hình video (video chạy loop vô hạn suốt thời
+     gian ở trang) — đây là điểm tốn GPU nặng nhất của cả trang. Giờ chỉ
+     còn 1 lớp gradient phủ tĩnh với opacity thường (composite rẻ), đổi lại
+     là màu video sẽ đúng màu gốc file mp4 thay vì được làm dịu bớt như
+     trước — nếu muốn giữ tông pastel, nên chỉnh màu sẵn trong file video
+     lúc export. */
   .bg-video-wrap::after{
     content:"";
     position:absolute; inset:0;
-    background: linear-gradient(165deg, rgba(251,231,207,0.35), rgba(246,211,199,0.32));
-    mix-blend-mode: soft-light;
+    background: linear-gradient(165deg, rgba(251,231,207,0.42), rgba(246,211,199,0.4));
   }
   .bg-video-wrap::before{
     content:"";
