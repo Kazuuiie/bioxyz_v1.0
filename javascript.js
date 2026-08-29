@@ -92,7 +92,7 @@ function renderCategoryFilters() {
   const chips = ['all', ...cats];
   trackCategoryFiltersEl.innerHTML = chips
     .map((c) => `
-      <button type="button" class="category-chip${c === currentCategory ? ' active' : ''}" data-category="${escapeHtml(c)}" role="tab" aria-selected="${c === currentCategory}">
+      <button type="button" class="category-chip${c === currentCategory ? ' active' : ''}" data-category="${escapeHtml(c)}" data-tooltip="${c === 'all' ? 'Tất cả bài hát' : escapeHtml(getCategoryLabel(c))}" role="tab" aria-selected="${c === currentCategory}">
         ${c === 'all' ? 'Tất cả' : escapeHtml(getCategoryLabel(c))}
       </button>
     `)
@@ -142,7 +142,7 @@ function renderTrackList(){
   }
 
   trackListEl.innerHTML = filtered.map(({ t, i }) => `
-    <li class="track-item${i === currentTrackIndex ? ' active' : ''}" data-index="${i}">
+    <li class="track-item${i === currentTrackIndex ? ' active' : ''}" data-index="${i}" data-tooltip="${escapeHtml(t.title || 'Không tên')}">
       <span class="t-index">${i + 1}</span>
       <img class="t-cover" src="${t.disc || ''}" alt="" loading="lazy">
       <div class="t-info">
@@ -226,7 +226,7 @@ if (tracks.length) {
 
 function setMusicState(isPlaying) {
   if (musicBox) musicBox.classList.toggle('is-playing', isPlaying);
-  if (discTip) discTip.textContent = isPlaying ? 'đang phát — bấm để tắt' : 'bấm để phát nhạc';
+  if (discTip) { const tip = isPlaying ? 'đang phát — bấm để tắt' : 'bấm để phát nhạc'; discTip.textContent = tip; discTip.dataset.tooltip = tip; }
 }
 
 /* ============ GATE ĐÃ ĐƠN GIẢN HÓA ============
@@ -824,7 +824,7 @@ function renderBadges(data) {
     const flags = (data.discord_user && data.discord_user.public_flags) || 0;
     dmpBadges.innerHTML = BADGE_FLAGS
       .filter(b => (flags & b.bit) !== 0)
-      .map(b => `<span class="dmp-badge" title="${b.label}">${b.icon}</span>`)
+      .map(b => `<span class="dmp-badge" data-tooltip="${escapeHtml(b.label)}">${b.icon}</span>`)
       .join('');
   }
   function activityText(data) {
@@ -1076,4 +1076,148 @@ function renderBadges(data) {
 
   tick();
   setInterval(tick, 1000);
+})();
+
+/* =========================================================
+   GLOBAL DATA-TOOLTIP SYSTEM
+   Mọi tooltip trên trang dùng chung một element duy nhất.
+   Chỉ cần: data-tooltip="Nội dung"
+   ========================================================= */
+(function initGlobalTooltips(){
+  'use strict';
+
+  const tooltip = document.getElementById('global-tooltip');
+  if (!tooltip) return;
+
+  let currentTarget = null;
+  let hideTimer = null;
+  let raf = null;
+  const OFFSET = 10;
+  const EDGE = 8;
+
+  function getText(el){
+    return el?.getAttribute('data-tooltip')?.trim() || '';
+  }
+
+  function position(el){
+    if (!el || !tooltip.classList.contains('is-visible')) return;
+
+    const rect = el.getBoundingClientRect();
+    const tip = tooltip.getBoundingClientRect();
+    const width = tip.width;
+    const height = tip.height;
+
+    let left = rect.left + rect.width / 2 - width / 2;
+    let top = rect.top - height - OFFSET;
+    let bottom = false;
+
+    if (top < EDGE){
+      top = rect.bottom + OFFSET;
+      bottom = true;
+    }
+
+    left = Math.max(EDGE, Math.min(left, window.innerWidth - width - EDGE));
+    top = Math.max(EDGE, Math.min(top, window.innerHeight - height - EDGE));
+
+    tooltip.style.left = Math.round(left) + 'px';
+    tooltip.style.top = Math.round(top) + 'px';
+    tooltip.classList.toggle('tooltip-bottom', bottom);
+  }
+
+  function schedulePosition(){
+    if (!currentTarget) return;
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      position(currentTarget);
+    });
+  }
+
+  function show(el){
+    const text = getText(el);
+    if (!text) return;
+
+    clearTimeout(hideTimer);
+    currentTarget = el;
+    tooltip.textContent = text;
+    tooltip.setAttribute('aria-hidden', 'false');
+    tooltip.classList.remove('tooltip-bottom');
+    tooltip.classList.add('is-visible');
+
+    requestAnimationFrame(() => {
+      if (currentTarget === el) position(el);
+    });
+  }
+
+  function hide(immediate=false){
+    clearTimeout(hideTimer);
+    const run = () => {
+      tooltip.classList.remove('is-visible');
+      tooltip.setAttribute('aria-hidden', 'true');
+      tooltip.classList.remove('tooltip-bottom');
+      currentTarget = null;
+    };
+    if (immediate) run();
+    else hideTimer = setTimeout(run, 70);
+  }
+
+  function init(el){
+    if (!el || el.dataset.tooltipBound === '1') return;
+    el.dataset.tooltipBound = '1';
+
+    el.addEventListener('mouseenter', () => show(el));
+    el.addEventListener('mouseleave', () => hide());
+    el.addEventListener('focus', () => show(el));
+    el.addEventListener('blur', () => hide(true));
+
+    el.addEventListener('touchstart', (e) => {
+      const text = getText(el);
+      if (!text) return;
+      e.stopPropagation();
+      if (currentTarget === el) hide(true);
+      else show(el);
+    }, {passive:true});
+  }
+
+  function scan(root=document){
+    if (root.matches?.('[data-tooltip]')) init(root);
+    root.querySelectorAll?.('[data-tooltip]').forEach(init);
+  }
+
+  document.addEventListener('click', (e) => {
+    if (currentTarget && !currentTarget.contains(e.target)) hide(true);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hide(true);
+  });
+
+  window.addEventListener('scroll', schedulePosition, {passive:true});
+  window.addEventListener('resize', schedulePosition, {passive:true});
+
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations){
+      if (mutation.type === 'childList') {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1) scan(node);
+        });
+      } else if (mutation.type === 'attributes' && mutation.target) {
+        init(mutation.target);
+        if (mutation.target === currentTarget) {
+          const text = getText(currentTarget);
+          if (text) tooltip.textContent = text;
+          else hide(true);
+          schedulePosition();
+        }
+      }
+    }
+  });
+
+  scan();
+  observer.observe(document.body, {
+    childList:true,
+    subtree:true,
+    attributes:true,
+    attributeFilter:['data-tooltip']
+  });
 })();
