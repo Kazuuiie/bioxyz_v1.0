@@ -773,69 +773,6 @@
 
      MUỐN ĐỔI MÀU: sửa các dòng có ghi chú "◄ ĐỔI MÀU Ở ĐÂY" bên dưới —
      đổi 1 lần là áp dụng cho MỌI tooltip dùng class này trên toàn trang. */
-  .tooltip-host{ position: relative; cursor: default; }
-  .tooltip-host[data-tooltip]::after{
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 0;
-    bottom: calc(100% + 12px);
-    max-width: 260px;
-    width: max-content;
-    background: #1a1412;              /* ◄ ĐỔI MÀU Ở ĐÂY: màu nền tooltip */
-    color: #fff8ee;                   /* ◄ ĐỔI MÀU Ở ĐÂY: màu chữ tooltip */
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
-    line-height: 1.4;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.12); /* ◄ ĐỔI MÀU Ở ĐÂY: viền tooltip */
-    box-shadow: 0 10px 24px -8px rgba(0,0,0,0.5);
-    white-space: normal;
-    opacity: 0;
-    transform: translateY(4px);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 30;
-  }
-  .tooltip-host[data-tooltip]::before{
-    content: "";
-    position: absolute;
-    left: 14px;
-    bottom: calc(100% + 6px);
-    border: 6px solid transparent;
-    border-top-color: #1a1412;        /* ◄ ĐỔI MÀU Ở ĐÂY: màu mũi tên (khớp màu nền) */
-    opacity: 0;
-    transform: translateY(4px);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 30;
-  }
-  /* Biến thể canh GIỮA (dùng cho phần tử nhỏ/gọn như đồng hồ) */
-  .tooltip-host.tooltip-center[data-tooltip]::after{
-    left: 50%; transform: translateX(-50%) translateY(4px);
-  }
-  .tooltip-host.tooltip-center[data-tooltip]::before{
-    left: 50%; transform: translateX(-50%) translateY(4px);
-  }
-  .tooltip-host.tooltip-center[data-tooltip]:hover::after{
-    transform: translateX(-50%) translateY(0);
-  }
-  .tooltip-host.tooltip-center[data-tooltip]:hover::before{
-    transform: translateX(-50%) translateY(0);
-  }
-  /* Biến thể canh PHẢI */
-  .tooltip-host.tooltip-right[data-tooltip]::after{ left: auto; right: 0; }
-  .tooltip-host.tooltip-right[data-tooltip]::before{ left: auto; right: 14px; }
-
-  .tooltip-host[data-tooltip]:hover::after,
-  .tooltip-host[data-tooltip]:hover::before{
-    opacity: 1;
-    transform: translateY(0);
-  }
-  @media (hover: none){
-    /* Trên điện thoại (không có hover thật) thì ẩn tooltip này đi,
-       tránh bị kẹt hiển thị sau khi chạm. */
     .tooltip-host[data-tooltip]::after,
     .tooltip-host[data-tooltip]::before{ display:none; }
   }
