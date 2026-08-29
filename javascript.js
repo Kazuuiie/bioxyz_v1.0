@@ -1043,3 +1043,37 @@ function renderBadges(data) {
       .catch(() => {});
   }
 })();
+
+/* ============ ĐỒNG HỒ THỜI GIAN THỰC (VIỆT NAM, UTC+7) ============ */
+(function () {
+  const clockEl = document.getElementById('vn-clock');
+  if (!clockEl) return;
+
+  const timeFormatter = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  const dateFormatter = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function tick() {
+    const now = new Date();
+    clockEl.textContent = `Việt Nam (UTC+7) · ${capitalize(dateFormatter.format(now))} · ${timeFormatter.format(now)}`;
+  }
+
+  tick();
+  setInterval(tick, 1000);
+})();
