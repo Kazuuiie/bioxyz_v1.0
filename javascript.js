@@ -1078,11 +1078,6 @@ function renderBadges(data) {
   setInterval(tick, 1000);
 })();
 
-
-/* =========================================================
-   GLOBAL TOOLTIP SYSTEM
-   ========================================================= */
-
 (() => {
   'use strict';
 
@@ -1095,25 +1090,16 @@ function renderBadges(data) {
   const EDGE = 8;
   const OFFSET = 10;
 
-  /*
-   * Delay giống cảm giác tooltip/title mặc định.
-   *
-   * 400-700ms là khoảng hợp lý.
-   * 500ms = mặc định hiện tại.
-   */
+  /* Delay tooltip */
   const SHOW_DELAY = 500;
 
 
   /* =======================================================
-     CREATE TOOLTIP
+     CREATE
      ======================================================= */
 
   function ensureTooltip() {
-
-    if (
-      tooltip &&
-      document.body.contains(tooltip)
-    ) {
+    if (tooltip && document.body.contains(tooltip)) {
       return tooltip;
     }
 
@@ -1121,16 +1107,14 @@ function renderBadges(data) {
 
     tooltip.id = 'global-tooltip';
 
-    tooltip.setAttribute(
-      'role',
-      'tooltip'
-    );
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.setAttribute('aria-hidden', 'true');
 
-    tooltip.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
+    /*
+     * Quan trọng:
+     * Không set color/font/background ở JS.
+     * CSS của #global-tooltip sẽ tự xử lý.
+     */
     document.body.appendChild(tooltip);
 
     return tooltip;
@@ -1138,134 +1122,149 @@ function renderBadges(data) {
 
 
   /* =======================================================
-     GET TEXT
+     GET TOOLTIP TEXT
      ======================================================= */
 
   function getText(el) {
+    if (!el) return '';
 
-    if (!el) {
-      return '';
+    const custom = el.getAttribute('data-tooltip');
+
+    if (custom && custom.trim()) {
+      return custom.trim();
     }
 
-    return (
-      el.getAttribute(
-        'data-tooltip'
-      ) || ''
-    ).trim();
+    /*
+     * -------------------------------------------------------
+     * MUSIC TITLE
+     *
+     * Nếu phần tử là #music-title nhưng chưa có
+     * data-tooltip thì tự lấy text hiện tại.
+     *
+     * Ví dụ:
+     * "Night Dancer — imase"
+     *
+     * → tooltip:
+     * "🎵 Night Dancer
+     *  🎤 imase"
+     * -------------------------------------------------------
+     */
+
+    if (el === musicTitle || el.id === 'music-title') {
+      const text = (el.textContent || '').trim();
+
+      if (!text) return '';
+
+      const parts = text.split(/\s+[—–-]\s+/);
+
+      if (parts.length >= 2) {
+        const title = parts.shift().trim();
+        const artist = parts.join(' — ').trim();
+
+        return `🎵 ${title}\n🎤 ${artist}`;
+      }
+
+      return `🎵 ${text}`;
+    }
+
+
+    /*
+     * -------------------------------------------------------
+     * DISCORD ACTIVITY
+     *
+     * Tự lấy nội dung hiện tại nếu element Discord
+     * không có data-tooltip.
+     * -------------------------------------------------------
+     */
+
+    if (
+      el.id === 'dmp-activity' ||
+      el.id === 'dmp-act-name' ||
+      el.id === 'dmp-act-details' ||
+      el.id === 'dmp-act-state'
+    ) {
+      const text = (el.textContent || '').trim();
+
+      return text || '';
+    }
+
+
+    return '';
   }
 
 
   /* =======================================================
      POSITION
-     
-     QUAN TRỌNG:
-     position() chỉ nhận X / Y.
-     
-     Không nhận element.
      ======================================================= */
 
   function position(x, y) {
+    if (!tooltip) return;
 
-    if (!tooltip) {
-      return;
-    }
-
-    const rect =
-      tooltip.getBoundingClientRect();
+    const rect = tooltip.getBoundingClientRect();
 
     const width = rect.width;
     const height = rect.height;
 
     /*
      * Mặc định:
-     * tooltip nằm phía trên con trỏ.
+     * phía trên con trỏ
      */
 
-    let left =
-      x - (width / 2);
-
-    let top =
-      y - height - OFFSET;
+    let left = x - width / 2;
+    let top = y - height - OFFSET;
 
     let isBottom = false;
 
 
     /* -----------------------------------------------------
-       TRÀN TRÁI
+       EDGE TRÁI
        ----------------------------------------------------- */
 
-    if (
-      left < EDGE
-    ) {
+    if (left < EDGE) {
       left = EDGE;
     }
 
 
     /* -----------------------------------------------------
-       TRÀN PHẢI
+       EDGE PHẢI
        ----------------------------------------------------- */
 
-    if (
-      left + width >
-      window.innerWidth - EDGE
-    ) {
-
-      left =
-        window.innerWidth -
-        width -
-        EDGE;
+    if (left + width > window.innerWidth - EDGE) {
+      left = window.innerWidth - width - EDGE;
     }
 
 
     /* -----------------------------------------------------
        KHÔNG ĐỦ CHỖ PHÍA TRÊN
-       → ĐẨY XUỐNG DƯỚI
+       → CHUYỂN XUỐNG DƯỚI
        ----------------------------------------------------- */
 
-    if (
-      top < EDGE
-    ) {
-
-      top =
-        y + OFFSET;
-
+    if (top < EDGE) {
+      top = y + OFFSET;
       isBottom = true;
     }
 
 
     /* -----------------------------------------------------
-       NẾU XUỐNG DƯỚI VẪN TRÀN
+       EDGE DƯỚI
        ----------------------------------------------------- */
 
-    if (
-      top + height >
-      window.innerHeight - EDGE
-    ) {
-
-      top =
-        window.innerHeight -
-        height -
-        EDGE;
+    if (top + height > window.innerHeight - EDGE) {
+      top = window.innerHeight - height - EDGE;
     }
 
 
     /* -----------------------------------------------------
-       ĐẢM BẢO KHÔNG TRÀN TRÊN
+       EDGE TRÊN
        ----------------------------------------------------- */
 
-    if (
-      top < EDGE
-    ) {
+    if (top < EDGE) {
       top = EDGE;
     }
 
 
-    tooltip.style.left =
-      `${Math.round(left)}px`;
-
-    tooltip.style.top =
-      `${Math.round(top)}px`;
-
+    tooltip.style.left = `${Math.round(left)}px`;
+    tooltip.style.top = `${Math.round(top)}px`;
 
     tooltip.classList.toggle(
       'tooltip-bottom',
@@ -1278,115 +1277,75 @@ function renderBadges(data) {
      SHOW
      ======================================================= */
 
-  function show(
-    el,
-    x,
-    y
-  ) {
-
-    const text =
-      getText(el);
+  function show(el, x, y) {
+    const text = getText(el);
 
     if (!text) {
+      hide();
       return;
     }
 
-
-    /*
-     * Hủy timer cũ.
-     */
-
-    clearTimeout(
-      showTimer
-    );
-
-    clearTimeout(
-      hideTimer
-    );
+    clearTimeout(showTimer);
+    clearTimeout(hideTimer);
 
     showTimer = null;
     hideTimer = null;
 
-
     /*
-     * Target hiện tại.
+     * Target mới
      */
 
     currentTarget = el;
 
-
-    const tip =
-      ensureTooltip();
-
+    const tip = ensureTooltip();
 
     /*
-     * Cập nhật nội dung.
+     * Không dùng innerHTML.
+     * Không ảnh hưởng HTML/style của phần tử gốc.
      */
 
-    tip.textContent =
-      text;
+    tip.textContent = text;
 
-
-    tip.setAttribute(
-      'aria-hidden',
-      'false'
-    );
-
+    tip.setAttribute('aria-hidden', 'false');
 
     /*
-     * Đảm bảo tooltip đang ẩn
-     * trong thời gian delay.
+     * Đảm bảo đang ẩn trong thời gian delay.
      */
 
-    tip.classList.remove(
-      'is-visible'
-    );
+    tip.classList.remove('is-visible');
 
 
     /*
      * Delay giống title.
      */
 
-    showTimer =
-      setTimeout(() => {
+    showTimer = setTimeout(() => {
 
-        /*
-         * Nếu mouse đã rời element
-         * trong lúc delay:
-         *
-         * KHÔNG được hiện tooltip.
-         */
+      /*
+       * Chuột đã rời element
+       * → không được hiện nữa.
+       */
 
-        if (
-          currentTarget !== el
-        ) {
-          return;
-        }
-
-
-        /*
-         * Hiện tooltip.
-         */
-
-        tip.classList.add(
-          'is-visible'
-        );
-
-
-        /*
-         * Định vị tại vị trí chuột
-         * cuối cùng đã ghi nhận.
-         */
-
-        position(
-          x,
-          y
-        );
-
-
+      if (currentTarget !== el) {
         showTimer = null;
+        return;
+      }
 
-      }, SHOW_DELAY);
+      /*
+       * Hiện tooltip.
+       */
+
+      tip.classList.add('is-visible');
+
+      /*
+       * Vị trí dựa trên tọa độ cuối cùng.
+       */
+
+      position(x, y);
+
+      showTimer = null;
+
+    }, SHOW_DELAY);
   }
 
 
@@ -1396,45 +1355,16 @@ function renderBadges(data) {
 
   function hide() {
 
-    /*
-     * Cực kỳ quan trọng:
-     * hủy timer SHOW.
-     */
-
-    clearTimeout(
-      showTimer
-    );
-
-
-    /*
-     * Hủy timer HIDE nếu có.
-     */
-
-    clearTimeout(
-      hideTimer
-    );
-
+    clearTimeout(showTimer);
+    clearTimeout(hideTimer);
 
     showTimer = null;
     hideTimer = null;
 
-
-    /*
-     * Không còn element hiện tại.
-     */
-
     currentTarget = null;
 
-
-    /*
-     * Ẩn NGAY.
-     */
-
     if (tooltip) {
-
-      tooltip.classList.remove(
-        'is-visible'
-      );
+      tooltip.classList.remove('is-visible');
 
       tooltip.setAttribute(
         'aria-hidden',
@@ -1449,18 +1379,35 @@ function renderBadges(data) {
      ======================================================= */
 
   function bind(el) {
-
-    if (!el) {
-      return;
-    }
-
+    if (!el) return;
 
     /*
      * Không bind 2 lần.
      */
 
+    if (el.dataset.globalTooltipBound === '1') {
+      return;
+    }
+
+    /*
+     * Chỉ bind element thực sự có tooltip
+     * hoặc các element được hỗ trợ tự động.
+     */
+
+    const isAutoMusic =
+      el === musicTitle ||
+      el.id === 'music-title';
+
+    const isAutoDiscord =
+      el.id === 'dmp-activity' ||
+      el.id === 'dmp-act-name' ||
+      el.id === 'dmp-act-details' ||
+      el.id === 'dmp-act-state';
+
     if (
-      el.dataset.globalTooltipBound === '1'
+      !el.hasAttribute('data-tooltip') &&
+      !isAutoMusic &&
+      !isAutoDiscord
     ) {
       return;
     }
@@ -1472,135 +1419,93 @@ function renderBadges(data) {
        MOUSE ENTER
        ===================================================== */
 
-    el.addEventListener(
-      'mouseenter',
-      (e) => {
+    el.addEventListener('mouseenter', (e) => {
 
-        show(
-          el,
-          e.clientX,
-          e.clientY
-        );
+      show(
+        el,
+        e.clientX,
+        e.clientY
+      );
 
-      }
-    );
+    });
 
 
     /* =====================================================
        MOUSE MOVE
-
-       CHỈ GẮN TRÊN EL.
-
+       
+       CHỈ TRÊN ELEMENT.
        KHÔNG document.
        KHÔNG window.
        ===================================================== */
 
-    el.addEventListener(
-      'mousemove',
-      (e) => {
+    el.addEventListener('mousemove', (e) => {
 
-        /*
-         * Nếu chuột không còn ở element
-         * thì tuyệt đối không làm gì.
-         */
-
-        if (
-          currentTarget !== el
-        ) {
-          return;
-        }
-
-
-        /*
-         * Chỉ cập nhật vị trí
-         * nếu tooltip thực sự đang hiện.
-         */
-
-        if (
-          tooltip &&
-          tooltip.classList.contains(
-            'is-visible'
-          )
-        ) {
-
-          position(
-            e.clientX,
-            e.clientY
-          );
-        }
-
+      if (currentTarget !== el) {
+        return;
       }
-    );
+
+      if (
+        tooltip &&
+        tooltip.classList.contains('is-visible')
+      ) {
+        position(
+          e.clientX,
+          e.clientY
+        );
+      }
+
+    });
 
 
     /* =====================================================
        MOUSE LEAVE
-
-       LUÔN HIDE.
-       KHÔNG ĐIỀU KIỆN.
        ===================================================== */
 
-    el.addEventListener(
-      'mouseleave',
-      () => {
+    el.addEventListener('mouseleave', () => {
 
-        hide();
+      /*
+       * Không kiểm tra currentTarget.
+       * Rời element là hide ngay.
+       */
 
-      }
-    );
+      hide();
+
+    });
 
 
     /* =====================================================
-       KEYBOARD FOCUS
+       FOCUS IN
        ===================================================== */
 
-    el.addEventListener(
-      'focusin',
-      () => {
+    el.addEventListener('focusin', () => {
 
-        const rect =
-          el.getBoundingClientRect();
+      const rect =
+        el.getBoundingClientRect();
 
+      const x =
+        rect.left + rect.width / 2;
 
-        /*
-         * Focus không có tọa độ chuột.
-         * Lấy tâm của element.
-         */
+      const y =
+        rect.top;
 
-        const x =
-          rect.left +
-          rect.width / 2;
+      show(
+        el,
+        x,
+        y
+      );
 
-        const y =
-          rect.top;
-
-
-        /*
-         * Dùng cùng delay.
-         */
-
-        show(
-          el,
-          x,
-          y
-        );
-
-      }
-    );
+    });
 
 
     /* =====================================================
        FOCUS OUT
        ===================================================== */
 
-    el.addEventListener(
-      'focusout',
-      () => {
+    el.addEventListener('focusout', () => {
 
-        hide();
+      hide();
 
-      }
-    );
+    });
 
 
     /* =====================================================
@@ -1611,39 +1516,24 @@ function renderBadges(data) {
       'touchstart',
       (e) => {
 
-        const text =
-          getText(el);
+        const text = getText(el);
 
-        if (!text) {
-          return;
-        }
-
+        if (!text) return;
 
         e.stopPropagation();
 
-
         /*
-         * Chạm lại cùng element
-         * → đóng.
+         * Chạm lại cùng element → đóng.
          */
 
-        if (
-          currentTarget === el
-        ) {
-
+        if (currentTarget === el) {
           hide();
-
           return;
         }
 
+        const touch = e.touches[0];
 
-        const touch =
-          e.touches[0];
-
-        if (!touch) {
-          return;
-        }
-
+        if (!touch) return;
 
         show(
           el,
@@ -1665,11 +1555,45 @@ function renderBadges(data) {
 
   function scan() {
 
+    /*
+     * Element có data-tooltip
+     */
+
     document
-      .querySelectorAll(
-        '[data-tooltip]'
-      )
+      .querySelectorAll('[data-tooltip]')
       .forEach(bind);
+
+
+    /*
+     * Music title tự động
+     */
+
+    const musicTitleEl =
+      document.getElementById('music-title');
+
+    if (musicTitleEl) {
+      bind(musicTitleEl);
+    }
+
+
+    /*
+     * Discord Activity tự động
+     */
+
+    [
+      'dmp-activity',
+      'dmp-act-name',
+      'dmp-act-details',
+      'dmp-act-state'
+    ].forEach(id => {
+
+      const el = document.getElementById(id);
+
+      if (el) {
+        bind(el);
+      }
+
+    });
   }
 
 
@@ -1677,65 +1601,44 @@ function renderBadges(data) {
      CLICK OUTSIDE
      ======================================================= */
 
-  document.addEventListener(
-    'click',
-    (e) => {
+  document.addEventListener('click', (e) => {
 
-      /*
-       * Không có tooltip
-       * → không cần làm gì.
-       */
-
-      if (
-        !currentTarget
-      ) {
-        return;
-      }
-
-
-      /*
-       * Click bên trong target
-       * → giữ tooltip.
-       */
-
-      if (
-        currentTarget.contains(
-          e.target
-        )
-      ) {
-        return;
-      }
-
-
-      /*
-       * Click bên ngoài
-       * → hide ngay.
-       */
-
-      hide();
-
+    if (!currentTarget) {
+      return;
     }
-  );
+
+    /*
+     * Click bên trong element hiện tại
+     * → giữ tooltip.
+     */
+
+    if (
+      currentTarget.contains(e.target)
+    ) {
+      return;
+    }
+
+    /*
+     * Click bên ngoài
+     * → hide ngay.
+     */
+
+    hide();
+
+  });
 
 
   /* =======================================================
      ESC
      ======================================================= */
 
-  document.addEventListener(
-    'keydown',
-    (e) => {
+  document.addEventListener('keydown', (e) => {
 
-      if (
-        e.key === 'Escape'
-      ) {
-
-        hide();
-
-      }
-
+    if (e.key === 'Escape') {
+      hide();
     }
-  );
+
+  });
 
 
   /* =======================================================
@@ -1743,13 +1646,9 @@ function renderBadges(data) {
      ======================================================= */
 
   const observer =
-    new MutationObserver(
-      () => {
-
-        scan();
-
-      }
-    );
+    new MutationObserver(() => {
+      scan();
+    });
 
 
   /* =======================================================
@@ -1761,7 +1660,6 @@ function renderBadges(data) {
     ensureTooltip();
 
     scan();
-
 
     observer.observe(
       document.body,
@@ -1777,10 +1675,7 @@ function renderBadges(data) {
   }
 
 
-  if (
-    document.readyState ===
-    'loading'
-  ) {
+  if (document.readyState === 'loading') {
 
     document.addEventListener(
       'DOMContentLoaded',
