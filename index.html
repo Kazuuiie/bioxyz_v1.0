@@ -996,8 +996,18 @@
   }
   h1 em{ font-style: italic; font-weight:500; color: var(--raspberry); }
 
-  .location{ text-align:center; font-size: 14px; color: var(--ink-soft); margin: 0 0 22px; }
+  .location{ text-align:center; font-size: 14px; color: var(--ink-soft); margin: 0 0 4px; }
   .location::before{ content:"📍 "; }
+
+  .vn-clock{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    opacity: 0.85;
+    margin: 0 0 22px;
+  }
 
   .divider{
     display:flex; align-items:center; justify-content:center; margin: 0 0 24px;
@@ -1213,6 +1223,7 @@
         <p class="eyebrow reveal" style="--i:2">xin chào, mình là</p>
         <h1 class="reveal" id="name-heading" style="--i:2">ITSREAL<em>KHANZ</em></h1>
         <p class="location reveal" style="--i:2">Việt Nam</p>
+        <p class="vn-clock reveal" style="--i:2" id="vn-clock">Việt Nam (UTC+7) · --:--:--</p>
         <div class="divider reveal" style="--i:3"><span>❊</span></div>
 
         <div class="discord-mini-profile reveal" style="--i:3.5" id="discord-mini-profile">
