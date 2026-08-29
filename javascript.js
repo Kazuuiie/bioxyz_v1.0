@@ -1182,11 +1182,14 @@ function bind(el) {
   el.dataset.globalTooltipBound = '1';
 
   el.addEventListener('mouseenter', (e) => show(el, e.clientX, e.clientY));
-  el.addEventListener('mousemove', (e) => { if (currentTarget === el) position(e.clientX, e.clientY); });
+  el.addEventListener('mousemove', (e) => {
+    if (currentTarget !== el) return;
+    position(e.clientX, e.clientY);
+  });
   el.addEventListener('mouseleave', hide);
   el.addEventListener('focusin', () => {
     const r = el.getBoundingClientRect();
-    show(el, r.left + r.width/2, r.top);
+    show(el, r.left + r.width / 2, r.top);
   });
   el.addEventListener('focusout', hide);
 }
