@@ -1215,13 +1215,6 @@ function bind(el) {
     if (e.key === 'Escape') hide();
   });
 
-  window.addEventListener('scroll', () => {
-    if (currentTarget) position(currentTarget);
-  }, { passive: true });
-
-  window.addEventListener('resize', () => {
-    if (currentTarget) position(currentTarget);
-  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init, { once: true });
