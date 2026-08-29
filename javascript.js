@@ -1138,23 +1138,35 @@ function renderBadges(data) {
     tooltip.classList.toggle('tooltip-bottom', bottom);
   }
 
-  const SHOW_DELAY = 60;
-let showTimer = null;
+function position(x, y) {
+  if (!tooltip) return;
+  const t = tooltip.getBoundingClientRect();
 
-function show(el) {
+  let left = x - t.width / 2;
+  let top = y - t.height - OFFSET;
+  let bottom = false;
+
+  if (top < EDGE) { top = y + OFFSET; bottom = true; }
+  if (left < EDGE) left = EDGE;
+  if (left + t.width > innerWidth - EDGE) left = innerWidth - t.width - EDGE;
+  if (top + t.height > innerHeight - EDGE) top = Math.max(EDGE, innerHeight - t.height - EDGE);
+
+  tooltip.style.left = `${Math.round(left)}px`;
+  tooltip.style.top = `${Math.round(top)}px`;
+  tooltip.classList.toggle('tooltip-bottom', bottom);
+}
+
+function show(el, x, y) {
   const text = getText(el);
   if (!text) return;
-  clearTimeout(showTimer);
   clearTimeout(hideTimer);
-  showTimer = setTimeout(() => {
-    currentTarget = el;
-    const tip = ensureTooltip();
-    tip.textContent = text;
-    tip.setAttribute('aria-hidden', 'false');
-    tip.classList.remove('tooltip-bottom');
-    tip.classList.add('is-visible');
-    position(el);
-  }, SHOW_DELAY);
+  currentTarget = el;
+  const tip = ensureTooltip();
+  tip.textContent = text;
+  tip.setAttribute('aria-hidden', 'false');
+  tip.classList.remove('tooltip-bottom');
+  tip.classList.add('is-visible');
+  position(x, y);
 }
 
 function hide() {
@@ -1165,26 +1177,19 @@ function hide() {
   tooltip.classList.remove('is-visible');
   tooltip.setAttribute('aria-hidden', 'true');
 }
-  function bind(el) {
-    if (el.dataset.globalTooltipBound === '1') return;
-    el.dataset.globalTooltipBound = '1';
+function bind(el) {
+  if (el.dataset.globalTooltipBound === '1') return;
+  el.dataset.globalTooltipBound = '1';
 
-    el.addEventListener('mouseenter', () => show(el));
-    el.addEventListener('mouseleave', hide);
-    el.addEventListener('focusin', () => show(el));
-    el.addEventListener('focusout', hide);
-
-    el.addEventListener('touchstart', (e) => {
-      const text = getText(el);
-      if (!text) return;
-
-      e.stopPropagation();
-
-      if (currentTarget === el) hide();
-      else show(el);
-    }, { passive: true });
-  }
-
+  el.addEventListener('mouseenter', (e) => show(el, e.clientX, e.clientY));
+  el.addEventListener('mousemove', (e) => { if (currentTarget === el) position(e.clientX, e.clientY); });
+  el.addEventListener('mouseleave', hide);
+  el.addEventListener('focusin', () => {
+    const r = el.getBoundingClientRect();
+    show(el, r.left + r.width/2, r.top);
+  });
+  el.addEventListener('focusout', hide);
+}
   function scan() {
     document.querySelectorAll('[data-tooltip]').forEach(bind);
   }
