@@ -824,7 +824,7 @@ function renderBadges(data) {
     const flags = (data.discord_user && data.discord_user.public_flags) || 0;
     dmpBadges.innerHTML = BADGE_FLAGS
       .filter(b => (flags & b.bit) !== 0)
-      .map(b => `<span class="dmp-badge" title="${b.label}">${b.icon}</span>`)
+      .map(b => `<span class="dmp-badge" data-tooltip="${b.label}">${b.icon}</span>`)
       .join('');
   }
   function activityText(data) {
