@@ -266,6 +266,30 @@
   }
   .dock-item{ position:relative; }
   .dock-item:hover{ translate: 0 -7px; }
+  .dock-item::after{
+    content: attr(data-tip);
+    position:absolute; bottom: calc(100% + 10px); left:50%;
+    transform: translate(-50%, 4px);
+    background: var(--ink);
+    color: #fdf6ec;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing:0.04em;
+    padding: 4px 8px; border-radius: 6px;
+    white-space:nowrap;
+    opacity:0; pointer-events:none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .dock-item::before{
+    content:"";
+    position:absolute; bottom: calc(100% + 5px); left:50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+    opacity:0;
+    transition: opacity 0.2s ease;
+  }
+  .dock-item:hover::after{ opacity:1; transform: translate(-50%, 0); }
+  .dock-item:hover::before{ opacity:1; }
   .dock-item img{
     width:100%; height:100%;
     object-fit:cover;
@@ -733,6 +757,89 @@
 
   .music-info{ flex:1; min-width:0; position:relative; z-index:1; }
 
+  /* ============ TOOLTIP DÙNG CHUNG (hover vào để hiện) ============
+     Tooltip TỰ VẼ bằng CSS (không dùng title="" gốc của trình duyệt),
+     nên custom màu sắc / font / bo góc thoải mái.
+
+     CÁCH DÙNG cho BẤT KỲ phần tử nào (không chỉ music box):
+       1) Thêm class="tooltip-host" vào phần tử đó
+       2) Thêm data-tooltip="Nội dung bạn muốn hiện"
+       3) Xong — không cần sửa JS, trừ khi muốn nội dung tự đổi động
+          (xem ví dụ cập nhật động trong javascript.js)
+
+     Mặc định tooltip canh TRÁI phía trên phần tử. Muốn canh GIỮA thì
+     thêm thêm class "tooltip-center" (ví dụ: class="tooltip-host
+     tooltip-center"). Muốn canh PHẢI thì thêm class "tooltip-right".
+
+     MUỐN ĐỔI MÀU: sửa các dòng có ghi chú "◄ ĐỔI MÀU Ở ĐÂY" bên dưới —
+     đổi 1 lần là áp dụng cho MỌI tooltip dùng class này trên toàn trang. */
+  .tooltip-host{ position: relative; cursor: default; }
+  .tooltip-host[data-tooltip]::after{
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 12px);
+    max-width: 260px;
+    width: max-content;
+    background: #1a1412;              /* ◄ ĐỔI MÀU Ở ĐÂY: màu nền tooltip */
+    color: #fff8ee;                   /* ◄ ĐỔI MÀU Ở ĐÂY: màu chữ tooltip */
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12); /* ◄ ĐỔI MÀU Ở ĐÂY: viền tooltip */
+    box-shadow: 0 10px 24px -8px rgba(0,0,0,0.5);
+    white-space: normal;
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 30;
+  }
+  .tooltip-host[data-tooltip]::before{
+    content: "";
+    position: absolute;
+    left: 14px;
+    bottom: calc(100% + 6px);
+    border: 6px solid transparent;
+    border-top-color: #1a1412;        /* ◄ ĐỔI MÀU Ở ĐÂY: màu mũi tên (khớp màu nền) */
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 30;
+  }
+  /* Biến thể canh GIỮA (dùng cho phần tử nhỏ/gọn như đồng hồ) */
+  .tooltip-host.tooltip-center[data-tooltip]::after{
+    left: 50%; transform: translateX(-50%) translateY(4px);
+  }
+  .tooltip-host.tooltip-center[data-tooltip]::before{
+    left: 50%; transform: translateX(-50%) translateY(4px);
+  }
+  .tooltip-host.tooltip-center[data-tooltip]:hover::after{
+    transform: translateX(-50%) translateY(0);
+  }
+  .tooltip-host.tooltip-center[data-tooltip]:hover::before{
+    transform: translateX(-50%) translateY(0);
+  }
+  /* Biến thể canh PHẢI */
+  .tooltip-host.tooltip-right[data-tooltip]::after{ left: auto; right: 0; }
+  .tooltip-host.tooltip-right[data-tooltip]::before{ left: auto; right: 14px; }
+
+  .tooltip-host[data-tooltip]:hover::after,
+  .tooltip-host[data-tooltip]:hover::before{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (hover: none){
+    /* Trên điện thoại (không có hover thật) thì ẩn tooltip này đi,
+       tránh bị kẹt hiển thị sau khi chạm. */
+    .tooltip-host[data-tooltip]::after,
+    .tooltip-host[data-tooltip]::before{ display:none; }
+  }
+
   .music-title{
     margin:0; font-family:'DM Sans', sans-serif; font-weight:700;
     font-size:13.5px; color:#fff8ee; line-height: 1.4;
@@ -1094,11 +1201,84 @@
   .foot-hint svg{ width:11px; height:11px; flex-shrink:0; transition: transform 0.35s ease; }
   footer#footer-bar:hover .foot-hint{ opacity:1; color: var(--raspberry); }
   footer#footer-bar:hover .foot-hint svg{ transform: rotate(180deg); }
-\n  /* ============ GLOBAL TOOLTIP — JS DUY NHẤT ============ */\n  #global-tooltip{\n    position:fixed;\n    left:0; top:0;\n    max-width:min(280px, calc(100vw - 24px));\n    padding:7px 10px;\n    background:#1a1412;\n    color:#fff8ee;\n    font-family:'DM Sans', sans-serif;\n    font-size:11.5px;\n    font-weight:600;\n    line-height:1.4;\n    border:1px solid rgba(255,255,255,0.12);\n    border-radius:9px;\n    box-shadow:0 10px 24px -8px rgba(0,0,0,0.5);\n    white-space:normal;\n    text-align:center;\n    pointer-events:none;\n    opacity:0;\n    visibility:hidden;\n    transform:translate3d(0,4px,0);\n    transition:opacity .16s ease, transform .16s ease, visibility .16s ease;\n    z-index:99999;\n    will-change:transform, opacity;\n  }\n  #global-tooltip.is-visible{\n    opacity:1;\n    visibility:visible;\n    transform:translate3d(0,0,0);\n  }\n  #global-tooltip::after{\n    content:"";\n    position:absolute;\n    width:8px; height:8px;\n    background:#1a1412;\n    border-right:1px solid rgba(255,255,255,0.12);\n    border-bottom:1px solid rgba(255,255,255,0.12);\n    transform:rotate(45deg);\n    bottom:-5px; left:50%; margin-left:-4px;\n  }\n  #global-tooltip.tooltip-bottom::after{\n    top:-5px; bottom:auto; transform:rotate(225deg);\n  }\n  @media (hover:none){\n    #global-tooltip{font-size:11px; max-width:min(240px, calc(100vw - 20px));}\n  }\n  @media (prefers-reduced-motion:reduce){\n    #global-tooltip{transition:none;}\n  }\n</style>
+
+/* =========================================================
+   GLOBAL JS TOOLTIP
+   ========================================================= */
+.tooltip-host[data-tooltip] {
+  cursor: default;
+}
+
+.tooltip-host[data-tooltip]::before,
+.tooltip-host[data-tooltip]::after,
+.dock-item[data-tooltip]::before,
+.dock-item[data-tooltip]::after,
+.dock-item[data-tip]::before,
+.dock-item[data-tip]::after {
+  content: none !important;
+  display: none !important;
+}
+
+#global-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  max-width: min(280px, calc(100vw - 20px));
+  padding: 7px 10px;
+  background: #1a1412;
+  color: #fff8ee;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 9px;
+  box-shadow: 0 10px 24px -8px rgba(0,0,0,.5);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0,4px,0);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+  z-index: 2147483647;
+}
+
+#global-tooltip.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0,0,0);
+}
+
+#global-tooltip::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  left: 50%;
+  bottom: -5px;
+  margin-left: -4px;
+  background: #1a1412;
+  border-right: 1px solid rgba(255,255,255,.12);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  transform: rotate(45deg);
+}
+
+#global-tooltip.tooltip-bottom::after {
+  top: -5px;
+  bottom: auto;
+  transform: rotate(225deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #global-tooltip { transition: none; }
+}
+
+</style>
 </head>
 <body oncontextmenu="return false;">
-
-<div id="global-tooltip" role="tooltip" aria-hidden="true"></div>
 
 <button id="gate" aria-label="Click to enter">
   <span class="gate-inner">
@@ -1219,7 +1399,7 @@
         <p class="eyebrow reveal" style="--i:2">xin chào, mình là</p>
         <h1 class="reveal" id="name-heading" style="--i:2">ITSREAL<em>KHANZ</em></h1>
         <p class="location reveal" style="--i:2">Việt Nam</p>
-        <p class="vn-clock reveal" style="--i:2" id="vn-clock" data-tooltip="Giờ Hiện Tại">Việt Nam (UTC+7) · --:--:--</p>
+        <p class="vn-clock reveal tooltip-host tooltip-center" style="--i:2" id="vn-clock" data-tooltip="Giờ Hiện Tại">Việt Nam (UTC+7) · --:--:--</p>
         <div class="divider reveal" style="--i:3"><span>❊</span></div>
 
         <div class="discord-mini-profile reveal" style="--i:3.5" id="discord-mini-profile">
@@ -1238,7 +1418,7 @@
                 <span id="dmp-activity" class="dmp-activity">đang kết nối…</span>
               </div>
               <div class="dmp-icons">
-                <button type="button" id="toggle-activity-btn" class="dmp-icon toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" data-tooltip="Ẩn/Hiện hoạt động">
+                <button type="button" id="toggle-activity-btn" class="dmp-icon toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" title="Ẩn/Hiện hoạt động">
                   <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
                     <circle cx="5" cy="12" r="2.2"></circle>
                     <circle cx="12" cy="12" r="2.2"></circle>
@@ -1276,7 +1456,7 @@
             
             <div class="music-info" id="music-info">
               <p class="music-title" id="music-title">Tên bài hát — nghệ sĩ</p>
-              <p class="music-sub" id="disc-tip" data-tooltip="bấm để phát nhạc">bấm để phát nhạc</p>
+              <p class="music-sub" id="disc-tip">bấm để phát nhạc</p>
             </div>
 
             <!-- NHỊP NHẠC THỜI GIAN THỰC -->
@@ -1295,39 +1475,39 @@
               <span class="bar"></span>
             </div>
 
-            <button class="music-playbtn" id="disc-player" type="button" aria-pressed="false" aria-label="Phát nhạc nền" data-tooltip="Phát / tạm dừng nhạc">
+            <button class="music-playbtn" id="disc-player" type="button" aria-pressed="false" aria-label="Phát nhạc nền">
               <svg class="icon-play" viewBox="0 0 24 24" fill="#121212"><path d="M8 5v14l11-7z"/></svg>
               <svg class="icon-pause" viewBox="0 0 24 24" fill="#121212"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
             </button>
-            <button class="music-menu-btn" id="track-menu-btn" type="button" aria-label="Danh sách bài hát" data-tooltip="Danh sách bài hát" aria-expanded="false" aria-haspopup="true">
+            <button class="music-menu-btn" id="track-menu-btn" type="button" aria-label="Danh sách bài hát" aria-expanded="false" aria-haspopup="true">
               <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
             </button>
           </div>
 
           <div class="music-progress-wrap">
             <span id="current-time" class="time-label">0:00</span>
-            <div class="progress-bar-container" id="progress-container" data-tooltip="Thanh tiến trình — kéo / bấm để tua">
+            <div class="progress-bar-container" id="progress-container">
               <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
             <span id="duration-time" class="time-label">0:00</span>
           </div>
 
           <div class="music-nav" aria-label="Chuyển bài">
-            <button type="button" id="music-prev" aria-label="Bài trước" data-tooltip="Bài trước">
+            <button type="button" id="music-prev" aria-label="Bài trước">
               <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
             </button>
-            <button type="button" id="music-next" aria-label="Bài tiếp theo" data-tooltip="Bài tiếp theo">
+            <button type="button" id="music-next" aria-label="Bài tiếp theo">
               <svg viewBox="0 0 24 24"><path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/></svg>
             </button>
 
             <div class="volume-container">
-              <button type="button" id="volume-btn" aria-label="Âm lượng" data-tooltip="Âm lượng">
+              <button type="button" id="volume-btn" aria-label="Âm lượng">
                 <svg viewBox="0 0 24 24">
                   <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
                   <path class="vol-wave" d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                 </svg>
               </button>
-              <div id="volume-slider-container" data-tooltip="Điều chỉnh âm lượng">
+              <div id="volume-slider-container">
                 <div id="volume-slider-fill"></div>
               </div>
             </div>
@@ -1336,7 +1516,7 @@
           <div class="track-list-panel" id="track-list-panel">
             <div class="track-list-header">
               <span>Danh sách phát</span>
-              <button type="button" class="track-list-close" id="track-list-close" aria-label="Đóng danh sách" data-tooltip="Đóng danh sách">✕</button>
+              <button type="button" class="track-list-close" id="track-list-close" aria-label="Đóng danh sách">✕</button>
             </div>
             <div class="track-category-filters" id="track-category-filters" role="tablist" aria-label="Lọc theo thể loại"></div>
             <ul class="track-list" id="track-list"></ul>
