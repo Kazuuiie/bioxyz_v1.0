@@ -1138,32 +1138,33 @@ function renderBadges(data) {
     tooltip.classList.toggle('tooltip-bottom', bottom);
   }
 
-  function show(el) {
-    const text = getText(el);
-    if (!text) return;
+  const SHOW_DELAY = 60;
+let showTimer = null;
 
-    clearTimeout(hideTimer);
+function show(el) {
+  const text = getText(el);
+  if (!text) return;
+  clearTimeout(showTimer);
+  clearTimeout(hideTimer);
+  showTimer = setTimeout(() => {
     currentTarget = el;
-
     const tip = ensureTooltip();
     tip.textContent = text;
     tip.setAttribute('aria-hidden', 'false');
     tip.classList.remove('tooltip-bottom');
-
-    // Hiện trước để getBoundingClientRect() có kích thước thật.
     tip.classList.add('is-visible');
     position(el);
-  }
+  }, SHOW_DELAY);
+}
 
-  function hide() {
-    clearTimeout(hideTimer);
-    currentTarget = null;
-
-    if (!tooltip) return;
-    tooltip.classList.remove('is-visible');
-    tooltip.setAttribute('aria-hidden', 'true');
-  }
-
+function hide() {
+  clearTimeout(showTimer);
+  clearTimeout(hideTimer);
+  currentTarget = null;
+  if (!tooltip) return;
+  tooltip.classList.remove('is-visible');
+  tooltip.setAttribute('aria-hidden', 'true');
+}
   function bind(el) {
     if (el.dataset.globalTooltipBound === '1') return;
     el.dataset.globalTooltipBound = '1';
