@@ -266,30 +266,6 @@
   }
   .dock-item{ position:relative; }
   .dock-item:hover{ translate: 0 -7px; }
-  .dock-item::after{
-    content: attr(data-tip);
-    position:absolute; bottom: calc(100% + 10px); left:50%;
-    transform: translate(-50%, 4px);
-    background: var(--ink);
-    color: #fdf6ec;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10px; letter-spacing:0.04em;
-    padding: 4px 8px; border-radius: 6px;
-    white-space:nowrap;
-    opacity:0; pointer-events:none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-  .dock-item::before{
-    content:"";
-    position:absolute; bottom: calc(100% + 5px); left:50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--ink);
-    opacity:0;
-    transition: opacity 0.2s ease;
-  }
-  .dock-item:hover::after{ opacity:1; transform: translate(-50%, 0); }
-  .dock-item:hover::before{ opacity:1; }
   .dock-item img{
     width:100%; height:100%;
     object-fit:cover;
@@ -757,34 +733,97 @@
 
   .music-info{ flex:1; min-width:0; position:relative; z-index:1; }
 
-  /* ============ TOOLTIP DÙNG CHUNG (hover vào để hiện) ============
-     Tooltip TỰ VẼ bằng CSS (không dùng title="" gốc của trình duyệt),
-     nên custom màu sắc / font / bo góc thoải mái.
+  /* =========================================================
+     GLOBAL JS TOOLTIP
+     Tất cả tooltip dùng chung một element duy nhất.
+     ========================================================= */
+  .tooltip-host[data-tooltip] {
+    cursor: default;
+  }
 
-     CÁCH DÙNG cho BẤT KỲ phần tử nào (không chỉ music box):
-       1) Thêm class="tooltip-host" vào phần tử đó
-       2) Thêm data-tooltip="Nội dung bạn muốn hiện"
-       3) Xong — không cần sửa JS, trừ khi muốn nội dung tự đổi động
-          (xem ví dụ cập nhật động trong javascript.js)
+  /* Tắt hoàn toàn tooltip CSS cũ để không bị trùng với JS. */
+  .tooltip-host[data-tooltip]::before,
+  .tooltip-host[data-tooltip]::after,
+  .dock-item[data-tooltip]::before,
+  .dock-item[data-tooltip]::after,
+  .dock-item[data-tip]::before,
+  .dock-item[data-tip]::after {
+    content: none !important;
+    display: none !important;
+  }
 
-     Mặc định tooltip canh TRÁI phía trên phần tử. Muốn canh GIỮA thì
-     thêm thêm class "tooltip-center" (ví dụ: class="tooltip-host
-     tooltip-center"). Muốn canh PHẢI thì thêm class "tooltip-right".
+  #global-tooltip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    max-width: min(280px, calc(100vw - 20px));
+    padding: 7px 10px;
+    background: var(--ink);
+    color: #fdf6ec;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.45;
+    text-align: center;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    border: 1px solid rgba(207,100,120,0.35);
+    border-radius: 8px;
+    box-shadow: 0 10px 24px -8px rgba(0,0,0,0.5);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0,4px,0) scale(.98);
+    transition: opacity .16s ease, transform .16s cubic-bezier(.34,1.56,.64,1), visibility .16s ease;
+    z-index: 2147483647;
+  }
 
-     MUỐN ĐỔI MÀU: sửa các dòng có ghi chú "◄ ĐỔI MÀU Ở ĐÂY" bên dưới —
-     đổi 1 lần là áp dụng cho MỌI tooltip dùng class này trên toàn trang. */
-    .tooltip-host[data-tooltip]::after,
-    .tooltip-host[data-tooltip]::before{ display:none; }
+  #global-tooltip.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0,0,0) scale(1);
+  }
+
+  #global-tooltip.tooltip-bottom {
+    transform-origin: center top;
+  }
+
+  #global-tooltip::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 50%;
+    bottom: -4.5px;
+    margin-left: -4px;
+    background: var(--ink);
+    border-right: 1px solid rgba(207,100,120,0.35);
+    border-bottom: 1px solid rgba(207,100,120,0.35);
+    transform: rotate(45deg);
+  }
+
+  #global-tooltip.tooltip-bottom::after {
+    top: -4.5px;
+    bottom: auto;
+    transform: rotate(225deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #global-tooltip {
+      transition: none;
+    }
   }
 
   .music-title{
     margin:0; font-family:'DM Sans', sans-serif; font-weight:700;
-    font-size:13.5px; color:#fff8ee; line-height: 1.4;
+    font-size:13.5px; color:#fff8ee !important; line-height: 1.4;
     white-space: normal; word-break: break-word;
   }
   .music-sub{
     margin:3px 0 0; font-family:'DM Sans', sans-serif; font-size:11.5px;
-    color: rgba(255,248,238,0.62);
+    color: rgba(255,248,238,0.62) !important;
   }
 
   .music-bars {
@@ -1393,7 +1432,7 @@
             </div>
             
             <div class="music-info" id="music-info">
-              <p class="music-title" id="music-title">Tên bài hát — nghệ sĩ</p>
+              <p class="music-title" id="music-title" data-tooltip="Tên bài hát — nghệ sĩ">Tên bài hát — nghệ sĩ</p>
               <p class="music-sub" id="disc-tip">bấm để phát nhạc</p>
             </div>
 
@@ -1492,6 +1531,8 @@
     </nav>
   </div>
 </div>
+
+<div id="global-tooltip" aria-hidden="true"></div>
 
 <script src="javascript.js"></script>
 </body>
