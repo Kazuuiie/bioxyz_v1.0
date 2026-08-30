@@ -379,13 +379,18 @@ function setMusicState(isPlaying) {
       isPlaying ? 'true' : 'false'
     );
 
-    disc.setAttribute(
+    if (discTip) {
+    const tip = isPlaying
+      ? 'đang phát — bấm để tắt'
+      : 'bấm để phát nhạc';
+
+    discTip.textContent = tip;
+    discTip.setAttribute(
       'data-tooltip',
-      isPlaying
-        ? 'Tạm dừng nhạc'
-        : 'Phát nhạc'
+      tip
     );
   }
+}
 
 
 
