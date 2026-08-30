@@ -1,32 +1,3 @@
-/* ============ CHẶN DEVTOOLS & BẢO VỆ NGUỒN ============ */
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-  if (
-    e.keyCode === 123 ||
-    (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) ||
-    (e.ctrlKey && [85, 83].includes(e.keyCode))
-  ) {
-    e.preventDefault();
-    return false;
-  }
-});
-
-let devtoolsStrikes = 0;
-setInterval(() => {
-  const startTime = performance.now();
-  debugger;
-  const endTime = performance.now();
-
-  if (endTime - startTime > 400) {
-    devtoolsStrikes++;
-    if (devtoolsStrikes >= 2) {
-      document.body.innerHTML = "Access Denied";
-    }
-  } else {
-    devtoolsStrikes = 0;
-  }
-}, 1500);
-
 /* ============ BIẾN CƠ BẢN ============ */
 const gate = document.getElementById('gate');
 const main = document.getElementById('main');
