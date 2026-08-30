@@ -387,18 +387,7 @@ function setMusicState(isPlaying) {
     );
   }
 
-  if (discTip) {
-    const tip = isPlaying
-      ? 'đang phát — bấm để tắt'
-      : 'bấm để phát nhạc';
 
-    discTip.textContent = tip;
-    discTip.setAttribute(
-      'data-tooltip',
-      tip
-    );
-  }
-}
 
 /* ============ GATE ============ */
 const prefersReducedMotion =
