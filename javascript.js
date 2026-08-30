@@ -267,32 +267,62 @@ if (gate) {
   });
 }
 
-/* ============ NGHIÊNG NHẸ THẺ BIO THEO CHUỘT (DESKTOP) ============ */
-// FIX LAG: card chứa các khối có backdrop-filter (music-box, discord mini
-// profile) bên trong. Khi card cha xoay rotateX/rotateY liên tục theo
-// mousemove, trình duyệt phải build lại layer blur của các khối con gần
-// như mỗi khung hình -> đây là nguồn giật hình chính. Giảm góc nghiêng
-// (5/6deg -> 3/4deg) và bỏ qua các thay đổi quá nhỏ (dưới ngưỡng) để giảm
-// đáng kể số lần phải vẽ lại, mà mắt gần như không nhận ra khác biệt.
+/* ============ NGHIÊNG THẺ BIO THEO CHUỘT (NÂNG CẤP) ============
+   Bản nâng cấp so với trước:
+   - Dùng vòng lặp requestAnimationFrame liên tục + nội suy (lerp) thay vì
+     nhảy thẳng tới góc nghiêng mục tiêu -> chuyển động mượt, có "quán
+     tính" nhẹ, không còn cảm giác giật cứng khi di chuột nhanh.
+   - Khi rời chuột, thẻ tự trả về góc 0° một cách mượt mà (mềm dần) thay vì
+     set thẳng transform về 0 ngay lập tức.
+   - Thêm hiệu ứng "spotlight" ánh sáng bám theo đúng vị trí con trỏ trên
+     thẻ (điều khiển qua 2 biến CSS --mx / --my, xem phần CSS .card::before).
+   - Vẫn giữ nguyên throttle bằng rAF (không tính toán ngoài khung hình) và
+     chỉ bật/tắt loop khi thật sự cần (hovering hoặc còn đang "trôi" về 0)
+     để không tốn CPU khi chuột đứng yên xa thẻ. */
 if (card && window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches && !prefersReducedMotion) {
+  let targetPx = 0, targetPy = 0;   // vị trí con trỏ mục tiêu (chuẩn hóa -0.5..0.5)
+  let curPx = 0, curPy = 0;         // vị trí đang nội suy dần tới mục tiêu
   let tiltRAF = null;
-  let lastPx = 0, lastPy = 0;
-  card.addEventListener('mouseenter', () => card.classList.add('tilt-ready'));
+  let hovering = false;
+
+  const LERP_SPEED = 0.14;   // càng lớn càng "bám" nhanh theo chuột
+  const SETTLE_EPS = 0.0015; // ngưỡng coi như đã "về" tới đích, dừng loop
+
+  function tiltLoop() {
+    curPx += (targetPx - curPx) * LERP_SPEED;
+    curPy += (targetPy - curPy) * LERP_SPEED;
+
+    card.style.transform = `translateY(0) scale(1) rotateX(${(-curPy * 3).toFixed(2)}deg) rotateY(${(curPx * 4).toFixed(2)}deg)`;
+    card.style.setProperty('--mx', `${((curPx + 0.5) * 100).toFixed(1)}%`);
+    card.style.setProperty('--my', `${((curPy + 0.5) * 100).toFixed(1)}%`);
+
+    const stillMoving = Math.abs(targetPx - curPx) > SETTLE_EPS || Math.abs(targetPy - curPy) > SETTLE_EPS;
+    if (hovering || stillMoving) {
+      tiltRAF = requestAnimationFrame(tiltLoop);
+    } else {
+      tiltRAF = null;
+    }
+  }
+
+  card.addEventListener('mouseenter', () => {
+    hovering = true;
+    card.classList.add('tilt-ready');
+    if (!tiltRAF) tiltRAF = requestAnimationFrame(tiltLoop);
+  });
+
   card.addEventListener('mousemove', (e) => {
     if (!card.classList.contains('in')) return;
     const rect = card.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width - 0.5;
-    const py = (e.clientY - rect.top) / rect.height - 0.5;
-    if (Math.abs(px - lastPx) < 0.01 && Math.abs(py - lastPy) < 0.01) return;
-    lastPx = px; lastPy = py;
-    if (tiltRAF) cancelAnimationFrame(tiltRAF);
-    tiltRAF = requestAnimationFrame(() => {
-      card.style.transform = `translateY(0) scale(1) rotateX(${(-py * 3).toFixed(2)}deg) rotateY(${(px * 4).toFixed(2)}deg)`;
-    });
+    targetPx = (e.clientX - rect.left) / rect.width - 0.5;
+    targetPy = (e.clientY - rect.top) / rect.height - 0.5;
+    if (!tiltRAF) tiltRAF = requestAnimationFrame(tiltLoop);
   });
+
   card.addEventListener('mouseleave', () => {
-    if (tiltRAF) cancelAnimationFrame(tiltRAF);
-    card.style.transform = 'translateY(0) scale(1) rotateX(0deg) rotateY(0deg)';
+    hovering = false;
+    targetPx = 0;
+    targetPy = 0;
+    if (!tiltRAF) tiltRAF = requestAnimationFrame(tiltLoop);
   });
 }
 
@@ -983,7 +1013,14 @@ function renderBadges(data) {
 
   typedEl.textContent = lines[currentIndex];
 })();
-/* ============ VIEW COUNTER — CHỈ CHỦ TRANG THẤY, KHÔNG TÍNH LƯỢT CỦA CHỦ ============ */
+/* ============ VIEW COUNTER — CHỈ CHỦ TRANG THẤY, KHÔNG TÍNH LƯỢT CỦA CHỦ ============
+   FIX: trước đây nếu fetch('/count') lỗi (sai key, CORS, server trả lỗi,
+   v.v.) thì .catch(() => {}) NUỐT LUÔN LỖI trong im lặng -> chủ trang nhập
+   đúng key nhưng không thấy số hiện ra mà cũng không biết lý do vì sao,
+   đặc biệt khó debug vì trang tự chặn F12/chuột phải. Giờ mọi trường hợp
+   thất bại đều hiện 1 khung nhỏ góc dưới phải giải thích rõ nguyên nhân
+   (thiếu key, HTTP lỗi gì, hay response không đúng định dạng), CHỈ chủ
+   trang mới thấy khung này. */
 (function () {
   const VIEW_API = 'https://views.ten870865.workers.dev';
   const OWNER_STORAGE_KEY = 'bio_is_owner';
@@ -995,7 +1032,7 @@ function renderBadges(data) {
     if (key) {
       try {
         localStorage.setItem(OWNER_STORAGE_KEY, '1');
-        localStorage.setItem(OWNER_URLKEY_STORAGE, key);
+        localStorage.setItem(OWNER_URLKEY_STORAGE, key.trim());
       } catch (e) {}
       params.delete('key');
       const clean = location.pathname + (params.toString() ? '?' + params.toString() : '');
@@ -1008,7 +1045,7 @@ function renderBadges(data) {
   }
 
   function getStoredKey() {
-    try { return localStorage.getItem(OWNER_URLKEY_STORAGE) || ''; } catch (e) { return ''; }
+    try { return (localStorage.getItem(OWNER_URLKEY_STORAGE) || '').trim(); } catch (e) { return ''; }
   }
 
   function showViewCount(count) {
@@ -1025,6 +1062,22 @@ function renderBadges(data) {
     el.textContent = '👁 ' + count.toLocaleString('vi-VN') + ' views';
   }
 
+  // FIX: hiển thị lý do khi có lỗi, thay vì im lặng không hiện gì cả —
+  // chỉ chủ trang mới thấy khung báo lỗi này.
+  function showOwnerError(message) {
+    let el = document.getElementById('owner-view-count');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'owner-view-count';
+      document.body.appendChild(el);
+    }
+    el.style.cssText = 'position:fixed;bottom:12px;right:12px;z-index:200;' +
+      'font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;' +
+      'background:rgba(120,30,30,.85);color:#fff8ee;padding:6px 12px;border-radius:14px;' +
+      'backdrop-filter:blur(6px);pointer-events:none;max-width:260px;line-height:1.5;';
+    el.textContent = '⚠ ' + message;
+  }
+
   checkOwnerFromUrl();
 
   const ownerNow = isOwner();
@@ -1037,10 +1090,32 @@ function renderBadges(data) {
   // Chỉ chủ trang mới thấy số (và số này không bị cộng thêm lượt của chính họ)
   if (ownerNow) {
     const key = getStoredKey();
-    fetch(VIEW_API + '/count?key=' + encodeURIComponent(key))
-      .then(r => r.json())
-      .then(data => { if (typeof data.count === 'number') showViewCount(data.count); })
-      .catch(() => {});
+    if (!key) {
+      // Trường hợp hay gặp: đã từng bật owner mode (bio_is_owner=1) nhưng
+      // trình duyệt chưa từng lưu được key hợp lệ nào (ví dụ link ?key=...
+      // đã hết hạn dùng, hoặc bị mất do xóa localStorage).
+      showOwnerError('Chưa có key hợp lệ — mở lại đúng link có ?key=... một lần để lưu key.');
+    } else {
+      fetch(VIEW_API + '/count?key=' + encodeURIComponent(key))
+        .then(async (res) => {
+          if (!res.ok) {
+            let bodyText = '';
+            try { bodyText = await res.text(); } catch (e) {}
+            throw new Error(`HTTP ${res.status}${bodyText ? ' — ' + bodyText.slice(0, 120) : ''}`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (typeof data.count === 'number') {
+            showViewCount(data.count);
+          } else {
+            showOwnerError('API phản hồi không đúng định dạng: ' + JSON.stringify(data).slice(0, 120));
+          }
+        })
+        .catch((err) => {
+          showOwnerError('Không tải được lượt xem: ' + err.message);
+        });
+    }
   }
 })();
 
