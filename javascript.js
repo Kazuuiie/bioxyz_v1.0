@@ -1165,30 +1165,43 @@ function renderBadges(data) {
   if (!tooltip) return;
 
   let currentTarget = null;
+  let showTimer = null;
   let hideTimer = null;
   let raf = null;
-  const OFFSET = 10;
+
+  // Vị trí con trỏ hiện tại (cập nhật liên tục khi di chuột trên phần tử
+  // đang hiển thị tooltip), tooltip sẽ bám theo điểm này.
+  let mouseX = 0, mouseY = 0;
+
+  const SHOW_DELAY = 350;  // ms chờ trước khi hiện tooltip (tránh chớp nháy khi lướt ngang qua)
+  const HIDE_DELAY = 120;  // ms chờ trước khi ẩn sau khi rời chuột
+  const CURSOR_OFFSET_X = 16; // khoảng cách ngang giữa tooltip và con trỏ
+  const CURSOR_OFFSET_Y = 22; // khoảng cách dọc giữa tooltip và con trỏ
   const EDGE = 8;
 
   function getText(el){
     return el?.getAttribute('data-tooltip')?.trim() || '';
   }
 
-  function position(el){
-    if (!el || !tooltip.classList.contains('is-visible')) return;
+  // Đặt vị trí tooltip bám theo (mouseX, mouseY), tự lật sang trái/lên
+  // trên nếu sắp tràn ra ngoài viewport, luôn kẹp trong vùng an toàn.
+  function positionAtCursor(){
+    if (!tooltip.classList.contains('is-visible')) return;
 
-    const rect = el.getBoundingClientRect();
     const tip = tooltip.getBoundingClientRect();
-    const width = tip.width;
-    const height = tip.height;
+    const width = tip.width || 120;
+    const height = tip.height || 28;
 
-    let left = rect.left + rect.width / 2 - width / 2;
-    let top = rect.top - height - OFFSET;
-    let bottom = false;
+    let left = mouseX + CURSOR_OFFSET_X;
+    let top = mouseY + CURSOR_OFFSET_Y;
 
-    if (top < EDGE){
-      top = rect.bottom + OFFSET;
-      bottom = true;
+    // Nếu tràn phải thì đặt tooltip sang bên trái con trỏ
+    if (left + width + EDGE > window.innerWidth){
+      left = mouseX - width - CURSOR_OFFSET_X;
+    }
+    // Nếu tràn dưới thì đặt tooltip lên trên con trỏ
+    if (top + height + EDGE > window.innerHeight){
+      top = mouseY - height - CURSOR_OFFSET_Y;
     }
 
     left = Math.max(EDGE, Math.min(left, window.innerWidth - width - EDGE));
@@ -1196,35 +1209,47 @@ function renderBadges(data) {
 
     tooltip.style.left = Math.round(left) + 'px';
     tooltip.style.top = Math.round(top) + 'px';
-    tooltip.classList.toggle('tooltip-bottom', bottom);
   }
 
   function schedulePosition(){
-    if (!currentTarget) return;
     if (raf) cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
       raf = null;
-      position(currentTarget);
+      positionAtCursor();
     });
   }
 
-  function show(el){
+  function reveal(el){
     const text = getText(el);
-    if (!text) return;
+    if (!text || currentTarget !== el) return;
 
-    clearTimeout(hideTimer);
-    currentTarget = el;
     tooltip.textContent = text;
     tooltip.setAttribute('aria-hidden', 'false');
     tooltip.classList.remove('tooltip-bottom');
     tooltip.classList.add('is-visible');
+    positionAtCursor();
+    requestAnimationFrame(positionAtCursor);
+  }
 
-    requestAnimationFrame(() => {
-      if (currentTarget === el) position(el);
-    });
+  function requestShow(el){
+    const text = getText(el);
+    if (!text) return;
+
+    clearTimeout(hideTimer);
+    clearTimeout(showTimer);
+    currentTarget = el;
+
+    // Nếu tooltip đã đang hiện (di chuột từ phần tử này sang phần tử khác
+    // liền kề), chuyển ngay không delay để cảm giác mượt hơn.
+    if (tooltip.classList.contains('is-visible')) {
+      reveal(el);
+    } else {
+      showTimer = setTimeout(() => reveal(el), SHOW_DELAY);
+    }
   }
 
   function hide(immediate=false){
+    clearTimeout(showTimer);
     clearTimeout(hideTimer);
     const run = () => {
       tooltip.classList.remove('is-visible');
@@ -1233,24 +1258,46 @@ function renderBadges(data) {
       currentTarget = null;
     };
     if (immediate) run();
-    else hideTimer = setTimeout(run, 70);
+    else hideTimer = setTimeout(run, HIDE_DELAY);
   }
 
   function init(el){
     if (!el || el.dataset.tooltipBound === '1') return;
     el.dataset.tooltipBound = '1';
 
-    el.addEventListener('mouseenter', () => show(el));
+    el.addEventListener('mouseenter', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      requestShow(el);
+    });
+
+    // Bám theo con trỏ liên tục trong khi vẫn đang hover phần tử này.
+    el.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (currentTarget === el && tooltip.classList.contains('is-visible')) {
+        schedulePosition();
+      }
+    });
+
     el.addEventListener('mouseleave', () => hide());
-    el.addEventListener('focus', () => show(el));
+    el.addEventListener('focus', (e) => {
+      // Bàn phím: không có tọa độ chuột, đặt tooltip cạnh phần tử.
+      const rect = el.getBoundingClientRect();
+      mouseX = rect.left + rect.width / 2;
+      mouseY = rect.top;
+      requestShow(el);
+    });
     el.addEventListener('blur', () => hide(true));
 
     el.addEventListener('touchstart', (e) => {
       const text = getText(el);
       if (!text) return;
       e.stopPropagation();
-      if (currentTarget === el) hide(true);
-      else show(el);
+      const touch = e.touches && e.touches[0];
+      if (touch) { mouseX = touch.clientX; mouseY = touch.clientY; }
+      if (currentTarget === el && tooltip.classList.contains('is-visible')) hide(true);
+      else { currentTarget = el; reveal(el); }
     }, {passive:true});
   }
 
