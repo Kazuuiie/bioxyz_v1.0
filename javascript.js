@@ -2327,7 +2327,7 @@ if (music) {
       new Date();
 
     clockEl.textContent =
-      `Việt Nam (UTC+7) · ${capitalize(dateFormatter.format(now))} · ${timeFormatter.format(now)}`;
+      `VietNam(UTC +7) · ${capitalize(dateFormatter.format(now))} · ${timeFormatter.format(now)}`;
   }
 
   tick();
