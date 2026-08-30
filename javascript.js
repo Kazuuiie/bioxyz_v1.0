@@ -53,18 +53,19 @@ const card = document.querySelector('.card');
 const dock = document.getElementById('dock');
 const bioConfig = window.bioConfig || {};
 
-const tracks =
-  Array.isArray(bioConfig.tracks) && bioConfig.tracks.length
-    ? bioConfig.tracks
-    : [{
-        title: 'Tên bài hát — nghệ sĩ',
-        file: 'song1.mp3',
-        disc: 'images1.png'
-      }];
-
-let currentTrackIndex = Number.isInteger(bioConfig.defaultIndex)
-  ? bioConfig.defaultIndex
-  : 0;
+/* ============ FIX: khai báo sớm để tránh lỗi TDZ (ReferenceError) ============
+ * Các biến này trước đây được khai báo ở section VISUALIZER (bên dưới),
+ * nhưng lại được dùng sớm hơn qua cacheTrackMiniBars() -> renderTrackList()
+ * (được gọi ngay lúc khởi tạo trackMenuBtn ở trên). Vì dùng "let/const" có
+ * temporal dead zone, việc gọi hàm dùng biến trước dòng khai báo gốc sẽ làm
+ * toàn bộ script phía sau (gate, tooltip, discord...) không chạy được.
+ * => Khai báo chúng NGAY TỪ ĐẦU, và đã xoá phần khai báo trùng ở dưới.
+ */
+const mainBarsCache = document.querySelectorAll('.music-bars .bar');
+let miniBarsPerTrack = [];
+let allMiniBarsFlat = [];
+let visualizerDataArray = null;
+let barsAreReset = true;
 
 /* ============ CATEGORY ============ */
 const CATEGORY_LABELS = {
@@ -142,6 +143,19 @@ if (albumCover && bioConfig.avatar) {
 }
 
 /* ============ MUSIC ============ */
+
+const tracks =
+  Array.isArray(bioConfig.tracks) && bioConfig.tracks.length
+    ? bioConfig.tracks
+    : [{
+        title: 'Tên bài hát — nghệ sĩ',
+        file: 'song1.mp3',
+        disc: 'images1.png'
+      }];
+
+let currentTrackIndex = Number.isInteger(bioConfig.defaultIndex)
+  ? bioConfig.defaultIndex
+  : 0;
 
 function getTrackTitle(track) {
   return String(track?.title || 'Không tên').trim() || 'Không tên';
@@ -902,15 +916,9 @@ let analyser = null;
 let source = null;
 let isAudioContextInit = false;
 
-const mainBarsCache =
-  document.querySelectorAll(
-    '.music-bars .bar'
-  );
-
-let miniBarsPerTrack = [];
-let allMiniBarsFlat = [];
-let visualizerDataArray = null;
-let barsAreReset = true;
+/* FIX: mainBarsCache / miniBarsPerTrack / allMiniBarsFlat /
+   visualizerDataArray / barsAreReset đã được khai báo sớm ở đầu file
+   (xem section "BIẾN CƠ BẢN") để tránh lỗi TDZ ReferenceError. */
 
 function cacheTrackMiniBars() {
   if (!trackListEl) return;
@@ -2463,6 +2471,59 @@ if (music) {
     );
   }
 
+  /* FIX: tooltip đuổi theo con trỏ chuột thay vì cố định
+     theo vị trí phần tử. Dùng cho các sự kiện mouseenter/mousemove. */
+  function positionAtMouse(x, y) {
+    if (
+      !tooltip.classList.contains(
+        'is-visible'
+      )
+    ) {
+      return;
+    }
+
+    const tip =
+      tooltip.getBoundingClientRect();
+
+    const width = tip.width;
+    const height = tip.height;
+
+    let left = x - width / 2;
+    let top = y - height - OFFSET - 6;
+    let bottom = false;
+
+    if (top < EDGE) {
+      top = y + OFFSET + 14;
+      bottom = true;
+    }
+
+    left =
+      Math.max(
+        EDGE,
+        Math.min(
+          left,
+          window.innerWidth - width - EDGE
+        )
+      );
+
+    top =
+      Math.max(
+        EDGE,
+        Math.min(
+          top,
+          window.innerHeight - height - EDGE
+        )
+      );
+
+    tooltip.style.left = Math.round(left) + 'px';
+    tooltip.style.top = Math.round(top) + 'px';
+
+    tooltip.classList.toggle(
+      'tooltip-bottom',
+      bottom
+    );
+  }
+
   function schedulePosition() {
     if (!currentTarget) return;
 
@@ -2486,7 +2547,9 @@ if (music) {
       );
   }
 
-  function show(el) {
+  /* FIX: show() giờ nhận thêm mouseEvt (tuỳ chọn) để định vị theo
+     con trỏ chuột khi tooltip được mở bằng hover chuột. */
+  function show(el, mouseEvt) {
     const text =
       getText(el);
 
@@ -2517,9 +2580,18 @@ if (music) {
     requestAnimationFrame(
       () => {
         if (
-          currentTarget ===
+          currentTarget !==
           el
         ) {
+          return;
+        }
+
+        if (mouseEvt) {
+          positionAtMouse(
+            mouseEvt.clientX,
+            mouseEvt.clientY
+          );
+        } else {
           position(el);
         }
       }
@@ -2573,9 +2645,26 @@ if (music) {
     el.dataset.tooltipBound =
       '1';
 
+    /* FIX: mouseenter truyền kèm sự kiện chuột để tooltip xuất hiện
+       ngay tại vị trí con trỏ; mousemove giúp tooltip "đuổi" theo
+       chuột trong lúc hover. */
     el.addEventListener(
       'mouseenter',
-      () => show(el)
+      e => show(el, e)
+    );
+
+    el.addEventListener(
+      'mousemove',
+      e => {
+        if (
+          currentTarget === el
+        ) {
+          positionAtMouse(
+            e.clientX,
+            e.clientY
+          );
+        }
+      }
     );
 
     el.addEventListener(
