@@ -379,10 +379,26 @@ function setMusicState(isPlaying) {
       isPlaying ? 'true' : 'false'
     );
 
-    if (discTip) {
+    disc.setAttribute(
+      'data-tooltip',
+      isPlaying
+        ? 'Tạm dừng nhạc'
+        : 'Phát nhạc'
+    );
+  }
+
+  if (discTip) {
     const tip = isPlaying
       ? 'đang phát — bấm để tắt'
       : 'bấm để phát nhạc';
+
+    discTip.textContent = tip;
+    discTip.setAttribute(
+      'data-tooltip',
+      tip
+    );
+  }
+}
 
 /* ============ GATE ============ */
 const prefersReducedMotion =
@@ -2311,7 +2327,7 @@ if (music) {
       new Date();
 
     clockEl.textContent =
-      `VietNam(UTC +7) · ${capitalize(dateFormatter.format(now))} · ${timeFormatter.format(now)}`;
+      `Việt Nam (UTC+7) · ${capitalize(dateFormatter.format(now))} · ${timeFormatter.format(now)}`;
   }
 
   tick();
@@ -2603,24 +2619,31 @@ if (music) {
     /* FIX: mouseenter truyền kèm sự kiện chuột để tooltip xuất hiện
        ngay tại vị trí con trỏ; mousemove giúp tooltip "đuổi" theo
        chuột trong lúc hover. */
-    el.addEventListener(
-      'mouseenter',
-      e => show(el, e)
-    );
+    /* data-tooltip-fixed="true" -> tooltip đứng yên theo vị trí
+       phần tử (dùng position()), không đuổi theo chuột */
+    const isFixed =
+      el.getAttribute('data-tooltip-fixed') === 'true';
 
     el.addEventListener(
-      'mousemove',
-      e => {
-        if (
-          currentTarget === el
-        ) {
-          positionAtMouse(
-            e.clientX,
-            e.clientY
-          );
-        }
-      }
+      'mouseenter',
+      e => show(el, isFixed ? null : e)
     );
+
+    if (!isFixed) {
+      el.addEventListener(
+        'mousemove',
+        e => {
+          if (
+            currentTarget === el
+          ) {
+            positionAtMouse(
+              e.clientX,
+              e.clientY
+            );
+          }
+        }
+      );
+    }
 
     el.addEventListener(
       'mouseleave',
