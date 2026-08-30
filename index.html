@@ -1208,6 +1208,9 @@
   display: none !important;
 }
 
+/* NÂNG CẤP: tooltip giờ bám theo vị trí con trỏ chuột (xem JS), không còn
+   neo cố định vào giữa phần tử -> bỏ mũi tên trỏ (::after) vì không còn
+   điểm neo cụ thể để trỏ tới. Thêm delay hiện/ẩn được xử lý bên JS. */
 #global-tooltip {
   position: fixed;
   left: 0;
@@ -1221,7 +1224,7 @@
   font-weight: 500;
   letter-spacing: 0.03em;
   line-height: 1.4;
-  text-align: center;
+  text-align: left;
   white-space: normal;
   overflow-wrap: anywhere;
   border: 1px solid rgba(207,100,120,0.35);
@@ -1231,11 +1234,10 @@
   opacity: 0;
   visibility: hidden;
   transform: translate3d(0,4px,0) scale(0.94);
-  transform-origin: center bottom;
-  transition: opacity .15s ease, transform .15s cubic-bezier(.34,1.56,.64,1), visibility .15s ease;
+  transform-origin: top left;
+  transition: opacity .15s ease, transform .15s cubic-bezier(.34,1.56,.64,1), visibility .15s ease, left .05s linear, top .05s linear;
   z-index: 2147483647;
 }
-#global-tooltip.tooltip-bottom{ transform-origin: center top; }
 
 #global-tooltip.is-visible {
   opacity: 1;
@@ -1243,27 +1245,8 @@
   transform: translate3d(0,0,0) scale(1);
 }
 
-#global-tooltip::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  left: 50%;
-  bottom: -4.5px;
-  margin-left: -4px;
-  background: var(--ink);
-  border-right: 1px solid rgba(207,100,120,0.35);
-  border-bottom: 1px solid rgba(207,100,120,0.35);
-  transform: rotate(45deg);
-}
-#global-tooltip.tooltip-bottom::after {
-  top: -4.5px;
-  bottom: auto;
-  transform: rotate(225deg);
-}
 @media (prefers-reduced-motion: reduce) {
-  #global-tooltip { transition: none; }
+  #global-tooltip { transition: opacity .15s ease, visibility .15s ease; }
 }
 
 </style>
