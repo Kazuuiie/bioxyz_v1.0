@@ -5,1257 +5,1627 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>itsrealkhanz — bio</title>
 <meta name="description" content="Trang bio cá nhân">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg-a: #fbe7cf;
-    --bg-b: #f6d3c7;
-    --paper-dim: #f9ecdd;
-    --ink: #4a3336;
-    --ink-soft: #8a6b62;
-    --raspberry: #cf6478;
-    --mustard: #e2a85c;
-    --sage: #86a179;
-    --line: rgba(74,51,54,0.14);
-    --shadow: 0 20px 44px -22px rgba(74,51,54,0.32);
-    --texture: radial-gradient(circle at 12% -6%, rgba(255,255,255,0.35), transparent 52%),
-               radial-gradient(circle at 100% 108%, rgba(207,100,120,0.07), transparent 58%),
-               radial-gradient(circle at 90% 0%, rgba(226,168,92,0.06), transparent 46%);
+:root{
+  --bg-a:#fbe7cf;
+  --bg-b:#f6d3c7;
+  --paper-dim:#f9ecdd;
+  --ink:#4a3336;
+  --ink-soft:#8a6b62;
+  --raspberry:#cf6478;
+  --mustard:#e2a85c;
+  --sage:#86a179;
+  --line:rgba(74,51,54,0.14);
+  --shadow:0 20px 44px -22px rgba(74,51,54,0.32);
+  --texture:
+    radial-gradient(circle at 12% -6%,rgba(255,255,255,0.35),transparent 52%),
+    radial-gradient(circle at 100% 108%,rgba(207,100,120,0.07),transparent 58%),
+    radial-gradient(circle at 90% 0%,rgba(226,168,92,0.06),transparent 46%);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{max-width:100%;overflow-x:hidden}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'DM Sans',sans-serif;
+  color:var(--ink);
+  background:var(--bg-a);
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+}
+a,button,.dock-item,.disc-player,.music-playbtn,.music-menu-btn,
+.music-nav button,#volume-btn,.track-item,.category-chip,
+.track-list-close,footer#footer-bar,.dmp-icon,
+.progress-bar-container,#volume-slider-container{
+  -webkit-tap-highlight-color:transparent;
+}
+::selection{background:var(--raspberry);color:#fff8ee}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:99;
+  pointer-events:none;
+  opacity:.035;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important;
   }
-
-  * { box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-  html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
-*, *::before, *::after {
-  box-sizing: border-box;
 }
 
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+  background:rgba(74,51,54,.22);
+  border-radius:8px;
+  border:2px solid var(--bg-a);
+}
+::-webkit-scrollbar-thumb:hover{background:rgba(74,51,54,.36)}
+
+@media (hover:hover) and (pointer:fine){
   body{
-    margin:0;
-    min-height:100vh;
-    font-family:'DM Sans', sans-serif;
-    color:var(--ink);
-    background: var(--bg-a);
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5,auto;
   }
-
-  /* FIX: tắt hiệu ứng "chạm nổi highlight" mặc định trên mobile (thường
-     thấy là 1 lớp màu xanh nước biển/xám lóe lên khi chạm vào link/nút) —
-     áp dụng cho toàn bộ phần tử có thể bấm để tránh sót chỗ nào đó. */
-  a, button, .dock-item, .disc-player, .music-playbtn, .music-menu-btn,
-  .music-nav button, #volume-btn, .track-item, .category-chip,
-  .track-list-close, footer#footer-bar, .dmp-icon, .progress-bar-container,
-  #volume-slider-container{
-    -webkit-tap-highlight-color: transparent;
+  a,button{
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5,pointer;
   }
-
-  ::selection{ background: var(--raspberry); color:#fff8ee; }
-
-  body::before{
-    content:"";
-    position:fixed; inset:0; z-index:99;
-    pointer-events:none;
-    opacity:0.035;
-    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
+  .disc-player,.progress-bar-container,#volume-slider-container{
+    cursor:pointer!important;
   }
-
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
-
-  ::-webkit-scrollbar{ width:10px; }
-  ::-webkit-scrollbar-track{ background: transparent; }
-  ::-webkit-scrollbar-thumb{ background: rgba(74,51,54,0.22); border-radius:8px; border:2px solid var(--bg-a); }
-  ::-webkit-scrollbar-thumb:hover{ background: rgba(74,51,54,0.36); }
-
-  @media (hover:hover) and (pointer:fine){
-    body{
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5, auto;
-    }
-    a, button{
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5, pointer;
-    }
-    .disc-player,
-    .progress-bar-container,
-    #volume-slider-container{
-      cursor: pointer !important;
-    }
-  }
-
-  /* ===== GATE — ĐÃ ĐƠN GIẢN HÓA ĐỂ GIẢM LAG =====
-     Bỏ hết animation chạy vô hạn (nền "thở", vòng tròn xoay, chữ pulse,
-     hint pulse, hạt sáng bay) vì các animation này chạy ngay từ khi trang
-     load xong, kể cả trước khi người dùng bấm vào — tốn GPU/CPU vô ích cho
-     một màn hình chờ đơn giản. Giờ chỉ còn 1 nền tĩnh + hiệu ứng hover nhẹ
-     + 1 vòng tròn nổ tối giản lúc bấm. */
-  #gate{
-    position:fixed; inset:0; z-index:100;
-    width:100%; border:none;
-    background: radial-gradient(circle at 50% 40%, #1a1412, #0d0b0a 70%);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    overflow:hidden;
-    clip-path: circle(150% at 50% 50%);
-    transition: clip-path 0.6s ease, opacity 0.6s ease;
-  }
-  #gate.hidden{
-    opacity:0;
-    clip-path: circle(0% at 50% 50%);
-    pointer-events:none;
-  }
-  #gate::after{
-    content:"";
-    position:absolute; inset:0;
-    background: radial-gradient(circle at 50% 50%, transparent 45%, rgba(0,0,0,0.55) 100%);
-    pointer-events:none;
-  }
-
-  .gate-inner{
-    position:relative;
-    display:flex; flex-direction:column; align-items:center; gap:22px;
-    padding: 20px;
-  }
-
-  .gate-ring{
-    position:relative;
-    display:flex; align-items:center; justify-content:center;
-    width: 122px; height: 122px;
-    border-radius:50%;
-    border: 1px solid rgba(243,236,226,0.22);
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-  #gate:hover .gate-ring{ transform: scale(1.05); border-color: rgba(207,100,120,0.4); }
-
-  .gate-mark{
-    position:relative;
-    font-family:'Fraunces', serif;
-    font-style: italic;
-    font-size: 26px;
-    color: var(--raspberry);
-    opacity:0.92;
-  }
-
-  .gate-text{
-    position:relative;
-    font-family:'Fraunces', serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: clamp(20px, 4.5vw, 28px);
-    letter-spacing: 0.02em;
-    color: #f3ece2;
-    opacity: 0.9;
-    transition: letter-spacing 0.3s ease, color 0.3s ease;
-  }
-  #gate:hover .gate-text{ letter-spacing: 0.06em; color:#fff8ee; }
-
-  .gate-text-underline{
-    display:block; height:1px; margin-top:8px;
-    background: linear-gradient(90deg, transparent, var(--raspberry), transparent);
-    transform: scaleX(0.15); opacity:0.5;
-    transition: transform 0.35s ease, opacity 0.35s ease;
-  }
-  #gate:hover .gate-text-underline{ transform: scaleX(1); opacity:1; }
-
-  .gate-hint{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px; letter-spacing: 0.14em; text-transform:uppercase;
-    color: rgba(243,236,226,0.4);
-  }
-
-  .gate-burst{
-    position:fixed; z-index:101; pointer-events:none;
-    border-radius:50%;
-    background: radial-gradient(circle, rgba(243,236,226,0.85), rgba(207,100,120,0.3) 55%, transparent 72%);
-    transform: translate(-50%,-50%) scale(0);
-    animation: gate-burst-anim 0.5s ease-out forwards;
-  }
-  @keyframes gate-burst-anim{
-    0%{ transform: translate(-50%,-50%) scale(0); opacity:0.9; }
-    100%{ transform: translate(-50%,-50%) scale(1); opacity:0; }
-  }
-
-  #main{ position:relative; min-height:100vh; }
-
-  .bg-video-wrap{
-    position:fixed; inset:0; z-index:0; overflow:hidden;
-    background: linear-gradient(160deg, var(--bg-a), var(--bg-b));
-  }
-  .bg-video-wrap video{
-    position:absolute; top:50%; left:50%;
-    min-width:100%; min-height:100%;
-    width:auto; height:auto;
-    transform: translate(-50%,-50%);
-    object-fit: cover;
-    object-position: 68% center;
-  }
-  /* FIX GPU: đã bỏ filter (saturate/brightness) trên thẻ <video> và
-     mix-blend-mode trên lớp phủ. Cả 2 thứ này trước đây buộc trình duyệt
-     tính lại theo TỪNG khung hình video (video chạy loop vô hạn suốt thời
-     gian ở trang) — đây là điểm tốn GPU nặng nhất của cả trang. Giờ chỉ
-     còn 1 lớp gradient phủ tĩnh với opacity thường (composite rẻ), đổi lại
-     là màu video sẽ đúng màu gốc file mp4 thay vì được làm dịu bớt như
-     trước — nếu muốn giữ tông pastel, nên chỉnh màu sẵn trong file video
-     lúc export. */
-  .bg-video-wrap::before{
-    content:"";
-    position:absolute; inset:0;
-    background: radial-gradient(circle at 50% 30%, rgba(255,248,238,0.12), rgba(74,51,54,0.16) 85%);
-    z-index:1;
-  }
-
-  .orb{
-    position:fixed; z-index:1; border-radius:50%;
-    filter: blur(44px); pointer-events:none;
-    opacity:0.55;
-    animation: orb-float 16s ease-in-out infinite;
-    will-change: transform;
-    transform: translateZ(0);
-  }
-  .orb-1{ width:260px; height:260px; top:6%; left:-6%; background: radial-gradient(circle, var(--raspberry), transparent 70%); animation-duration: 18s; }
-  .orb-2{ width:220px; height:220px; bottom:8%; right:-5%; background: radial-gradient(circle, var(--mustard), transparent 70%); animation-duration: 21s; animation-delay: -6s; }
-  .orb-3{ width:180px; height:180px; bottom:32%; left:4%; background: radial-gradient(circle, var(--sage), transparent 70%); animation-duration: 15s; animation-delay: -3s; }
-  @keyframes orb-float{
-    0%,100%{ transform: translateZ(0) translate(0,0); }
-    33%{ transform: translateZ(0) translate(26px,-32px); }
-    66%{ transform: translateZ(0) translate(-20px,20px); }
-  }
-  @media (max-width: 640px){
-    .orb-3{ display:none; }
-    /* Bớt thêm 1 lớp blur nữa trên mobile để nhẹ máy hơn nữa */
-    .orb-2{ display:none; }
-  }
-
-  main{
-    position:relative; z-index:2;
-    display:flex; flex-direction:column; align-items:center; gap:14px;
-    padding: 40px 20px 60px;
-    perspective: 1200px;
-  }
-
-  .dock{
-    display:flex; gap:14px;
-    width: fit-content;
-    margin: 0 auto;
-    opacity:0;
-    translate: 0 16px;
-    transition: opacity 0.6s ease;
-  }
-  .dock.in{ opacity:1; translate: 0 0; }
-  .dock-item{
-    width:40px; height:40px;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    text-decoration:none;
-    background: transparent;
-    overflow:hidden;
-    flex-shrink:0;
-    transition: translate 0.35s cubic-bezier(.34,1.56,.64,1);
-  }
-  .dock-item{ position:relative; }
-  .dock-item:hover{ translate: 0 -7px; }
-  .dock-item img{
-    width:100%; height:100%;
-    object-fit:cover;
-    display:block;
-    filter: drop-shadow(0 3px 6px rgba(74,51,54,0.28));
-  }
-  .dock-avatar{
-    width:100%; height:100%;
-    display:flex; align-items:center; justify-content:center;
-  }
-
-  .dock-wrap{
-    position:relative; z-index:2;
-    display:flex; justify-content:center;
-    padding: 0 20px 56px;
-  }
-
-  .card{
-    position:relative;
-    width:100%;
-    max-width: 480px;
-    background: none;
-    border-radius: 14px;
-    padding: 0 0 36px;
-    opacity:0;
-    transform: translateY(28px) scale(0.98);
-    transition: opacity 0.8s cubic-bezier(.2,.8,.2,1), transform 0.8s cubic-bezier(.2,.8,.2,1);
-    transform-style: preserve-3d;
-    will-change: transform;
-    --mx:50%; --my:50%;
-  }
-  .card.in{ opacity:1; transform: translateY(0) scale(1); }
-  .card.tilt-ready{ transition: transform 0.2s cubic-bezier(.2,.8,.2,1), opacity 0.8s ease; }
-
-  /* NÂNG CẤP: hiệu ứng "spotlight" ánh sáng bám theo vị trí con trỏ khi
-     rê chuột trên thẻ, đi kèm với hiệu ứng nghiêng (tilt) mượt hơn ở JS. */
-  .card::before{
-    content:"";
-    position:absolute; inset:0; z-index:1;
-    border-radius:14px;
-    background: radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,0.35), transparent 45%);
-    opacity:0; pointer-events:none;
-    transition: opacity 0.3s ease;
-  }
-  .card.tilt-ready::before{ opacity:1; }
-
-  .titlebar{
-    display:flex; align-items:center; gap:8px;
-    padding: 9px 15px;
-    background: var(--paper-dim);
-    background-image: var(--texture);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    position:relative; z-index:2;
-  }
-  .titlebar .dots{ display:flex; gap:5px; flex-shrink:0; }
-  .titlebar .dot{ width:9px; height:9px; border-radius:50%; box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12); }
-  .titlebar .dot.r{ background: var(--raspberry); }
-  .titlebar .dot.y{ background: var(--mustard); }
-  .titlebar .dot.g{ background: var(--sage); }
-
-  .discord-status{
-    display:flex; align-items:center; gap:6px;
-    flex-shrink:0;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing:0.03em;
-    color: var(--ink-soft);
-  }
-  .status-led{
-    width:7px; height:7px; border-radius:50%;
-    background: rgba(74,51,54,0.28);
-    flex-shrink:0;
-  }
-  .titlebar .path{
-    flex:1; text-align:right;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 9.5px; letter-spacing: 0.04em;
-    color: var(--ink-soft);
-  }
-
-  /* ============ DISCORD MINI PROFILE ============ */
-  .discord-mini-profile{
-    position: relative;
-    display:flex; flex-direction:column;
-    width:100%;
-    margin: 0 auto 14px;
-    padding: 0 0 8px 0;
-    background: rgba(255,255,255,0.24);
-    background-image:
-      radial-gradient(circle at 14% -12%, rgba(255,255,255,0.55), transparent 52%),
-      linear-gradient(150deg, rgba(255,255,255,0.22), rgba(255,255,255,0));
-    border: 1px solid rgba(255,255,255,0.4);
-    border-left: 3px solid var(--raspberry);
-    border-radius: 14px;
-    box-sizing:border-box;
-    overflow: hidden;
-    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset;
-    backdrop-filter: blur(6px) saturate(1.05);
-    -webkit-backdrop-filter: blur(6px) saturate(1.05);
-    transition: background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
-  }
-  .discord-mini-profile:hover{
-    box-shadow: 0 20px 38px -20px rgba(74,51,54,0.46), 0 1px 0 rgba(255,255,255,0.5) inset;
-  }
-  .discord-mini-profile:has(.dmp-status-dot.online){
-    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(35,165,90,0.3);
-  }
-  .discord-mini-profile:has(.dmp-status-dot.idle){
-    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(240,178,50,0.3);
-  }
-  .discord-mini-profile:has(.dmp-status-dot.dnd){
-    box-shadow: 0 16px 30px -22px rgba(74,51,54,0.4), 0 1px 0 rgba(255,255,255,0.5) inset, 0 0 0 1px rgba(242,63,67,0.3);
-  }
-  .discord-mini-profile::before{
-    content:"$ discord --whoami";
-    display:block;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10px; letter-spacing:0.05em;
-    color: var(--ink-soft);
-    opacity:0.65;
-    padding: 9px 14px 7px;
-  }
-  .discord-mini-profile.has-nameplate{
-    border-color: rgba(255,255,255,0.14);
-    border-left-color: transparent;
-    background-color: transparent;
-    background-image:
-      radial-gradient(circle at 14% -12%, rgba(255,255,255,0.12), transparent 48%),
-      linear-gradient(180deg, rgba(20,16,15,0.58) 0%, rgba(20,16,15,0.74) 100%);
-    backdrop-filter: blur(10px) saturate(1.02);
-    -webkit-backdrop-filter: blur(10px) saturate(1.02);
-    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55);
-  }
-  .discord-mini-profile.has-nameplate:has(.dmp-status-dot.online){
-    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(35,165,90,0.35);
-  }
-  .discord-mini-profile.has-nameplate:has(.dmp-status-dot.idle){
-    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(240,178,50,0.35);
-  }
-  .discord-mini-profile.has-nameplate:has(.dmp-status-dot.dnd){
-    box-shadow: 0 18px 34px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(242,63,67,0.35);
-  }
-  .discord-mini-profile.has-nameplate::before{ color: rgba(255,248,238,0.55); }
-  .discord-mini-profile.has-nameplate .dmp-nameplate-zone{
-    background: #14100f;
-  }
-
-  .dmp-nameplate-zone{
-    position: relative;
-    overflow: hidden;
-    padding: 10px 14px 8px 10px;
-    --dmp-nameplate: none;
-    --dmp-nameplate-color: rgba(20,13,15,.9);
-  }
-  .dmp-nameplate-zone::before,
-  .dmp-nameplate-zone::after{
-    content:"";
-    position:absolute; inset:0;
-    z-index:0;
-    opacity:0;
-    pointer-events:none;
-    transition: opacity .35s ease;
-  }
-  .dmp-nameplate-zone::before{
-    background-image: var(--dmp-nameplate);
-    background-color: var(--dmp-nameplate-color);
-    background-size: cover;
-    background-position: center;
-    transform: scale(1.06);
-  }
-  .dmp-nameplate-zone::after{
-    background: linear-gradient(115deg, rgba(20,13,15,.85) 12%, rgba(20,13,15,.45) 55%, rgba(20,13,15,.72) 100%);
-  }
-  .dmp-nameplate-zone .dmp-nameplate-video{
-    position:absolute; inset:0;
-    z-index:0;
-    width:100%; height:100%;
-    object-fit: cover;
-    opacity:0;
-    pointer-events:none;
-    transform: scale(1.06);
-    transition: opacity .35s ease;
-  }
-  .discord-mini-profile.has-nameplate .dmp-nameplate-zone::before,
-  .discord-mini-profile.has-nameplate .dmp-nameplate-zone::after,
-  .discord-mini-profile.has-nameplate .dmp-nameplate-zone .dmp-nameplate-video{
-    opacity:1;
-  }
-  .discord-mini-profile.has-nameplate .dmp-username{ color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55); }
-  .discord-mini-profile.has-nameplate .dmp-activity{ color:rgba(255,255,255,.78); }
-  .discord-mini-profile.has-nameplate .dmp-status-dot{ background:#14100f; }
-  .discord-mini-profile.has-nameplate .dmp-avatar{ box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 0 0 2px #14100f; }
-  .discord-mini-profile.has-nameplate .dmp-activity-card{
-    background: transparent;
-    border: none;
-  }
-  .discord-mini-profile.has-nameplate .dmp-act-details,
-  .discord-mini-profile.has-nameplate .dmp-act-state,
-  .discord-mini-profile.has-nameplate .dmp-act-time{
-    color: rgba(255,248,238,.72);
-  }
-  .discord-mini-profile.has-nameplate .dmp-act-img{
-    box-shadow: 0 4px 12px -3px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
-  }
-
-  @media (max-width: 640px){
-    .discord-mini-profile,
-    .discord-mini-profile.has-nameplate,
-    .music-box{
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-    .discord-mini-profile{
-      background-color: rgba(255,255,255,0.5);
-    }
-    .discord-mini-profile.has-nameplate{
-      background-color: rgba(20,16,15,0.78);
-    }
-    .music-box{
-      background-color: rgba(18,16,15,0.7);
-    }
-  }
-
-  .dmp-icons{
-    display:flex; align-items:center; gap:2px;
-    margin-left:auto; position:relative; z-index:1;
-    flex-shrink:0;
-  }
-  .dmp-icon{
-    width:30px; height:30px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background:transparent; border:none; padding:0; margin:0;
-    color: var(--ink-soft);
-    transition: color .2s ease, background .2s ease, transform .2s cubic-bezier(.34,1.56,.64,1);
-  }
-  button.dmp-icon{ cursor:pointer; }
-  .dmp-icon:hover{ background: rgba(74,51,54,0.08); color: var(--ink); transform: scale(1.08); }
-  .dmp-icon:active{ transform: scale(0.94); }
-  .dmp-icons .toggle-act-btn{ margin-left:0; }
-
-  .discord-mini-profile.has-nameplate .dmp-icon{ color: rgba(255,255,255,.82); }
-  .discord-mini-profile.has-nameplate .dmp-icon:hover{ background: rgba(255,255,255,.16); color:#fff; }
-  .dmp-top{ display:flex; align-items:center; gap:13px; width:100%; position: relative; z-index: 1; }
-  .dmp-avatar-wrap{ position:relative; width:46px; height:46px; flex-shrink:0; }
-  .dmp-avatar{
-    width:46px; height:46px; border-radius:50%; object-fit:cover; display:block;
-    background: var(--bg-b);
-    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35);
-    transition: box-shadow .4s ease;
-  }
-  .dmp-avatar-wrap:has(.dmp-status-dot.online) .dmp-avatar{
-    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(35,165,90,0.16), 0 0 18px 4px rgba(35,165,90,0.22);
-  }
-  .dmp-avatar-wrap:has(.dmp-status-dot.idle) .dmp-avatar{
-    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(240,178,50,0.14), 0 0 18px 4px rgba(240,178,50,0.18);
-  }
-  .dmp-avatar-wrap:has(.dmp-status-dot.dnd) .dmp-avatar{
-    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12), 0 3px 8px -2px rgba(74,51,54,0.35), 0 0 0 7px rgba(242,63,67,0.14), 0 0 18px 4px rgba(242,63,67,0.18);
-  }
-  .dmp-decoration{
-    position:absolute; inset:-6px;
-    width:58px; height:58px;
-    pointer-events:none;
-  }
-
-  .toggle-act-btn {
-    background: transparent;
-    border: none;
-    color: var(--ink-soft);
-    padding: 4px 6px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease, background 0.2s ease, transform 0.2s cubic-bezier(.34,1.56,.64,1);
-    flex-shrink: 0;
-    margin-left: auto;
-  }
-
-  .toggle-act-btn:hover {
-    color: var(--ink);
-    background: rgba(74, 51, 54, 0.08);
-    transform: scale(1.1);
-  }
-  .toggle-act-btn:active{ transform: scale(0.92); }
-
-  .toggle-act-btn.is-disabled {
-    opacity: 0.4;
-  }
-
-  .dmp-activity-panel.user-collapsed {
-    max-height: 0px !important;
-    opacity: 0 !important;
-    margin-top: 0px !important;
-    pointer-events: none;
-  }
-
-  .dmp-status-dot{
-    position:absolute; right:-2px; bottom:-2px;
-    width:15px; height:15px; border-radius:50%;
-    background: var(--paper-dim);
-    box-sizing:border-box; z-index:2;
-    transition: transform .2s cubic-bezier(.34,1.56,.64,1);
-  }
-  .dmp-status-dot::before{
-    content:""; position:absolute; inset:2.5px; border-radius:50%;
-    background:#80848e;
-  }
-  .dmp-status-dot.online::before{ background:#23a55a; }
-  .dmp-status-dot.online{ position:absolute; }
-  .dmp-status-dot.online::after{
-    content:"";
-    position:absolute; inset:2.5px; border-radius:50%;
-    background: rgba(35,165,90,0.55);
-    animation: status-glow-ring 2s ease-out infinite;
-    pointer-events:none;
-  }
-  @keyframes status-glow-ring{
-    0%{ transform: scale(1); opacity:0.55; }
-    100%{ transform: scale(1.9); opacity:0; }
-  }
-  .dmp-status-dot.idle::before{ background:#f0b232; }
-  .dmp-status-dot.dnd::before{ background:#f23f43; }
-  .dmp-status-dot.offline::before{ background:#80848e; }
-  .dmp-status-dot.idle::after{
-    content:""; position:absolute; width:6.5px; height:6.5px; border-radius:50%;
-    background: var(--paper-dim); top:1.5px; left:1.5px;
-  }
-  .dmp-status-dot.dnd::after{
-    content:""; position:absolute; width:6.5px; height:2px; border-radius:1px;
-    background:#fff8ee; top:6.5px; left:4.2px;
-  }
-
-  .dmp-info{ display:flex; flex-direction:column; gap:4px; min-width:0; text-align:left; flex:1; }
-  .dmp-name-row{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-  .dmp-username{
-    font-family:'DM Sans', sans-serif; font-weight:700;
-    font-size: 14.5px; letter-spacing: 0.005em; color: var(--ink);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;
-    transition: color .3s ease;
-  }
-  .dmp-badges{ display:inline-flex; align-items:center; gap:4px; }
-  .dmp-badge{
-    font-size: 12px; line-height:1;
-    filter: drop-shadow(0 1px 1px rgba(74,51,54,0.2));
-    transition: transform .2s ease;
-  }
-  .dmp-badge:hover{ transform: translateY(-1px) scale(1.12); }
-  .dmp-activity{
-    font-family:'IBM Plex Mono', monospace; font-size: 11px;
-    color: var(--ink-soft); letter-spacing: 0.01em;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    transition: color .3s ease;
-  }
-
-  .dmp-activity-panel{
-    width:100%; overflow:hidden;
-    max-height:0; opacity:0; margin-top:0;
-    padding: 0 14px 0 10px;
-    box-sizing: border-box;
-    border-top: 1px solid transparent;
-    transition: max-height 0.42s cubic-bezier(.2,.8,.2,1), opacity 0.32s ease, margin-top 0.42s ease, border-color 0.32s ease;
-  }
-  .dmp-activity-panel.open{
-    opacity:1; margin-top:10px; padding-top:10px;
-    border-top-color: rgba(74,51,54,0.12);
-  }
-  .discord-mini-profile.has-nameplate .dmp-activity-panel.open{
-    border-top-color: rgba(255,255,255,.16);
-  }
-  .dmp-activity-panel.open .dmp-activity-card::before{
-    content:"▸ hoạt động";
-    display:block; width:100%;
-    font-family:'IBM Plex Mono', monospace; font-size:9.5px;
-    letter-spacing:0.08em; color: var(--raspberry);
-    opacity:0.7; margin-bottom:8px;
-  }
-  .discord-mini-profile.has-nameplate .dmp-activity-panel.open .dmp-activity-card::before{
-    color: rgba(255,248,238,.7);
-  }
-  .dmp-activity-card{
-    display:flex; align-items:center; flex-wrap:wrap; gap:10px;
-    padding:0;
-    background: transparent;
-    border: none;
-    border-radius:0;
-  }
-  .dmp-act-img-wrap{ position:relative; width:40px; height:40px; flex-shrink:0; }
-  .dmp-act-img{
-    width:40px; height:40px; border-radius:9px; object-fit:cover; display:block;
-    background: var(--bg-b);
-    box-shadow: 0 4px 10px -4px rgba(74,51,54,0.4);
-  }
-  .dmp-act-img-small{
-    position:absolute; right:-4px; bottom:-4px; width:17px; height:17px; border-radius:50%;
-    border:2px solid var(--paper-dim); object-fit:cover; background: var(--bg-b);
-    box-shadow: 0 2px 5px -1px rgba(74,51,54,0.35);
-  }
-  .dmp-act-text{ min-width:0; text-align:left; flex:1; }
-  .dmp-act-name{
-    margin:0; font-family:'DM Sans', sans-serif; font-weight:700;
-    font-size:12.5px; color: var(--raspberry);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-  .discord-mini-profile.has-nameplate .dmp-act-name{ color:#fff; }
-  .dmp-act-details, .dmp-act-state{
-    margin:2px 0 0; font-family:'DM Sans', sans-serif; font-size:11.5px;
-    color: var(--ink-soft);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-  .dmp-act-time{
-    margin:4px 0 0; font-family:'IBM Plex Mono', monospace; font-size:10px;
-    color: var(--ink-soft); opacity:0.85;
-  }
-
-.dmp-status-dot:hover {
-  transform: scale(1.25);
 }
 
-
-  .card-inner{ padding: 26px 30px 0; position:relative; z-index:2; }
-
-  .reveal{
-    opacity:0;
-    translate: 0 12px;
-    filter: blur(3px);
-    transition: opacity 0.6s ease, translate 0.6s cubic-bezier(.2,.8,.2,1), filter 0.6s ease;
-    transition-delay: calc(var(--i, 0) * 90ms + 150ms);
-  }
-  .card.in .reveal{ opacity:1; translate: 0 0; filter: blur(0); }
-
-  /* ===== SPOTIFY MUSIC BOX ===== */
-  .music-box {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    background-color: rgba(18, 16, 15, 0.42);
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 14px;
-    padding: 12px 14px;
-    margin: 0 0 14px;
-    box-shadow: 0 14px 28px -18px rgba(74, 51, 54, 0.45);
-    backdrop-filter: blur(8px) saturate(1.1);
-    -webkit-backdrop-filter: blur(8px) saturate(1.1);
-  }
-  .music-box::before{
-    content:""; position:absolute; inset:0;
-    background: radial-gradient(circle at 15% 0%, rgba(29,185,84,0.12), transparent 55%);
-    pointer-events:none; border-radius: 14px;
-  }
-  .music-box.is-playing{
-    box-shadow: 0 14px 28px -18px rgba(74,51,54,0.5), 0 0 0 1px rgba(29,185,84,0.32);
-  }
-
-  .music-topline{
-    position:relative; z-index:1;
-    display:flex; align-items:center; gap:12px;
-  }
-
-  .disc-player{
-    position:relative;
-    width:48px; height:48px;
-    border-radius:6px;
-    background: rgba(255,255,255,0.10);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer; border:none; padding:0; flex-shrink:0; overflow:hidden; z-index:1;
-  }
-  .disc-player .disc-label{
-    display:block; width:100%; height:100%;
-    background: linear-gradient(135deg, var(--raspberry), var(--mustard));
-    background-size: cover; background-position: center;
-  }
-
-  .music-info{ flex:1; min-width:0; position:relative; z-index:1; }
-
-  /* =========================================================
-     GLOBAL JS TOOLTIP
-     Tất cả tooltip dùng chung một element duy nhất.
-     ========================================================= */
-  .tooltip-host[data-tooltip] {
-    cursor: default;
-  }
-
-  /* Tắt hoàn toàn tooltip CSS cũ để không bị trùng với JS. */
-  .tooltip-host[data-tooltip]::before,
-  .tooltip-host[data-tooltip]::after,
-  .dock-item[data-tooltip]::before,
-  .dock-item[data-tooltip]::after,
-  .dock-item[data-tip]::before,
-  .dock-item[data-tip]::after {
-    content: none !important;
-    display: none !important;
-  }
-
-  #global-tooltip {
-    position: fixed;
-    left: 0;
-    top: 0;
-    max-width: min(280px, calc(100vw - 20px));
-    padding: 7px 10px;
-    background: var(--ink);
-    color: #fdf6ec;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    line-height: 1.45;
-    text-align: center;
-    white-space: pre-line;
-    overflow-wrap: anywhere;
-    border: 1px solid rgba(207,100,120,0.35);
-    border-radius: 8px;
-    box-shadow: 0 10px 24px -8px rgba(0,0,0,0.5);
-    pointer-events: none;
-    opacity: 0;
-    visibility: hidden;
-    transform: translate3d(0,4px,0) scale(.98);
-    transition: opacity .16s ease, transform .16s cubic-bezier(.34,1.56,.64,1), visibility .16s ease;
-    z-index: 2147483647;
-  }
-
-  #global-tooltip.is-visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translate3d(0,0,0) scale(1);
-  }
-
-  #global-tooltip.tooltip-bottom {
-    transform-origin: center top;
-  }
-
-  #global-tooltip::after {
-    content: "" !important;
-    display: block !important;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    left: 50%;
-    bottom: -4.5px;
-    margin-left: -4px;
-    background: var(--ink);
-    border-right: 1px solid rgba(207,100,120,0.35);
-    border-bottom: 1px solid rgba(207,100,120,0.35);
-    transform: rotate(45deg);
-  }
-
-  #global-tooltip.tooltip-bottom::after {
-    top: -4.5px;
-    bottom: auto;
-    transform: rotate(225deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #global-tooltip {
-      transition: none;
-    }
-  }
-
-  .music-title{
-    margin:0; font-family:'DM Sans', sans-serif; font-weight:700;
-    font-size:13.5px; color:#fff8ee !important; line-height: 1.4;
-    white-space: normal; word-break: break-word;
-  }
-  .music-sub{
-    margin:3px 0 0; font-family:'DM Sans', sans-serif; font-size:11.5px;
-    color: rgba(255,248,238,0.62) !important;
-  }
-
-  .music-bars {
-    display: flex;
-    align-items: flex-end; 
-    justify-content: center;
-    gap: 2px;
-    height: 18px;
-    padding: 0 2px;
-    flex-shrink: 0;
-    overflow: hidden;
-    border-radius: 2px;
-  }
-
-  .music-bars .bar {
-    width: 2px;
-    height: 100%;
-    background-color: #1db954;
-    transform-origin: bottom center !important; 
-    transform: scaleY(0.08); 
-    transition: transform 0.06s ease;
-    will-change: transform;
-  }
-
-  .music-playbtn{
-    position:relative; z-index:1;
-    width:34px; height:34px; flex-shrink:0;
-    border-radius:50%; background: rgba(255,248,238,0.92); border:none;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    transition: transform 0.15s cubic-bezier(.34,1.56,.64,1);
-  }
-  .music-playbtn:hover{ transform: scale(1.06); background:#ffffff; }
-  .music-playbtn svg{ width:14px; height:14px; display:block; }
-  .music-playbtn .icon-pause{ display:none; }
-  .music-box.is-playing .music-playbtn .icon-play{ display:none; }
-  .music-box.is-playing .music-playbtn .icon-pause{ display:block; }
-
-  .music-menu-btn{
-    position:relative; z-index:1;
-    width:28px; height:28px; flex-shrink:0; border-radius:50%;
-    background: transparent; border:none; color: rgba(255,248,238,0.62);
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-  }
-  .music-menu-btn:hover{ color:#fff8ee; background: rgba(255,255,255,0.10); }
-  .music-menu-btn svg{ width:16px; height:16px; }
-  .music-menu-btn[aria-expanded="true"]{ color:#1DB954; background: rgba(29,185,84,0.14); }
-
-  .music-progress-wrap {
-    position: relative; z-index: 1;
-    display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 12px;
-  }
-  .time-label {
-    font-family: 'DM Sans', sans-serif; font-size: 10.5px; color: #a7a7a7; min-width: 30px; text-align: center;
-  }
-  .progress-bar-container {
-    flex: 1; height: 4px; background: rgba(255,248,238,0.22); border-radius: 2px; cursor: pointer; position: relative; overflow: hidden;
-    transition: height 0.15s ease;
-  }
-  .progress-bar-container:hover{ height: 6px; }
-  .progress-bar-fill {
-    position: absolute; left: 0; top: 0;
-    width: 100%; height: 100%;
-    transform-origin: left; transform: scaleX(0);
-    background: #fff8ee; border-radius: 2px;
-    will-change: transform;
-  }
-
-  .music-nav{
-    position:relative; z-index:1;
-    display:flex; align-items:center; justify-content:center; gap:18px; margin-top:10px;
-    height: 32px;
-  }
-  .music-nav button{
-    width:28px; height:28px; border:none; border-radius:50%;
-    background: transparent; color: rgba(255,248,238,0.62);
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-    transition: color 0.2s ease, transform 0.2s ease;
-  }
-  .music-nav button svg{ width:16px; height:16px; fill: currentColor; }
-  .music-nav button:hover{ color:#fff8ee; transform: scale(1.1); }
-
-  .volume-container {
-    position: absolute; right: 0; top: 50%;
-    transform: translateY(-50%); display: flex; align-items: center; gap: 6px;
-    padding: 2px 4px; border-radius: 20px; transition: background 0.2s ease;
-  }
-  .volume-container:hover { background: rgba(255, 255, 255, 0.08); }
-
-  #volume-btn {
-    background: transparent; border: none; color: rgba(255,248,238,0.62);
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    padding: 0; width: 24px; height: 24px; outline: none; transition: color 0.2s ease;
-  }
-  #volume-btn:hover { color: #ffffff; }
-
-  #volume-slider-container {
-    position: relative; width: 0; height: 4px;
-    background: rgba(255, 255, 255, 0.2); border-radius: 4px;
-    cursor: pointer; opacity: 0; overflow: hidden;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
-  }
-  .volume-container:hover #volume-slider-container { width: 65px; opacity: 1; overflow: visible; }
-
-  #volume-slider-fill {
-    position: absolute; left: 0; top: 0; height: 100%; width: 100%;
-    transform-origin: left; transform: scaleX(1);
-    background: #1db954; border-radius: 4px; pointer-events: none;
-    will-change: transform;
-  }
-
-  .track-list-panel {
-    position: relative; margin-top: 10px; width: 100%; max-height: 0px; 
-    overflow-y: hidden; background: rgba(0, 0, 0, 0.25); border-radius: 10px;
-    padding: 0 8px; border: 1px solid transparent; opacity: 0;
-    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
-  }
-  .track-list-panel.open {
-    opacity: 1; max-height: 175px; overflow-y: auto; padding: 8px;
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .track-list-panel::-webkit-scrollbar {
-    width: 4px;
-  }
-  .track-list-panel::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .track-list-panel::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-  }
-  .track-list-panel::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4);
-  }
-
-  .track-list-header{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:8px; font-family:'DM Sans', sans-serif; font-size:11.5px; font-weight:700;
-    color:#fff8ee; user-select: none;
-  }
-  .track-list-header span::before{ content:"♪ "; color:#1DB954; }
-  .track-list-close{
-    width:22px; height:22px; border:none; border-radius:50%;
-    background:transparent; color: rgba(255,248,238,0.6);
-    display:flex; align-items:center; justify-content:center; font-size:13px; cursor:pointer;
-  }
-  .track-list-close:hover{ color:#fff8ee; background: rgba(255,255,255,0.12); }
-
-  .track-category-filters{
-    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;
-  }
-  .category-chip{
-    padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.14);
-    background: rgba(255,255,255,0.05); color: rgba(255,248,238,0.65);
-    font-family:'DM Sans', sans-serif; font-size:10.5px; font-weight:600;
-    cursor:pointer; user-select:none; transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
-    white-space:nowrap; line-height:1.4;
-  }
-  .category-chip:hover{ background: rgba(255,255,255,0.12); color:#fff8ee; }
-  .category-chip.active{ background: rgba(29,185,84,0.22); border-color: rgba(29,185,84,0.5); color:#1DB954; }
-
-  .track-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
-  
-  .track-item{
-    display:flex; align-items:center; gap:10px; padding:6px 8px;
-    border-radius:8px; cursor:pointer; user-select: none; transition: background 0.15s ease;
-  }
-  .track-item:hover{ background: rgba(255,255,255,0.1); }
-  .track-item.active{ background: rgba(29,185,84,0.18); }
-  .track-item .t-index{ width:16px; text-align:center; font-family:'DM Sans', sans-serif; font-size:11px; color: rgba(255,248,238,0.4); }
-  .track-item.active .t-index{ color:#1DB954; font-weight: bold; }
-  .track-item .t-cover{ width:32px; height:32px; border-radius:6px; object-fit:cover; flex-shrink:0; }
-  .track-item .t-info{ display:flex; flex-direction:column; min-width:0; gap:1px; }
-  .track-item .t-title{ margin:0; min-width:0; font-family:'DM Sans', sans-serif; font-size:12px; color:#fff8ee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .track-item.active .t-title{ color:#1DB954; font-weight:700; }
-  .track-item .t-category{
-    font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:0.05em;
-    text-transform:uppercase; color: rgba(255,248,238,0.4);
-  }
-  .track-item.active .t-category{ color: rgba(29,185,84,0.75); }
-  .track-list-empty{
-    text-align:center; padding:16px 0; font-family:'DM Sans', sans-serif;
-    font-size:11.5px; color: rgba(255,248,238,0.45);
-  }
-
-  .mini-bars {
-    display: none;
-    align-items: flex-end;
-    gap: 2px;
-    height: 12px;
-    margin-left: auto;
-    flex-shrink: 0;
-    overflow: hidden;
-    border-radius: 1px;
-  }
-  
-  .music-box.is-playing .track-item.active .mini-bars {
-    display: flex;
-  }
-
-  .mini-bars .m-bar {
-    width: 2px;
-    height: 100%;
-    background-color: #1DB954;
-    transform-origin: bottom center !important;
-    transform: scaleY(0.1);
-    transition: transform 0.06s ease;
-  }
-
-  /* ===== PHOTO & CONTENT ===== */
-  .photo-wrap{
-    position:relative; width: 196px; margin: -74px auto 16px;
-    display:flex; align-items:center; justify-content:center;
-    animation: photo-idle 5.5s ease-in-out infinite;
-  }
-  @keyframes photo-idle{
-    0%,100%{ transform: translateY(0); }
-    50%{ transform: translateY(-6px); }
-  }
-  .photo-shadow{
-    position:absolute; width: 76%; height: 72%; top: 12%;
-    border-radius: 6px; background: radial-gradient(circle, rgba(74,51,54,0.22), transparent 75%);
-    filter: blur(12px); transform: translateY(18px) rotate(-4deg);
-  }
-  .photo-frame{
-    position:relative; width: 176px; background-color: rgba(255,254,252,0.55);
-    background-image: var(--texture); padding: 10px 10px 26px; border-radius: 6px;
-    rotate: -4deg; transition: rotate 0.4s ease;
-  }
-  .photo-frame:hover{ rotate: 0deg; }
-  .album-cover{ display:block; width: 156px; height: 156px; object-fit:cover; border-radius: 2px; }
-
-  .eyebrow{
-    text-align:center; font-family:'IBM Plex Mono', monospace;
-    font-size: 11px; letter-spacing: 0.1em; color: var(--ink-soft); margin: 0 0 6px;
-  }
-  .eyebrow::before{ content:"$ whoami"; display:block; color: var(--raspberry); margin-bottom:3px; opacity:0.75; }
-
-  h1{
-    text-align:center; font-family:'Fraunces', serif; font-weight: 600;
-    font-size: clamp(32px, 8vw, 42px); margin: 0 0 4px; line-height:1.05;
-  }
-  h1 em{ font-style: italic; font-weight:500; color: var(--raspberry); }
-
-  .location{ text-align:center; font-size: 14px; color: var(--ink-soft); margin: 0 0 4px; }
-  .location::before{ content:"📍 "; }
-
-  .vn-clock{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    color: #fff8ee;
-    background: rgba(74,51,54,0.55);
-    width: fit-content;
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin: 0 auto 14px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-    white-space: nowrap;
-  }
-
-  .divider{
-    display:flex; align-items:center; justify-content:center; margin: 0 0 14px;
-    font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--line);
-  }
-
-  .bio{
-    text-align:left; font-size: 14.5px; line-height:1.6; color: var(--ink);
-    margin: 0 auto 14px; font-family:'IBM Plex Mono', monospace;
-    background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.35);
-    border-left: 3px solid var(--raspberry); border-radius: 8px; padding: 11px 14px;
-  }
-  .bio::before{ content:"# about.txt"; display:block; font-size:10px; color: var(--ink-soft); margin-bottom:8px; }
-
-  .now{
-    margin-top: 4px; padding: 11px 14px; border-radius: 12px;
-    background: rgba(124,148,115,0.14); border: 1px dashed rgba(124,148,115,0.5);
-    font-size: 13.5px; color: var(--ink-soft); text-align:left;
-  }
-  .now::before{ content:"$ cat status.log"; display:block; font-family:'IBM Plex Mono', monospace; font-size:10px; margin-bottom:6px; opacity:0.7; }
-  .now strong{ color: var(--sage); font-family:'IBM Plex Mono', monospace; font-weight:500; }
-
-  footer{
-    display:flex; align-items:center; gap:10px; text-align:left; margin-top: 14px;
-    padding: 12px 18px; background: var(--paper-dim); background-image: var(--texture);
-    border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
-    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft);
-    margin-left: -30px;
-    margin-right: -30px;
-    width: calc(100% + 60px);
-  }
-  .foot-dots{ display:flex; gap:6px; flex-shrink:0; }
-  .foot-dots .dot{
-    width:11px; height:11px; border-radius:50%;
-    box-shadow: inset 0 0 0 1px rgba(74,51,54,0.12);
-    transition: background 0.25s ease, box-shadow 0.25s ease;
-  }
-  .foot-dots .dot.r{ background: var(--raspberry); }
-  .foot-dots .dot.y{ background: var(--mustard); }
-  .foot-dots .dot.g{ background: var(--sage); }
-  .foot-dots.pulse .dot{ animation: foot-dot-pulse 0.9s ease-in-out infinite; }
-  .foot-dots.pulse .dot.y{ animation-delay: 0.12s; }
-  .foot-dots.pulse .dot.g{ animation-delay: 0.24s; }
-  @keyframes foot-dot-pulse{
-    0%,100%{ opacity:0.55; transform: scale(0.85); }
-    50%{ opacity:1; transform: scale(1); }
-  }
-
-  footer#footer-bar{
-    cursor:pointer;
-    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-  footer#footer-bar:hover{
-    transform: translateY(-3px);
-    border-color: rgba(207,100,120,0.35);
-    box-shadow: 0 24px 44px -20px rgba(74,51,54,0.4);
-  }
-  footer#footer-bar:active{ transform: translateY(-1px) scale(0.995); }
-  footer#footer-bar:focus-visible{ outline: 2px solid var(--raspberry); outline-offset: 2px; }
-
-  .foot-text{
-    flex:1; min-width:0;
-    display:flex; align-items:baseline; gap:6px;
-    white-space:nowrap; overflow:hidden;
-  }
-  .foot-text::before{
-    content:"$"; flex-shrink:0;
-    color: var(--raspberry); opacity:0.8;
-  }
-  .foot-typed{
-    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-    color: var(--ink);
-  }
-  .foot-cursor{
-    display:inline-block; width:6px; margin-left:1px;
-    color: var(--raspberry);
-    animation: foot-cursor-blink 1s step-end infinite;
-  }
-  @keyframes foot-cursor-blink{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0; } }
-
-  .foot-hint{
-    flex-shrink:0;
-    display:flex; align-items:center; gap:5px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px; letter-spacing: 0.04em;
-    color: var(--ink-soft);
-    opacity:0.75;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-  .foot-hint svg{ width:11px; height:11px; flex-shrink:0; transition: transform 0.35s ease; }
-  footer#footer-bar:hover .foot-hint{ opacity:1; color: var(--raspberry); }
-  footer#footer-bar:hover .foot-hint svg{ transform: rotate(180deg); }
-
-/* =========================================================
-   GLOBAL JS TOOLTIP
-   ========================================================= */
-.tooltip-host[data-tooltip] {
-  cursor: default;
+/* ===== GATE ===== */
+#gate{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  width:100%;
+  border:none;
+  background:radial-gradient(circle at 50% 40%,#1a1412,#0d0b0a 70%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  overflow:hidden;
+  clip-path:circle(150% at 50% 50%);
+  transition:clip-path .6s ease,opacity .6s ease;
+}
+#gate.hidden{
+  opacity:0;
+  clip-path:circle(0% at 50% 50%);
+  pointer-events:none;
+}
+#gate::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 50%,transparent 45%,rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+.gate-inner{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+  padding:20px;
+}
+.gate-ring{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:122px;
+  height:122px;
+  border-radius:50%;
+  border:1px solid rgba(243,236,226,.22);
+  transition:transform .3s ease,border-color .3s ease;
+}
+#gate:hover .gate-ring{
+  transform:scale(1.05);
+  border-color:rgba(207,100,120,.4);
+}
+.gate-mark{
+  position:relative;
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:26px;
+  color:var(--raspberry);
+  opacity:.92;
+}
+.gate-text{
+  position:relative;
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-weight:500;
+  font-size:clamp(20px,4.5vw,28px);
+  letter-spacing:.02em;
+  color:#f3ece2;
+  opacity:.9;
+  transition:letter-spacing .3s ease,color .3s ease;
+}
+#gate:hover .gate-text{
+  letter-spacing:.06em;
+  color:#fff8ee;
+}
+.gate-text-underline{
+  display:block;
+  height:1px;
+  margin-top:8px;
+  background:linear-gradient(90deg,transparent,var(--raspberry),transparent);
+  transform:scaleX(.15);
+  opacity:.5;
+  transition:transform .35s ease,opacity .35s ease;
+}
+#gate:hover .gate-text-underline{
+  transform:scaleX(1);
+  opacity:1;
+}
+.gate-hint{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(243,236,226,.4);
+}
+.gate-burst{
+  position:fixed;
+  z-index:101;
+  pointer-events:none;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(243,236,226,.85),rgba(207,100,120,.3) 55%,transparent 72%);
+  transform:translate(-50%,-50%) scale(0);
+  animation:gate-burst-anim .5s ease-out forwards;
+}
+@keyframes gate-burst-anim{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:.9}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:0}
 }
 
+/* ===== BACKGROUND ===== */
+#main{position:relative;min-height:100vh}
+.bg-video-wrap{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:linear-gradient(160deg,var(--bg-a),var(--bg-b));
+}
+.bg-video-wrap video{
+  position:absolute;
+  top:50%;
+  left:50%;
+  min-width:100%;
+  min-height:100%;
+  width:auto;
+  height:auto;
+  transform:translate(-50%,-50%);
+  object-fit:cover;
+  object-position:68% center;
+}
+.bg-video-wrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 30%,rgba(255,248,238,.12),rgba(74,51,54,.16) 85%);
+  z-index:1;
+}
+.orb{
+  position:fixed;
+  z-index:1;
+  border-radius:50%;
+  filter:blur(44px);
+  pointer-events:none;
+  opacity:.55;
+  animation:orb-float 16s ease-in-out infinite;
+  will-change:transform;
+  transform:translateZ(0);
+}
+.orb-1{
+  width:260px;height:260px;top:6%;left:-6%;
+  background:radial-gradient(circle,var(--raspberry),transparent 70%);
+  animation-duration:18s;
+}
+.orb-2{
+  width:220px;height:220px;bottom:8%;right:-5%;
+  background:radial-gradient(circle,var(--mustard),transparent 70%);
+  animation-duration:21s;
+  animation-delay:-6s;
+}
+.orb-3{
+  width:180px;height:180px;bottom:32%;left:4%;
+  background:radial-gradient(circle,var(--sage),transparent 70%);
+  animation-duration:15s;
+  animation-delay:-3s;
+}
+@keyframes orb-float{
+  0%,100%{transform:translateZ(0) translate(0,0)}
+  33%{transform:translateZ(0) translate(26px,-32px)}
+  66%{transform:translateZ(0) translate(-20px,20px)}
+}
+@media(max-width:640px){
+  .orb-3,.orb-2{display:none}
+}
+
+/* ===== MAIN / CARD ===== */
+main{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:40px 20px 60px;
+  perspective:1200px;
+}
+.dock{
+  display:flex;
+  gap:14px;
+  width:fit-content;
+  margin:0 auto;
+  opacity:0;
+  translate:0 16px;
+  transition:opacity .6s ease;
+}
+.dock.in{opacity:1;translate:0 0}
+.dock-item{
+  width:40px;height:40px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  background:transparent;
+  overflow:hidden;
+  flex-shrink:0;
+  transition:translate .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.dock-item:hover{translate:0 -7px}
+.dock-item img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  filter:drop-shadow(0 3px 6px rgba(74,51,54,.28));
+}
+.dock-avatar{
+  width:100%;height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.dock-wrap{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  padding:0 20px 56px;
+}
+.card{
+  position:relative;
+  width:100%;
+  max-width:480px;
+  background:none;
+  border-radius:14px;
+  padding:0 0 36px;
+  opacity:0;
+  transform:translateY(28px) scale(.98);
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.card.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.card.tilt-ready{
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),opacity .8s ease;
+}
+.titlebar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 15px;
+  background:var(--paper-dim);
+  background-image:var(--texture);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  position:relative;
+  z-index:2;
+}
+.titlebar .dots{display:flex;gap:5px;flex-shrink:0}
+.titlebar .dot{
+  width:9px;height:9px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12);
+}
+.titlebar .dot.r{background:var(--raspberry)}
+.titlebar .dot.y{background:var(--mustard)}
+.titlebar .dot.g{background:var(--sage)}
+.titlebar .path{
+  flex:1;
+  text-align:right;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.04em;
+  color:var(--ink-soft);
+}
+.card-inner{
+  padding:26px 30px 0;
+  position:relative;
+  z-index:2;
+}
+.reveal{
+  opacity:0;
+  translate:0 12px;
+  filter:blur(3px);
+  transition:opacity .6s ease,translate .6s cubic-bezier(.2,.8,.2,1),filter .6s ease;
+  transition-delay:calc(var(--i,0) * 90ms + 150ms);
+}
+.card.in .reveal{
+  opacity:1;
+  translate:0 0;
+  filter:blur(0);
+}
+
+/* ===== DISCORD ===== */
+.discord-mini-profile{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  margin:0 auto 14px;
+  padding:0 0 8px;
+  background:rgba(255,255,255,.24);
+  background-image:
+    radial-gradient(circle at 14% -12%,rgba(255,255,255,.55),transparent 52%),
+    linear-gradient(150deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.4);
+  border-left:3px solid var(--raspberry);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset;
+  backdrop-filter:blur(6px) saturate(1.05);
+  -webkit-backdrop-filter:blur(6px) saturate(1.05);
+  transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.discord-mini-profile:hover{
+  box-shadow:0 20px 38px -20px rgba(74,51,54,.46),0 1px 0 rgba(255,255,255,.5) inset;
+}
+.discord-mini-profile:has(.dmp-status-dot.online){
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(35,165,90,.3);
+}
+.discord-mini-profile:has(.dmp-status-dot.idle){
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(240,178,50,.3);
+}
+.discord-mini-profile:has(.dmp-status-dot.dnd){
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(242,63,67,.3);
+}
+.discord-mini-profile::before{
+  content:"$ discord --whoami";
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.05em;
+  color:var(--ink-soft);
+  opacity:.65;
+  padding:9px 14px 7px;
+}
+.discord-mini-profile.has-nameplate{
+  border-color:rgba(255,255,255,.14);
+  border-left-color:transparent;
+  background-color:transparent;
+  background-image:
+    radial-gradient(circle at 14% -12%,rgba(255,255,255,.12),transparent 48%),
+    linear-gradient(180deg,rgba(20,16,15,.58) 0%,rgba(20,16,15,.74) 100%);
+  backdrop-filter:blur(10px) saturate(1.02);
+  -webkit-backdrop-filter:blur(10px) saturate(1.02);
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55);
+}
+.discord-mini-profile.has-nameplate:has(.dmp-status-dot.online){
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55),0 0 0 1px rgba(35,165,90,.35);
+}
+.discord-mini-profile.has-nameplate:has(.dmp-status-dot.idle){
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55),0 0 0 1px rgba(240,178,50,.35);
+}
+.discord-mini-profile.has-nameplate:has(.dmp-status-dot.dnd){
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55),0 0 0 1px rgba(242,63,67,.35);
+}
+.discord-mini-profile.has-nameplate::before{color:rgba(255,248,238,.55)}
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone{background:#14100f}
+
+.dmp-nameplate-zone{
+  position:relative;
+  overflow:hidden;
+  padding:10px 14px 8px 10px;
+  --dmp-nameplate:none;
+  --dmp-nameplate-color:rgba(20,13,15,.9);
+}
+.dmp-nameplate-zone::before,
+.dmp-nameplate-zone::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s ease;
+}
+.dmp-nameplate-zone::before{
+  background-image:var(--dmp-nameplate);
+  background-color:var(--dmp-nameplate-color);
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.06);
+}
+.dmp-nameplate-zone::after{
+  background:linear-gradient(115deg,rgba(20,13,15,.85) 12%,rgba(20,13,15,.45) 55%,rgba(20,13,15,.72) 100%);
+}
+.dmp-nameplate-zone .dmp-nameplate-video{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  pointer-events:none;
+  transform:scale(1.06);
+  transition:opacity .35s ease;
+}
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone::before,
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone::after,
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone .dmp-nameplate-video{
+  opacity:1;
+}
+.discord-mini-profile.has-nameplate .dmp-username{
+  color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.55);
+}
+.discord-mini-profile.has-nameplate .dmp-activity{color:rgba(255,255,255,.78)}
+.discord-mini-profile.has-nameplate .dmp-status-dot{background:#14100f}
+.discord-mini-profile.has-nameplate .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 0 0 2px #14100f;
+}
+.discord-mini-profile.has-nameplate .dmp-activity-card{
+  background:transparent;
+  border:none;
+}
+.discord-mini-profile.has-nameplate .dmp-act-details,
+.discord-mini-profile.has-nameplate .dmp-act-state,
+.discord-mini-profile.has-nameplate .dmp-act-time{
+  color:rgba(255,248,238,.72);
+}
+.discord-mini-profile.has-nameplate .dmp-act-img{
+  box-shadow:0 4px 12px -3px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);
+}
+@media(max-width:640px){
+  .discord-mini-profile,
+  .discord-mini-profile.has-nameplate,
+  .music-box{
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .discord-mini-profile{background-color:rgba(255,255,255,.5)}
+  .discord-mini-profile.has-nameplate{background-color:rgba(20,16,15,.78)}
+  .music-box{background-color:rgba(18,16,15,.7)}
+}
+.dmp-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  width:100%;
+  position:relative;
+  z-index:1;
+}
+.dmp-avatar-wrap{
+  position:relative;
+  width:46px;
+  height:46px;
+  flex-shrink:0;
+}
+.dmp-avatar{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  background:var(--bg-b);
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35);
+  transition:box-shadow .4s ease;
+}
+.dmp-avatar-wrap:has(.dmp-status-dot.online) .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35),0 0 0 7px rgba(35,165,90,.16),0 0 18px 4px rgba(35,165,90,.22);
+}
+.dmp-avatar-wrap:has(.dmp-status-dot.idle) .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35),0 0 0 7px rgba(240,178,50,.14),0 0 18px 4px rgba(240,178,50,.18);
+}
+.dmp-avatar-wrap:has(.dmp-status-dot.dnd) .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35),0 0 0 7px rgba(242,63,67,.14),0 0 18px 4px rgba(242,63,67,.18);
+}
+.dmp-decoration{
+  position:absolute;
+  inset:-6px;
+  width:58px;
+  height:58px;
+  pointer-events:none;
+}
+.dmp-info{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+  text-align:left;
+  flex:1;
+}
+.dmp-name-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.dmp-username{
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:14.5px;
+  letter-spacing:.005em;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:160px;
+  transition:color .3s ease;
+}
+.dmp-badges{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.dmp-badge{
+  font-size:12px;
+  line-height:1;
+  filter:drop-shadow(0 1px 1px rgba(74,51,54,.2));
+  transition:transform .2s ease;
+}
+.dmp-badge:hover{
+  transform:translateY(-1px) scale(1.12);
+}
+.dmp-activity{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+  letter-spacing:.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:color .3s ease;
+}
+.dmp-icons{
+  display:flex;
+  align-items:center;
+  gap:2px;
+  margin-left:auto;
+  position:relative;
+  z-index:1;
+  flex-shrink:0;
+}
+.dmp-icon{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:none;
+  padding:0;
+  margin:0;
+  color:var(--ink-soft);
+  transition:color .2s ease,background .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+button.dmp-icon{cursor:pointer}
+.dmp-icon:hover{
+  background:rgba(74,51,54,.08);
+  color:var(--ink);
+  transform:scale(1.08);
+}
+.dmp-icon:active{transform:scale(.94)}
+.discord-mini-profile.has-nameplate .dmp-icon{color:rgba(255,255,255,.82)}
+.discord-mini-profile.has-nameplate .dmp-icon:hover{
+  background:rgba(255,255,255,.16);
+  color:#fff;
+}
+.toggle-act-btn{
+  background:transparent;
+  border:none;
+  color:var(--ink-soft);
+  padding:4px 6px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:color .2s ease,background .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);
+  flex-shrink:0;
+  margin-left:0;
+}
+.toggle-act-btn:hover{
+  color:var(--ink);
+  background:rgba(74,51,54,.08);
+  transform:scale(1.1);
+}
+.toggle-act-btn:active{transform:scale(.92)}
+.toggle-act-btn.is-disabled{opacity:.4}
+
+.dmp-status-dot{
+  position:absolute;
+  right:-2px;
+  bottom:-2px;
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:var(--paper-dim);
+  box-sizing:border-box;
+  z-index:2;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+.dmp-status-dot::before{
+  content:"";
+  position:absolute;
+  inset:2.5px;
+  border-radius:50%;
+  background:#80848e;
+}
+.dmp-status-dot.online::before{background:#23a55a}
+.dmp-status-dot.online::after{
+  content:"";
+  position:absolute;
+  inset:2.5px;
+  border-radius:50%;
+  background:rgba(35,165,90,.55);
+  animation:status-glow-ring 2s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes status-glow-ring{
+  0%{transform:scale(1);opacity:.55}
+  100%{transform:scale(1.9);opacity:0}
+}
+.dmp-status-dot.idle::before{background:#f0b232}
+.dmp-status-dot.dnd::before{background:#f23f43}
+.dmp-status-dot.offline::before{background:#80848e}
+.dmp-status-dot.idle::after{
+  content:"";
+  position:absolute;
+  width:6.5px;
+  height:6.5px;
+  border-radius:50%;
+  background:var(--paper-dim);
+  top:1.5px;
+  left:1.5px;
+}
+.dmp-status-dot.dnd::after{
+  content:"";
+  position:absolute;
+  width:6.5px;
+  height:2px;
+  border-radius:1px;
+  background:#fff8ee;
+  top:6.5px;
+  left:4.2px;
+}
+.dmp-status-dot:hover{transform:scale(1.25)}
+
+.dmp-activity-panel{
+  width:100%;
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  margin-top:0;
+  padding:0 14px 0 10px;
+  box-sizing:border-box;
+  border-top:1px solid transparent;
+  transition:max-height .42s cubic-bezier(.2,.8,.2,1),opacity .32s ease,margin-top .42s ease,border-color .32s ease;
+}
+.dmp-activity-panel.open{
+  opacity:1;
+  margin-top:10px;
+  padding-top:10px;
+  border-top-color:rgba(74,51,54,.12);
+}
+.discord-mini-profile.has-nameplate .dmp-activity-panel.open{
+  border-top-color:rgba(255,255,255,.16);
+}
+.dmp-activity-panel.open .dmp-activity-card::before{
+  content:"▸ hoạt động";
+  display:block;
+  width:100%;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.08em;
+  color:var(--raspberry);
+  opacity:.7;
+  margin-bottom:8px;
+}
+.discord-mini-profile.has-nameplate .dmp-activity-panel.open .dmp-activity-card::before{
+  color:rgba(255,248,238,.7);
+}
+.dmp-activity-panel.user-collapsed{
+  max-height:0!important;
+  opacity:0!important;
+  margin-top:0!important;
+  pointer-events:none;
+}
+.dmp-activity-card{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:0;
+  background:transparent;
+  border:none;
+  border-radius:0;
+}
+.dmp-act-img-wrap{
+  position:relative;
+  width:40px;
+  height:40px;
+  flex-shrink:0;
+}
+.dmp-act-img{
+  width:40px;
+  height:40px;
+  border-radius:9px;
+  object-fit:cover;
+  display:block;
+  background:var(--bg-b);
+  box-shadow:0 4px 10px -4px rgba(74,51,54,.4);
+}
+.dmp-act-img-small{
+  position:absolute;
+  right:-4px;
+  bottom:-4px;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  border:2px solid var(--paper-dim);
+  object-fit:cover;
+  background:var(--bg-b);
+  box-shadow:0 2px 5px -1px rgba(74,51,54,.35);
+}
+.dmp-act-text{
+  min-width:0;
+  text-align:left;
+  flex:1;
+}
+.dmp-act-name{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:12.5px;
+  color:var(--raspberry);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.discord-mini-profile.has-nameplate .dmp-act-name{color:#fff}
+.dmp-act-details,.dmp-act-state{
+  margin:2px 0 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dmp-act-time{
+  margin:4px 0 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:var(--ink-soft);
+  opacity:.85;
+}
+
+/* ===== MUSIC ===== */
+.music-box{
+  position:relative;
+  z-index:10;
+  width:100%;
+  background-color:rgba(18,16,15,.42);
+  background-image:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:12px 14px;
+  margin:0 0 14px;
+  box-shadow:0 14px 28px -18px rgba(74,51,54,.45);
+  backdrop-filter:blur(8px) saturate(1.1);
+  -webkit-backdrop-filter:blur(8px) saturate(1.1);
+}
+.music-box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 15% 0%,rgba(29,185,84,.12),transparent 55%);
+  pointer-events:none;
+  border-radius:14px;
+}
+.music-box.is-playing{
+  box-shadow:0 14px 28px -18px rgba(74,51,54,.5),0 0 0 1px rgba(29,185,84,.32);
+}
+.music-topline{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.disc-player{
+  position:relative;
+  width:48px;
+  height:48px;
+  border-radius:6px;
+  background:rgba(255,255,255,.10);
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  border:none;
+  padding:0;
+  flex-shrink:0;
+  overflow:hidden;
+  z-index:1;
+}
+.disc-player .disc-label{
+  display:block;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,var(--raspberry),var(--mustard));
+  background-size:cover;
+  background-position:center;
+}
+.music-info{
+  flex:1;
+  min-width:0;
+  position:relative;
+  z-index:1;
+}
+.music-title{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:13.5px;
+  color:#fff8ee!important;
+  line-height:1.4;
+  white-space:normal;
+  word-break:break-word;
+  cursor:default;
+}
+.music-sub{
+  margin:3px 0 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:rgba(255,248,238,.62)!important;
+}
+.music-bars{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:2px;
+  height:18px;
+  padding:0 2px;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:2px;
+}
+.music-bars .bar{
+  width:2px;
+  height:100%;
+  background-color:#1db954;
+  transform-origin:bottom center!important;
+  transform:scaleY(.08);
+  transition:transform .06s ease;
+  will-change:transform;
+}
+.music-playbtn{
+  position:relative;
+  z-index:1;
+  width:34px;
+  height:34px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:rgba(255,248,238,.92);
+  border:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1);
+}
+.music-playbtn:hover{
+  transform:scale(1.06);
+  background:#fff;
+}
+.music-playbtn svg{width:14px;height:14px;display:block}
+.music-playbtn .icon-pause{display:none}
+.music-box.is-playing .music-playbtn .icon-play{display:none}
+.music-box.is-playing .music-playbtn .icon-pause{display:block}
+.music-menu-btn{
+  position:relative;
+  z-index:1;
+  width:28px;
+  height:28px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:transparent;
+  border:none;
+  color:rgba(255,248,238,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.music-menu-btn:hover{
+  color:#fff8ee;
+  background:rgba(255,255,255,.10);
+}
+.music-menu-btn svg{width:16px;height:16px}
+.music-menu-btn[aria-expanded="true"]{
+  color:#1DB954;
+  background:rgba(29,185,84,.14);
+}
+.music-progress-wrap{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  margin-top:12px;
+}
+.time-label{
+  font-family:'DM Sans',sans-serif;
+  font-size:10.5px;
+  color:#a7a7a7;
+  min-width:30px;
+  text-align:center;
+}
+.progress-bar-container{
+  flex:1;
+  height:4px;
+  background:rgba(255,248,238,.22);
+  border-radius:2px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:height .15s ease;
+}
+.progress-bar-container:hover{height:6px}
+.progress-bar-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  transform-origin:left;
+  transform:scaleX(0);
+  background:#fff8ee;
+  border-radius:2px;
+  will-change:transform;
+}
+.music-nav{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:10px;
+  height:32px;
+}
+.music-nav button{
+  width:28px;
+  height:28px;
+  border:none;
+  border-radius:50%;
+  background:transparent;
+  color:rgba(255,248,238,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:color .2s ease,transform .2s ease;
+}
+.music-nav button svg{width:16px;height:16px;fill:currentColor}
+.music-nav button:hover{
+  color:#fff8ee;
+  transform:scale(1.1);
+}
+.volume-container{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:2px 4px;
+  border-radius:20px;
+  transition:background .2s ease;
+}
+.volume-container:hover{background:rgba(255,255,255,.08)}
+#volume-btn{
+  background:transparent;
+  border:none;
+  color:rgba(255,248,238,.62);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  width:24px;
+  height:24px;
+  outline:none;
+  transition:color .2s ease;
+}
+#volume-btn:hover{color:#fff}
+#volume-slider-container{
+  position:relative;
+  width:0;
+  height:4px;
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
+  cursor:pointer;
+  opacity:0;
+  overflow:hidden;
+  transition:width .3s cubic-bezier(.4,0,.2,1),opacity .25s ease;
+}
+.volume-container:hover #volume-slider-container{
+  width:65px;
+  opacity:1;
+  overflow:visible;
+}
+#volume-slider-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  transform-origin:left;
+  transform:scaleX(1);
+  background:#1db954;
+  border-radius:4px;
+  pointer-events:none;
+  will-change:transform;
+}
+
+/* ===== PLAYLIST ===== */
+.track-list-panel{
+  position:relative;
+  margin-top:10px;
+  width:100%;
+  max-height:0;
+  overflow-y:hidden;
+  background:rgba(0,0,0,.25);
+  border-radius:10px;
+  padding:0 8px;
+  border:1px solid transparent;
+  opacity:0;
+  transition:max-height .35s ease,opacity .3s ease,padding .3s ease;
+}
+.track-list-panel.open{
+  opacity:1;
+  max-height:175px;
+  overflow-y:auto;
+  padding:8px;
+  border-color:rgba(255,255,255,.1);
+}
+.track-list-panel::-webkit-scrollbar{width:4px}
+.track-list-panel::-webkit-scrollbar-track{background:transparent}
+.track-list-panel::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
+}
+.track-list-panel::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.4)}
+.track-list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  font-weight:700;
+  color:#fff8ee;
+  user-select:none;
+}
+.track-list-header span::before{
+  content:"♪ ";
+  color:#1DB954;
+}
+.track-list-close{
+  width:22px;
+  height:22px;
+  border:none;
+  border-radius:50%;
+  background:transparent;
+  color:rgba(255,248,238,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  cursor:pointer;
+}
+.track-list-close:hover{
+  color:#fff8ee;
+  background:rgba(255,255,255,.12);
+}
+.track-category-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:8px;
+}
+.category-chip{
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:rgba(255,248,238,.65);
+  font-family:'DM Sans',sans-serif;
+  font-size:10.5px;
+  font-weight:600;
+  cursor:pointer;
+  user-select:none;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+  white-space:nowrap;
+  line-height:1.4;
+}
+.category-chip:hover{
+  background:rgba(255,255,255,.12);
+  color:#fff8ee;
+}
+.category-chip.active{
+  background:rgba(29,185,84,.22);
+  border-color:rgba(29,185,84,.5);
+  color:#1DB954;
+}
+.track-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.track-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 8px;
+  border-radius:8px;
+  cursor:pointer;
+  user-select:none;
+  transition:background .15s ease;
+}
+.track-item:hover{background:rgba(255,255,255,.1)}
+.track-item.active{background:rgba(29,185,84,.18)}
+.track-item .t-index{
+  width:16px;
+  text-align:center;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;
+  color:rgba(255,248,238,.4);
+}
+.track-item.active .t-index{
+  color:#1DB954;
+  font-weight:bold;
+}
+.track-item .t-cover{
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+.track-item .t-info{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  gap:1px;
+}
+.track-item .t-title{
+  margin:0;
+  min-width:0;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  color:#fff8ee;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.track-item.active .t-title{
+  color:#1DB954;
+  font-weight:700;
+}
+.track-item .t-category{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:rgba(255,248,238,.4);
+}
+.track-item.active .t-category{color:rgba(29,185,84,.75)}
+.track-list-empty{
+  text-align:center;
+  padding:16px 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:rgba(255,248,238,.45);
+}
+.mini-bars{
+  display:none;
+  align-items:flex-end;
+  gap:2px;
+  height:12px;
+  margin-left:auto;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:1px;
+}
+.music-box.is-playing .track-item.active .mini-bars{display:flex}
+.mini-bars .m-bar{
+  width:2px;
+  height:100%;
+  background-color:#1DB954;
+  transform-origin:bottom center!important;
+  transform:scaleY(.1);
+  transition:transform .06s ease;
+}
+
+/* ===== PHOTO / TEXT ===== */
+.photo-wrap{
+  position:relative;
+  width:196px;
+  margin:-74px auto 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:photo-idle 5.5s ease-in-out infinite;
+}
+@keyframes photo-idle{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+.photo-shadow{
+  position:absolute;
+  width:76%;
+  height:72%;
+  top:12%;
+  border-radius:6px;
+  background:radial-gradient(circle,rgba(74,51,54,.22),transparent 75%);
+  filter:blur(12px);
+  transform:translateY(18px) rotate(-4deg);
+}
+.photo-frame{
+  position:relative;
+  width:176px;
+  background-color:rgba(255,254,252,.55);
+  background-image:var(--texture);
+  padding:10px 10px 26px;
+  border-radius:6px;
+  rotate:-4deg;
+  transition:rotate .4s ease;
+}
+.photo-frame:hover{rotate:0deg}
+.album-cover{
+  display:block;
+  width:156px;
+  height:156px;
+  object-fit:cover;
+  border-radius:2px;
+}
+.eyebrow{
+  text-align:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--ink-soft);
+  margin:0 0 6px;
+}
+.eyebrow::before{
+  content:"$ whoami";
+  display:block;
+  color:var(--raspberry);
+  margin-bottom:3px;
+  opacity:.75;
+}
+h1{
+  text-align:center;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(32px,8vw,42px);
+  margin:0 0 4px;
+  line-height:1.05;
+}
+h1 em{
+  font-style:italic;
+  font-weight:500;
+  color:var(--raspberry);
+}
+.location{
+  text-align:center;
+  font-size:14px;
+  color:var(--ink-soft);
+  margin:0 0 4px;
+}
+.location::before{content:"📍 "}
+.vn-clock{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  font-weight:500;
+  letter-spacing:.03em;
+  color:#fff8ee;
+  background:rgba(74,51,54,.55);
+  width:fit-content;
+  padding:3px 10px;
+  border-radius:20px;
+  margin:0 auto 14px;
+  text-shadow:0 1px 2px rgba(0,0,0,.25);
+  white-space:nowrap;
+}
+.divider{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 0 14px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--line);
+}
+.bio{
+  text-align:left;
+  font-size:14.5px;
+  line-height:1.6;
+  color:var(--ink);
+  margin:0 auto 14px;
+  font-family:'IBM Plex Mono',monospace;
+  background:rgba(255,255,255,.22);
+  border:1px solid rgba(255,255,255,.35);
+  border-left:3px solid var(--raspberry);
+  border-radius:8px;
+  padding:11px 14px;
+}
+.bio::before{
+  content:"# about.txt";
+  display:block;
+  font-size:10px;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.now{
+  margin-top:4px;
+  padding:11px 14px;
+  border-radius:12px;
+  background:rgba(124,148,115,.14);
+  border:1px dashed rgba(124,148,115,.5);
+  font-size:13.5px;
+  color:var(--ink-soft);
+  text-align:left;
+}
+.now::before{
+  content:"$ cat status.log";
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  margin-bottom:6px;
+  opacity:.7;
+}
+.now strong{
+  color:var(--sage);
+  font-family:'IBM Plex Mono',monospace;
+  font-weight:500;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-align:left;
+  margin-top:14px;
+  padding:12px 18px;
+  background:var(--paper-dim);
+  background-image:var(--texture);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+  margin-left:-30px;
+  margin-right:-30px;
+  width:calc(100% + 60px);
+}
+.foot-dots{
+  display:flex;
+  gap:6px;
+  flex-shrink:0;
+}
+.foot-dots .dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12);
+}
+.foot-dots .dot.r{background:var(--raspberry)}
+.foot-dots .dot.y{background:var(--mustard)}
+.foot-dots .dot.g{background:var(--sage)}
+footer#footer-bar{
+  cursor:pointer;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,border-color .25s ease;
+}
+footer#footer-bar:hover{
+  transform:translateY(-3px);
+  border-color:rgba(207,100,120,.35);
+  box-shadow:0 24px 44px -20px rgba(74,51,54,.4);
+}
+footer#footer-bar:active{
+  transform:translateY(-1px) scale(.995);
+}
+footer#footer-bar:focus-visible{
+  outline:2px solid var(--raspberry);
+  outline-offset:2px;
+}
+.foot-text{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.foot-text::before{
+  content:"$";
+  flex-shrink:0;
+  color:var(--raspberry);
+  opacity:.8;
+}
+.foot-typed{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--ink);
+}
+.foot-cursor{
+  display:inline-block;
+  width:6px;
+  margin-left:1px;
+  color:var(--raspberry);
+  animation:foot-cursor-blink 1s step-end infinite;
+}
+@keyframes foot-cursor-blink{
+  0%,49%{opacity:1}
+  50%,100%{opacity:0}
+}
+.foot-hint{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.04em;
+  color:var(--ink-soft);
+  opacity:.75;
+}
+.foot-hint svg{
+  width:11px;
+  height:11px;
+  flex-shrink:0;
+  transition:transform .35s ease;
+}
+footer#footer-bar:hover .foot-hint{
+  opacity:1;
+  color:var(--raspberry);
+}
+footer#footer-bar:hover .foot-hint svg{
+  transform:rotate(180deg);
+}
+
+/* ===== GLOBAL TOOLTIP ===== */
+.tooltip-host[data-tooltip]{cursor:default}
 .tooltip-host[data-tooltip]::before,
 .tooltip-host[data-tooltip]::after,
 .dock-item[data-tooltip]::before,
 .dock-item[data-tooltip]::after,
 .dock-item[data-tip]::before,
-.dock-item[data-tip]::after {
-  content: none !important;
-  display: none !important;
+.dock-item[data-tip]::after{
+  content:none!important;
+  display:none!important;
 }
 
-/* NÂNG CẤP: tooltip giờ bám theo vị trí con trỏ chuột (xem JS), không còn
-   neo cố định vào giữa phần tử -> bỏ mũi tên trỏ (::after) vì không còn
-   điểm neo cụ thể để trỏ tới. Thêm delay hiện/ẩn được xử lý bên JS. */
-#global-tooltip {
-  position: fixed;
-  left: 0;
-  top: 0;
-  max-width: min(240px, calc(100vw - 24px));
-  padding: 6px 11px;
-  background: var(--ink);
-  color: #fdf6ec;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  line-height: 1.4;
-  text-align: left;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  border: 1px solid rgba(207,100,120,0.35);
-  border-radius: 8px;
-  box-shadow: 0 10px 22px -10px rgba(74,51,54,0.5);
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: translate3d(0,4px,0) scale(0.94);
-  transform-origin: top left;
-  transition: opacity .15s ease, transform .15s cubic-bezier(.34,1.56,.64,1), visibility .15s ease, left .05s linear, top .05s linear;
-  z-index: 2147483647;
+#global-tooltip{
+  position:fixed;
+  left:0;
+  top:0;
+  max-width:min(280px,calc(100vw - 20px));
+  padding:7px 10px;
+  background:var(--ink);
+  color:#fdf6ec;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  font-weight:500;
+  letter-spacing:.03em;
+  line-height:1.45;
+  text-align:center;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+  border:1px solid rgba(207,100,120,.35);
+  border-radius:8px;
+  box-shadow:0 10px 24px -8px rgba(0,0,0,.5);
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  transform:translate3d(0,4px,0) scale(.98);
+  transition:opacity .16s ease,transform .16s cubic-bezier(.34,1.56,.64,1),visibility .16s ease;
+  z-index:2147483647;
 }
-
-#global-tooltip.is-visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translate3d(0,0,0) scale(1);
+#global-tooltip.is-visible{
+  opacity:1;
+  visibility:visible;
+  transform:translate3d(0,0,0) scale(1);
 }
-
-@media (prefers-reduced-motion: reduce) {
-  #global-tooltip { transition: opacity .15s ease, visibility .15s ease; }
+#global-tooltip.tooltip-bottom{
+  transform-origin:center top;
 }
-
+#global-tooltip::after{
+  content:""!important;
+  display:block!important;
+  position:absolute;
+  width:8px;
+  height:8px;
+  left:50%;
+  bottom:-4.5px;
+  margin-left:-4px;
+  background:var(--ink);
+  border-right:1px solid rgba(207,100,120,.35);
+  border-bottom:1px solid rgba(207,100,120,.35);
+  transform:rotate(45deg);
+}
+#global-tooltip.tooltip-bottom::after{
+  top:-4.5px;
+  bottom:auto;
+  transform:rotate(225deg);
+}
+@media(prefers-reduced-motion:reduce){
+  #global-tooltip{transition:none}
+}
 </style>
 </head>
+
 <body oncontextmenu="return false;">
 
 <button id="gate" aria-label="Click to enter">
   <span class="gate-inner">
-    <span class="gate-ring" aria-hidden="true"><span class="gate-mark">✦</span></span>
+    <span class="gate-ring" aria-hidden="true">
+      <span class="gate-mark">✦</span>
+    </span>
     <span class="gate-text">click to enter</span>
     <span class="gate-text-underline" aria-hidden="true"></span>
     <span class="gate-hint">bấm để mở khóa</span>
@@ -1263,11 +1633,18 @@
 </button>
 
 <div id="main" hidden>
+
   <div class="bg-video-wrap">
-    <video id="bg-video" autoplay muted loop playsinline onerror="this.closest('.bg-video-wrap').classList.add('novideo')">
+    <video id="bg-video"
+           autoplay
+           muted
+           loop
+           playsinline
+           onerror="this.closest('.bg-video-wrap').classList.add('novideo')">
       <source src="bg.mp4" type="video/mp4">
     </video>
   </div>
+
   <div class="orb orb-1" aria-hidden="true"></div>
   <div class="orb orb-2" aria-hidden="true"></div>
   <div class="orb orb-3" aria-hidden="true"></div>
@@ -1279,10 +1656,16 @@
   <script>
     window.bioConfig = {
       defaultIndex: 0,
+
       avatar: 'https://static2.klipy.com/ii/4e7bea9f7a3371424e6c16ebc93252fe/a8/d8/AHgMD8cH1v4MnHbSHcV.gif',
+
       discordId: '1473247060298961040',
-      discordNameplateWorkerUrl: 'https://gentle-dust-08b8.ten870865.workers.dev/',
+
+      discordNameplateWorkerUrl:
+        'https://gentle-dust-08b8.ten870865.workers.dev/',
+
       discordNameplateStaticUrl: '',
+
       tracks: [
         {
           title: 'Id Thang Máy - W/n ft.267',
@@ -1296,17 +1679,16 @@
           disc: 'images2.png',
           category: 'bth'
         },
-
         {
           title: 'Wrong Times - Puppy,Dangrangto',
           file: 'Wrong Times.mp3',
-          disc:'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02566178ff844ca2b57f959374',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02566178ff844ca2b57f959374',
           category: 'bth'
         },
         {
           title: 'Có Công Mài "Sắc" - Ngô Lan Hương | Drill Mix (Prod, By Hades)',
           file: 'cocongmaisac.mp3',
-          disc:'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ebcdc310f026bb7600fb085d',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ebcdc310f026bb7600fb085d',
           category: 'drill'
         },
         {
@@ -1331,9 +1713,8 @@
           title: 'Em Là Nhất - kis, Hoàng Kaylee, YAHY',
           file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/SpotiDownloader.com%20-%20Em%20L%C3%A0%20Nh%E1%BA%A5t%20-%20kis.mp3',
           disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02a84cceb4e4e08f388cf16b28',
-          category:'bth'
+          category: 'bth'
         },
-        
         {
           title: '2 4 - W/n',
           file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/W_n%20%20-%20%20a%20b%20c%20d%20x%20y%20z%20n%20m%20a%20s%20a%20d%20(song%2024)%20%203107%20-%20W_n.mp3',
@@ -1352,6 +1733,7 @@
 
   <main>
     <div class="card">
+
       <div class="titlebar" aria-hidden="true">
         <div class="dots">
           <span class="dot r"></span>
@@ -1362,78 +1744,181 @@
       </div>
 
       <div class="card-inner">
+
         <div class="photo-wrap reveal" style="--i:1">
           <div class="photo-shadow" aria-hidden="true"></div>
+
           <div class="photo-frame" id="avatar-frame">
-            <img id="album-cover" class="album-cover" src="images1.png" alt="Ảnh đại diện">
+            <img id="album-cover"
+                 class="album-cover"
+                 src="images1.png"
+                 alt="Ảnh đại diện">
           </div>
         </div>
 
-        <p class="eyebrow reveal" style="--i:2">xin chào, mình là</p>
-        <h1 class="reveal" id="name-heading" style="--i:2">ItsReal<em>Khanz</em></h1>
-        <p class="location reveal" style="--i:2">Việt Nam</p>
-        <p class="vn-clock reveal tooltip-host tooltip-center" style="--i:2" id="vn-clock" data-tooltip="Giờ Hiện Tại">Việt Nam (UTC+7) · --:--:--</p>
-        <div class="divider reveal" style="--i:3"><span>❊</span></div>
+        <p class="eyebrow reveal" style="--i:2">
+          xin chào, mình là
+        </p>
 
-        <div class="discord-mini-profile reveal" style="--i:3.5" id="discord-mini-profile">
-          <div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
+        <h1 class="reveal" id="name-heading" style="--i:2">
+          ITSREAL<em>KHANZ</em>
+        </h1>
+
+        <p class="location reveal" style="--i:2">
+          Việt Nam
+        </p>
+
+        <p class="vn-clock reveal tooltip-host tooltip-center"
+           style="--i:2"
+           id="vn-clock"
+           data-tooltip="Giờ hiện tại">
+          Việt Nam (UTC+7) · --:--:--
+        </p>
+
+        <div class="divider reveal" style="--i:3">
+          <span>❊</span>
+        </div>
+
+        <!-- ===== DISCORD ===== -->
+        <div class="discord-mini-profile reveal"
+             style="--i:3.5"
+             id="discord-mini-profile">
+
+          <div class="dmp-nameplate-zone"
+               id="dmp-nameplate-zone">
+
             <div class="dmp-top">
+
               <div class="dmp-avatar-wrap">
-                <img id="dmp-avatar" class="dmp-avatar" src="" alt="avatar Discord">
-                <img id="dmp-decoration" class="dmp-decoration" src="" alt="" style="display:none">
-                <span id="dmp-status-dot" class="dmp-status-dot offline" aria-hidden="true"></span>
+                <img id="dmp-avatar"
+                     class="dmp-avatar"
+                     src=""
+                     alt="avatar Discord">
+
+                <img id="dmp-decoration"
+                     class="dmp-decoration"
+                     src=""
+                     alt=""
+                     style="display:none">
+
+                <span id="dmp-status-dot"
+                      class="dmp-status-dot offline"
+                      aria-hidden="true"></span>
               </div>
+
               <div class="dmp-info">
                 <div class="dmp-name-row">
-                  <span id="dmp-username" class="dmp-username">—</span>
-                  <span id="dmp-badges" class="dmp-badges"></span>
+                  <span id="dmp-username"
+                        class="dmp-username">—</span>
+                  <span id="dmp-badges"
+                        class="dmp-badges"></span>
                 </div>
-                <span id="dmp-activity" class="dmp-activity">đang kết nối…</span>
+
+                <span id="dmp-activity"
+                      class="dmp-activity">
+                  đang kết nối…
+                </span>
               </div>
+
               <div class="dmp-icons">
-                <button type="button" id="toggle-activity-btn" class="dmp-icon toggle-act-btn" aria-label="Ẩn/Hiện hoạt động" data-tooltip="Ẩn/Hiện hoạt động">
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                <button type="button"
+                        id="toggle-activity-btn"
+                        class="dmp-icon toggle-act-btn"
+                        aria-label="Ẩn/Hiện hoạt động"
+                        data-tooltip="Ẩn hoạt động">
+                  <svg viewBox="0 0 24 24"
+                       width="15"
+                       height="15"
+                       fill="currentColor">
                     <circle cx="5" cy="12" r="2.2"></circle>
                     <circle cx="12" cy="12" r="2.2"></circle>
                     <circle cx="19" cy="12" r="2.2"></circle>
                   </svg>
                 </button>
               </div>
+
             </div>
           </div>
 
-          <div class="dmp-activity-panel" id="dmp-activity-panel">
+          <div class="dmp-activity-panel"
+               id="dmp-activity-panel">
+
             <div class="dmp-activity-card">
+
               <div class="dmp-act-img-wrap">
-                <img id="dmp-act-img" class="dmp-act-img" src="" alt="" style="display:none">
-                <img id="dmp-act-img-small" class="dmp-act-img-small" src="" alt="" style="display:none">
+                <img id="dmp-act-img"
+                     class="dmp-act-img"
+                     src=""
+                     alt=""
+                     style="display:none">
+
+                <img id="dmp-act-img-small"
+                     class="dmp-act-img-small"
+                     src=""
+                     alt=""
+                     style="display:none">
               </div>
+
               <div class="dmp-act-text">
-                <p id="dmp-act-name" class="dmp-act-name"></p>
-                <p id="dmp-act-details" class="dmp-act-details" style="display:none"></p>
-                <p id="dmp-act-state" class="dmp-act-state" style="display:none"></p>
-                <p id="dmp-act-time" class="dmp-act-time"></p>
+                <p id="dmp-act-name"
+                   class="dmp-act-name"></p>
+
+                <p id="dmp-act-details"
+                   class="dmp-act-details"
+                   style="display:none"></p>
+
+                <p id="dmp-act-state"
+                   class="dmp-act-state"
+                   style="display:none"></p>
+
+                <p id="dmp-act-time"
+                   class="dmp-act-time"></p>
               </div>
+
             </div>
           </div>
         </div>
 
-        <p class="bio reveal" style="--i:4">Nothing Here.</p>
+        <p class="bio reveal" style="--i:4">
+          Nothing Here.
+        </p>
 
-        <!-- SPOTIFY MUSIC BOX -->
-        <div class="music-box reveal" style="--i:5" id="music-box">
+        <!-- ===== MUSIC ===== -->
+        <div class="music-box reveal"
+             style="--i:5"
+             id="music-box">
+
           <div class="music-topline">
-            <div class="disc-player" id="disc-player-cover" aria-hidden="true">
-              <span class="disc-label" id="disc-label"></span>
-            </div>
-            
-            <div class="music-info" id="music-info">
-              <p class="music-title" id="music-title" data-tooltip="">Tên bài hát — nghệ sĩ</p>
-              <p class="music-sub" id="disc-tip">bấm để phát nhạc</p>
+
+            <!-- FIX:
+                 id này tách khỏi nút Play/Pause -->
+            <div class="disc-player"
+                 id="disc-player-cover"
+                 data-tooltip="Tên bài hát">
+              <span class="disc-label"
+                    id="disc-label"></span>
             </div>
 
-            <!-- NHỊP NHẠC THỜI GIAN THỰC -->
-            <div class="music-bars" id="music-bars">
+            <div class="music-info"
+                 id="music-info">
+
+              <!-- Tooltip này được JS cập nhật realtime
+                   mỗi khi bài hát thay đổi -->
+              <p class="music-title"
+                 id="music-title"
+                 data-tooltip="Tên bài hát — nghệ sĩ">
+                Tên bài hát — nghệ sĩ
+              </p>
+
+              <p class="music-sub"
+                 id="disc-tip"
+                 data-tooltip="bấm để phát nhạc">
+                bấm để phát nhạc
+              </p>
+            </div>
+
+            <div class="music-bars"
+                 id="music-bars">
               <span class="bar"></span>
               <span class="bar"></span>
               <span class="bar"></span>
@@ -1448,87 +1933,233 @@
               <span class="bar"></span>
             </div>
 
-            <button class="music-playbtn" id="disc-player" type="button" aria-pressed="false" aria-label="Phát nhạc nền">
-              <svg class="icon-play" viewBox="0 0 24 24" fill="#121212"><path d="M8 5v14l11-7z"/></svg>
-              <svg class="icon-pause" viewBox="0 0 24 24" fill="#121212"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+            <!-- FIX:
+                 id disc-player chỉ tồn tại ở đây -->
+            <button class="music-playbtn"
+                    id="disc-player"
+                    type="button"
+                    aria-pressed="false"
+                    aria-label="Phát nhạc nền"
+                    data-tooltip="Phát nhạc">
+
+              <svg class="icon-play"
+                   viewBox="0 0 24 24"
+                   fill="#121212">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+
+              <svg class="icon-pause"
+                   viewBox="0 0 24 24"
+                   fill="#121212">
+                <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+              </svg>
             </button>
-            <button class="music-menu-btn" id="track-menu-btn" type="button" aria-label="Danh sách bài hát" aria-expanded="false" aria-haspopup="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+
+            <button class="music-menu-btn"
+                    id="track-menu-btn"
+                    type="button"
+                    aria-label="Danh sách bài hát"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    data-tooltip="Danh sách bài hát">
+              <svg viewBox="0 0 24 24"
+                   fill="currentColor">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+              </svg>
             </button>
+
           </div>
 
           <div class="music-progress-wrap">
-            <span id="current-time" class="time-label">0:00</span>
-            <div class="progress-bar-container" id="progress-container">
-              <div class="progress-bar-fill" id="progress-fill"></div>
+
+            <span id="current-time"
+                  class="time-label">
+              0:00
+            </span>
+
+            <div class="progress-bar-container"
+                 id="progress-container"
+                 data-tooltip="Tiến trình bài hát">
+              <div class="progress-bar-fill"
+                   id="progress-fill"></div>
             </div>
-            <span id="duration-time" class="time-label">0:00</span>
+
+            <span id="duration-time"
+                  class="time-label">
+              0:00
+            </span>
           </div>
 
-          <div class="music-nav" aria-label="Chuyển bài">
-            <button type="button" id="music-prev" aria-label="Bài trước">
-              <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+          <div class="music-nav"
+               aria-label="Chuyển bài">
+
+            <button type="button"
+                    id="music-prev"
+                    aria-label="Bài trước"
+                    data-tooltip="Bài trước">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+              </svg>
             </button>
-            <button type="button" id="music-next" aria-label="Bài tiếp theo">
-              <svg viewBox="0 0 24 24"><path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/></svg>
+
+            <button type="button"
+                    id="music-next"
+                    aria-label="Bài tiếp theo"
+                    data-tooltip="Bài tiếp theo">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/>
+              </svg>
             </button>
 
             <div class="volume-container">
-              <button type="button" id="volume-btn" aria-label="Âm lượng">
+
+              <button type="button"
+                      id="volume-btn"
+                      aria-label="Âm lượng"
+                      data-tooltip="Âm lượng">
                 <svg viewBox="0 0 24 24">
                   <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-                  <path class="vol-wave" d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                  <path class="vol-wave"
+                        d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                 </svg>
               </button>
-              <div id="volume-slider-container">
+
+              <div id="volume-slider-container"
+                   data-tooltip="Điều chỉnh âm lượng">
                 <div id="volume-slider-fill"></div>
               </div>
+
             </div>
           </div>
 
-          <div class="track-list-panel" id="track-list-panel">
+          <div class="track-list-panel"
+               id="track-list-panel">
+
             <div class="track-list-header">
               <span>Danh sách phát</span>
-              <button type="button" class="track-list-close" id="track-list-close" aria-label="Đóng danh sách">✕</button>
+
+              <button type="button"
+                      class="track-list-close"
+                      id="track-list-close"
+                      aria-label="Đóng danh sách"
+                      data-tooltip="Đóng danh sách">
+                ✕
+              </button>
             </div>
-            <div class="track-category-filters" id="track-category-filters" role="tablist" aria-label="Lọc theo thể loại"></div>
-            <ul class="track-list" id="track-list"></ul>
+
+            <div class="track-category-filters"
+                 id="track-category-filters"
+                 role="tablist"
+                 aria-label="Lọc theo thể loại"></div>
+
+            <ul class="track-list"
+                id="track-list"></ul>
           </div>
+
         </div>
 
-        <div class="now reveal" style="--i:6">
-          <strong>đang làm gì:</strong> đang nghỉ hè
+        <div class="now reveal"
+             style="--i:6">
+          <strong>đang làm gì:</strong>
+          đang nghỉ hè
         </div>
 
-        <footer class="reveal" id="footer-bar" style="--i:7" role="button" tabindex="0" aria-label="Nhấn để chạy lệnh terminal">
-          <span class="dots foot-dots" id="foot-dots" aria-hidden="true">
+        <footer class="reveal"
+                id="footer-bar"
+                style="--i:7"
+                role="button"
+                tabindex="0"
+                aria-label="Nhấn để chạy lệnh terminal">
+
+          <span class="dots foot-dots"
+                id="foot-dots"
+                aria-hidden="true">
             <span class="dot r"></span>
             <span class="dot y"></span>
             <span class="dot g"></span>
           </span>
-          <span class="foot-text" id="foot-text">
-            <span class="foot-typed" id="foot-typed"></span><span class="foot-cursor" id="foot-cursor">▌</span>
+
+          <span class="foot-text"
+                id="foot-text">
+            <span class="foot-typed"
+                  id="foot-typed"></span>
+            <span class="foot-cursor"
+                  id="foot-cursor">▌</span>
           </span>
-          <span class="foot-hint" aria-hidden="true">
+
+          <span class="foot-hint"
+                aria-hidden="true">
             next
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h5"/><path d="M4 9a8 8 0 1 1 2 5.3"/></svg>
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+              <path d="M4 4v5h5"/>
+              <path d="M4 9a8 8 0 1 1 2 5.3"/>
+            </svg>
           </span>
         </footer>
+
       </div>
     </div>
   </main>
 
   <div class="dock-wrap">
-    <nav class="dock" id="dock" aria-label="Mạng xã hội">
-      <a class="dock-item discord" href="#" onclick="return false;" data-tooltip="Discord"><span class="dock-avatar"><img src="discord.png" alt="Discord" ></span></a>
-      <a class="dock-item youtube" href="#" onclick="return false;" data-tooltip="YouTube"><span class="dock-avatar"><img src="youtube.png" alt="YouTube"></span></a>
-      <a class="dock-item facebook" href="#" onclick="return false;" data-tooltip="Facebook"><span class="dock-avatar"><img src="facebook.png" alt="Facebook"></span></a>
-      <a class="dock-item roblox" href="#" onclick="return false;" data-tooltip="Roblox"><span class="dock-avatar"><img src="roblox.png" alt="roblox"></span></a>
+    <nav class="dock"
+         id="dock"
+         aria-label="Mạng xã hội">
+
+      <a class="dock-item discord"
+         href="#"
+         onclick="return false;"
+         data-tooltip="Discord">
+        <span class="dock-avatar">
+          <img src="discord.png"
+               alt="Discord">
+        </span>
+      </a>
+
+      <a class="dock-item youtube"
+         href="#"
+         onclick="return false;"
+         data-tooltip="YouTube">
+        <span class="dock-avatar">
+          <img src="youtube.png"
+               alt="YouTube">
+        </span>
+      </a>
+
+      <a class="dock-item facebook"
+         href="#"
+         onclick="return false;"
+         data-tooltip="Facebook">
+        <span class="dock-avatar">
+          <img src="facebook.png"
+               alt="Facebook">
+        </span>
+      </a>
+
+      <a class="dock-item roblox"
+         href="#"
+         onclick="return false;"
+         data-tooltip="Roblox">
+        <span class="dock-avatar">
+          <img src="roblox.png"
+               alt="Roblox">
+        </span>
+      </a>
+
     </nav>
   </div>
+
 </div>
 
-<div id="global-tooltip" aria-hidden="true"></div>
+<div id="global-tooltip"
+     aria-hidden="true"></div>
 
 <script src="javascript.js"></script>
 </body>
