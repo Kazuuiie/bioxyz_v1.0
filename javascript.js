@@ -2365,265 +2365,158 @@ if (music) {
 
 
 /* ============================================================
- * LỊCH SỰ KIỆN VIỆT NAM
+ * LỊCH SỰ KIỆN VIỆT NAM + QUỐC TẾ
  * ============================================================
- * Giữ nguyên clock hiện tại; module này chỉ bổ sung lịch.
  * - Dương lịch lưu trực tiếp trong JS.
  * - Âm lịch đổi sang dương qua Huyền Minh /api/amlich.
- * - Cache localStorage để tránh gọi API liên tục.
- * - Mọi mốc thời gian được hiển thị theo Asia/Ho_Chi_Minh.
- * - Event hết -> tự loại khỏi DOM, không cần F5.
+ * - Chỉ hiển thị ngày âm cho event có trường `lunar`.
+ * - Mỗi loại event có màu riêng + chú thích.
+ * - Event đã qua tự loại khỏi danh sách.
  * - Ưu tiên event còn lại của năm hiện tại.
  * ============================================================ */
-
 (function initVietnamCalendar() {
   'use strict';
 
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
   const AM_LICH_API = 'https://huyenminh.com.vn/api/amlich';
-
-  const CACHE_KEY = 'vn-calendar-amlich-cache-v3';
+  const CACHE_KEY = 'vn-calendar-amlich-cache-v4';
   const CACHE_TTL = 30 * 24 * 60 * 60 * 1000;
 
   const btn = document.getElementById('vn-calendar-btn');
   const popover = document.getElementById('vn-calendar-popover');
   const closeBtn = document.getElementById('vn-calendar-close');
-
   const nextCard = document.getElementById('vn-calendar-next');
   const nextName = document.getElementById('vn-calendar-next-name');
   const nextDates = document.getElementById('vn-calendar-next-dates');
   const nextCount = document.getElementById('vn-calendar-next-count');
-
-  const daysEl = document.getElementById('vn-days');
-  const hoursEl = document.getElementById('vn-hours');
-  const minutesEl = document.getElementById('vn-minutes');
-  const secondsEl = document.getElementById('vn-seconds');
-
   const listEl = document.getElementById('vn-calendar-events');
   const listCountEl = document.getElementById('vn-calendar-list-count');
   const yearLabelEl = document.getElementById('vn-calendar-year-label');
   const subEl = document.getElementById('vn-calendar-sub');
   const syncEl = document.getElementById('vn-calendar-sync');
+  const filterEl = document.getElementById('vn-calendar-filter');
 
-  if (
-    !btn ||
-    !popover ||
-    !closeBtn ||
-    !nextCard ||
-    !nextName ||
-    !nextDates ||
-    !listEl
-  ) {
-    return;
-  }
-
-  /* ===== DỮ LIỆU SỰ KIỆN ===== */
+  if (!btn || !popover || !closeBtn || !nextCard || !nextName || !nextDates || !nextCount || !listEl) return;
 
   const EVENTS = [
-    {
-      id: 'tet-duong-lich',
-      title: 'Tết Dương lịch',
-      icon: '🎉',
-      kind: 'special',
-      solar: { day: 1, month: 1 },
-      lunarLabel: null
-    },
-    {
-      id: 'quoc-khanh',
-      title: 'Quốc Khánh Việt Nam',
-      icon: '🇻🇳',
-      kind: 'official',
-      solar: { day: 2, month: 9 },
-      lunarLabel: '11/07 Âm lịch'
-    },
-    {
-      id: 'phu-nu',
-      title: 'Ngày Phụ nữ Việt Nam',
-      icon: '👩',
-      kind: 'special',
-      solar: { day: 20, month: 10 },
-      lunarLabel: '09/09 Âm lịch'
-    },
-    {
-      id: 'nha-giao',
-      title: 'Ngày Nhà giáo Việt Nam',
-      icon: '📖',
-      kind: 'special',
-      solar: { day: 20, month: 11 },
-      lunarLabel: '11/10 Âm lịch'
-    },
-    {
-      id: 'trung-thu',
-      title: 'Tết Trung Thu',
-      icon: '🌙',
-      kind: 'special',
-      lunar: { day: 15, month: 8, leap: false },
-      lunarLabel: '15/08 Âm lịch'
-    },
-    {
-      id: 'giang-sinh',
-      title: 'Giáng sinh',
-      icon: '🎄',
-      kind: 'special',
-      solar: { day: 25, month: 12 },
-      lunarLabel: null
-    }
+    // ===== VIỆT NAM — CHÍNH THỨC =====
+    { id:'tet-duong-lich', title:'Tết Dương lịch', icon:'🎉', kind:'official', solar:{day:1,month:1} },
+    { id:'thanh-lap-dang', title:'Ngày thành lập Đảng Cộng sản Việt Nam', icon:'🔴', kind:'official', solar:{day:3,month:2} },
+    { id:'hung-vuong', title:'Giỗ Tổ Hùng Vương', icon:'🏯', kind:'official', lunar:{day:10,month:3,leap:false}, lunarLabel:'10/03 Âm lịch' },
+    { id:'giai-phong-mien-nam', title:'Ngày Chiến thắng 30/4', icon:'🇻🇳', kind:'official', solar:{day:30,month:4} },
+    { id:'quoc-khanh', title:'Quốc Khánh Việt Nam', icon:'🇻🇳', kind:'official', solar:{day:2,month:9} },
+    { id:'thuong-binh-liet-si', title:'Ngày Thương binh - Liệt sĩ', icon:'🎖️', kind:'official', solar:{day:27,month:7} },
+
+    // ===== VIỆT NAM — NGÀY KỶ NIỆM =====
+    { id:'hoc-sinh-sinh-vien', title:'Ngày truyền thống Học sinh, Sinh viên Việt Nam', icon:'🎓', kind:'vietnam', solar:{day:9,month:1} },
+    { id:'thay-thuoc', title:'Ngày Thầy thuốc Việt Nam', icon:'🩺', kind:'vietnam', solar:{day:27,month:2} },
+    { id:'thanh-lap-doan', title:'Ngày thành lập Đoàn TNCS Hồ Chí Minh', icon:'🌱', kind:'vietnam', solar:{day:26,month:3} },
+    { id:'sach-doc', title:'Ngày Sách và Văn hóa đọc Việt Nam', icon:'📚', kind:'vietnam', solar:{day:21,month:4} },
+    { id:'dien-bien-phu', title:'Ngày Chiến thắng Điện Biên Phủ', icon:'🎖️', kind:'vietnam', solar:{day:7,month:5} },
+    { id:'ho-chi-minh', title:'Ngày sinh Chủ tịch Hồ Chí Minh', icon:'🌿', kind:'vietnam', solar:{day:19,month:5} },
+    { id:'thieu-nhi', title:'Ngày Quốc tế Thiếu nhi', icon:'🧸', kind:'vietnam', solar:{day:1,month:6} },
+    { id:'bao-chi', title:'Ngày Báo chí Cách mạng Việt Nam', icon:'📰', kind:'vietnam', solar:{day:21,month:6} },
+    { id:'cach-mang-thang-tam', title:'Ngày Cách mạng Tháng Tám', icon:'⭐', kind:'vietnam', solar:{day:19,month:8} },
+    { id:'doanh-nhan', title:'Ngày Doanh nhân Việt Nam', icon:'💼', kind:'vietnam', solar:{day:13,month:10} },
+    { id:'phu-nu', title:'Ngày Phụ nữ Việt Nam', icon:'👩', kind:'vietnam', solar:{day:20,month:10} },
+    { id:'nha-giao', title:'Ngày Nhà giáo Việt Nam', icon:'📖', kind:'vietnam', solar:{day:20,month:11} },
+    { id:'di-san', title:'Ngày Di sản Văn hóa Việt Nam', icon:'🏛️', kind:'vietnam', solar:{day:23,month:11} },
+    { id:'quan-doi', title:'Ngày thành lập Quân đội Nhân dân Việt Nam', icon:'🪖', kind:'vietnam', solar:{day:22,month:12} },
+
+    // ===== SỰ KIỆN ÂM LỊCH / VĂN HÓA =====
+    { id:'tet-nguyen-dan', title:'Tết Nguyên Đán', icon:'🧧', kind:'lunar', lunar:{day:1,month:1,leap:false}, lunarLabel:'01/01 Âm lịch' },
+    { id:'ram-thang-gieng', title:'Rằm tháng Giêng', icon:'🌕', kind:'lunar', lunar:{day:15,month:1,leap:false}, lunarLabel:'15/01 Âm lịch' },
+    { id:'han-thuc', title:'Tết Hàn Thực', icon:'🥮', kind:'lunar', lunar:{day:3,month:3,leap:false}, lunarLabel:'03/03 Âm lịch' },
+    { id:'doan-ngo', title:'Tết Đoan Ngọ', icon:'🍉', kind:'lunar', lunar:{day:5,month:5,leap:false}, lunarLabel:'05/05 Âm lịch' },
+    { id:'that-tich', title:'Thất Tịch', icon:'💫', kind:'lunar', lunar:{day:7,month:7,leap:false}, lunarLabel:'07/07 Âm lịch' },
+    { id:'vu-lan', title:'Lễ Vu Lan', icon:'🪷', kind:'lunar', lunar:{day:15,month:7,leap:false}, lunarLabel:'15/07 Âm lịch' },
+    { id:'trung-thu', title:'Tết Trung Thu', icon:'🌙', kind:'lunar', lunar:{day:15,month:8,leap:false}, lunarLabel:'15/08 Âm lịch' },
+    { id:'ong-tao', title:'Ông Công Ông Táo', icon:'🔥', kind:'lunar', lunar:{day:23,month:12,leap:false}, lunarLabel:'23/12 Âm lịch' },
+
+    // ===== QUỐC TẾ =====
+    { id:'education-day', title:'Ngày Quốc tế Giáo dục', icon:'📘', kind:'international', solar:{day:24,month:1} },
+    { id:'cancer-day', title:'Ngày Thế giới Phòng chống Ung thư', icon:'🎗️', kind:'international', solar:{day:4,month:2} },
+    { id:'valentines', title:'Valentine', icon:'❤️', kind:'international', solar:{day:14,month:2} },
+    { id:'womens-day', title:'Ngày Quốc tế Phụ nữ', icon:'🌷', kind:'international', solar:{day:8,month:3} },
+    { id:'happiness-day', title:'Ngày Quốc tế Hạnh phúc', icon:'😊', kind:'international', solar:{day:20,month:3} },
+    { id:'world-water', title:'Ngày Nước Thế giới', icon:'💧', kind:'international', solar:{day:22,month:3} },
+    { id:'earth-day', title:'Ngày Trái Đất', icon:'🌍', kind:'international', solar:{day:22,month:4} },
+    { id:'book-day', title:'Ngày Sách và Bản quyền Thế giới', icon:'📚', kind:'international', solar:{day:23,month:4} },
+    { id:'environment-day', title:'Ngày Môi trường Thế giới', icon:'🌱', kind:'international', solar:{day:5,month:6} },
+    { id:'oceans-day', title:'Ngày Đại dương Thế giới', icon:'🌊', kind:'international', solar:{day:8,month:6} },
+    { id:'youth-day', title:'Ngày Quốc tế Thanh niên', icon:'🧑‍🤝‍🧑', kind:'international', solar:{day:12,month:8} },
+    { id:'peace-day', title:'Ngày Quốc tế Hòa bình', icon:'🕊️', kind:'international', solar:{day:21,month:9} },
+    { id:'tourism-day', title:'Ngày Du lịch Thế giới', icon:'✈️', kind:'international', solar:{day:27,month:9} },
+    { id:'food-day', title:'Ngày Lương thực Thế giới', icon:'🌾', kind:'international', solar:{day:16,month:10} },
+    { id:'un-day', title:'Ngày Liên Hợp Quốc', icon:'🌐', kind:'international', solar:{day:24,month:10} },
+    { id:'halloween', title:'Halloween', icon:'🎃', kind:'special', solar:{day:31,month:10} },
+    { id:'aids-day', title:'Ngày Thế giới Phòng chống AIDS', icon:'🎗️', kind:'international', solar:{day:1,month:12} },
+    { id:'human-rights-day', title:'Ngày Nhân quyền Thế giới', icon:'⚖️', kind:'international', solar:{day:10,month:12} },
+    { id:'christmas', title:'Giáng sinh', icon:'🎄', kind:'special', solar:{day:25,month:12} },
   ];
 
-  /* ===== CACHE ===== */
+  const KIND_LABELS = {
+    all:'Tất cả', official:'Chính thức', lunar:'Âm lịch', international:'Quốc tế', vietnam:'Việt Nam', special:'Đặc biệt'
+  };
 
   let cache = {};
-
-  try {
-    cache = JSON.parse(
-      localStorage.getItem(CACHE_KEY) || '{}'
-    );
-  } catch {
-    cache = {};
-  }
+  try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch { cache = {}; }
 
   function saveCache() {
-    try {
-      localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify(cache)
-      );
-    } catch {
-      // localStorage bị chặn thì bỏ qua.
-    }
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
   }
 
   function cacheKey(day, month, lunarYear, leap) {
-    return [
-      lunarYear,
-      month,
-      day,
-      leap ? 1 : 0
-    ].join('-');
+    return [lunarYear, month, day, leap ? 1 : 0].join('-');
   }
 
-  /* ===== TIMEZONE HELPERS ===== */
-
   function vnParts(date = new Date()) {
-    const parts =
-      new Intl.DateTimeFormat('en-US', {
-        timeZone: TIME_ZONE,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      }).formatToParts(date);
-
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone:TIME_ZONE,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
+    }).formatToParts(date);
     const out = {};
-
-    for (const part of parts) {
-      if (part.type !== 'literal') {
-        out[part.type] = Number(part.value);
-      }
-    }
-
+    for (const p of parts) if (p.type !== 'literal') out[p.type] = Number(p.value);
     return out;
   }
 
-  function vnYear(date = new Date()) {
-    return vnParts(date).year;
+  function vnYear(date = new Date()) { return vnParts(date).year; }
+
+  function vnDate(year, month, day, hour=0, minute=0, second=0, ms=0) {
+    return new Date(Date.UTC(year, month - 1, day, hour - 7, minute, second, ms));
   }
 
-  function vnDate(year, month, day, hour = 0, minute = 0, second = 0, ms = 0) {
-    // Asia/Ho_Chi_Minh = UTC+7, không DST.
-    return new Date(
-      Date.UTC(
-        year,
-        month - 1,
-        day,
-        hour - 7,
-        minute,
-        second,
-        ms
-      )
-    );
-  }
-
-  const dateFormatter = new Intl.DateTimeFormat('vi-VN', {
-    timeZone: TIME_ZONE,
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-
-  function formatSolarDate(date) {
-    return dateFormatter.format(date);
-  }
+  const dateFormatter = new Intl.DateTimeFormat('vi-VN', {timeZone:TIME_ZONE,day:'2-digit',month:'2-digit',year:'numeric'});
+  function formatSolarDate(date) { return dateFormatter.format(date); }
 
   function escapeHTML(value) {
-    return String(value ?? '').replace(
-      /[&<>"']/g,
-      ch => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      }[ch])
-    );
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   }
 
-  /* ===== ÂM -> DƯƠNG ===== */
+  function formatMeta(event) {
+    if (event.lunar && event.lunarLabel) {
+      return `${escapeHTML(formatSolarDate(event.start))} <span class="vn-lunar-highlight">· ${escapeHTML(event.lunarLabel)}</span>`;
+    }
+    return escapeHTML(formatSolarDate(event.start));
+  }
 
   async function lunarToSolar(lunar, lunarYear) {
-    const key = cacheKey(
-      lunar.day,
-      lunar.month,
-      lunarYear,
-      Boolean(lunar.leap)
-    );
-
+    const key = cacheKey(lunar.day, lunar.month, lunarYear, Boolean(lunar.leap));
     const cached = cache[key];
-
-    if (
-      cached &&
-      cached.iso &&
-      Date.now() - Number(cached.timestamp || 0) < CACHE_TTL
-    ) {
-      return cached.iso;
-    }
+    if (cached && cached.iso && Date.now() - Number(cached.timestamp || 0) < CACHE_TTL) return cached.iso;
 
     const url = new URL(AM_LICH_API);
-
     url.searchParams.set('d', String(lunar.day));
     url.searchParams.set('m', String(lunar.month));
     url.searchParams.set('y', String(lunarYear));
-
-    if (lunar.leap) {
-      url.searchParams.set('nhuan', '1');
-    }
+    if (lunar.leap) url.searchParams.set('nhuan', '1');
 
     try {
-      const response = await fetch(url.toString(), {
-        method: 'GET',
-        cache: 'no-store'
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
+      const response = await fetch(url.toString(), {method:'GET',cache:'no-store'});
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-
-      if (!data || typeof data.iso !== 'string') {
-        throw new Error('API không trả về iso.');
-      }
-
-      cache[key] = {
-        iso: data.iso,
-        timestamp: Date.now()
-      };
-
+      if (!data || typeof data.iso !== 'string') throw new Error('API không trả về iso.');
+      cache[key] = {iso:data.iso,timestamp:Date.now()};
       saveCache();
-
       return data.iso;
     } catch (error) {
       console.warn('[VN CALENDAR] Không đổi được âm lịch:', error);
@@ -2631,720 +2524,245 @@ if (music) {
     }
   }
 
-  /* ===== RESOLVE EVENT ===== */
-
   async function resolveEvent(event, year) {
     let iso = null;
-
     if (event.solar) {
-      iso =
-        `${year}-${String(event.solar.month).padStart(2, '0')}-` +
-        `${String(event.solar.day).padStart(2, '0')}`;
+      iso = `${year}-${String(event.solar.month).padStart(2,'0')}-${String(event.solar.day).padStart(2,'0')}`;
     } else if (event.lunar) {
-      iso = await lunarToSolar(
-        event.lunar,
-        year
-      );
+      iso = await lunarToSolar(event.lunar, year);
     }
-
-    if (!iso) {
-      return null;
-    }
+    if (!iso) return null;
 
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-    if (!match) {
-      return null;
-    }
+    if (!match) return null;
 
     const resolvedYear = Number(match[1]);
     const month = Number(match[2]);
     const day = Number(match[3]);
+    const start = vnDate(resolvedYear, month, day);
+    const end = vnDate(resolvedYear, month, day + 1);
 
-    const start = vnDate(
-      resolvedYear,
-      month,
-      day
-    );
-
-    const end = vnDate(
-      resolvedYear,
-      month,
-      day + 1
-    );
-
-    return {
-      ...event,
-      year: resolvedYear,
-      month,
-      day,
-      iso,
-      start,
-      end
-    };
+    return {...event,year:resolvedYear,month,day,iso,start,end};
   }
 
   let resolvedEvents = [];
   let building = false;
 
   async function rebuildEvents() {
-    if (building) {
-      return;
-    }
-
+    if (building) return;
     building = true;
-
     try {
       const currentYear = vnYear();
-      const years = [
-        currentYear,
-        currentYear + 1
-      ];
-
+      const years = [currentYear,currentYear + 1];
       const results = [];
-
       for (const event of EVENTS) {
         for (const year of years) {
-          const item = await resolveEvent(
-            event,
-            year
-          );
-
-          if (!item) {
-            continue;
-          }
-
-          const duplicate = results.some(
-            x =>
-              x.id === item.id &&
-              x.iso === item.iso
-          );
-
-          if (!duplicate) {
-            results.push(item);
-          }
+          const item = await resolveEvent(event, year);
+          if (!item) continue;
+          if (!results.some(x => x.id === item.id && x.iso === item.iso)) results.push(item);
         }
       }
-
-      resolvedEvents =
-        results.sort(
-          (a, b) =>
-            a.start.getTime() -
-            b.start.getTime()
-        );
-
+      resolvedEvents = results.sort((a,b) => a.start.getTime() - b.start.getTime());
       updateSubtitle();
-    } finally {
-      building = false;
-    }
+    } finally { building = false; }
   }
-
-  /* ===== STATUS ===== */
 
   function eventStatus(event, now = new Date()) {
     const time = now.getTime();
-
-    if (
-      time >= event.start.getTime() &&
-      time < event.end.getTime()
-    ) {
-      return 'ongoing';
-    }
-
-    if (time < event.start.getTime()) {
-      return 'upcoming';
-    }
-
+    if (time >= event.start.getTime() && time < event.end.getTime()) return 'ongoing';
+    if (time < event.start.getTime()) return 'upcoming';
     return 'ended';
   }
 
   function removeEnded(now = new Date()) {
-    const before = resolvedEvents.length;
-
-    resolvedEvents =
-      resolvedEvents.filter(
-        event =>
-          eventStatus(event, now) !== 'ended'
-      );
-
-    return before !== resolvedEvents.length;
+    resolvedEvents = resolvedEvents.filter(event => eventStatus(event, now) !== 'ended');
   }
 
-  /* ===== YEAR PRIORITY ===== */
+  let currentFilter = 'all';
 
   function visibleEvents(now = new Date()) {
     const currentYear = vnYear(now);
-
-    const active =
-      resolvedEvents.filter(
-        event =>
-          eventStatus(event, now) !== 'ended'
-      );
-
-    // Ưu tiên toàn bộ event còn lại của năm hiện tại.
-    const currentYearEvents =
-      active.filter(
-        event =>
-          event.year === currentYear
-      );
-
-    if (currentYearEvents.length) {
-      return currentYearEvents;
-    }
-
-    // Chỉ chuyển năm sau khi năm hiện tại hết event.
-    return active.filter(
-      event =>
-        event.year > currentYear
-    );
+    let active = resolvedEvents.filter(event => eventStatus(event, now) !== 'ended');
+    if (currentFilter !== 'all') active = active.filter(event => event.kind === currentFilter);
+    const currentYearEvents = active.filter(event => event.year === currentYear);
+    if (currentYearEvents.length) return currentYearEvents;
+    return active.filter(event => event.year > currentYear);
   }
 
-  /* ===== COUNTDOWN ===== */
-
   function countdown(target, now) {
-    let diff =
-      Math.max(
-        0,
-        target.getTime() - now.getTime()
-      );
-
-    const totalSeconds =
-      Math.floor(diff / 1000);
-
-    const days =
-      Math.floor(totalSeconds / 86400);
-
-    const hours =
-      Math.floor(
-        (totalSeconds % 86400) / 3600
-      );
-
-    const minutes =
-      Math.floor(
-        (totalSeconds % 3600) / 60
-      );
-
-    const seconds =
-      totalSeconds % 60;
-
+    const diff = Math.max(0, target.getTime() - now.getTime());
+    const totalSeconds = Math.floor(diff / 1000);
     return {
-      days,
-      hours,
-      minutes,
-      seconds
+      days:Math.floor(totalSeconds / 86400),
+      hours:Math.floor((totalSeconds % 86400) / 3600),
+      minutes:Math.floor((totalSeconds % 3600) / 60),
+      seconds:totalSeconds % 60
     };
   }
 
-  function pad2(value) {
-    return String(value).padStart(2, '0');
+  function pad2(value) { return String(value).padStart(2,'0'); }
+
+  function applyKindClass(el, kind) {
+    ['official','lunar','international','vietnam','special'].forEach(k => el.classList.remove(`kind-${k}`));
+    if (kind) el.classList.add(`kind-${kind}`);
   }
 
   function setCountdown(target, now) {
-    const value =
-      countdown(target, now);
-
-    if (daysEl) {
-      daysEl.textContent = String(
-        value.days
-      ).padStart(2, '0');
-    }
-
-    if (hoursEl) {
-      hoursEl.textContent = pad2(
-        value.hours
-      );
-    }
-
-    if (minutesEl) {
-      minutesEl.textContent = pad2(
-        value.minutes
-      );
-    }
-
-    if (secondsEl) {
-      secondsEl.textContent = pad2(
-        value.seconds
-      );
-    }
+    const value = countdown(target, now);
+    const days = document.getElementById('vn-days');
+    const hours = document.getElementById('vn-hours');
+    const minutes = document.getElementById('vn-minutes');
+    const seconds = document.getElementById('vn-seconds');
+    if (days) days.textContent = String(value.days).padStart(2,'0');
+    if (hours) hours.textContent = pad2(value.hours);
+    if (minutes) minutes.textContent = pad2(value.minutes);
+    if (seconds) seconds.textContent = pad2(value.seconds);
   }
 
-  /* ===== NEXT EVENT ===== */
+  function nextCountMarkup() {
+    return `<div class="vn-calendar-count-grid">
+      <div class="vn-count-box"><div class="vn-count-value" id="vn-days">00</div><div class="vn-count-unit">Ngày</div></div>
+      <div class="vn-count-box"><div class="vn-count-value" id="vn-hours">00</div><div class="vn-count-unit">Giờ</div></div>
+      <div class="vn-count-box"><div class="vn-count-value" id="vn-minutes">00</div><div class="vn-count-unit">Phút</div></div>
+      <div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
+    </div>`;
+  }
 
   function renderNext(now) {
-    const events =
-      visibleEvents(now);
-
+    const events = visibleEvents(now);
     const next = events[0];
-
     if (!next) {
-      nextName.textContent =
-        'Không còn sự kiện';
-
-      nextDates.textContent =
-        'Hẹn gặp lại vào năm mới.';
-
-      if (nextCount) {
-        nextCount.innerHTML = `
-          <div class="vn-calendar-ongoing">
-            đã hoàn tất
-          </div>
-        `;
-      }
-
+      applyKindClass(nextCard, 'special');
+      nextName.textContent = 'Không còn sự kiện';
+      nextDates.textContent = 'Hẹn gặp lại vào năm mới.';
+      nextCount.innerHTML = '<div class="vn-calendar-ongoing">đã hoàn tất</div>';
       return;
     }
 
-    const status =
-      eventStatus(next, now);
+    applyKindClass(nextCard, next.kind);
+    nextName.textContent = `${next.icon} ${next.title}`;
+    nextDates.innerHTML = formatMeta(next);
 
-    nextName.textContent =
-      `${next.icon} ${next.title}`;
-
-    const lunarText =
-      next.lunarLabel
-        ? ` · ${next.lunarLabel}`
-        : '';
-
-    nextDates.textContent =
-      `${formatSolarDate(next.start)}${lunarText}`;
-
-    if (status === 'ongoing') {
-      if (nextCount) {
-        nextCount.innerHTML = `
-          <div class="vn-calendar-ongoing">
-            đang diễn ra
-          </div>
-        `;
-      }
-
-      nextCard.classList.add('is-ongoing');
-      return;
-    }
-
-    nextCard.classList.remove(
-      'is-ongoing'
-    );
-
-    if (nextCount) {
-      nextCount.innerHTML = `
-        <div class="vn-calendar-count-grid">
-          <div class="vn-count-box">
-            <div class="vn-count-value" id="vn-days">00</div>
-            <div class="vn-count-unit">Ngày</div>
-          </div>
-          <div class="vn-count-box">
-            <div class="vn-count-value" id="vn-hours">00</div>
-            <div class="vn-count-unit">Giờ</div>
-          </div>
-          <div class="vn-count-box">
-            <div class="vn-count-value" id="vn-minutes">00</div>
-            <div class="vn-count-unit">Phút</div>
-          </div>
-          <div class="vn-count-box">
-            <div class="vn-count-value" id="vn-seconds">00</div>
-            <div class="vn-count-unit">Giây</div>
-          </div>
-        </div>
-      `;
-    }
-
-    /*
-     * Re-cache vì innerHTML tạo lại 4 node.
-     */
-    const currentDays =
-      document.getElementById('vn-days');
-    const currentHours =
-      document.getElementById('vn-hours');
-    const currentMinutes =
-      document.getElementById('vn-minutes');
-    const currentSeconds =
-      document.getElementById('vn-seconds');
-
-    const value =
-      countdown(next.start, now);
-
-    if (currentDays) {
-      currentDays.textContent =
-        String(value.days).padStart(2, '0');
-    }
-
-    if (currentHours) {
-      currentHours.textContent =
-        pad2(value.hours);
-    }
-
-    if (currentMinutes) {
-      currentMinutes.textContent =
-        pad2(value.minutes);
-    }
-
-    if (currentSeconds) {
-      currentSeconds.textContent =
-        pad2(value.seconds);
-    }
+    const status = eventStatus(next, now);
+    nextCard.classList.toggle('is-ongoing', status === 'ongoing');
+    nextCount.innerHTML = status === 'ongoing' ? '<div class="vn-calendar-ongoing">đang diễn ra</div>' : nextCountMarkup();
+    if (status !== 'ongoing') setCountdown(next.start, now);
   }
 
-  /* ===== LIST ===== */
-
   function renderList(now) {
-    const events =
-      visibleEvents(now);
-
-    if (listCountEl) {
-      listCountEl.textContent =
-        String(events.length);
-    }
-
-    if (yearLabelEl) {
-      yearLabelEl.textContent =
-        String(
-          events[0]?.year ||
-          vnYear(now)
-        );
-    }
+    const events = visibleEvents(now);
+    if (listCountEl) listCountEl.textContent = String(events.length);
+    if (yearLabelEl) yearLabelEl.textContent = String(events[0]?.year || vnYear(now));
 
     if (!events.length) {
-      listEl.innerHTML = `
-        <div class="vn-calendar-empty">
-          Không còn sự kiện trong năm hiện tại.
-        </div>
-      `;
+      listEl.innerHTML = '<div class="vn-calendar-empty">Không có sự kiện phù hợp trong khoảng thời gian này.</div>';
       return;
     }
 
-    listEl.innerHTML =
-      events.map(event => {
-        const status =
-          eventStatus(event, now);
-
-        const lunarText =
-          event.lunarLabel || '';
-
-        const right =
-          status === 'ongoing'
-            ? `<span class="vn-calendar-live">đang diễn ra</span>`
-            : `còn ${Math.max(
-                0,
-                Math.ceil(
-                  (
-                    event.start.getTime() -
-                    now.getTime()
-                  ) / 86400000
-                )
-              )} ngày`;
-
-        return `
-          <div class="vn-calendar-event ${status}"
-               data-event-id="${escapeHTML(event.id)}">
-
-            <div class="vn-calendar-event-icon"
-                 aria-hidden="true">
-              ${escapeHTML(event.icon)}
-            </div>
-
-            <div class="vn-calendar-event-date">
-              ${pad2(event.day)}/${pad2(event.month)}
-            </div>
-
-            <div class="vn-calendar-event-info">
-              <p class="vn-calendar-event-name">
-                ${escapeHTML(event.title)}
-              </p>
-
-              <p class="vn-calendar-event-meta">
-                ${escapeHTML(formatSolarDate(event.start))}
-                ${lunarText ? ` · ${escapeHTML(lunarText)}` : ''}
-              </p>
-            </div>
-
-            <div class="vn-calendar-event-left">
-              ${right}
-            </div>
-
-          </div>
-        `;
-      }).join('');
+    listEl.innerHTML = events.map(event => {
+      const status = eventStatus(event, now);
+      const right = status === 'ongoing'
+        ? '<span class="vn-calendar-live">đang diễn ra</span>'
+        : `còn ${Math.max(0, Math.ceil((event.start.getTime() - now.getTime()) / 86400000))} ngày`;
+      return `<div class="vn-calendar-event ${status} kind-${escapeHTML(event.kind)}" data-event-id="${escapeHTML(event.id)}">
+        <div class="vn-calendar-event-icon" aria-hidden="true">${escapeHTML(event.icon)}</div>
+        <div class="vn-calendar-event-date">${pad2(event.day)}/${pad2(event.month)}</div>
+        <div class="vn-calendar-event-info">
+          <p class="vn-calendar-event-name">${escapeHTML(event.title)}</p>
+          <p class="vn-calendar-event-meta">${formatMeta(event)}</p>
+        </div>
+        <div class="vn-calendar-event-left">${right}</div>
+      </div>`;
+    }).join('');
   }
 
   function updateSubtitle() {
-    if (!subEl) {
-      return;
-    }
-
-    subEl.textContent =
-      'Lịch dương + âm · cập nhật realtime · UTC+7';
+    if (subEl) subEl.textContent = currentFilter === 'all'
+      ? 'Lịch dương + âm · Việt Nam + quốc tế · UTC+7'
+      : `${KIND_LABELS[currentFilter]} · cập nhật realtime · UTC+7`;
   }
 
   function render(now = new Date()) {
     removeEnded(now);
+    updateSubtitle();
     renderNext(now);
     renderList(now);
   }
 
-  /* ===== POPUP POSITION ===== */
-
   function positionPopover() {
-    if (
-      !popover.classList.contains('open')
-    ) {
-      return;
-    }
-
-    const rect =
-      btn.getBoundingClientRect();
-
+    if (!popover.classList.contains('open')) return;
+    const rect = btn.getBoundingClientRect();
+    const margin = 20;
     const gap = 10;
-    const margin = 8;
-
-    /*
-     * Desktop:
-     * căn phải theo icon lịch,
-     * giống popup nổi ngay dưới clock.
-     */
-
-    let left =
-      rect.right -
-      popover.offsetWidth;
-
-    let top =
-      rect.bottom + gap;
-
-    const maxLeft =
-      window.innerWidth -
-      popover.offsetWidth -
-      margin;
-
-    left =
-      Math.max(
-        margin,
-        Math.min(
-          left,
-          maxLeft
-        )
-      );
-
-    /*
-     * Nếu không đủ chỗ phía dưới,
-     * mở lên phía trên.
-     */
-
-    if (
-      top +
-      popover.offsetHeight >
-      window.innerHeight - margin
-    ) {
-      top =
-        rect.top -
-        popover.offsetHeight -
-        gap;
-
-      popover.style.transformOrigin =
-        'bottom right';
+    const width = popover.offsetWidth;
+    let left = rect.right - width;
+    let top = rect.bottom + gap;
+    left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+    if (top + popover.offsetHeight > window.innerHeight - margin) {
+      top = rect.top - popover.offsetHeight - gap;
+      popover.style.transformOrigin = 'bottom right';
     } else {
-      popover.style.transformOrigin =
-        'top right';
+      popover.style.transformOrigin = 'top right';
     }
-
-    top =
-      Math.max(
-        margin,
-        Math.min(
-          top,
-          window.innerHeight -
-            popover.offsetHeight -
-            margin
-        )
-      );
-
-    popover.style.left =
-      `${Math.round(left)}px`;
-
-    popover.style.top =
-      `${Math.round(top)}px`;
+    top = Math.max(margin, Math.min(top, window.innerHeight - popover.offsetHeight - margin));
+    popover.style.left = `${Math.round(left)}px`;
+    popover.style.top = `${Math.round(top)}px`;
   }
-
-  /* ===== OPEN / CLOSE ===== */
 
   function openCalendar() {
     render();
-
     popover.classList.add('open');
-
     btn.classList.add('is-open');
-    btn.setAttribute(
-      'aria-expanded',
-      'true'
-    );
-
-    requestAnimationFrame(() => {
-      positionPopover();
-    });
+    btn.setAttribute('aria-expanded','true');
+    requestAnimationFrame(positionPopover);
   }
 
   function closeCalendar() {
-    popover.classList.remove(
-      'open'
-    );
-
+    popover.classList.remove('open');
     btn.classList.remove('is-open');
-
-    btn.setAttribute(
-      'aria-expanded',
-      'false'
-    );
+    btn.setAttribute('aria-expanded','false');
   }
 
-  btn.addEventListener(
-    'click',
-    event => {
-      event.stopPropagation();
+  btn.addEventListener('click', event => {
+    event.stopPropagation();
+    popover.classList.contains('open') ? closeCalendar() : openCalendar();
+  });
 
-      if (
-        popover.classList.contains('open')
-      ) {
-        closeCalendar();
-      } else {
-        openCalendar();
-      }
-    }
-  );
+  closeBtn.addEventListener('click', event => { event.stopPropagation(); closeCalendar(); });
+  popover.addEventListener('click', event => event.stopPropagation());
+  document.addEventListener('click', event => {
+    if (popover.classList.contains('open') && !popover.contains(event.target) && !btn.contains(event.target)) closeCalendar();
+  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && popover.classList.contains('open')) closeCalendar(); });
+  window.addEventListener('resize', positionPopover, {passive:true});
+  window.addEventListener('scroll', positionPopover, {passive:true});
 
-  closeBtn.addEventListener(
-    'click',
-    event => {
-      event.stopPropagation();
-      closeCalendar();
-    }
-  );
-
-  popover.addEventListener(
-    'click',
-    event => {
-      event.stopPropagation();
-    }
-  );
-
-  document.addEventListener(
-    'click',
-    event => {
-      if (
-        popover.classList.contains('open') &&
-        !popover.contains(event.target) &&
-        !btn.contains(event.target)
-      ) {
-        closeCalendar();
-      }
-    }
-  );
-
-  document.addEventListener(
-    'keydown',
-    event => {
-      if (
-        event.key === 'Escape' &&
-        popover.classList.contains('open')
-      ) {
-        closeCalendar();
-      }
-    }
-  );
-
-  window.addEventListener(
-    'resize',
-    positionPopover,
-    { passive: true }
-  );
-
-  window.addEventListener(
-    'scroll',
-    positionPopover,
-    { passive: true }
-  );
-
-  /* ===== REALTIME ===== */
+  if (filterEl) {
+    filterEl.addEventListener('change', () => {
+      currentFilter = filterEl.value || 'all';
+      render();
+      requestAnimationFrame(positionPopover);
+    });
+  }
 
   let lastSecond = -1;
   let lastYear = vnYear();
 
   setInterval(() => {
-    const now =
-      new Date();
-
-    const parts =
-      vnParts(now);
-
-    if (
-      parts.year !== lastYear
-    ) {
-      lastYear =
-        parts.year;
-
-      rebuildEvents().then(() => {
-        if (
-          popover.classList.contains('open')
-        ) {
-          render(now);
-          requestAnimationFrame(
-            positionPopover
-          );
-        }
-      });
-
+    const now = new Date();
+    const parts = vnParts(now);
+    if (parts.year !== lastYear) {
+      lastYear = parts.year;
+      rebuildEvents().then(() => { render(now); requestAnimationFrame(positionPopover); });
       return;
     }
-
-    /*
-     * Chỉ cập nhật DOM mỗi khi giây đổi.
-     */
-    if (
-      parts.second === lastSecond
-    ) {
-      return;
-    }
-
-    lastSecond =
-      parts.second;
-
-    /*
-     * Event hết hạn -> tự xóa ngay.
-     */
-    const changed =
-      removeEnded(now);
-
-    if (
-      changed ||
-      popover.classList.contains('open')
-    ) {
-      if (
-        popover.classList.contains('open')
-      ) {
-        render(now);
-      }
-    }
-
-    if (syncEl) {
-      syncEl.textContent =
-        'Đang đồng bộ thời gian thực · UTC+7';
-    }
+    if (parts.second === lastSecond) return;
+    lastSecond = parts.second;
+    if (popover.classList.contains('open')) render(now);
+    if (syncEl) syncEl.textContent = 'Cập nhật theo thời gian thực (UTC+7)';
   }, 250);
 
-  /* ===== INIT ===== */
-
-  rebuildEvents().then(() => {
-    render();
-
-    /*
-     * Nếu popup đang mở do browser giữ state,
-     * cập nhật vị trí sau khi resolve API.
-     */
-    if (
-      popover.classList.contains('open')
-    ) {
-      requestAnimationFrame(
-        positionPopover
-      );
-    }
-  });
-
+  rebuildEvents().then(() => render());
 })();
 
 /* ============ GLOBAL DATA-TOOLTIP ============ */
