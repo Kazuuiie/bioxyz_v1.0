@@ -2574,14 +2574,30 @@ if (music) {
     try {
       const currentYear = vnYear();
       const years = [currentYear,currentYear + 1];
-      const results = [];
+      const jobs = [];
       for (const event of EVENTS) {
-        for (const year of years) {
-          const item = await resolveEvent(event, year);
-          if (!item) continue;
-          if (!results.some(x => x.id === item.id && x.iso === item.iso)) results.push(item);
-        }
+        for (const year of years) jobs.push([event, year]);
       }
+
+      // Resolve dates concurrently. Solar dates are instant; lunar dates
+      // may hit the cache/API. Promise.all avoids a long serial waterfall.
+      const settled = await Promise.all(
+        jobs.map(async ([event, year]) => {
+          try { return await resolveEvent(event, year); }
+          catch { return null; }
+        })
+      );
+
+      const results = [];
+      const seen = new Set();
+      for (const item of settled) {
+        if (!item) continue;
+        const key = `${item.id}|${item.iso}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        results.push(item);
+      }
+
       resolvedEvents = results.sort((a,b) => a.start.getTime() - b.start.getTime());
       updateSubtitle();
     } finally { building = false; }
@@ -2659,15 +2675,16 @@ if (music) {
     return KIND_LABELS[event?.kind] || 'Sự kiện';
   }
 
+  const detailNowFormatter = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: TIME_ZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
   function formatDetailNow(now) {
-    const f = new Intl.DateTimeFormat('vi-VN', {
-      timeZone: TIME_ZONE,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-    return `Giờ Việt Nam (UTC+7): ${f.format(now)}`;
+    return `Giờ Việt Nam (UTC+7): ${detailNowFormatter.format(now)}`;
   }
 
   function updateDetail(now = new Date()) {
@@ -2779,11 +2796,18 @@ if (music) {
       : `${KIND_LABELS[currentFilter]} · cập nhật realtime · UTC+7`;
   }
 
-  function render(now = new Date()) {
+  let lastRenderedListDay = '';
+
+  function render(now = new Date(), forceList = true) {
     removeEnded(now);
     updateSubtitle();
     renderNext(now);
-    renderList(now);
+    const parts = vnParts(now);
+    const dayKey = `${parts.year}-${parts.month}-${parts.day}`;
+    if (forceList || dayKey !== lastRenderedListDay) {
+      lastRenderedListDay = dayKey;
+      renderList(now);
+    }
   }
 
   function positionPopover() {
@@ -2879,21 +2903,43 @@ if (music) {
   }
 
   let lastSecond = -1;
+  let lastDayKey = '';
   let lastYear = vnYear();
 
   setInterval(() => {
     const now = new Date();
     const parts = vnParts(now);
+    const dayKey = `${parts.year}-${parts.month}-${parts.day}`;
+
     if (parts.year !== lastYear) {
       lastYear = parts.year;
-      rebuildEvents().then(() => { render(now); requestAnimationFrame(positionPopover); });
+      rebuildEvents().then(() => {
+        if (popover.classList.contains('open')) {
+          render(now);
+          requestAnimationFrame(positionPopover);
+        }
+      });
       return;
     }
+
     if (parts.second === lastSecond) return;
     lastSecond = parts.second;
-    if (popover.classList.contains('open')) render(now);
+
+    if (!popover.classList.contains('open')) return;
+
+    // Update only the changing countdowns every second.
+    renderNext(now);
+
+    // Rebuild the list only when the day changes, so the DOM is not
+    // destroyed/recreated 60 times per minute.
+    if (dayKey !== lastDayKey) {
+      lastDayKey = dayKey;
+      removeEnded(now);
+      renderList(now);
+    }
+
     if (syncEl) syncEl.textContent = 'Cập nhật theo thời gian thực (UTC+7)';
-  }, 250);
+  }, 1000);
 
   rebuildEvents().then(() => render());
 })();
