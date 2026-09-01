@@ -2303,6 +2303,75 @@ footer#footer-bar:hover .foot-hint svg{
 }
 
 </style>
+
+<style id="calendar-final-tuning">
+/* ===== FINAL COMPACT CALENDAR ===== */
+.vn-calendar-popover{
+  width:min(780px,calc(100vw - 28px)) !important;
+  height:min(520px,calc(100vh - 28px)) !important;
+  max-height:min(520px,calc(100vh - 28px)) !important;
+}
+.vn-calendar-head{padding:11px 14px 10px !important;gap:9px !important}
+.vn-calendar-head-icon{width:30px !important;height:30px !important;border-radius:9px !important}
+.vn-calendar-head-icon svg{width:16px !important;height:16px !important}
+.vn-calendar-title{font-size:15px !important}
+.vn-calendar-sub{font-size:7px !important;margin-top:3px !important}
+.vn-calendar-close{width:28px !important;height:28px !important;font-size:18px !important}
+.vn-calendar-body{height:calc(100% - 51px) !important;padding:10px 11px 8px !important}
+.vn-calendar-main-grid{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) !important;gap:11px !important}
+.vn-calendar-next,.vn-calendar-right{height:100% !important;min-height:0 !important}
+.vn-calendar-next{padding:13px !important;border-radius:12px !important}
+.vn-calendar-kicker{font-size:7px !important;letter-spacing:.12em !important}
+.vn-calendar-kicker svg{width:10px !important;height:10px !important}
+.vn-calendar-next-main{margin-top:18px !important}
+.vn-calendar-next-name{font-size:18px !important}
+.vn-calendar-next-dates{margin-top:5px !important;font-size:8px !important}
+.vn-calendar-next-count{padding-top:12px !important}
+.vn-calendar-count-grid{gap:5px !important}
+.vn-count-box{padding:7px 4px 6px !important;border-radius:8px !important}
+.vn-count-value{font-size:16px !important}
+.vn-count-unit{margin-top:3px !important;font-size:6px !important}
+.vn-calendar-section-title{padding:1px 2px 6px !important;font-size:7px !important}
+.vn-calendar-filter{min-width:92px !important;padding:6px 22px 6px 9px !important;font-size:9px !important}
+.vn-calendar-events{max-height:none !important;height:calc(100% - 34px) !important;flex:none !important;gap:5px !important;padding-right:4px !important}
+.vn-calendar-event{grid-template-columns:30px 47px minmax(0,1fr) auto !important;gap:6px !important;padding:6px 8px !important;border-radius:9px !important;min-height:48px !important}
+.vn-calendar-event-icon{width:26px !important;height:26px !important;border-radius:8px !important;font-size:13px !important}
+.vn-calendar-event-date{font-size:8px !important}
+.vn-calendar-event-name{font-size:9.5px !important}
+.vn-calendar-event-meta{font-size:6.7px !important;margin-top:2px !important}
+.vn-calendar-event-left{font-size:6.7px !important}
+.vn-calendar-legend{margin-top:7px !important;padding-top:7px !important;gap:7px !important;font-size:7px !important}
+.vn-calendar-legend-title{font-size:7px !important}
+.vn-calendar-status{margin-top:7px !important;padding-top:6px !important;font-size:6.7px !important}
+/* Detail replaces the left panel visually and stays compact */
+.vn-calendar-detail{padding:10px !important;border-radius:12px !important}
+.vn-calendar-detail-panel{width:100% !important;height:100% !important;padding:14px !important;border-radius:11px !important;justify-content:flex-start !important}
+.vn-calendar-detail-kicker{font-size:7px !important}
+.vn-calendar-detail-panel h3{font-size:17px !important;margin-top:4px !important}
+.vn-calendar-detail-close{width:27px !important;height:27px !important;font-size:18px !important}
+.vn-calendar-detail-meta{margin-top:9px !important;font-size:7.5px !important}
+.vn-calendar-detail-type{margin-top:7px !important;padding:4px 7px !important;font-size:6.5px !important}
+.vn-calendar-detail-countdown-label{margin-top:13px !important;font-size:6.5px !important}
+.vn-calendar-detail-countdown{gap:5px !important;margin-top:6px !important}
+.vn-calendar-detail-countdown>div{padding:7px 4px 6px !important;border-radius:8px !important}
+.vn-calendar-detail-countdown strong{font-size:16px !important}
+.vn-calendar-detail-countdown span{margin-top:3px !important;font-size:6px !important}
+.vn-calendar-detail-now{margin-top:9px !important;font-size:7px !important}
+@media(max-width:900px){
+  .vn-calendar-popover{width:min(680px,calc(100vw - 20px)) !important;height:min(560px,calc(100vh - 20px)) !important;max-height:min(560px,calc(100vh - 20px)) !important}
+}
+@media(max-width:640px){
+  .vn-calendar-popover{width:calc(100vw - 14px) !important;height:calc(100vh - 14px) !important;max-height:calc(100vh - 14px) !important}
+  .vn-calendar-main-grid{grid-template-columns:1fr !important;gap:8px !important}
+  .vn-calendar-next{height:180px !important;min-height:180px !important}
+  .vn-calendar-right{height:240px !important;min-height:0 !important}
+  .vn-calendar-events{height:196px !important;max-height:196px !important}
+  .vn-calendar-event{grid-template-columns:28px 42px minmax(0,1fr) !important;min-height:42px !important}
+  .vn-calendar-event-left{grid-column:3 !important;text-align:left !important}
+  .vn-calendar-legend{flex-wrap:wrap !important}
+  .vn-calendar-detail-panel{padding:12px !important}
+}
+</style>
 </head>
 <body data-calendar-layout="standalone-centered" oncontextmenu="return false;">
 <button aria-label="Click to enter" id="gate">
