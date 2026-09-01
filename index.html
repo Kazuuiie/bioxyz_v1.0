@@ -524,6 +524,7 @@ main{
   }
   .discord-mini-profile{background-color:rgba(255,255,255,.5)}
   .discord-mini-profile.has-nameplate{background-color:rgba(20,16,15,.78)}
+  .music-box{background-color:rgba(255,255,255,.5)}
 }
 .dmp-top{
   display:flex;
@@ -840,25 +841,26 @@ button.dmp-icon{cursor:pointer}
   opacity:.85;
 }
 
-/* ===== MUSIC (không viền/khung, nằm trần trên card) ===== */
+/* ===== MUSIC ===== */
 .music-box{
   position:relative;
   z-index:10;
   width:100%;
-  background:none;
-  border:none;
-  border-radius:0;
-  padding:0;
+  background:rgba(255,255,255,.24);
+  background-image:
+    radial-gradient(circle at 14% -12%,rgba(255,255,255,.5),transparent 52%),
+    linear-gradient(150deg,rgba(255,255,255,.2),rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:14px;
+  padding:16px 16px 14px;
   margin:0 0 14px;
-  box-shadow:none;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
-}
-.music-box::before{
-  content:none;
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset;
+  backdrop-filter:blur(6px) saturate(1.05);
+  -webkit-backdrop-filter:blur(6px) saturate(1.05);
+  transition:box-shadow .3s ease;
 }
 .music-box.is-playing{
-  box-shadow:none;
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(134,161,121,.35);
 }
 .music-topline{
   position:relative;
@@ -871,9 +873,9 @@ button.dmp-icon{cursor:pointer}
   position:relative;
   width:64px;
   height:64px;
-  border-radius:10px;
+  border-radius:50%;
   background:rgba(74,51,54,.08);
-  box-shadow:0 4px 10px -4px rgba(74,51,54,.3);
+  box-shadow:0 6px 16px -6px rgba(74,51,54,.35),inset 0 0 0 1px rgba(255,255,255,.4);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -883,14 +885,41 @@ button.dmp-icon{cursor:pointer}
   flex-shrink:0;
   overflow:hidden;
   z-index:1;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
+}
+.disc-player:hover{
+  transform:scale(1.05);
+  box-shadow:0 8px 20px -6px rgba(74,51,54,.42),inset 0 0 0 1px rgba(255,255,255,.5);
+}
+.disc-player::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:var(--paper-dim);
+  box-shadow:0 0 0 2px rgba(74,51,54,.14);
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:2;
 }
 .disc-player .disc-label{
   display:block;
   width:100%;
   height:100%;
+  border-radius:50%;
   background:linear-gradient(135deg,var(--raspberry),var(--mustard));
   background-size:cover;
   background-position:center;
+  transition:transform .2s ease;
+}
+.music-box.is-playing .disc-player .disc-label{
+  animation:disc-spin 9s linear infinite;
+}
+@keyframes disc-spin{
+  to{transform:rotate(360deg)}
 }
 .music-info{
   flex:1;
@@ -948,7 +977,8 @@ button.dmp-icon{cursor:pointer}
   display:flex;
   align-items:center;
   justify-content:center;
-  transition:transform .15s cubic-bezier(.34,1.56,.64,1);
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1),background .2s ease;
+  box-shadow:0 6px 14px -6px rgba(74,51,54,.5);
 }
 .music-playbtn:hover{
   transform:scale(1.06);
@@ -974,10 +1004,12 @@ button.dmp-icon{cursor:pointer}
   align-items:center;
   justify-content:center;
   cursor:pointer;
+  transition:color .2s ease,background .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);
 }
 .music-menu-btn:hover{
   color:var(--ink);
   background:rgba(74,51,54,.08);
+  transform:scale(1.08);
 }
 .music-menu-btn svg{width:17px;height:17px}
 .music-menu-btn[aria-expanded="true"]{
@@ -1023,16 +1055,18 @@ button.dmp-icon{cursor:pointer}
   border-radius:2px;
   will-change:transform;
 }
-/* ===== HÀNG ĐIỀU KHIỂN: prev — play/pause — next — danh sách bài hát ===== */
+/* ===== HÀNG ĐIỀU KHIỂN: prev — play/pause — next — danh sách — âm lượng ===== */
 .music-nav{
   position:relative;
   z-index:1;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:16px;
+  flex-wrap:wrap;
+  gap:14px;
+  row-gap:10px;
   margin-top:10px;
-  height:38px;
+  min-height:38px;
 }
 .music-nav button{
   width:28px;
@@ -1045,15 +1079,79 @@ button.dmp-icon{cursor:pointer}
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  transition:color .2s ease,transform .2s ease;
+  transition:color .2s ease,background .2s ease,transform .2s ease;
 }
-.music-nav button svg{width:16px;height:16px;fill:currentColor}
 .music-nav button:hover{
   color:var(--ink);
+  background:rgba(74,51,54,.08);
   transform:scale(1.1);
 }
+.music-nav svg{width:16px;height:16px;fill:currentColor}
 .music-nav .music-menu-btn{
-  margin-left:8px;
+  margin-left:2px;
+}
+
+/* ===== ÂM LƯỢNG ===== */
+.volume-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:4px;
+  padding-left:12px;
+  border-left:1px solid rgba(74,51,54,.14);
+}
+#volume-btn{
+  width:28px;
+  height:28px;
+  flex-shrink:0;
+  border:none;
+  border-radius:50%;
+  background:transparent;
+  color:var(--ink-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:color .2s ease,background .2s ease,transform .2s ease;
+}
+#volume-btn:hover{
+  color:var(--ink);
+  background:rgba(74,51,54,.08);
+  transform:scale(1.1);
+}
+#volume-btn svg{width:16px;height:16px}
+.vol-wave{transition:opacity .15s ease}
+#volume-slider-container{
+  position:relative;
+  width:58px;
+  height:4px;
+  background:rgba(74,51,54,.14);
+  border-radius:2px;
+  cursor:pointer;
+  overflow:hidden;
+  transition:height .15s ease;
+}
+#volume-slider-container:hover{height:6px}
+#volume-slider-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  transform-origin:left;
+  transform:scaleX(1);
+  background:var(--sage);
+  border-radius:2px;
+  will-change:transform;
+}
+@media(max-width:380px){
+  .volume-control{
+    margin-left:0;
+    padding-left:0;
+    border-left:none;
+    width:100%;
+    justify-content:center;
+  }
 }
 
 /* ===== PLAYLIST (giữ khung tối vì là menu nổi lên trên) ===== */
@@ -1962,6 +2060,31 @@ footer#footer-bar:hover .foot-hint svg{
                 <circle cx="12" cy="19" r="2"/>
               </svg>
             </button>
+
+            <!-- ÂM LƯỢNG -->
+            <div class="volume-control" id="volume-control">
+              <button type="button"
+                      id="volume-btn"
+                      aria-label="Âm lượng"
+                      data-tooltip="Âm lượng"
+                      data-tooltip-fixed="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+                  <g class="vol-wave" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                    <path d="M16.2 8.8a5 5 0 0 1 0 6.4"/>
+                    <path d="M18.6 6.2a8.5 8.5 0 0 1 0 11.6"/>
+                  </g>
+                </svg>
+              </button>
+
+              <div class="progress-bar-container"
+                   id="volume-slider-container"
+                   aria-label="Thanh âm lượng"
+                   data-tooltip="Kéo để chỉnh âm lượng">
+                <div class="progress-bar-fill"
+                     id="volume-slider-fill"></div>
+              </div>
+            </div>
 
           </div>
 
