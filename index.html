@@ -1,15 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>itsrealkhanz — bio</title>
-<meta name="description" content="Trang bio cá nhân">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<meta content="Trang bio cá nhân" name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&amp;family=DM+Sans:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg-a:#fbe7cf;
@@ -1879,44 +1878,199 @@ footer#footer-bar:hover .foot-hint svg{
 @media(prefers-reduced-motion:reduce){
   #global-tooltip{transition:none}
 }
+
+/* ===== STANDALONE CENTERED CALENDAR ===== */
+#vn-calendar-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:230;
+  background:radial-gradient(circle at 50% 45%,rgba(79,59,125,.18),rgba(3,5,9,.72) 58%,rgba(0,0,0,.82));
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+#vn-calendar-backdrop.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.vn-calendar-popover{
+  left:50% !important;
+  top:50% !important;
+  width:min(1200px,calc(100vw - 56px));
+  max-height:min(84vh,760px);
+  transform:translate(-50%,-50%) scale(.965);
+  transform-origin:center center;
+  z-index:240;
+}
+.vn-calendar-popover.open{
+  transform:translate(-50%,-50%) scale(1);
+}
+.vn-calendar-popover.open .vn-calendar-event{cursor:pointer}
+.vn-calendar-event:focus-visible{
+  outline:2px solid var(--event-color);
+  outline-offset:2px;
+}
+.vn-calendar-detail{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  border-radius:18px;
+  background:rgba(4,6,10,.58);
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+.vn-calendar-detail.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.vn-calendar-detail-panel{
+  width:min(620px,100%);
+  padding:22px;
+  border:1px solid rgba(184,168,255,.28);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 95% 0%,rgba(139,92,246,.16),transparent 40%),
+    linear-gradient(180deg,rgba(18,17,28,.985),rgba(10,12,18,.99));
+  box-shadow:0 30px 90px -28px rgba(0,0,0,.88),0 0 0 1px rgba(255,255,255,.035) inset;
+}
+.vn-calendar-detail-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+}
+.vn-calendar-detail-kicker{
+  font:600 8.5px 'IBM Plex Mono',monospace;
+  letter-spacing:.14em;
+  color:#c39cff;
+  text-transform:uppercase;
+}
+.vn-calendar-detail-panel h3{
+  margin:6px 0 0;
+  font-size:22px;
+  line-height:1.2;
+  color:#fff8ff;
+}
+.vn-calendar-detail-close{
+  width:34px;height:34px;flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:50%;
+  background:rgba(255,255,255,.025);
+  color:rgba(245,237,255,.68);
+  font-size:22px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease,transform .15s ease;
+}
+.vn-calendar-detail-close:hover{background:rgba(255,255,255,.08);color:#fff;transform:rotate(4deg)}
+.vn-calendar-detail-meta{
+  margin-top:14px;
+  font:500 10px 'IBM Plex Mono',monospace;
+  color:rgba(245,237,255,.55);
+}
+.vn-calendar-detail-meta .vn-lunar-highlight{color:#f4c95d;font-weight:700}
+.vn-calendar-detail-type{
+  display:inline-flex;
+  margin-top:10px;
+  padding:6px 9px;
+  border:1px solid rgba(139,92,246,.18);
+  border-radius:999px;
+  background:rgba(139,92,246,.08);
+  color:#cdb4ff;
+  font:600 8px 'IBM Plex Mono',monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.vn-calendar-detail-countdown-label{
+  margin-top:18px;
+  color:rgba(245,237,255,.36);
+  font:700 8px 'IBM Plex Mono',monospace;
+  letter-spacing:.13em;
+}
+.vn-calendar-detail-countdown{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-top:8px;
+}
+.vn-calendar-detail-countdown>div{
+  padding:12px 8px 10px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+}
+.vn-calendar-detail-countdown strong{
+  display:block;
+  font:600 23px 'IBM Plex Mono',monospace;
+  color:#ca9bff;
+  letter-spacing:.02em;
+}
+.vn-calendar-detail-countdown span{
+  display:block;
+  margin-top:6px;
+  color:rgba(245,237,255,.38);
+  font:600 7px 'IBM Plex Mono',monospace;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.vn-calendar-detail-now{
+  margin-top:13px;
+  color:rgba(245,237,255,.42);
+  font:500 8.5px 'IBM Plex Mono',monospace;
+}
+@media(max-width:900px){
+  .vn-calendar-popover{width:calc(100vw - 28px);max-height:84vh}
+}
+@media(max-width:640px){
+  .vn-calendar-popover{width:calc(100vw - 14px);max-height:88vh;border-radius:15px}
+  .vn-calendar-detail{padding:12px}
+  .vn-calendar-detail-panel{padding:17px;border-radius:15px}
+  .vn-calendar-detail-panel h3{font-size:18px}
+  .vn-calendar-detail-countdown{gap:5px}
+  .vn-calendar-detail-countdown>div{padding:9px 4px 8px}
+  .vn-calendar-detail-countdown strong{font-size:16px}
+}
+
 </style>
 </head>
-
-<body oncontextmenu="return false;">
-
-<button id="gate" aria-label="Click to enter">
-  <span class="gate-inner">
-    <span class="gate-ring" aria-hidden="true">
-      <span class="gate-mark">✦</span>
-    </span>
-    <span class="gate-text">click to enter</span>
-    <span class="gate-text-underline" aria-hidden="true"></span>
-    <span class="gate-hint">bấm để mở khóa</span>
-  </span>
+<body data-calendar-layout="standalone-centered" oncontextmenu="return false;">
+<button aria-label="Click to enter" id="gate">
+<span class="gate-inner">
+<span aria-hidden="true" class="gate-ring">
+<span class="gate-mark">✦</span>
+</span>
+<span class="gate-text">click to enter</span>
+<span aria-hidden="true" class="gate-text-underline"></span>
+<span class="gate-hint">bấm để mở khóa</span>
+</span>
 </button>
-
-<div id="main" hidden>
-
-  <div class="bg-video-wrap">
-    <video id="bg-video"
-           autoplay
-           muted
-           loop
-           playsinline
-           onerror="this.closest('.bg-video-wrap').classList.add('novideo')">
-      <source src="bg.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <div class="orb orb-1" aria-hidden="true"></div>
-  <div class="orb orb-2" aria-hidden="true"></div>
-  <div class="orb orb-3" aria-hidden="true"></div>
-
-  <audio id="bg-music" crossorigin="anonymous">
-    <source src="song1.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
+<div hidden="" id="main">
+<div class="bg-video-wrap">
+<video autoplay="" id="bg-video" loop="" muted="" onerror="this.closest('.bg-video-wrap').classList.add('novideo')" playsinline="">
+<source src="bg.mp4" type="video/mp4"/>
+</video>
+</div>
+<div aria-hidden="true" class="orb orb-1"></div>
+<div aria-hidden="true" class="orb orb-2"></div>
+<div aria-hidden="true" class="orb orb-3"></div>
+<audio crossorigin="anonymous" id="bg-music">
+<source src="song1.mp3" type="audio/mpeg"/>
+</audio>
+<script>
     window.bioConfig = {
       defaultIndex: 0,
 
@@ -1993,552 +2147,337 @@ footer#footer-bar:hover .foot-hint svg{
       ]
     };
   </script>
-
-  <main>
-    <div class="card">
-
-      <div class="titlebar" aria-hidden="true">
-        <div class="dots">
-          <span class="dot r"></span>
-          <span class="dot y"></span>
-          <span class="dot g"></span>
-        </div>
-        <span class="path">bio@terminal — 80x24</span>
-      </div>
-
-      <div class="card-inner">
-
-        <div class="photo-wrap reveal" style="--i:1">
-          <div class="photo-shadow" aria-hidden="true"></div>
-
-          <div class="photo-frame" id="avatar-frame">
-            <img id="album-cover"
-                 class="album-cover"
-                 src="images1.png"
-                 alt="Ảnh đại diện">
-          </div>
-        </div>
-
-        <p class="eyebrow reveal" style="--i:2">
+<main>
+<div class="card">
+<div aria-hidden="true" class="titlebar">
+<div class="dots">
+<span class="dot r"></span>
+<span class="dot y"></span>
+<span class="dot g"></span>
+</div>
+<span class="path">bio@terminal — 80x24</span>
+</div>
+<div class="card-inner">
+<div class="photo-wrap reveal" style="--i:1">
+<div aria-hidden="true" class="photo-shadow"></div>
+<div class="photo-frame" id="avatar-frame">
+<img alt="Ảnh đại diện" class="album-cover" id="album-cover" src="images1.png"/>
+</div>
+</div>
+<p class="eyebrow reveal" style="--i:2">
           xin chào, mình là
         </p>
-
-        <h1 class="reveal" id="name-heading" style="--i:2">
+<h1 class="reveal" id="name-heading" style="--i:2">
           ItsReal<em>Khanz</em>
-        </h1>
-
-        <p class="location reveal" style="--i:2">
+</h1>
+<p class="location reveal" style="--i:2">
           Việt Nam
         </p>
-
-        <div class="vn-clock-wrap reveal" style="--i:2" id="vn-clock-wrap">
-          <p class="vn-clock tooltip-host tooltip-center"
-             id="vn-clock"
-             data-tooltip="Giờ hiện tại">
+<div class="vn-clock-wrap reveal" id="vn-clock-wrap" style="--i:2">
+<p class="vn-clock tooltip-host tooltip-center" data-tooltip="Giờ hiện tại" id="vn-clock">
             Việt Nam (UTC+7) · --:--:--
           </p>
-
-          <button
-            class="vn-calendar-btn tooltip-host tooltip-center"
-            id="vn-calendar-btn"
-            type="button"
-            aria-label="Mở lịch sự kiện Việt Nam"
-            aria-expanded="false"
-            data-tooltip="Lịch sự kiện Việt Nam">
-
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3.5" y="5.5" width="17" height="15" rx="2.5"></rect>
-              <path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
-              <path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div
-          class="vn-calendar-popover"
-          id="vn-calendar-popover"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="vn-calendar-title">
-
-          <div class="vn-calendar-head">
-            <div class="vn-calendar-head-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <rect x="3.5" y="5.5" width="17" height="15" rx="2.5"></rect>
-                <path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
-              </svg>
-            </div>
-
-            <div class="vn-calendar-head-text">
-              <h2 class="vn-calendar-title" id="vn-calendar-title">
-                Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em>
-              </h2>
-              <p class="vn-calendar-sub" id="vn-calendar-sub">
-                Lịch dương + âm · cập nhật realtime · UTC+7
-              </p>
-            </div>
-
-            <button
-              class="vn-calendar-close"
-              id="vn-calendar-close"
-              type="button"
-              aria-label="Đóng lịch">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18"></path>
-              </svg>
-            </button>
-          </div>
-
-          <div class="vn-calendar-body" id="vn-calendar-body">
-            <div class="vn-calendar-main-grid">
-              <div class="vn-calendar-next" id="vn-calendar-next">
-                <div class="vn-calendar-kicker">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m12 3 2.78 5.63 6.22.9-4.5 4.38 1.06 6.2L12 17.18 6.44 20.1l1.06-6.2L3 9.53l6.22-.9z"></path>
-                  </svg>
-                  Next event
-                </div>
-
-                <div class="vn-calendar-next-main">
-                  <p class="vn-calendar-next-name" id="vn-calendar-next-name">Đang tải…</p>
-                  <p class="vn-calendar-next-dates" id="vn-calendar-next-dates">—</p>
-                </div>
-
-                <div class="vn-calendar-next-count" id="vn-calendar-next-count">
-                  <div class="vn-calendar-count-grid">
-                    <div class="vn-count-box"><div class="vn-count-value" id="vn-days">00</div><div class="vn-count-unit">Ngày</div></div>
-                    <div class="vn-count-box"><div class="vn-count-value" id="vn-hours">00</div><div class="vn-count-unit">Giờ</div></div>
-                    <div class="vn-count-box"><div class="vn-count-value" id="vn-minutes">00</div><div class="vn-count-unit">Phút</div></div>
-                    <div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="vn-calendar-right">
-                <div class="vn-calendar-section-title">
-                  <span><strong id="vn-calendar-list-count">0</strong> sự kiện sắp tới</span>
-                  <span class="vn-calendar-list-controls">
-                    <span id="vn-calendar-year-label">2026</span>
-                    <select class="vn-calendar-filter" id="vn-calendar-filter" aria-label="Lọc loại sự kiện">
-                      <option value="all">Tất cả</option>
-                      <option value="official">🇻🇳 Chính thức</option>
-                      <option value="lunar">🌙 Âm lịch</option>
-                      <option value="international">🌐 Quốc tế</option>
-                      <option value="vietnam">🇻🇳 Việt Nam</option>
-                      <option value="special">⭐ Đặc biệt</option>
-                    </select>
-                  </span>
-                </div>
-
-                <div class="vn-calendar-events" id="vn-calendar-events"></div>
-              </div>
-            </div>
-
-            <div class="vn-calendar-legend">
-              <div class="vn-calendar-legend-items">
-                <span class="vn-calendar-legend-title">Chú thích</span>
-                <span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot official"></i> Chính thức</span>
-                <span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot lunar"></i> Ngày âm</span>
-                <span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot international"></i> Quốc tế</span>
-                <span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot vietnam"></i> Việt Nam</span>
-                <span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot special"></i> Đặc biệt</span>
-              </div>
-              <span id="vn-calendar-sync">Cập nhật theo thời gian thực (UTC+7)</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider reveal" style="--i:3">
-          <span>❊</span>
-        </div>
-
-        <!-- ===== DISCORD ===== -->
-        <div class="discord-mini-profile reveal"
-             style="--i:3.5"
-             id="discord-mini-profile">
-
-          <div class="dmp-nameplate-zone"
-               id="dmp-nameplate-zone">
-
-            <div class="dmp-top">
-
-              <div class="dmp-avatar-wrap">
-                <img id="dmp-avatar"
-                     class="dmp-avatar"
-                     src=""
-                     alt="avatar Discord">
-
-                <img id="dmp-decoration"
-                     class="dmp-decoration"
-                     src=""
-                     alt=""
-                     style="display:none">
-
-                <span id="dmp-status-dot"
-                      class="dmp-status-dot offline"
-                      aria-hidden="true"></span>
-              </div>
-
-              <div class="dmp-info">
-                <div class="dmp-name-row">
-                  <span id="dmp-username"
-                        class="dmp-username">—</span>
-                  <span id="dmp-badges"
-                        class="dmp-badges"></span>
-                </div>
-
-                <span id="dmp-activity"
-                      class="dmp-activity">
-                  đang kết nối…
-                </span>
-              </div>
-
-              <div class="dmp-icons">
-                <button type="button"
-                        id="toggle-activity-btn"
-                        class="dmp-icon toggle-act-btn"
-                        aria-label="Ẩn/Hiện hoạt động"
-                        data-tooltip="Ẩn hoạt động"
-                        data-tooltip-fixed="true">
-                  <svg viewBox="0 0 24 24"
-                       width="15"
-                       height="15"
-                       fill="currentColor">
-                    <circle cx="5" cy="12" r="2.2"></circle>
-                    <circle cx="12" cy="12" r="2.2"></circle>
-                    <circle cx="19" cy="12" r="2.2"></circle>
-                  </svg>
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="dmp-activity-panel"
-               id="dmp-activity-panel">
-
-            <div class="dmp-activity-card">
-
-              <div class="dmp-act-img-wrap">
-                <img id="dmp-act-img"
-                     class="dmp-act-img"
-                     src=""
-                     alt=""
-                     style="display:none">
-
-                <img id="dmp-act-img-small"
-                     class="dmp-act-img-small"
-                     src=""
-                     alt=""
-                     style="display:none">
-              </div>
-
-              <div class="dmp-act-text">
-                <p id="dmp-act-name"
-                   class="dmp-act-name"></p>
-
-                <p id="dmp-act-details"
-                   class="dmp-act-details"
-                   style="display:none"></p>
-
-                <p id="dmp-act-state"
-                   class="dmp-act-state"
-                   style="display:none"></p>
-
-                <p id="dmp-act-time"
-                   class="dmp-act-time"></p>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <p class="bio reveal" style="--i:4">
-          Nothing Here.
-        </p>
-
-        <!-- ===== MUSIC ===== -->
-        <div class="music-box reveal"
-             style="--i:5"
-             id="music-box">
-
-          <div class="music-topline">
-
-            <!-- FIX:
-                 id này tách khỏi nút Play/Pause -->
-            <div class="disc-player"
-                 id="disc-player-cover"
-                 data-tooltip="Tên bài hát">
-              <span class="disc-label"
-                    id="disc-label"></span>
-            </div>
-
-            <div class="music-info"
-                 id="music-info">
-
-              <!-- Tooltip này được JS cập nhật realtime
-                   mỗi khi bài hát thay đổi -->
-              <p class="music-title"
-                 id="music-title"
-                 data-tooltip="Tên bài hát — nghệ sĩ">
-                Tên bài hát — nghệ sĩ
-              </p>
-
-              <p class="music-sub"
-                 id="disc-tip">
-                bấm để phát nhạc
-              </p>
-            </div>
-
-            <div class="music-bars"
-                 id="music-bars">
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-            </div>
-
-            <!-- FIX:
-                 id disc-player chỉ tồn tại ở đây -->
-            <button class="music-playbtn"
-                    id="disc-player"
-                    type="button"
-                    aria-pressed="false"
-                    aria-label="Phát nhạc nền"
-                    data-tooltip="Phát nhạc">
-
-              <svg class="icon-play"
-                   viewBox="0 0 24 24"
-                   fill="#121212">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-
-              <svg class="icon-pause"
-                   viewBox="0 0 24 24"
-                   fill="#121212">
-                <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
-              </svg>
-            </button>
-
-            <button class="music-menu-btn"
-                    id="track-menu-btn"
-                    type="button"
-                    aria-label="Danh sách bài hát"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                    data-tooltip="Danh sách bài hát"
-                    data-tooltip-fixed="true">
-              <svg viewBox="0 0 24 24"
-                   fill="currentColor">
-                <circle cx="12" cy="5" r="2"/>
-                <circle cx="12" cy="12" r="2"/>
-                <circle cx="12" cy="19" r="2"/>
-              </svg>
-            </button>
-
-          </div>
-
-          <div class="music-progress-wrap">
-
-            <span id="current-time"
-                  class="time-label">
-              0:00
-            </span>
-
-            <div class="progress-bar-container"
-                 id="progress-container">
-              <div class="progress-bar-fill"
-                   id="progress-fill"></div>
-            </div>
-
-            <span id="duration-time"
-                  class="time-label">
-              0:00
-            </span>
-          </div>
-
-          <div class="music-nav"
-               aria-label="Chuyển bài">
-
-            <button type="button"
-                    id="music-prev"
-                    aria-label="Bài trước"
-                    data-tooltip="Bài trước"
-                    data-tooltip-fixed="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
-              </svg>
-            </button>
-
-            <button type="button"
-                    id="music-next"
-                    aria-label="Bài tiếp theo"
-                    data-tooltip="Bài tiếp theo"
-                    data-tooltip-fixed="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/>
-              </svg>
-            </button>
-
-            <div class="volume-container">
-
-              <button type="button"
-                      id="volume-btn"
-                      aria-label="Âm lượng"
-                      data-tooltip="Âm lượng"
-                      data-tooltip-fixed="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-                  <path class="vol-wave"
-                        d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                </svg>
-              </button>
-
-              <div id="volume-slider-container"
-                   data-tooltip="Điều chỉnh âm lượng"
-                   data-tooltip-fixed="true">
-                <div id="volume-slider-fill"></div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="track-list-panel"
-               id="track-list-panel">
-
-            <div class="track-list-header">
-              <span>Danh sách phát</span>
-
-              <button type="button"
-                      class="track-list-close"
-                      id="track-list-close"
-                      aria-label="Đóng danh sách"
-                      data-tooltip="Đóng danh sách"
-                      data-tooltip-fixed="true">
-                ✕
-              </button>
-            </div>
-
-            <div class="track-category-filters"
-                 id="track-category-filters"
-                 role="tablist"
-                 aria-label="Lọc theo thể loại"></div>
-
-            <ul class="track-list"
-                id="track-list"></ul>
-          </div>
-
-        </div>
-
-        <div class="now reveal"
-             style="--i:6">
-          <strong>đang làm gì:</strong>
-          đang nghỉ hè
-        </div>
-
-        <footer class="reveal"
-                id="footer-bar"
-                style="--i:7"
-                role="button"
-                tabindex="0"
-                aria-label="Nhấn để chạy lệnh terminal">
-
-          <span class="dots foot-dots"
-                id="foot-dots"
-                aria-hidden="true">
-            <span class="dot r"></span>
-            <span class="dot y"></span>
-            <span class="dot g"></span>
-          </span>
-
-          <span class="foot-text"
-                id="foot-text">
-            <span class="foot-typed"
-                  id="foot-typed"></span>
-            <span class="foot-cursor"
-                  id="foot-cursor">▌</span>
-          </span>
-
-          <span class="foot-hint"
-                aria-hidden="true">
-            next
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-              <path d="M4 4v5h5"/>
-              <path d="M4 9a8 8 0 1 1 2 5.3"/>
-            </svg>
-          </span>
-        </footer>
-
-      </div>
-    </div>
-  </main>
-
-  <div class="dock-wrap">
-    <nav class="dock"
-         id="dock"
-         aria-label="Mạng xã hội">
-
-      <a class="dock-item discord"
-         href="#"
-         onclick="return false;"
-         data-tooltip="">
-        <span class="dock-avatar">
-          <img src="discord.png"
-               alt="Discord">
-        </span>
-      </a>
-
-      <a class="dock-item youtube"
-         href="#"
-         onclick="return false;"
-         data-tooltip="">
-        <span class="dock-avatar">
-          <img src="youtube.png"
-               alt="YouTube">
-        </span>
-      </a>
-
-      <a class="dock-item facebook"
-         href="#"
-         onclick="return false;"
-         data-tooltip="">
-        <span class="dock-avatar">
-          <img src="facebook.png"
-               alt="Facebook">
-        </span>
-      </a>
-
-      <a class="dock-item roblox"
-         href="#"
-         onclick="return false;"
-         data-tooltip="">
-        <span class="dock-avatar">
-          <img src="roblox.png"
-               alt="Roblox">
-        </span>
-      </a>
-
-    </nav>
-  </div>
-
+<button aria-expanded="false" aria-label="Mở lịch sự kiện Việt Nam" class="vn-calendar-btn tooltip-host tooltip-center" data-tooltip="Lịch sự kiện Việt Nam" id="vn-calendar-btn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect>
+<path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
+<path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path>
+</svg>
+</button>
 </div>
 
-<div id="global-tooltip"
-     aria-hidden="true"></div>
-
+<div class="divider reveal" style="--i:3">
+<span>❊</span>
+</div>
+<!-- ===== DISCORD ===== -->
+<div class="discord-mini-profile reveal" id="discord-mini-profile" style="--i:3.5">
+<div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
+<div class="dmp-top">
+<div class="dmp-avatar-wrap">
+<img alt="avatar Discord" class="dmp-avatar" id="dmp-avatar" src=""/>
+<img alt="" class="dmp-decoration" id="dmp-decoration" src="" style="display:none"/>
+<span aria-hidden="true" class="dmp-status-dot offline" id="dmp-status-dot"></span>
+</div>
+<div class="dmp-info">
+<div class="dmp-name-row">
+<span class="dmp-username" id="dmp-username">—</span>
+<span class="dmp-badges" id="dmp-badges"></span>
+</div>
+<span class="dmp-activity" id="dmp-activity">
+                  đang kết nối…
+                </span>
+</div>
+<div class="dmp-icons">
+<button aria-label="Ẩn/Hiện hoạt động" class="dmp-icon toggle-act-btn" data-tooltip="Ẩn hoạt động" data-tooltip-fixed="true" id="toggle-activity-btn" type="button">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15">
+<circle cx="5" cy="12" r="2.2"></circle>
+<circle cx="12" cy="12" r="2.2"></circle>
+<circle cx="19" cy="12" r="2.2"></circle>
+</svg>
+</button>
+</div>
+</div>
+</div>
+<div class="dmp-activity-panel" id="dmp-activity-panel">
+<div class="dmp-activity-card">
+<div class="dmp-act-img-wrap">
+<img alt="" class="dmp-act-img" id="dmp-act-img" src="" style="display:none"/>
+<img alt="" class="dmp-act-img-small" id="dmp-act-img-small" src="" style="display:none"/>
+</div>
+<div class="dmp-act-text">
+<p class="dmp-act-name" id="dmp-act-name"></p>
+<p class="dmp-act-details" id="dmp-act-details" style="display:none"></p>
+<p class="dmp-act-state" id="dmp-act-state" style="display:none"></p>
+<p class="dmp-act-time" id="dmp-act-time"></p>
+</div>
+</div>
+</div>
+</div>
+<p class="bio reveal" style="--i:4">
+          Nothing Here.
+        </p>
+<!-- ===== MUSIC ===== -->
+<div class="music-box reveal" id="music-box" style="--i:5">
+<div class="music-topline">
+<!-- FIX:
+                 id này tách khỏi nút Play/Pause -->
+<div class="disc-player" data-tooltip="Tên bài hát" id="disc-player-cover">
+<span class="disc-label" id="disc-label"></span>
+</div>
+<div class="music-info" id="music-info">
+<!-- Tooltip này được JS cập nhật realtime
+                   mỗi khi bài hát thay đổi -->
+<p class="music-title" data-tooltip="Tên bài hát — nghệ sĩ" id="music-title">
+                Tên bài hát — nghệ sĩ
+              </p>
+<p class="music-sub" id="disc-tip">
+                bấm để phát nhạc
+              </p>
+</div>
+<div class="music-bars" id="music-bars">
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+</div>
+<!-- FIX:
+                 id disc-player chỉ tồn tại ở đây -->
+<button aria-label="Phát nhạc nền" aria-pressed="false" class="music-playbtn" data-tooltip="Phát nhạc" id="disc-player" type="button">
+<svg class="icon-play" fill="#121212" viewbox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+<svg class="icon-pause" fill="#121212" viewbox="0 0 24 24">
+<path d="M6 5h4v14H6zM14 5h4v14h-4z"></path>
+</svg>
+</button>
+<button aria-expanded="false" aria-haspopup="true" aria-label="Danh sách bài hát" class="music-menu-btn" data-tooltip="Danh sách bài hát" data-tooltip-fixed="true" id="track-menu-btn" type="button">
+<svg fill="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="5" r="2"></circle>
+<circle cx="12" cy="12" r="2"></circle>
+<circle cx="12" cy="19" r="2"></circle>
+</svg>
+</button>
+</div>
+<div class="music-progress-wrap">
+<span class="time-label" id="current-time">
+              0:00
+            </span>
+<div class="progress-bar-container" id="progress-container">
+<div class="progress-bar-fill" id="progress-fill"></div>
+</div>
+<span class="time-label" id="duration-time">
+              0:00
+            </span>
+</div>
+<div aria-label="Chuyển bài" class="music-nav">
+<button aria-label="Bài trước" data-tooltip="Bài trước" data-tooltip-fixed="true" id="music-prev" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"></path>
+</svg>
+</button>
+<button aria-label="Bài tiếp theo" data-tooltip="Bài tiếp theo" data-tooltip-fixed="true" id="music-next" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"></path>
+</svg>
+</button>
+<div class="volume-container">
+<button aria-label="Âm lượng" data-tooltip="Âm lượng" data-tooltip-fixed="true" id="volume-btn" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"></path>
+<path class="vol-wave" d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+</svg>
+</button>
+<div data-tooltip="Điều chỉnh âm lượng" data-tooltip-fixed="true" id="volume-slider-container">
+<div id="volume-slider-fill"></div>
+</div>
+</div>
+</div>
+<div class="track-list-panel" id="track-list-panel">
+<div class="track-list-header">
+<span>Danh sách phát</span>
+<button aria-label="Đóng danh sách" class="track-list-close" data-tooltip="Đóng danh sách" data-tooltip-fixed="true" id="track-list-close" type="button">
+                ✕
+              </button>
+</div>
+<div aria-label="Lọc theo thể loại" class="track-category-filters" id="track-category-filters" role="tablist"></div>
+<ul class="track-list" id="track-list"></ul>
+</div>
+</div>
+<div class="now reveal" style="--i:6">
+<strong>đang làm gì:</strong>
+          đang nghỉ hè
+        </div>
+<footer aria-label="Nhấn để chạy lệnh terminal" class="reveal" id="footer-bar" role="button" style="--i:7" tabindex="0">
+<span aria-hidden="true" class="dots foot-dots" id="foot-dots">
+<span class="dot r"></span>
+<span class="dot y"></span>
+<span class="dot g"></span>
+</span>
+<span class="foot-text" id="foot-text">
+<span class="foot-typed" id="foot-typed"></span>
+<span class="foot-cursor" id="foot-cursor">▌</span>
+</span>
+<span aria-hidden="true" class="foot-hint">
+            next
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M4 4v5h5"></path>
+<path d="M4 9a8 8 0 1 1 2 5.3"></path>
+</svg>
+</span>
+</footer>
+</div>
+</div>
+</main>
+<div class="dock-wrap">
+<nav aria-label="Mạng xã hội" class="dock" id="dock">
+<a class="dock-item discord" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="Discord" src="discord.png"/>
+</span>
+</a>
+<a class="dock-item youtube" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="YouTube" src="youtube.png"/>
+</span>
+</a>
+<a class="dock-item facebook" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="Facebook" src="facebook.png"/>
+</span>
+</a>
+<a class="dock-item roblox" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="Roblox" src="roblox.png"/>
+</span>
+</a>
+</nav>
+</div>
+</div>
+<div aria-hidden="true" id="global-tooltip"></div>
 <script src="javascript.js"></script>
-</body>
+<div aria-hidden="true" id="vn-calendar-backdrop"></div><div aria-labelledby="vn-calendar-title" aria-modal="false" class="vn-calendar-popover" id="vn-calendar-popover" role="dialog">
+<div class="vn-calendar-head">
+<div aria-hidden="true" class="vn-calendar-head-icon">
+<svg viewbox="0 0 24 24">
+<rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect>
+<path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
+</svg>
+</div>
+<div class="vn-calendar-head-text">
+<h2 class="vn-calendar-title" id="vn-calendar-title">
+                Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em>
+</h2>
+<p class="vn-calendar-sub" id="vn-calendar-sub">
+                Lịch dương + âm · cập nhật realtime · UTC+7
+              </p>
+</div>
+<button aria-label="Đóng lịch" class="vn-calendar-close" id="vn-calendar-close" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M6 6l12 12M18 6L6 18"></path>
+</svg>
+</button>
+</div>
+<div class="vn-calendar-body" id="vn-calendar-body">
+<div class="vn-calendar-main-grid">
+<div class="vn-calendar-next" id="vn-calendar-next">
+<div class="vn-calendar-kicker">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="m12 3 2.78 5.63 6.22.9-4.5 4.38 1.06 6.2L12 17.18 6.44 20.1l1.06-6.2L3 9.53l6.22-.9z"></path>
+</svg>
+                  Next event
+                </div>
+<div class="vn-calendar-next-main">
+<p class="vn-calendar-next-name" id="vn-calendar-next-name">Đang tải…</p>
+<p class="vn-calendar-next-dates" id="vn-calendar-next-dates">—</p>
+</div>
+<div class="vn-calendar-next-count" id="vn-calendar-next-count">
+<div class="vn-calendar-count-grid">
+<div class="vn-count-box"><div class="vn-count-value" id="vn-days">00</div><div class="vn-count-unit">Ngày</div></div>
+<div class="vn-count-box"><div class="vn-count-value" id="vn-hours">00</div><div class="vn-count-unit">Giờ</div></div>
+<div class="vn-count-box"><div class="vn-count-value" id="vn-minutes">00</div><div class="vn-count-unit">Phút</div></div>
+<div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
+</div>
+</div>
+</div>
+<div class="vn-calendar-right">
+<div class="vn-calendar-section-title">
+<span><strong id="vn-calendar-list-count">0</strong> sự kiện sắp tới</span>
+<span class="vn-calendar-list-controls">
+<span id="vn-calendar-year-label">2026</span>
+<select aria-label="Lọc loại sự kiện" class="vn-calendar-filter" id="vn-calendar-filter">
+<option value="all">Tất cả</option>
+<option value="official">🇻🇳 Chính thức</option>
+<option value="lunar">🌙 Âm lịch</option>
+<option value="international">🌐 Quốc tế</option>
+<option value="vietnam">🇻🇳 Việt Nam</option>
+<option value="special">⭐ Đặc biệt</option>
+</select>
+</span>
+</div>
+<div class="vn-calendar-events" id="vn-calendar-events"></div>
+</div>
+</div>
+<div class="vn-calendar-legend">
+<div class="vn-calendar-legend-items">
+<span class="vn-calendar-legend-title">Chú thích</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot official"></i> Chính thức</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot lunar"></i> Ngày âm</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot international"></i> Quốc tế</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot vietnam"></i> Việt Nam</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot special"></i> Đặc biệt</span>
+</div>
+<span id="vn-calendar-sync">Cập nhật theo thời gian thực (UTC+7)</span>
+</div>
+</div>
+
+<div aria-hidden="true" class="vn-calendar-detail" id="vn-calendar-detail">
+<div aria-labelledby="vn-calendar-detail-title" aria-modal="false" class="vn-calendar-detail-panel" role="dialog">
+<div class="vn-calendar-detail-head">
+<div>
+<div class="vn-calendar-detail-kicker">CHI TIẾT SỰ KIỆN</div>
+<h3 id="vn-calendar-detail-title">—</h3>
+</div>
+<button aria-label="Đóng chi tiết" class="vn-calendar-detail-close" id="vn-calendar-detail-close" type="button">×</button>
+</div>
+<div class="vn-calendar-detail-meta" id="vn-calendar-detail-meta">—</div>
+<div class="vn-calendar-detail-type" id="vn-calendar-detail-type">—</div>
+<div class="vn-calendar-detail-countdown-label">ĐẾM NGƯỢC THỜI GIAN THỰC</div>
+<div class="vn-calendar-detail-countdown" id="vn-calendar-detail-countdown">
+<div><strong id="detail-days">00</strong><span>Ngày</span></div>
+<div><strong id="detail-hours">00</strong><span>Giờ</span></div>
+<div><strong id="detail-minutes">00</strong><span>Phút</span></div>
+<div><strong id="detail-seconds">00</strong><span>Giây</span></div>
+</div>
+<div class="vn-calendar-detail-now" id="vn-calendar-detail-now">Giờ Việt Nam (UTC+7): --:--:--</div>
+</div>
+</div>
+</div></body>
 </html>
