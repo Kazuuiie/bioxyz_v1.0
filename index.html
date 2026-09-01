@@ -862,12 +862,14 @@ button.dmp-icon{cursor:pointer}
 .music-box.is-playing{
   box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(134,161,121,.35);
 }
+
+/* hàng trên: ảnh album (trái) + tên bài hát/menu + thanh tiến trình (phải) */
 .music-topline{
   position:relative;
   z-index:1;
   display:flex;
-  align-items:center;
-  gap:14px;
+  align-items:flex-start;
+  gap:12px;
 }
 .disc-player{
   position:relative;
@@ -899,6 +901,24 @@ button.dmp-icon{cursor:pointer}
   background:linear-gradient(135deg,var(--raspberry),var(--mustard));
   background-size:cover;
   background-position:center;
+}
+.music-right{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.music-title-box{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:6px;
+  background:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:10px;
+  padding:9px 6px 9px 12px;
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset;
 }
 .music-info{
   flex:1;
@@ -943,37 +963,11 @@ button.dmp-icon{cursor:pointer}
   transition:transform .06s ease;
   will-change:transform;
 }
-.music-playbtn{
-  position:relative;
-  z-index:1;
-  width:38px;
-  height:38px;
-  flex-shrink:0;
-  border-radius:50%;
-  background:var(--ink);
-  border:none;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:transform .15s cubic-bezier(.34,1.56,.64,1),background .2s ease;
-  box-shadow:0 6px 14px -6px rgba(74,51,54,.5);
-}
-.music-playbtn:hover{
-  transform:scale(1.06);
-  background:var(--raspberry);
-}
-.music-playbtn svg{width:15px;height:15px;display:block}
-.music-playbtn .icon-play,
-.music-playbtn .icon-pause{fill:#fff8ee}
-.music-playbtn .icon-pause{display:none}
-.music-box.is-playing .music-playbtn .icon-play{display:none}
-.music-box.is-playing .music-playbtn .icon-pause{display:block}
 .music-menu-btn{
   position:relative;
   z-index:1;
-  width:30px;
-  height:30px;
+  width:26px;
+  height:26px;
   flex-shrink:0;
   border-radius:50%;
   background:transparent;
@@ -987,13 +981,13 @@ button.dmp-icon{cursor:pointer}
 }
 .music-menu-btn:hover{
   color:var(--ink);
-  background:rgba(74,51,54,.08);
+  background:rgba(74,51,54,.1);
   transform:scale(1.08);
 }
-.music-menu-btn svg{width:17px;height:17px}
+.music-menu-btn svg{width:16px;height:16px}
 .music-menu-btn[aria-expanded="true"]{
   color:var(--sage);
-  background:rgba(134,161,121,.16);
+  background:rgba(134,161,121,.18);
 }
 .music-progress-wrap{
   position:relative;
@@ -1002,7 +996,6 @@ button.dmp-icon{cursor:pointer}
   align-items:center;
   gap:8px;
   width:100%;
-  margin-top:12px;
 }
 .time-label{
   font-family:'DM Sans',sans-serif;
@@ -1034,20 +1027,26 @@ button.dmp-icon{cursor:pointer}
   border-radius:2px;
   will-change:transform;
 }
-/* ===== HÀNG ĐIỀU KHIỂN: prev — play/pause — next — danh sách — âm lượng ===== */
-.music-nav{
+
+/* hàng dưới: prev/play/next bên trái — âm lượng bên phải */
+.music-controls-row{
   position:relative;
   z-index:1;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:space-between;
   flex-wrap:wrap;
-  gap:14px;
+  gap:12px;
   row-gap:10px;
-  margin-top:10px;
-  min-height:38px;
+  margin-top:12px;
+  min-height:34px;
 }
-.music-nav button{
+.transport-controls{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.transport-controls button{
   width:28px;
   height:28px;
   border:none;
@@ -1060,24 +1059,44 @@ button.dmp-icon{cursor:pointer}
   cursor:pointer;
   transition:color .2s ease,background .2s ease,transform .2s ease;
 }
-.music-nav button:hover{
+.transport-controls button:hover{
   color:var(--ink);
   background:rgba(74,51,54,.08);
   transform:scale(1.1);
 }
-.music-nav svg{width:16px;height:16px;fill:currentColor}
-.music-nav .music-menu-btn{
-  margin-left:2px;
+.transport-controls svg{width:16px;height:16px;fill:currentColor}
+.music-playbtn{
+  position:relative;
+  z-index:1;
+  width:38px!important;
+  height:38px!important;
+  flex-shrink:0;
+  border-radius:50%!important;
+  background:var(--ink)!important;
+  border:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1),background .2s ease;
+  box-shadow:0 6px 14px -6px rgba(74,51,54,.5);
 }
+.music-playbtn:hover{
+  transform:scale(1.06)!important;
+  background:var(--raspberry)!important;
+}
+.music-playbtn svg{width:15px;height:15px;display:block}
+.music-playbtn .icon-play,
+.music-playbtn .icon-pause{fill:#fff8ee}
+.music-playbtn .icon-pause{display:none}
+.music-box.is-playing .music-playbtn .icon-play{display:none}
+.music-box.is-playing .music-playbtn .icon-pause{display:block}
 
 /* ===== ÂM LƯỢNG ===== */
 .volume-control{
   display:flex;
   align-items:center;
   gap:8px;
-  margin-left:4px;
-  padding-left:12px;
-  border-left:1px solid rgba(74,51,54,.14);
 }
 #volume-btn{
   width:28px;
@@ -1102,7 +1121,7 @@ button.dmp-icon{cursor:pointer}
 .vol-wave{transition:opacity .15s ease}
 #volume-slider-container{
   position:relative;
-  width:58px;
+  width:64px;
   height:4px;
   background:rgba(74,51,54,.14);
   border-radius:2px;
@@ -1124,10 +1143,10 @@ button.dmp-icon{cursor:pointer}
   will-change:transform;
 }
 @media(max-width:380px){
+  .music-controls-row{
+    justify-content:center;
+  }
   .volume-control{
-    margin-left:0;
-    padding-left:0;
-    border-left:none;
     width:100%;
     justify-content:center;
   }
@@ -1919,21 +1938,65 @@ footer#footer-bar:hover .foot-hint svg{
                     id="disc-label"></span>
             </div>
 
-            <div class="music-info"
-                 id="music-info">
+            <div class="music-right">
 
-              <!-- Tooltip này được JS cập nhật realtime
-                   mỗi khi bài hát thay đổi -->
-              <p class="music-title"
-                 id="music-title"
-                 data-tooltip="Tên bài hát — nghệ sĩ">
-                Tên bài hát — nghệ sĩ
-              </p>
+              <div class="music-title-box">
 
-              <p class="music-sub"
-                 id="disc-tip">
-                bấm để phát nhạc
-              </p>
+                <div class="music-info"
+                     id="music-info">
+
+                  <!-- Tooltip này được JS cập nhật realtime
+                       mỗi khi bài hát thay đổi -->
+                  <p class="music-title"
+                     id="music-title"
+                     data-tooltip="Tên bài hát — nghệ sĩ">
+                    Tên bài hát — nghệ sĩ
+                  </p>
+
+                  <p class="music-sub"
+                     id="disc-tip">
+                    bấm để phát nhạc
+                  </p>
+                </div>
+
+                <!-- nút 3 chấm = mở danh sách phát -->
+                <button class="music-menu-btn"
+                        id="track-menu-btn"
+                        type="button"
+                        aria-label="Danh sách bài hát"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        data-tooltip="Danh sách bài hát"
+                        data-tooltip-fixed="true">
+                  <svg viewBox="0 0 24 24"
+                       fill="currentColor">
+                    <circle cx="12" cy="5" r="2"/>
+                    <circle cx="12" cy="12" r="2"/>
+                    <circle cx="12" cy="19" r="2"/>
+                  </svg>
+                </button>
+
+              </div>
+
+              <div class="music-progress-wrap">
+
+                <span id="current-time"
+                      class="time-label">
+                  0:00
+                </span>
+
+                <div class="progress-bar-container"
+                     id="progress-container">
+                  <div class="progress-bar-fill"
+                       id="progress-fill"></div>
+                </div>
+
+                <span id="duration-time"
+                      class="time-label">
+                  0:00
+                </span>
+              </div>
+
             </div>
 
             <!-- FIX: visualizer ẩn khỏi layout (không hiện trên giao diện
@@ -1958,87 +2021,54 @@ footer#footer-bar:hover .foot-hint svg{
 
           </div>
 
-          <div class="music-progress-wrap">
-
-            <span id="current-time"
-                  class="time-label">
-              0:00
-            </span>
-
-            <div class="progress-bar-container"
-                 id="progress-container">
-              <div class="progress-bar-fill"
-                   id="progress-fill"></div>
-            </div>
-
-            <span id="duration-time"
-                  class="time-label">
-              0:00
-            </span>
-          </div>
-
-          <div class="music-nav"
+          <div class="music-controls-row"
                aria-label="Điều khiển phát nhạc">
 
-            <button type="button"
-                    id="music-prev"
-                    aria-label="Bài trước"
-                    data-tooltip="Bài trước"
-                    data-tooltip-fixed="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
-              </svg>
-            </button>
+            <div class="transport-controls">
 
-            <!-- FIX:
-                 id disc-player chỉ tồn tại ở đây -->
-            <button class="music-playbtn"
-                    id="disc-player"
-                    type="button"
-                    aria-pressed="false"
-                    aria-label="Phát nhạc nền"
-                    data-tooltip="Phát nhạc">
+              <button type="button"
+                      id="music-prev"
+                      aria-label="Bài trước"
+                      data-tooltip="Bài trước"
+                      data-tooltip-fixed="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+                </svg>
+              </button>
 
-              <svg class="icon-play"
-                   viewBox="0 0 24 24"
-                   fill="#121212">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
+              <!-- FIX:
+                   id disc-player chỉ tồn tại ở đây -->
+              <button class="music-playbtn"
+                      id="disc-player"
+                      type="button"
+                      aria-pressed="false"
+                      aria-label="Phát nhạc nền"
+                      data-tooltip="Phát nhạc">
 
-              <svg class="icon-pause"
-                   viewBox="0 0 24 24"
-                   fill="#121212">
-                <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
-              </svg>
-            </button>
+                <svg class="icon-play"
+                     viewBox="0 0 24 24"
+                     fill="#121212">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
 
-            <button type="button"
-                    id="music-next"
-                    aria-label="Bài tiếp theo"
-                    data-tooltip="Bài tiếp theo"
-                    data-tooltip-fixed="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/>
-              </svg>
-            </button>
+                <svg class="icon-pause"
+                     viewBox="0 0 24 24"
+                     fill="#121212">
+                  <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+                </svg>
+              </button>
 
-            <!-- FIX: nút danh sách bài hát chuyển xuống hàng điều khiển,
-                 thay cho chỗ âm lượng cũ. -->
-            <button class="music-menu-btn"
-                    id="track-menu-btn"
-                    type="button"
-                    aria-label="Danh sách bài hát"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                    data-tooltip="Danh sách bài hát"
-                    data-tooltip-fixed="true">
-              <svg viewBox="0 0 24 24"
-                   fill="currentColor">
-                <circle cx="12" cy="5" r="2"/>
-                <circle cx="12" cy="12" r="2"/>
-                <circle cx="12" cy="19" r="2"/>
-              </svg>
-            </button>
+              <button type="button"
+                      id="music-next"
+                      aria-label="Bài tiếp theo"
+                      data-tooltip="Bài tiếp theo"
+                      data-tooltip-fixed="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/>
+                </svg>
+              </button>
+
+            </div>
 
             <!-- ÂM LƯỢNG -->
             <div class="volume-control" id="volume-control">
