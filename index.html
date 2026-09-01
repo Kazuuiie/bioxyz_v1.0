@@ -1654,6 +1654,255 @@ footer#footer-bar:hover .foot-hint svg{
 @media(prefers-reduced-motion:reduce){
   #global-tooltip{transition:none}
 }
+
+/* ===== MUSIC BOX — MINIMAL / NO CARD ===== */
+.music-box{
+  position:relative;
+  width:100%;
+  max-width:none;
+  margin:0 0 18px;
+  padding:8px 0 10px;
+  background:transparent!important;
+  background-image:none!important;
+  border:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+.music-box.is-playing{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+.music-topline{
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  align-items:center;
+  gap:18px;
+  width:100%;
+}
+
+.disc-player{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:0 10px 26px -14px rgba(74,51,54,.42)!important;
+  overflow:hidden;
+  flex-shrink:0;
+  cursor:default;
+}
+
+.disc-player:hover{
+  transform:scale(1.025);
+  box-shadow:0 12px 28px -14px rgba(74,51,54,.46)!important;
+}
+
+.disc-player .disc-label{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background-size:cover;
+  background-position:center;
+}
+
+.music-right{
+  min-width:0;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+}
+
+.music-title-box{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:0!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+
+.music-info{
+  min-width:0;
+  flex:1;
+}
+
+.music-title{
+  margin:0;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(24px,5vw,34px);
+  line-height:1.08;
+  letter-spacing:-.025em;
+  color:var(--ink)!important;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  word-break:break-word;
+}
+
+.music-title::first-letter{
+  color:var(--raspberry);
+}
+
+.music-sub{display:none!important}
+
+.music-menu-btn{
+  width:30px;
+  height:30px;
+  margin-top:2px;
+  flex-shrink:0;
+  color:var(--ink-soft);
+}
+
+.music-menu-btn:hover{
+  background:transparent!important;
+  color:var(--raspberry);
+  transform:scale(1.08);
+}
+
+.music-progress-wrap{
+  display:grid;
+  grid-template-columns:auto minmax(80px,1fr) auto;
+  align-items:center;
+  gap:8px;
+  width:100%;
+}
+
+.time-label{
+  min-width:30px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  color:var(--ink-soft);
+}
+
+.progress-bar-container{
+  height:3px;
+  background:rgba(74,51,54,.14);
+  border-radius:999px;
+  overflow:visible;
+  cursor:pointer;
+}
+
+.progress-bar-container:hover{height:4px}
+
+.progress-bar-fill{
+  height:100%;
+  background:var(--raspberry);
+  border-radius:999px;
+}
+
+.music-controls-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  width:100%;
+  min-height:38px;
+  margin-top:4px;
+  padding:0;
+}
+
+.transport-controls{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.transport-controls button{
+  width:30px;
+  height:30px;
+  color:var(--ink-soft);
+  background:transparent;
+}
+
+.transport-controls button:hover{
+  color:var(--ink);
+  background:transparent;
+  transform:scale(1.1);
+}
+
+.music-playbtn{
+  width:38px!important;
+  height:38px!important;
+  background:var(--ink)!important;
+  box-shadow:0 7px 15px -8px rgba(74,51,54,.55)!important;
+}
+
+.music-playbtn:hover{
+  background:var(--raspberry)!important;
+}
+
+.volume-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+#volume-btn{
+  width:28px;
+  height:28px;
+  color:var(--ink-soft);
+}
+
+#volume-btn:hover{
+  color:var(--raspberry);
+  background:transparent;
+}
+
+#volume-slider-container{
+  width:62px;
+  height:3px;
+  background:rgba(74,51,54,.14);
+  border-radius:999px;
+}
+
+#volume-slider-container:hover{height:4px}
+
+#volume-slider-fill{
+  background:var(--raspberry);
+  border-radius:999px;
+}
+
+/* Playlist remains available from the 3-dot menu, but the closed player is clean. */
+.track-list-panel{
+  margin-top:14px;
+  border-radius:10px;
+}
+
+@media(max-width:560px){
+  .music-topline{
+    grid-template-columns:68px minmax(0,1fr);
+    gap:14px;
+  }
+  .disc-player{
+    width:68px;
+    height:68px;
+  }
+  .music-title{
+    font-size:clamp(21px,7vw,29px);
+  }
+  .transport-controls{gap:13px}
+  .music-controls-row{gap:10px}
+  #volume-slider-container{width:48px}
+}
+
+@media(max-width:380px){
+  .music-topline{grid-template-columns:58px minmax(0,1fr);gap:12px}
+  .disc-player{width:58px;height:58px}
+  .music-title{font-size:22px}
+  .music-controls-row{justify-content:space-between}
+  .transport-controls{gap:8px}
+  #volume-slider-container{width:42px}
+}
+
 </style>
 </head>
 
@@ -1929,8 +2178,6 @@ footer#footer-bar:hover .foot-hint svg{
 
           <div class="music-topline">
 
-            <!-- FIX:
-                 id này tách khỏi nút Play/Pause -->
             <div class="disc-player"
                  id="disc-player-cover"
                  data-tooltip="Tên bài hát">
@@ -1953,14 +2200,9 @@ footer#footer-bar:hover .foot-hint svg{
                     Tên bài hát — nghệ sĩ
                   </p>
 
-                  <p class="music-sub"
-                     id="disc-tip">
-                    bấm để phát nhạc
-                  </p>
                 </div>
 
-                <!-- nút 3 chấm = mở danh sách phát -->
-                <button class="music-menu-btn"
+                  <button class="music-menu-btn"
                         id="track-menu-btn"
                         type="button"
                         aria-label="Danh sách bài hát"
@@ -1999,9 +2241,6 @@ footer#footer-bar:hover .foot-hint svg{
 
             </div>
 
-            <!-- FIX: visualizer ẩn khỏi layout (không hiện trên giao diện
-                 mới) nhưng vẫn giữ trong DOM để JS cập nhật transform
-                 không bị lỗi. -->
             <div class="music-bars"
                  id="music-bars"
                  hidden>
@@ -2070,7 +2309,6 @@ footer#footer-bar:hover .foot-hint svg{
 
             </div>
 
-            <!-- ÂM LƯỢNG -->
             <div class="volume-control" id="volume-control">
               <button type="button"
                       id="volume-btn"
