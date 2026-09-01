@@ -2045,530 +2045,57 @@ footer#footer-bar:hover .foot-hint svg{
   .vn-calendar-detail-countdown strong{font-size:16px}
 }
 
-
-/* ===== CALENDAR LAYOUT FIX v2 ===== */
-#vn-calendar-backdrop.open{pointer-events:auto}
-.vn-calendar-popover{
-  width:min(1200px,calc(100vw - 56px)) !important;
-  height:min(86vh,760px) !important;
-  max-height:min(86vh,760px) !important;
-  overflow:hidden !important;
-}
-.vn-calendar-body{
-  height:calc(100% - 64px) !important;
-  max-height:none !important;
-  overflow:hidden !important;
-  display:flex !important;
-  flex-direction:column !important;
-  padding:14px 16px 12px !important;
-}
-.vn-calendar-main-grid{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  height:auto !important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-  align-items:stretch !important;
-}
-.vn-calendar-next,
-.vn-calendar-right{
-  height:100% !important;
-  min-height:0 !important;
-}
-.vn-calendar-next{
-  min-height:0 !important;
-  overflow:hidden !important;
-}
-.vn-calendar-right{
-  display:flex !important;
-  flex-direction:column !important;
-}
-.vn-calendar-events{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  max-height:none !important;
-  overflow-y:auto !important;
-  overflow-x:hidden !important;
-  padding-right:6px !important;
-}
-.vn-calendar-legend{
-  flex:0 0 auto !important;
-  margin-top:10px !important;
-}
-.vn-calendar-status{
-  flex:0 0 auto !important;
-}
-.vn-calendar-detail{
-  z-index:25 !important;
-  border-radius:15px !important;
-}
-.vn-calendar-detail-panel{
-  width:100% !important;
-  max-width:none !important;
-  height:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:center !important;
-  border-radius:15px !important;
-}
-.vn-calendar-detail-countdown{
-  margin-top:14px !important;
-}
-@media(max-width:900px){
-  .vn-calendar-popover{
-    height:min(88vh,760px) !important;
-    max-height:min(88vh,760px) !important;
-  }
-  .vn-calendar-main-grid{
-    grid-template-columns:1fr !important;
-  }
-  .vn-calendar-next{
-    height:auto !important;
-    min-height:290px !important;
-  }
-  .vn-calendar-right{
-    height:auto !important;
-    min-height:0 !important;
-  }
-  .vn-calendar-events{
-    max-height:34vh !important;
-    flex:none !important;
-  }
-}
-@media(max-width:640px){
-  .vn-calendar-popover{
-    width:calc(100vw - 14px) !important;
-    height:88vh !important;
-    max-height:88vh !important;
-  }
-  .vn-calendar-body{
-    height:calc(100% - 58px) !important;
-    padding:10px !important;
-  }
-}
-
-
-
-/* ===== CALENDAR COMPACT / BIO THEME v3 ===== */
-.vn-calendar-popover{
-  width:min(1040px,calc(100vw - 48px)) !important;
-  height:min(620px,calc(100vh - 72px)) !important;
-  max-height:min(620px,calc(100vh - 72px)) !important;
-  background:
-    radial-gradient(circle at 88% 0%,rgba(207,100,120,.10),transparent 34%),
-    radial-gradient(circle at 8% 100%,rgba(226,168,92,.055),transparent 30%),
-    linear-gradient(180deg,rgba(22,18,20,.985),rgba(14,13,16,.99)) !important;
-  border-color:rgba(207,100,120,.24) !important;
-  box-shadow:0 28px 72px -26px rgba(34,21,24,.85),0 0 0 1px rgba(255,248,238,.025) inset !important;
-}
-.vn-calendar-head{
-  padding:13px 18px 11px !important;
-  border-bottom-color:rgba(207,100,120,.12) !important;
-}
-.vn-calendar-head-icon{
-  width:32px !important;height:32px !important;
-  color:#e6a0b0 !important;
-  border-color:rgba(207,100,120,.28) !important;
-  background:rgba(207,100,120,.09) !important;
-}
-.vn-calendar-title{font-size:17px !important;color:#fff8ee !important}
-.vn-calendar-title em{color:#dc82ef !important}
-.vn-calendar-sub{color:rgba(255,248,238,.36) !important}
-.vn-calendar-body{
-  height:calc(100% - 56px) !important;
-  padding:12px 14px 10px !important;
-  overflow:hidden !important;
-}
-.vn-calendar-main-grid{
-  gap:14px !important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-  min-height:0 !important;
-  height:100% !important;
-}
-.vn-calendar-next,
-.vn-calendar-right{
-  height:100% !important;
-  min-height:0 !important;
-}
-.vn-calendar-next{
-  padding:15px !important;
-  border-radius:14px !important;
-  background:
-    radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--event-color,#cf6478) 11%,transparent),transparent 45%),
-    linear-gradient(135deg,rgba(255,255,255,.042),rgba(255,255,255,.016)) !important;
-  border-color:color-mix(in srgb,var(--event-color,#cf6478) 25%,rgba(255,248,238,.08)) !important;
-}
-.vn-calendar-next-main{margin-top:22px !important}
-.vn-calendar-next-name{font-size:20px !important}
-.vn-calendar-next-dates{font-size:9px !important;color:rgba(255,248,238,.48) !important}
-.vn-calendar-next-count{padding-top:18px !important}
-.vn-calendar-count-grid{gap:6px !important}
-.vn-count-box{
-  padding:8px 5px 7px !important;
-  border-radius:9px !important;
-  background:rgba(255,248,238,.028) !important;
-}
-.vn-count-value{font-size:18px !important}
-.vn-count-unit{font-size:7px !important;color:rgba(255,248,238,.34) !important}
-.vn-calendar-right{padding:0 !important}
-.vn-calendar-section-title{padding:1px 2px 7px !important;font-size:8px !important}
-.vn-calendar-list-controls{gap:6px !important}
-.vn-calendar-filter{
-  min-width:104px !important;
-  padding:7px 24px 7px 11px !important;
-  font-size:10px !important;
-  border-color:rgba(255,248,238,.10) !important;
-}
-.vn-calendar-events{
-  height:238px !important;
-  flex:0 0 238px !important;
-  max-height:238px !important;
-  overflow-y:auto !important;
-  gap:6px !important;
-  padding-right:5px !important;
-}
-.vn-calendar-events::-webkit-scrollbar{width:5px}
-.vn-calendar-events::-webkit-scrollbar-thumb{background:rgba(207,100,120,.28);border-radius:8px}
-.vn-calendar-event{
-  min-height:52px !important;
-  padding:7px 9px !important;
-  grid-template-columns:34px 56px minmax(0,1fr) auto !important;
-  gap:7px !important;
-  border-radius:10px !important;
-  border-color:rgba(255,248,238,.06) !important;
-  background:rgba(255,248,238,.025) !important;
-}
-.vn-calendar-event:hover{
-  background:rgba(207,100,120,.055) !important;
-}
-.vn-calendar-event-icon{
-  width:30px !important;height:30px !important;
-  border-radius:9px !important;
-  font-size:15px !important;
-}
-.vn-calendar-event-date{font-size:9px !important}
-.vn-calendar-event-name{font-size:11px !important}
-.vn-calendar-event-meta{font-size:7.6px !important;margin-top:2px !important}
-.vn-calendar-event-left{font-size:7.8px !important}
-.vn-calendar-legend{
-  margin-top:8px !important;
-  padding:8px 2px 0 !important;
-  gap:8px !important;
-  border-top-color:rgba(255,248,238,.06) !important;
-}
-.vn-calendar-legend-items{gap:10px !important}
-.vn-calendar-legend-item{gap:4px !important;font-size:7.5px !important}
-.vn-calendar-legend-title{font-size:7.5px !important}
-.vn-calendar-legend-dot{width:7px !important;height:7px !important}
-.vn-calendar-status{margin-top:7px !important;padding-top:7px !important;font-size:7.2px !important}
-.vn-calendar-status span:last-child{color:rgba(255,248,238,.32) !important}
-
-/* Match the warmer bio palette while keeping type-based accents. */
-.vn-calendar-next.kind-official{--event-color:#cf6478 !important}
-.vn-calendar-next.kind-lunar{--event-color:#e2a85c !important}
-.vn-calendar-next.kind-international{--event-color:#9aa7d8 !important}
-.vn-calendar-next.kind-vietnam{--event-color:#86a179 !important}
-.vn-calendar-next.kind-special{--event-color:#b78ad9 !important}
-.vn-calendar-event.kind-official{--event-color:#cf6478 !important}
-.vn-calendar-event.kind-lunar{--event-color:#e2a85c !important}
-.vn-calendar-event.kind-international{--event-color:#9aa7d8 !important}
-.vn-calendar-event.kind-vietnam{--event-color:#86a179 !important}
-.vn-calendar-event.kind-special{--event-color:#b78ad9 !important}
-.vn-calendar-next::after{width:2px !important}
-.vn-calendar-event::before{width:2px !important}
-
-@media(max-width:900px){
-  .vn-calendar-popover{
-    width:calc(100vw - 28px) !important;
-    height:min(700px,calc(100vh - 48px)) !important;
-    max-height:min(700px,calc(100vh - 48px)) !important;
-  }
-  .vn-calendar-main-grid{grid-template-columns:1fr !important;gap:10px !important}
-  .vn-calendar-next{height:250px !important;min-height:250px !important}
-  .vn-calendar-right{height:auto !important}
-  .vn-calendar-events{height:220px !important;flex-basis:220px !important;max-height:220px !important}
-}
-@media(max-width:640px){
-  .vn-calendar-popover{width:calc(100vw - 14px) !important;height:88vh !important;max-height:88vh !important}
-  .vn-calendar-head{padding:11px 12px 9px !important}
-  .vn-calendar-body{height:calc(100% - 52px) !important;padding:9px !important}
-  .vn-calendar-next{height:220px !important;min-height:220px !important;padding:12px !important}
-  .vn-calendar-next-main{margin-top:17px !important}
-  .vn-calendar-next-name{font-size:17px !important}
-  .vn-calendar-count-grid{gap:4px !important}
-  .vn-count-box{padding:6px 3px 5px !important}
-  .vn-count-value{font-size:15px !important}
-  .vn-calendar-events{height:190px !important;flex-basis:190px !important;max-height:190px !important}
-  .vn-calendar-legend{align-items:flex-start !important;flex-direction:column !important}
-  .vn-calendar-status{align-items:flex-start !important;flex-direction:column !important}
-}
-
 </style>
 
-<style id="calendar-final-tuning">
-/* ===== FINAL COMPACT CALENDAR ===== */
-.vn-calendar-popover{
-  width:min(780px,calc(100vw - 28px)) !important;
-  height:min(520px,calc(100vh - 28px)) !important;
-  max-height:min(520px,calc(100vh - 28px)) !important;
+<style id="calendar-workspace-final">
+/* Final workspace overrides: compact, stable, low-lag. */
+#vn-calendar-backdrop{background:rgba(0,0,0,.58)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#vn-calendar-popover,.vn-calendar-popover{
+  width:min(720px,calc(100vw - 28px))!important;
+  height:min(430px,calc(100vh - 28px))!important;
+  max-height:min(430px,calc(100vh - 28px))!important;
+  overflow:hidden!important;
+  backdrop-filter:blur(6px)!important;
+  -webkit-backdrop-filter:blur(6px)!important;
 }
-.vn-calendar-head{padding:11px 14px 10px !important;gap:9px !important}
-.vn-calendar-head-icon{width:30px !important;height:30px !important;border-radius:9px !important}
-.vn-calendar-head-icon svg{width:16px !important;height:16px !important}
-.vn-calendar-title{font-size:15px !important}
-.vn-calendar-sub{font-size:7px !important;margin-top:3px !important}
-.vn-calendar-close{width:28px !important;height:28px !important;font-size:18px !important}
-.vn-calendar-body{height:calc(100% - 51px) !important;padding:10px 11px 8px !important}
-.vn-calendar-main-grid{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) !important;gap:11px !important}
-.vn-calendar-next,.vn-calendar-right{height:100% !important;min-height:0 !important}
-.vn-calendar-next{padding:13px !important;border-radius:12px !important}
-.vn-calendar-kicker{font-size:7px !important;letter-spacing:.12em !important}
-.vn-calendar-kicker svg{width:10px !important;height:10px !important}
-.vn-calendar-next-main{margin-top:18px !important}
-.vn-calendar-next-name{font-size:18px !important}
-.vn-calendar-next-dates{margin-top:5px !important;font-size:8px !important}
-.vn-calendar-next-count{padding-top:12px !important}
-.vn-calendar-count-grid{gap:5px !important}
-.vn-count-box{padding:7px 4px 6px !important;border-radius:8px !important}
-.vn-count-value{font-size:16px !important}
-.vn-count-unit{margin-top:3px !important;font-size:6px !important}
-.vn-calendar-section-title{padding:1px 2px 6px !important;font-size:7px !important}
-.vn-calendar-filter{min-width:92px !important;padding:6px 22px 6px 9px !important;font-size:9px !important}
-.vn-calendar-events{max-height:none !important;height:calc(100% - 34px) !important;flex:none !important;gap:5px !important;padding-right:4px !important}
-.vn-calendar-event{grid-template-columns:30px 47px minmax(0,1fr) auto !important;gap:6px !important;padding:6px 8px !important;border-radius:9px !important;min-height:48px !important}
-.vn-calendar-event-icon{width:26px !important;height:26px !important;border-radius:8px !important;font-size:13px !important}
-.vn-calendar-event-date{font-size:8px !important}
-.vn-calendar-event-name{font-size:9.5px !important}
-.vn-calendar-event-meta{font-size:6.7px !important;margin-top:2px !important}
-.vn-calendar-event-left{font-size:6.7px !important}
-.vn-calendar-legend{margin-top:7px !important;padding-top:7px !important;gap:7px !important;font-size:7px !important}
-.vn-calendar-legend-title{font-size:7px !important}
-.vn-calendar-status{margin-top:7px !important;padding-top:6px !important;font-size:6.7px !important}
-/* Detail replaces the left panel visually and stays compact */
-.vn-calendar-detail{padding:10px !important;border-radius:12px !important}
-.vn-calendar-detail-panel{width:100% !important;height:100% !important;padding:14px !important;border-radius:11px !important;justify-content:flex-start !important}
-.vn-calendar-detail-kicker{font-size:7px !important}
-.vn-calendar-detail-panel h3{font-size:17px !important;margin-top:4px !important}
-.vn-calendar-detail-close{width:27px !important;height:27px !important;font-size:18px !important}
-.vn-calendar-detail-meta{margin-top:9px !important;font-size:7.5px !important}
-.vn-calendar-detail-type{margin-top:7px !important;padding:4px 7px !important;font-size:6.5px !important}
-.vn-calendar-detail-countdown-label{margin-top:13px !important;font-size:6.5px !important}
-.vn-calendar-detail-countdown{gap:5px !important;margin-top:6px !important}
-.vn-calendar-detail-countdown>div{padding:7px 4px 6px !important;border-radius:8px !important}
-.vn-calendar-detail-countdown strong{font-size:16px !important}
-.vn-calendar-detail-countdown span{margin-top:3px !important;font-size:6px !important}
-.vn-calendar-detail-now{margin-top:9px !important;font-size:7px !important}
-@media(max-width:900px){
-  .vn-calendar-popover{width:min(680px,calc(100vw - 20px)) !important;height:min(560px,calc(100vh - 20px)) !important;max-height:min(560px,calc(100vh - 20px)) !important}
-}
+.vn-calendar-body{height:calc(100% - 48px)!important;max-height:none!important;padding:8px 10px 7px!important;overflow:hidden!important}
+.vn-calendar-main-grid{height:calc(100% - 30px)!important;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr)!important;gap:9px!important;min-height:0!important}
+.vn-calendar-next,.vn-calendar-right{height:100%!important;min-height:0!important}
+.vn-calendar-next{padding:11px!important;border-radius:11px!important;overflow:hidden!important}
+.vn-calendar-next-main{margin-top:14px!important}
+.vn-calendar-next-name{font-size:16px!important}
+.vn-calendar-next-dates{font-size:7.2px!important}
+.vn-calendar-next-count{padding-top:8px!important}
+.vn-count-box{padding:6px 3px 5px!important}
+.vn-count-value{font-size:14px!important}
+.vn-calendar-right{display:flex!important;flex-direction:column!important;overflow:hidden!important}
+.vn-calendar-section-title{height:23px!important;padding:0 2px 4px!important;font-size:6.7px!important;flex:0 0 auto!important}
+.vn-calendar-events{height:auto!important;max-height:none!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;gap:4px!important;padding-right:3px!important}
+.vn-calendar-event{min-height:44px!important;padding:5px 6px!important;grid-template-columns:26px 43px minmax(0,1fr) auto!important;gap:5px!important;box-shadow:none!important;transition:none!important}
+.vn-calendar-event:hover{transform:none!important;box-shadow:none!important}
+.vn-calendar-event-icon{width:24px!important;height:24px!important;font-size:12px!important}
+.vn-calendar-event-date{font-size:7.4px!important}
+.vn-calendar-event-name{font-size:8.7px!important}
+.vn-calendar-event-meta{font-size:6.1px!important}
+.vn-calendar-event-left{font-size:6.1px!important}
+.vn-calendar-legend{height:27px!important;margin-top:6px!important;padding:6px 2px 0!important;flex:0 0 auto!important}
+.vn-calendar-status{display:none!important}
+.vn-calendar-detail{padding:8px!important;background:rgba(4,6,10,.52)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.vn-calendar-detail-panel{width:min(360px,100%)!important;height:auto!important;max-height:180px!important;padding:10px!important;border-radius:10px!important;box-shadow:0 14px 35px -20px rgba(0,0,0,.7)!important;justify-content:flex-start!important}
+.vn-calendar-detail-panel h3{font-size:14px!important;margin:3px 0 0!important}
+.vn-calendar-detail-countdown{gap:4px!important;margin-top:5px!important}
+.vn-calendar-detail-countdown>div{padding:5px 3px 4px!important}
+.vn-calendar-detail-countdown strong{font-size:13px!important}
+.vn-calendar-detail-countdown span{font-size:5px!important;margin-top:2px!important}
 @media(max-width:640px){
-  .vn-calendar-popover{width:calc(100vw - 14px) !important;height:calc(100vh - 14px) !important;max-height:calc(100vh - 14px) !important}
-  .vn-calendar-main-grid{grid-template-columns:1fr !important;gap:8px !important}
-  .vn-calendar-next{height:180px !important;min-height:180px !important}
-  .vn-calendar-right{height:240px !important;min-height:0 !important}
-  .vn-calendar-events{height:196px !important;max-height:196px !important}
-  .vn-calendar-event{grid-template-columns:28px 42px minmax(0,1fr) !important;min-height:42px !important}
-  .vn-calendar-event-left{grid-column:3 !important;text-align:left !important}
-  .vn-calendar-legend{flex-wrap:wrap !important}
-  .vn-calendar-detail-panel{padding:12px !important}
+  #vn-calendar-popover,.vn-calendar-popover{width:calc(100vw - 12px)!important;height:min(510px,calc(100vh - 12px))!important;max-height:min(510px,calc(100vh - 12px))!important}
+  .vn-calendar-main-grid{grid-template-columns:1fr!important;gap:7px!important;height:calc(100% - 60px)!important}
+  .vn-calendar-next{height:145px!important;min-height:145px!important}
+  .vn-calendar-right{height:220px!important;min-height:220px!important}
+  .vn-calendar-events{height:190px!important;flex:none!important}
+  .vn-calendar-legend{height:auto!important;min-height:28px!important;flex-wrap:wrap!important}
 }
 </style>
-
-<style id="calendar-performance-v4">
-/* ===== CALENDAR COMPACT + LOW-LAG ===== */
-#vn-calendar-backdrop{
-  backdrop-filter:none !important;
-  -webkit-backdrop-filter:none !important;
-  background:rgba(5,7,10,.62) !important;
-}
-#vn-calendar-popover,
-.vn-calendar-popover{
-  width:min(720px,calc(100vw - 32px)) !important;
-  height:min(420px,calc(100vh - 32px)) !important;
-  max-height:min(420px,calc(100vh - 32px)) !important;
-  border-radius:15px !important;
-  backdrop-filter:blur(8px) !important;
-  -webkit-backdrop-filter:blur(8px) !important;
-  box-shadow:0 24px 60px -26px rgba(0,0,0,.82),0 0 0 1px rgba(139,92,246,.045) inset !important;
-}
-.vn-calendar-head{
-  min-height:48px !important;
-  padding:9px 12px !important;
-}
-.vn-calendar-head-icon{width:28px !important;height:28px !important;border-radius:8px !important}
-.vn-calendar-head-icon svg{width:15px !important;height:15px !important}
-.vn-calendar-title{font-size:14px !important}
-.vn-calendar-sub{font-size:6.6px !important}
-.vn-calendar-close{width:26px !important;height:26px !important}
-.vn-calendar-body{
-  height:calc(100% - 48px) !important;
-  padding:8px 10px 7px !important;
-  overflow:hidden !important;
-}
-.vn-calendar-main-grid{
-  height:calc(100% - 34px) !important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.06fr) !important;
-  gap:9px !important;
-  align-items:stretch !important;
-}
-.vn-calendar-next,
-.vn-calendar-right{
-  height:100% !important;
-  min-height:0 !important;
-}
-.vn-calendar-next{
-  padding:11px !important;
-  border-radius:11px !important;
-}
-.vn-calendar-kicker{font-size:6.6px !important}
-.vn-calendar-kicker svg{width:9px !important;height:9px !important}
-.vn-calendar-next-main{margin-top:14px !important}
-.vn-calendar-next-name{font-size:16px !important}
-.vn-calendar-next-dates{margin-top:4px !important;font-size:7.2px !important}
-.vn-calendar-next-count{padding-top:8px !important}
-.vn-calendar-count-grid{gap:4px !important}
-.vn-count-box{padding:6px 3px 5px !important;border-radius:7px !important}
-.vn-count-value{font-size:14px !important}
-.vn-count-unit{margin-top:2px !important;font-size:5.7px !important}
-.vn-calendar-section-title{
-  height:24px !important;
-  padding:0 2px 4px !important;
-  font-size:6.7px !important;
-}
-.vn-calendar-list-controls{gap:6px !important}
-.vn-calendar-filter{
-  min-width:82px !important;
-  padding:5px 18px 5px 7px !important;
-  font-size:8px !important;
-}
-.vn-calendar-events{
-  height:calc(100% - 24px) !important;
-  max-height:none !important;
-  overflow-y:auto !important;
-  overflow-x:hidden !important;
-  gap:4px !important;
-  padding-right:3px !important;
-  scrollbar-width:thin !important;
-}
-.vn-calendar-event{
-  grid-template-columns:26px 43px minmax(0,1fr) auto !important;
-  gap:5px !important;
-  padding:5px 6px !important;
-  min-height:45px !important;
-  border-radius:8px !important;
-  box-shadow:none !important;
-}
-.vn-calendar-event-icon{width:24px !important;height:24px !important;border-radius:7px !important;font-size:12px !important}
-.vn-calendar-event-date{font-size:7.4px !important}
-.vn-calendar-event-name{font-size:8.7px !important}
-.vn-calendar-event-meta{font-size:6.1px !important;margin-top:1px !important}
-.vn-calendar-event-left{font-size:6.1px !important}
-.vn-calendar-legend{
-  height:28px !important;
-  margin-top:6px !important;
-  padding:6px 2px 0 !important;
-  gap:6px !important;
-  font-size:6.3px !important;
-}
-.vn-calendar-legend-items{gap:7px !important}
-.vn-calendar-legend-title{font-size:6.4px !important}
-.vn-calendar-legend-item{font-size:6.2px !important;gap:3px !important}
-.vn-calendar-legend-dot{width:6px !important;height:6px !important}
-.vn-calendar-status{display:none !important}
-
-/* Detail content: compact card, not giant empty panel */
-.vn-calendar-detail{
-  padding:10px !important;
-  border-radius:11px !important;
-  backdrop-filter:none !important;
-  -webkit-backdrop-filter:none !important;
-  background:rgba(4,6,10,.58) !important;
-}
-.vn-calendar-detail-panel{
-  width:100% !important;
-  height:auto !important;
-  max-height:230px !important;
-  padding:11px !important;
-  border-radius:10px !important;
-  justify-content:flex-start !important;
-  box-shadow:0 18px 42px -22px rgba(0,0,0,.72) !important;
-}
-.vn-calendar-detail-head{gap:8px !important}
-.vn-calendar-detail-kicker{font-size:6.5px !important}
-.vn-calendar-detail-panel h3{font-size:14px !important;margin:3px 0 0 !important}
-.vn-calendar-detail-close{width:24px !important;height:24px !important;font-size:16px !important}
-.vn-calendar-detail-meta{margin-top:7px !important;font-size:6.5px !important}
-.vn-calendar-detail-type{margin-top:5px !important;padding:3px 6px !important;font-size:5.8px !important}
-.vn-calendar-detail-countdown-label{margin-top:9px !important;font-size:5.8px !important}
-.vn-calendar-detail-countdown{gap:4px !important;margin-top:5px !important}
-.vn-calendar-detail-countdown>div{padding:6px 3px 5px !important;border-radius:7px !important}
-.vn-calendar-detail-countdown strong{font-size:14px !important}
-.vn-calendar-detail-countdown span{margin-top:2px !important;font-size:5.5px !important}
-.vn-calendar-detail-now{margin-top:6px !important;font-size:6.3px !important}
-
-/* Reduce animation work while calendar is open */
-.vn-calendar-popover,
-.vn-calendar-event,
-.vn-calendar-detail-panel{transition-duration:.12s !important}
-
-@media(max-width:900px){
-  .vn-calendar-popover,
-  #vn-calendar-popover{
-    width:min(640px,calc(100vw - 20px)) !important;
-    height:min(470px,calc(100vh - 20px)) !important;
-    max-height:min(470px,calc(100vh - 20px)) !important;
-  }
-  .vn-calendar-main-grid{
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
-    gap:8px !important;
-  }
-}
-@media(max-width:640px){
-  .vn-calendar-popover,
-  #vn-calendar-popover{
-    width:calc(100vw - 14px) !important;
-    height:min(520px,calc(100vh - 14px)) !important;
-    max-height:min(520px,calc(100vh - 14px)) !important;
-  }
-  .vn-calendar-head{padding:8px 10px !important}
-  .vn-calendar-title{font-size:13px !important}
-  .vn-calendar-main-grid{
-    height:auto !important;
-    grid-template-columns:1fr !important;
-    gap:7px !important;
-    overflow:hidden !important;
-  }
-  .vn-calendar-next{
-    height:150px !important;
-    min-height:150px !important;
-  }
-  .vn-calendar-right{
-    height:220px !important;
-    min-height:220px !important;
-  }
-  .vn-calendar-events{
-    height:196px !important;
-    max-height:196px !important;
-  }
-  .vn-calendar-legend{
-    height:auto !important;
-    min-height:28px !important;
-    flex-wrap:wrap !important;
-  }
-  .vn-calendar-event{
-    grid-template-columns:25px 40px minmax(0,1fr) !important;
-    min-height:41px !important;
-  }
-  .vn-calendar-event-left{
-    grid-column:3 !important;
-    text-align:left !important;
-  }
-  .vn-calendar-detail-panel{max-height:210px !important}
-}
-@media(prefers-reduced-motion:reduce){
-  .vn-calendar-popover,.vn-calendar-event,.vn-calendar-detail-panel{transition:none !important}
-}
-</style>
-
 </head>
 <body data-calendar-layout="standalone-centered" oncontextmenu="return false;">
 <button aria-label="Click to enter" id="gate">
@@ -2700,7 +2227,7 @@ footer#footer-bar:hover .foot-hint svg{
 <p class="vn-clock tooltip-host tooltip-center" data-tooltip="Giờ hiện tại" id="vn-clock">
             Việt Nam (UTC+7) · --:--:--
           </p>
-<button aria-expanded="false" aria-label="Mở Calendar sự kiện Việt Nam và Quốc tế" class="vn-calendar-btn tooltip-host tooltip-center" data-tooltip="Calendar · Việt Nam + Quốc tế" id="vn-calendar-btn" type="button">
+<button aria-expanded="false" aria-label="Mở lịch sự kiện Việt Nam" class="vn-calendar-btn tooltip-host tooltip-center" data-tooltip="Lịch sự kiện Việt Nam" id="vn-calendar-btn" type="button">
 <svg aria-hidden="true" viewbox="0 0 24 24">
 <rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect>
 <path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
@@ -2916,10 +2443,10 @@ footer#footer-bar:hover .foot-hint svg{
 </div>
 <div class="vn-calendar-head-text">
 <h2 class="vn-calendar-title" id="vn-calendar-title">
-                Calendar <em>Việt Nam &amp; Quốc tế</em>
+                Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em>
 </h2>
 <p class="vn-calendar-sub" id="vn-calendar-sub">
-                Dương lịch + Âm lịch · Việt Nam + Quốc tế · UTC+7
+                Lịch dương + âm · cập nhật realtime · UTC+7
               </p>
 </div>
 <button aria-label="Đóng lịch" class="vn-calendar-close" id="vn-calendar-close" type="button">
@@ -3002,6 +2529,6 @@ footer#footer-bar:hover .foot-hint svg{
 <div class="vn-calendar-detail-now" id="vn-calendar-detail-now">Giờ Việt Nam (UTC+7): --:--:--</div>
 </div>
 </div>
-</div></body>
-</html>
+</div>
+
 <script src="javascript.js" defer></script>
