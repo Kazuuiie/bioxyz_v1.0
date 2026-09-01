@@ -2395,8 +2395,28 @@ if (music) {
   const subEl = document.getElementById('vn-calendar-sub');
   const syncEl = document.getElementById('vn-calendar-sync');
   const filterEl = document.getElementById('vn-calendar-filter');
+  const detail = document.getElementById('vn-calendar-detail');
+  const detailPanel = detail?.querySelector('.vn-calendar-detail-panel');
+  const detailCloseBtn = document.getElementById('vn-calendar-detail-close');
+  const detailTitle = document.getElementById('vn-calendar-detail-title');
+  const detailMeta = document.getElementById('vn-calendar-detail-meta');
+  const detailType = document.getElementById('vn-calendar-detail-type');
+  const detailCountdownLabel = document.querySelector('.vn-calendar-detail-countdown-label');
+  const detailDays = document.getElementById('detail-days');
+  const detailHours = document.getElementById('detail-hours');
+  const detailMinutes = document.getElementById('detail-minutes');
+  const detailSeconds = document.getElementById('detail-seconds');
+  const detailNow = document.getElementById('vn-calendar-detail-now');
 
   if (!btn || !popover || !closeBtn || !nextCard || !nextName || !nextDates || !nextCount || !listEl) return;
+
+  // Detail panel lives inside the left column so clicking an event
+  // replaces the left "Next event" content without covering the list.
+  if (detail && detail.parentElement !== nextCard) {
+    nextCard.appendChild(detail);
+  }
+
+  let selectedEvent = null;
 
   const EVENTS = [
     // ===== VIỆT NAM — CHÍNH THỨC =====
@@ -2628,7 +2648,84 @@ if (music) {
     </div>`;
   }
 
+  function resetDetail() {
+    selectedEvent = null;
+    if (!detail) return;
+    detail.classList.remove('open');
+    detail.setAttribute('aria-hidden', 'true');
+  }
+
+  function detailTypeLabel(event) {
+    return KIND_LABELS[event?.kind] || 'Sự kiện';
+  }
+
+  function formatDetailNow(now) {
+    const f = new Intl.DateTimeFormat('vi-VN', {
+      timeZone: TIME_ZONE,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    return `Giờ Việt Nam (UTC+7): ${f.format(now)}`;
+  }
+
+  function updateDetail(now = new Date()) {
+    if (!detail || !detail.classList.contains('open') || !selectedEvent) return;
+
+    const event = selectedEvent;
+    const status = eventStatus(event, now);
+
+    if (detailTitle) detailTitle.textContent = `${event.icon} ${event.title}`;
+    if (detailMeta) detailMeta.innerHTML = formatMeta(event);
+    if (detailType) {
+      detailType.textContent = detailTypeLabel(event);
+      applyKindClass(detailType, event.kind);
+    }
+
+    if (detailCountdownLabel) {
+      detailCountdownLabel.textContent =
+        status === 'ongoing'
+          ? 'ĐANG DIỄN RA · THỜI GIAN THỰC'
+          : 'ĐẾM NGƯỢC TỚI SỰ KIỆN';
+    }
+
+    const value = countdown(event.start, now);
+    if (detailDays) detailDays.textContent = String(value.days).padStart(2,'0');
+    if (detailHours) detailHours.textContent = pad2(value.hours);
+    if (detailMinutes) detailMinutes.textContent = pad2(value.minutes);
+    if (detailSeconds) detailSeconds.textContent = pad2(value.seconds);
+    if (detailNow) detailNow.textContent = formatDetailNow(now);
+
+    if (status === 'ongoing') {
+      detailDays?.setAttribute('aria-label','Đang diễn ra');
+    }
+  }
+
+  function openDetail(event) {
+    if (!detail || !event) return;
+    selectedEvent = event;
+    applyKindClass(nextCard, event.kind);
+
+    if (detailTitle) detailTitle.textContent = `${event.icon} ${event.title}`;
+    if (detailMeta) detailMeta.innerHTML = formatMeta(event);
+    if (detailType) {
+      detailType.textContent = detailTypeLabel(event);
+      applyKindClass(detailType, event.kind);
+    }
+
+    detail.classList.add('open');
+    detail.setAttribute('aria-hidden', 'false');
+    updateDetail(new Date());
+  }
+
   function renderNext(now) {
+    // When a detail is open, keep the selected event in the left panel.
+    if (selectedEvent && detail?.classList.contains('open')) {
+      updateDetail(now);
+      return;
+    }
+
     const events = visibleEvents(now);
     const next = events[0];
     if (!next) {
@@ -2664,7 +2761,7 @@ if (music) {
       const right = status === 'ongoing'
         ? '<span class="vn-calendar-live">đang diễn ra</span>'
         : `còn ${Math.max(0, Math.ceil((event.start.getTime() - now.getTime()) / 86400000))} ngày`;
-      return `<div class="vn-calendar-event ${status} kind-${escapeHTML(event.kind)}" data-event-id="${escapeHTML(event.id)}">
+      return `<div class="vn-calendar-event ${status} kind-${escapeHTML(event.kind)}" data-event-id="${escapeHTML(event.id)}" tabindex="0" role="button" aria-label="Xem chi tiết ${escapeHTML(event.title)}">
         <div class="vn-calendar-event-icon" aria-hidden="true">${escapeHTML(event.icon)}</div>
         <div class="vn-calendar-event-date">${pad2(event.day)}/${pad2(event.month)}</div>
         <div class="vn-calendar-event-info">
@@ -2691,34 +2788,26 @@ if (music) {
 
   function positionPopover() {
     if (!popover.classList.contains('open')) return;
-    const rect = btn.getBoundingClientRect();
-    const margin = 20;
-    const gap = 10;
-    const width = popover.offsetWidth;
-    let left = rect.right - width;
-    let top = rect.bottom + gap;
-    left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
-    if (top + popover.offsetHeight > window.innerHeight - margin) {
-      top = rect.top - popover.offsetHeight - gap;
-      popover.style.transformOrigin = 'bottom right';
-    } else {
-      popover.style.transformOrigin = 'top right';
-    }
-    top = Math.max(margin, Math.min(top, window.innerHeight - popover.offsetHeight - margin));
-    popover.style.left = `${Math.round(left)}px`;
-    popover.style.top = `${Math.round(top)}px`;
+    popover.style.left = '50%';
+    popover.style.top = '50%';
+    popover.style.transformOrigin = 'center center';
   }
 
   function openCalendar() {
     render();
     popover.classList.add('open');
+    const backdrop = document.getElementById('vn-calendar-backdrop');
+    backdrop?.classList.add('open');
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded','true');
     requestAnimationFrame(positionPopover);
   }
 
   function closeCalendar() {
+    resetDetail();
     popover.classList.remove('open');
+    const backdrop = document.getElementById('vn-calendar-backdrop');
+    backdrop?.classList.remove('open');
     btn.classList.remove('is-open');
     btn.setAttribute('aria-expanded','false');
   }
@@ -2730,6 +2819,9 @@ if (music) {
 
   closeBtn.addEventListener('click', event => { event.stopPropagation(); closeCalendar(); });
   popover.addEventListener('click', event => event.stopPropagation());
+  const backdrop = document.getElementById('vn-calendar-backdrop');
+  backdrop?.addEventListener('click', closeCalendar);
+
   document.addEventListener('click', event => {
     if (popover.classList.contains('open') && !popover.contains(event.target) && !btn.contains(event.target)) closeCalendar();
   });
@@ -2742,6 +2834,47 @@ if (music) {
       currentFilter = filterEl.value || 'all';
       render();
       requestAnimationFrame(positionPopover);
+    });
+  }
+
+  if (listEl) {
+    listEl.addEventListener('click', event => {
+      const item = event.target.closest('.vn-calendar-event');
+      if (!item) return;
+      const id = item.getAttribute('data-event-id');
+      const selected = resolvedEvents.find(e => e.id === id);
+      if (selected) openDetail(selected);
+    });
+
+    listEl.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const item = event.target.closest('.vn-calendar-event');
+      if (!item) return;
+      event.preventDefault();
+      const id = item.getAttribute('data-event-id');
+      const selected = resolvedEvents.find(e => e.id === id);
+      if (selected) openDetail(selected);
+    });
+  }
+
+  if (detailCloseBtn) {
+    detailCloseBtn.addEventListener('click', event => {
+      event.stopPropagation();
+      resetDetail();
+      render(new Date());
+    });
+  }
+
+  if (detailPanel) {
+    detailPanel.addEventListener('click', event => event.stopPropagation());
+  }
+
+  if (nextCard) {
+    nextCard.addEventListener('click', event => {
+      if (detail?.classList.contains('open')) return;
+      if (event.target.closest('.vn-calendar-ongoing')) return;
+      const events = visibleEvents(new Date());
+      if (events[0]) openDetail(events[0]);
     });
   }
 
