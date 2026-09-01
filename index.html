@@ -524,7 +524,6 @@ main{
   }
   .discord-mini-profile{background-color:rgba(255,255,255,.5)}
   .discord-mini-profile.has-nameplate{background-color:rgba(20,16,15,.78)}
-  .music-box{background-color:rgba(18,16,15,.7)}
 }
 .dmp-top{
   display:flex;
@@ -841,31 +840,25 @@ button.dmp-icon{cursor:pointer}
   opacity:.85;
 }
 
-/* ===== MUSIC ===== */
+/* ===== MUSIC (không viền/khung, nằm trần trên card) ===== */
 .music-box{
   position:relative;
   z-index:10;
   width:100%;
-  background-color:rgba(18,16,15,.42);
-  background-image:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0));
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;
-  padding:12px 14px;
+  background:none;
+  border:none;
+  border-radius:0;
+  padding:0;
   margin:0 0 14px;
-  box-shadow:0 14px 28px -18px rgba(74,51,54,.45);
-  backdrop-filter:blur(8px) saturate(1.1);
-  -webkit-backdrop-filter:blur(8px) saturate(1.1);
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
 }
 .music-box::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at 15% 0%,rgba(29,185,84,.12),transparent 55%);
-  pointer-events:none;
-  border-radius:14px;
+  content:none;
 }
 .music-box.is-playing{
-  box-shadow:0 14px 28px -18px rgba(74,51,54,.5),0 0 0 1px rgba(29,185,84,.32);
+  box-shadow:none;
 }
 .music-topline{
   position:relative;
@@ -879,8 +872,8 @@ button.dmp-icon{cursor:pointer}
   width:48px;
   height:48px;
   border-radius:6px;
-  background:rgba(255,255,255,.10);
-  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  background:rgba(74,51,54,.08);
+  box-shadow:0 4px 10px -4px rgba(74,51,54,.3);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -910,7 +903,7 @@ button.dmp-icon{cursor:pointer}
   font-family:'DM Sans',sans-serif;
   font-weight:700;
   font-size:13.5px;
-  color:#fff8ee!important;
+  color:var(--ink)!important;
   line-height:1.4;
   white-space:normal;
   word-break:break-word;
@@ -920,7 +913,7 @@ button.dmp-icon{cursor:pointer}
   margin:3px 0 0;
   font-family:'DM Sans',sans-serif;
   font-size:11.5px;
-  color:rgba(255,248,238,.62)!important;
+  color:var(--ink-soft)!important;
 }
 .music-bars{
   display:flex;
@@ -936,7 +929,7 @@ button.dmp-icon{cursor:pointer}
 .music-bars .bar{
   width:2px;
   height:100%;
-  background-color:#1db954;
+  background-color:var(--sage);
   transform-origin:bottom center!important;
   transform:scaleY(.08);
   transition:transform .06s ease;
@@ -949,7 +942,7 @@ button.dmp-icon{cursor:pointer}
   height:34px;
   flex-shrink:0;
   border-radius:50%;
-  background:rgba(255,248,238,.92);
+  background:var(--ink);
   border:none;
   cursor:pointer;
   display:flex;
@@ -959,9 +952,11 @@ button.dmp-icon{cursor:pointer}
 }
 .music-playbtn:hover{
   transform:scale(1.06);
-  background:#fff;
+  background:var(--raspberry);
 }
 .music-playbtn svg{width:14px;height:14px;display:block}
+.music-playbtn .icon-play,
+.music-playbtn .icon-pause{fill:#fff8ee}
 .music-playbtn .icon-pause{display:none}
 .music-box.is-playing .music-playbtn .icon-play{display:none}
 .music-box.is-playing .music-playbtn .icon-pause{display:block}
@@ -974,20 +969,20 @@ button.dmp-icon{cursor:pointer}
   border-radius:50%;
   background:transparent;
   border:none;
-  color:rgba(255,248,238,.62);
+  color:var(--ink-soft);
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
 }
 .music-menu-btn:hover{
-  color:#fff8ee;
-  background:rgba(255,255,255,.10);
+  color:var(--ink);
+  background:rgba(74,51,54,.08);
 }
 .music-menu-btn svg{width:16px;height:16px}
 .music-menu-btn[aria-expanded="true"]{
-  color:#1DB954;
-  background:rgba(29,185,84,.14);
+  color:var(--sage);
+  background:rgba(134,161,121,.16);
 }
 .music-progress-wrap{
   position:relative;
@@ -1001,14 +996,14 @@ button.dmp-icon{cursor:pointer}
 .time-label{
   font-family:'DM Sans',sans-serif;
   font-size:10.5px;
-  color:#a7a7a7;
+  color:var(--ink-soft);
   min-width:30px;
   text-align:center;
 }
 .progress-bar-container{
   flex:1;
   height:4px;
-  background:rgba(255,248,238,.22);
+  background:rgba(74,51,54,.14);
   border-radius:2px;
   cursor:pointer;
   position:relative;
@@ -1024,7 +1019,7 @@ button.dmp-icon{cursor:pointer}
   height:100%;
   transform-origin:left;
   transform:scaleX(0);
-  background:#fff8ee;
+  background:var(--ink);
   border-radius:2px;
   will-change:transform;
 }
@@ -1044,7 +1039,7 @@ button.dmp-icon{cursor:pointer}
   border:none;
   border-radius:50%;
   background:transparent;
-  color:rgba(255,248,238,.62);
+  color:var(--ink-soft);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1053,7 +1048,7 @@ button.dmp-icon{cursor:pointer}
 }
 .music-nav button svg{width:16px;height:16px;fill:currentColor}
 .music-nav button:hover{
-  color:#fff8ee;
+  color:var(--ink);
   transform:scale(1.1);
 }
 .volume-container{
@@ -1068,11 +1063,11 @@ button.dmp-icon{cursor:pointer}
   border-radius:20px;
   transition:background .2s ease;
 }
-.volume-container:hover{background:rgba(255,255,255,.08)}
+.volume-container:hover{background:rgba(74,51,54,.08)}
 #volume-btn{
   background:transparent;
   border:none;
-  color:rgba(255,248,238,.62);
+  color:var(--ink-soft);
   cursor:pointer;
   display:flex;
   align-items:center;
@@ -1083,12 +1078,12 @@ button.dmp-icon{cursor:pointer}
   outline:none;
   transition:color .2s ease;
 }
-#volume-btn:hover{color:#fff}
+#volume-btn:hover{color:var(--ink)}
 #volume-slider-container{
   position:relative;
   width:0;
   height:4px;
-  background:rgba(255,255,255,.2);
+  background:rgba(74,51,54,.16);
   border-radius:4px;
   cursor:pointer;
   opacity:0;
@@ -1108,20 +1103,20 @@ button.dmp-icon{cursor:pointer}
   width:100%;
   transform-origin:left;
   transform:scaleX(1);
-  background:#1db954;
+  background:var(--sage);
   border-radius:4px;
   pointer-events:none;
   will-change:transform;
 }
 
-/* ===== PLAYLIST ===== */
+/* ===== PLAYLIST (giữ khung tối vì là menu nổi lên trên) ===== */
 .track-list-panel{
   position:relative;
   margin-top:10px;
   width:100%;
   max-height:0;
   overflow-y:hidden;
-  background:rgba(0,0,0,.25);
+  background:rgba(74,51,54,.9);
   border-radius:10px;
   padding:0 8px;
   border:1px solid transparent;
@@ -1155,7 +1150,7 @@ button.dmp-icon{cursor:pointer}
 }
 .track-list-header span::before{
   content:"♪ ";
-  color:#1DB954;
+  color:var(--sage);
 }
 .track-list-close{
   width:22px;
@@ -1200,9 +1195,9 @@ button.dmp-icon{cursor:pointer}
   color:#fff8ee;
 }
 .category-chip.active{
-  background:rgba(29,185,84,.22);
-  border-color:rgba(29,185,84,.5);
-  color:#1DB954;
+  background:rgba(134,161,121,.3);
+  border-color:rgba(134,161,121,.6);
+  color:#c8e0bc;
 }
 .track-list{
   list-style:none;
@@ -1223,7 +1218,7 @@ button.dmp-icon{cursor:pointer}
   transition:background .15s ease;
 }
 .track-item:hover{background:rgba(255,255,255,.1)}
-.track-item.active{background:rgba(29,185,84,.18)}
+.track-item.active{background:rgba(134,161,121,.28)}
 .track-item .t-index{
   width:16px;
   text-align:center;
@@ -1232,7 +1227,7 @@ button.dmp-icon{cursor:pointer}
   color:rgba(255,248,238,.4);
 }
 .track-item.active .t-index{
-  color:#1DB954;
+  color:#c8e0bc;
   font-weight:bold;
 }
 .track-item .t-cover{
@@ -1259,7 +1254,7 @@ button.dmp-icon{cursor:pointer}
   text-overflow:ellipsis;
 }
 .track-item.active .t-title{
-  color:#1DB954;
+  color:#c8e0bc;
   font-weight:700;
 }
 .track-item .t-category{
@@ -1269,7 +1264,7 @@ button.dmp-icon{cursor:pointer}
   text-transform:uppercase;
   color:rgba(255,248,238,.4);
 }
-.track-item.active .t-category{color:rgba(29,185,84,.75)}
+.track-item.active .t-category{color:rgba(200,224,188,.75)}
 .track-list-empty{
   text-align:center;
   padding:16px 0;
@@ -1291,7 +1286,7 @@ button.dmp-icon{cursor:pointer}
 .mini-bars .m-bar{
   width:2px;
   height:100%;
-  background-color:#1DB954;
+  background-color:#c8e0bc;
   transform-origin:bottom center!important;
   transform:scaleY(.1);
   transition:transform .06s ease;
