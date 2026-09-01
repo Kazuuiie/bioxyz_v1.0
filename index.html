@@ -873,7 +873,7 @@ button.dmp-icon{cursor:pointer}
   position:relative;
   width:64px;
   height:64px;
-  border-radius:50%;
+  border-radius:12px;
   background:rgba(74,51,54,.08);
   box-shadow:0 6px 16px -6px rgba(74,51,54,.35),inset 0 0 0 1px rgba(255,255,255,.4);
   display:flex;
@@ -891,35 +891,14 @@ button.dmp-icon{cursor:pointer}
   transform:scale(1.05);
   box-shadow:0 8px 20px -6px rgba(74,51,54,.42),inset 0 0 0 1px rgba(255,255,255,.5);
 }
-.disc-player::after{
-  content:"";
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  background:var(--paper-dim);
-  box-shadow:0 0 0 2px rgba(74,51,54,.14);
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  z-index:2;
-}
 .disc-player .disc-label{
   display:block;
   width:100%;
   height:100%;
-  border-radius:50%;
+  border-radius:8px;
   background:linear-gradient(135deg,var(--raspberry),var(--mustard));
   background-size:cover;
   background-position:center;
-  transition:transform .2s ease;
-}
-.music-box.is-playing .disc-player .disc-label{
-  animation:disc-spin 9s linear infinite;
-}
-@keyframes disc-spin{
-  to{transform:rotate(360deg)}
 }
 .music-info{
   flex:1;
