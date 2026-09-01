@@ -145,8 +145,33 @@ function updateMusicTooltip(track) {
   if (!musicTitle) return;
 
   const title = getTrackTitle(track);
+  const parts = title.split(/\s+-\s+/);
+  const song = parts.shift()?.trim() || title;
+  const artist = parts.join(' - ').trim();
 
-  musicTitle.textContent = title;
+  let mainEl = musicTitle.querySelector('.music-title-main');
+  let sepEl = musicTitle.querySelector('.music-title-sep');
+  let artistEl = musicTitle.querySelector('.music-title-artist');
+
+  if (!mainEl || !sepEl || !artistEl) {
+    musicTitle.textContent = '';
+
+    mainEl = document.createElement('span');
+    mainEl.className = 'music-title-main';
+
+    sepEl = document.createElement('span');
+    sepEl.className = 'music-title-sep';
+
+    artistEl = document.createElement('span');
+    artistEl.className = 'music-title-artist';
+
+    musicTitle.append(mainEl, sepEl, artistEl);
+  }
+
+  mainEl.textContent = song;
+  sepEl.textContent = artist ? '—' : '';
+  artistEl.textContent = artist;
+  artistEl.style.display = artist ? '' : 'none';
   musicTitle.setAttribute('data-tooltip', title);
 }
 
