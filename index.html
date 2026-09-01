@@ -524,7 +524,7 @@ main{
   }
   .discord-mini-profile{background-color:rgba(255,255,255,.5)}
   .discord-mini-profile.has-nameplate{background-color:rgba(20,16,15,.78)}
-  .music-box{background-color:rgba(255,255,255,.5)}
+  .music-box{background-color:rgba(18,16,15,.7)}
 }
 .dmp-top{
   display:flex;
@@ -841,320 +841,222 @@ button.dmp-icon{cursor:pointer}
   opacity:.85;
 }
 
-/* ===== MUSIC — COMPACT / CLEAN REDESIGN ===== */
+/* ===== MUSIC ===== */
 .music-box{
   position:relative;
   z-index:10;
   width:100%;
-  margin:0 0 16px;
-  padding:0;
-  background:transparent;
-  border:0;
-  box-shadow:none;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
+  background-color:rgba(18,16,15,.42);
+  background-image:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:12px 14px;
+  margin:0 0 14px;
+  box-shadow:0 14px 28px -18px rgba(74,51,54,.45);
+  backdrop-filter:blur(8px) saturate(1.1);
+  -webkit-backdrop-filter:blur(8px) saturate(1.1);
 }
-
-.music-box.is-playing{box-shadow:none}
-
+.music-box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 15% 0%,rgba(29,185,84,.12),transparent 55%);
+  pointer-events:none;
+  border-radius:14px;
+}
+.music-box.is-playing{
+  box-shadow:0 14px 28px -18px rgba(74,51,54,.5),0 0 0 1px rgba(29,185,84,.32);
+}
 .music-topline{
   position:relative;
   z-index:1;
-  display:grid;
-  grid-template-columns:56px minmax(0,1fr);
-  gap:12px;
+  display:flex;
   align-items:center;
+  gap:12px;
 }
-
-/* album = ảnh thật, nhỏ gọn */
 .disc-player{
   position:relative;
-  width:56px;
-  height:56px;
-  padding:0;
-  margin:0;
-  border:0;
-  border-radius:10px;
-  overflow:hidden;
-  background:rgba(20,16,15,.3);
-  box-shadow:0 8px 20px -12px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.14);
+  width:48px;
+  height:48px;
+  border-radius:6px;
+  background:rgba(255,255,255,.10);
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
+  border:none;
+  padding:0;
   flex-shrink:0;
-  transition:transform .22s ease,box-shadow .22s ease;
+  overflow:hidden;
+  z-index:1;
 }
-
-.disc-player:hover{
-  transform:translateY(-1px) scale(1.03);
-  box-shadow:0 12px 24px -12px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.22);
-}
-
 .disc-player .disc-label{
   display:block;
   width:100%;
   height:100%;
-  border-radius:10px;
-  background-position:center;
+  background:linear-gradient(135deg,var(--raspberry),var(--mustard));
   background-size:cover;
-  background-repeat:no-repeat;
+  background-position:center;
 }
-
-.music-right{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-/* Không còn card bao title */
-.music-title-box{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  min-width:0;
-  padding:0;
-  background:transparent;
-  border:0;
-  box-shadow:none;
-}
-
 .music-info{
-  min-width:0;
   flex:1;
+  min-width:0;
+  position:relative;
+  z-index:1;
 }
-
-/* màu tiêu đề: trắng + shadow để tương phản tốt với video */
 .music-title{
   margin:0;
-  display:flex;
-  align-items:baseline;
-  gap:6px;
-  min-width:0;
   font-family:'DM Sans',sans-serif;
-  font-size:15.5px;
-  line-height:1.18;
   font-weight:700;
-  letter-spacing:-.015em;
-  color:#fffaf4 !important;
-  text-shadow:0 2px 12px rgba(0,0,0,.55);
-  white-space:nowrap;
-  overflow:hidden;
+  font-size:13.5px;
+  color:#fff8ee!important;
+  line-height:1.4;
+  white-space:normal;
+  word-break:break-word;
   cursor:default;
 }
-
-.music-title-main{
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  color:#fffaf4;
-  font-weight:700;
-}
-
-.music-title-sep{
-  color:rgba(255,248,238,.5);
-  flex:0 0 auto;
-  font-weight:500;
-}
-
-.music-title-artist{
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  color:#ffd0dc;
-  font-weight:500;
-  text-shadow:0 2px 10px rgba(0,0,0,.45);
-}
-
 .music-sub{
-  display:none !important;
+  margin:3px 0 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:rgba(255,248,238,.62)!important;
 }
-
-.music-menu-btn{
-  width:26px;
-  height:26px;
-  padding:0;
-  margin:0;
-  flex:0 0 26px;
+.music-bars{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:2px;
+  height:18px;
+  padding:0 2px;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:2px;
+}
+.music-bars .bar{
+  width:2px;
+  height:100%;
+  background-color:#1db954;
+  transform-origin:bottom center!important;
+  transform:scaleY(.08);
+  transition:transform .06s ease;
+  will-change:transform;
+}
+.music-playbtn{
+  position:relative;
+  z-index:1;
+  width:34px;
+  height:34px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:rgba(255,248,238,.92);
+  border:none;
+  cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
-  border:0;
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1);
+}
+.music-playbtn:hover{
+  transform:scale(1.06);
+  background:#fff;
+}
+.music-playbtn svg{width:14px;height:14px;display:block}
+.music-playbtn .icon-pause{display:none}
+.music-box.is-playing .music-playbtn .icon-play{display:none}
+.music-box.is-playing .music-playbtn .icon-pause{display:block}
+.music-menu-btn{
+  position:relative;
+  z-index:1;
+  width:28px;
+  height:28px;
+  flex-shrink:0;
   border-radius:50%;
   background:transparent;
-  color:rgba(255,248,238,.72);
+  border:none;
+  color:rgba(255,248,238,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
-  transition:color .18s ease,background .18s ease,transform .18s ease;
 }
-
 .music-menu-btn:hover{
-  color:#fff;
+  color:#fff8ee;
   background:rgba(255,255,255,.10);
-  transform:scale(1.06);
 }
-
+.music-menu-btn svg{width:16px;height:16px}
 .music-menu-btn[aria-expanded="true"]{
-  color:#ffd0dc;
-  background:rgba(207,100,120,.16);
+  color:#1DB954;
+  background:rgba(29,185,84,.14);
 }
-
-.music-menu-btn svg{width:15px;height:15px}
-
-/* waveform nằm NGAY TRÊN thanh tiến trình — kiểu Spotify nhưng mang nét riêng */
-.music-bars{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:1px;
-  height:22px;
-  display:flex !important;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:2px;
-  padding:0 2px;
-  margin:0;
-  overflow:visible;
-  border-radius:3px;
-  pointer-events:none;
-  z-index:2;
-  opacity:.82;
-}
-
-.music-bars .bar{
-  width:3px;
-  height:100%;
-  min-height:2px;
-  flex:1 1 0;
-  max-width:5px;
-  border-radius:2px 2px 1px 1px;
-  background:linear-gradient(180deg,#fff8ee 0%,#ffd0dc 55%,#cf6478 100%);
-  transform-origin:bottom center !important;
-  transform:scaleY(.08);
-  transition:transform .06s linear,opacity .2s ease;
-  will-change:transform;
-  filter:drop-shadow(0 2px 5px rgba(207,100,120,.18));
-}
-
-/* thanh tiến trình phía dưới waveform */
 .music-progress-wrap{
   position:relative;
   z-index:1;
   display:flex;
   align-items:center;
-  gap:7px;
+  gap:8px;
   width:100%;
+  margin-top:12px;
 }
-
+.time-label{
+  font-family:'DM Sans',sans-serif;
+  font-size:10.5px;
+  color:#a7a7a7;
+  min-width:30px;
+  text-align:center;
+}
 .progress-bar-container{
-  position:relative;
   flex:1;
   height:4px;
-  overflow:visible;
-  border-radius:99px;
-  background:rgba(255,248,238,.17);
+  background:rgba(255,248,238,.22);
+  border-radius:2px;
   cursor:pointer;
-  transition:height .15s ease,background .15s ease;
+  position:relative;
+  overflow:hidden;
+  transition:height .15s ease;
 }
-
-.progress-bar-container:hover{
-  height:5px;
-  background:rgba(255,248,238,.24);
-}
-
+.progress-bar-container:hover{height:6px}
 .progress-bar-fill{
   position:absolute;
-  inset:0 auto 0 0;
+  left:0;
+  top:0;
   width:100%;
   height:100%;
-  transform-origin:left center;
+  transform-origin:left;
   transform:scaleX(0);
-  border-radius:inherit;
-  background:linear-gradient(90deg,#ffd0dc 0%,#fff8ee 42%,#cf6478 100%);
-  box-shadow:0 0 10px rgba(255,208,220,.24);
+  background:#fff8ee;
+  border-radius:2px;
   will-change:transform;
-  z-index:0;
 }
-
-/* 3 nút ở GIỮA */
-.music-controls-row{
+.music-nav{
   position:relative;
   z-index:1;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:0;
-  min-height:34px;
-  margin-top:7px;
+  gap:18px;
+  margin-top:10px;
+  height:32px;
 }
-
-.transport-controls{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-}
-
-.transport-controls button{
+.music-nav button{
   width:28px;
   height:28px;
-  padding:0;
-  border:0;
+  border:none;
   border-radius:50%;
   background:transparent;
-  color:rgba(255,248,238,.76);
+  color:rgba(255,248,238,.62);
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  transition:color .18s ease,background .18s ease,transform .18s ease;
+  transition:color .2s ease,transform .2s ease;
 }
-
-.transport-controls button:hover{
-  color:#fff;
-  background:rgba(255,255,255,.09);
-  transform:scale(1.08);
+.music-nav button svg{width:16px;height:16px;fill:currentColor}
+.music-nav button:hover{
+  color:#fff8ee;
+  transform:scale(1.1);
 }
-
-.transport-controls button:first-child,
-.transport-controls button:last-child{
-  width:25px;
-  height:25px;
-}
-
-.transport-controls svg{width:16px;height:16px;fill:currentColor}
-
-/* play = điểm nhấn duy nhất */
-.music-playbtn{
-  position:relative;
-  width:34px !important;
-  height:34px !important;
-  padding:0;
-  border:0;
-  border-radius:50% !important;
-  background:#fff8ee !important;
-  color:#4a3336;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  box-shadow:0 7px 16px -8px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.25);
-  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
-}
-
-.music-playbtn:hover{
-  transform:scale(1.08) !important;
-  background:#ffd0dc !important;
-  box-shadow:0 10px 20px -8px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.30);
-}
-
-.music-playbtn svg{width:14px;height:14px;display:block}
-.music-playbtn .icon-play,
-.music-playbtn .icon-pause{fill:#4a3336}
-.music-playbtn .icon-pause{display:none}
-.music-box.is-playing .music-playbtn .icon-play{display:none}
-.music-box.is-playing .music-playbtn .icon-pause{display:block}
-
-/* volume: để bên phải nhưng KHÔNG ảnh hưởng việc căn giữa 3 nút */
-.volume-control{
+.volume-container{
   position:absolute;
   right:0;
   top:50%;
@@ -1162,303 +1064,238 @@ button.dmp-icon{cursor:pointer}
   display:flex;
   align-items:center;
   gap:6px;
+  padding:2px 4px;
+  border-radius:20px;
+  transition:background .2s ease;
 }
-
+.volume-container:hover{background:rgba(255,255,255,.08)}
 #volume-btn{
-  width:24px;
-  height:24px;
-  padding:0;
-  border:0;
-  border-radius:50%;
   background:transparent;
-  color:rgba(255,248,238,.66);
+  border:none;
+  color:rgba(255,248,238,.62);
+  cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
-  transition:color .18s ease,background .18s ease,transform .18s ease;
+  padding:0;
+  width:24px;
+  height:24px;
+  outline:none;
+  transition:color .2s ease;
 }
-
-#volume-btn:hover{
-  color:#fff;
-  background:rgba(255,255,255,.08);
-  transform:scale(1.06);
-}
-
-#volume-btn svg{width:14px;height:14px}
+#volume-btn:hover{color:#fff}
 #volume-slider-container{
   position:relative;
-  width:46px;
-  height:3px;
-  overflow:hidden;
-  border-radius:99px;
-  background:rgba(255,248,238,.18);
+  width:0;
+  height:4px;
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
   cursor:pointer;
-  transition:height .15s ease;
+  opacity:0;
+  overflow:hidden;
+  transition:width .3s cubic-bezier(.4,0,.2,1),opacity .25s ease;
 }
-
-#volume-slider-container:hover{height:5px}
-
+.volume-container:hover #volume-slider-container{
+  width:65px;
+  opacity:1;
+  overflow:visible;
+}
 #volume-slider-fill{
   position:absolute;
-  inset:0 auto 0 0;
-  width:100%;
+  left:0;
+  top:0;
   height:100%;
-  transform-origin:left center;
+  width:100%;
+  transform-origin:left;
   transform:scaleX(1);
-  border-radius:inherit;
-  background:#ffd0dc;
+  background:#1db954;
+  border-radius:4px;
+  pointer-events:none;
+  will-change:transform;
 }
 
-/* playlist: clean, tối, thoáng và hợp font hiện tại */
+/* ===== PLAYLIST ===== */
 .track-list-panel{
   position:relative;
+  margin-top:10px;
   width:100%;
-  margin-top:12px;
   max-height:0;
-  overflow:hidden;
-  padding:0;
-  opacity:0;
+  overflow-y:hidden;
+  background:rgba(0,0,0,.25);
+  border-radius:10px;
+  padding:0 8px;
   border:1px solid transparent;
-  border-radius:12px;
-  background:rgba(20,16,15,.62);
-  box-shadow:0 16px 34px -20px rgba(0,0,0,.72);
-  backdrop-filter:blur(10px) saturate(1.06);
-  -webkit-backdrop-filter:blur(10px) saturate(1.06);
-  transform:translateY(-4px);
-  transition:max-height .34s cubic-bezier(.2,.8,.2,1),opacity .22s ease,padding .3s ease,margin-top .3s ease,transform .3s ease,border-color .25s ease;
+  opacity:0;
+  transition:max-height .35s ease,opacity .3s ease,padding .3s ease;
 }
-
 .track-list-panel.open{
-  max-height:235px;
-  overflow-y:auto;
-  padding:9px;
   opacity:1;
-  transform:translateY(0);
-  border-color:rgba(255,255,255,.10);
+  max-height:175px;
+  overflow-y:auto;
+  padding:8px;
+  border-color:rgba(255,255,255,.1);
 }
-
 .track-list-panel::-webkit-scrollbar{width:4px}
 .track-list-panel::-webkit-scrollbar-track{background:transparent}
-.track-list-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.17);border-radius:999px}
-.track-list-panel::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.28)}
-
+.track-list-panel::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
+}
+.track-list-panel::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.4)}
 .track-list-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  padding:1px 2px 8px;
-  margin:0 0 2px;
+  margin-bottom:8px;
   font-family:'DM Sans',sans-serif;
-  font-size:11px;
+  font-size:11.5px;
   font-weight:700;
   color:#fff8ee;
+  user-select:none;
 }
-
 .track-list-header span::before{
-  content:'♪';
-  display:inline-block;
-  margin-right:6px;
-  color:#ffd0dc;
+  content:"♪ ";
+  color:#1DB954;
 }
-
 .track-list-close{
-  width:23px;
-  height:23px;
-  padding:0;
-  border:0;
+  width:22px;
+  height:22px;
+  border:none;
   border-radius:50%;
   background:transparent;
-  color:rgba(255,248,238,.48);
+  color:rgba(255,248,238,.6);
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:13px;
   cursor:pointer;
-  transition:color .18s ease,background .18s ease,transform .18s ease;
 }
-
 .track-list-close:hover{
-  color:#fff;
-  background:rgba(255,255,255,.09);
-  transform:rotate(90deg);
+  color:#fff8ee;
+  background:rgba(255,255,255,.12);
 }
-
 .track-category-filters{
   display:flex;
   flex-wrap:wrap;
-  gap:5px;
-  margin:0 0 8px;
+  gap:6px;
+  margin-bottom:8px;
 }
-
 .category-chip{
-  padding:4px 8px;
-  border:1px solid rgba(255,255,255,.10);
+  padding:4px 10px;
   border-radius:999px;
-  background:rgba(255,255,255,.045);
-  color:rgba(255,248,238,.58);
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:rgba(255,248,238,.65);
   font-family:'DM Sans',sans-serif;
-  font-size:9.5px;
+  font-size:10.5px;
   font-weight:600;
-  line-height:1.2;
   cursor:pointer;
   user-select:none;
-  transition:background .17s ease,color .17s ease,border-color .17s ease,transform .17s ease;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+  white-space:nowrap;
+  line-height:1.4;
 }
-
 .category-chip:hover{
-  color:#fff;
-  background:rgba(255,255,255,.09);
-  border-color:rgba(255,255,255,.18);
-  transform:translateY(-1px);
+  background:rgba(255,255,255,.12);
+  color:#fff8ee;
 }
-
 .category-chip.active{
-  color:#ffd7e0;
-  background:rgba(207,100,120,.16);
-  border-color:rgba(207,100,120,.38);
+  background:rgba(29,185,84,.22);
+  border-color:rgba(29,185,84,.5);
+  color:#1DB954;
 }
-
 .track-list{
   list-style:none;
   margin:0;
   padding:0;
   display:flex;
   flex-direction:column;
-  gap:3px;
+  gap:4px;
 }
-
 .track-item{
-  position:relative;
-  display:grid;
-  grid-template-columns:18px 34px minmax(0,1fr) auto;
+  display:flex;
   align-items:center;
-  gap:8px;
-  min-height:43px;
-  padding:5px 7px;
-  border:1px solid transparent;
-  border-radius:9px;
-  background:transparent;
+  gap:10px;
+  padding:6px 8px;
+  border-radius:8px;
   cursor:pointer;
   user-select:none;
-  transition:background .17s ease,border-color .17s ease,transform .17s ease;
+  transition:background .15s ease;
 }
-
-.track-item:hover{
-  background:rgba(255,255,255,.055);
-  border-color:rgba(255,255,255,.07);
-  transform:translateX(1px);
-}
-
-.track-item.active{
-  background:linear-gradient(90deg,rgba(207,100,120,.15),rgba(207,100,120,.05));
-  border-color:rgba(207,100,120,.22);
-}
-
+.track-item:hover{background:rgba(255,255,255,.1)}
+.track-item.active{background:rgba(29,185,84,.18)}
 .track-item .t-index{
-  width:18px;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:9px;
-  color:rgba(255,248,238,.33);
+  width:16px;
   text-align:center;
-}
-
-.track-item.active .t-index{
-  color:#ffd0dc;
-  font-weight:600;
-}
-
-.track-item .t-cover{
-  width:34px;
-  height:34px;
-  border-radius:7px;
-  object-fit:cover;
-  flex-shrink:0;
-  background:#2a2221;
-  box-shadow:0 4px 10px -6px rgba(0,0,0,.75);
-}
-
-.track-item .t-info{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.track-item .t-title{
-  min-width:0;
-  margin:0;
   font-family:'DM Sans',sans-serif;
   font-size:11px;
-  line-height:1.25;
-  font-weight:600;
+  color:rgba(255,248,238,.4);
+}
+.track-item.active .t-index{
+  color:#1DB954;
+  font-weight:bold;
+}
+.track-item .t-cover{
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+.track-item .t-info{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  gap:1px;
+}
+.track-item .t-title{
+  margin:0;
+  min-width:0;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
   color:#fff8ee;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
-
-.track-item.active .t-title{color:#ffd7e0}
-
+.track-item.active .t-title{
+  color:#1DB954;
+  font-weight:700;
+}
 .track-item .t-category{
   font-family:'IBM Plex Mono',monospace;
-  font-size:8px;
-  letter-spacing:.04em;
-  color:rgba(255,248,238,.38);
+  font-size:9px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:rgba(255,248,238,.4);
 }
-
-.track-item.active .t-category{color:rgba(255,208,220,.68)}
-
+.track-item.active .t-category{color:rgba(29,185,84,.75)}
 .track-list-empty{
-  padding:18px 0;
   text-align:center;
+  padding:16px 0;
   font-family:'DM Sans',sans-serif;
-  font-size:11px;
-  color:rgba(255,248,238,.42);
+  font-size:11.5px;
+  color:rgba(255,248,238,.45);
 }
-
 .mini-bars{
   display:none;
   align-items:flex-end;
   gap:2px;
-  height:13px;
-  min-width:12px;
-  margin-left:4px;
+  height:12px;
+  margin-left:auto;
   flex-shrink:0;
+  overflow:hidden;
+  border-radius:1px;
 }
-
 .music-box.is-playing .track-item.active .mini-bars{display:flex}
-
 .mini-bars .m-bar{
   width:2px;
   height:100%;
-  border-radius:2px;
-  background:#ffd0dc;
-  transform-origin:bottom center !important;
+  background-color:#1DB954;
+  transform-origin:bottom center!important;
   transform:scaleY(.1);
-  transition:transform .06s linear;
+  transition:transform .06s ease;
 }
-
-@media(max-width:640px){
-  .music-box{margin-bottom:12px}
-  .music-topline{grid-template-columns:52px minmax(0,1fr);gap:10px}
-  .disc-player{width:52px;height:52px;border-radius:9px}
-  .disc-player .disc-label{border-radius:9px}
-  .music-title{font-size:14px}
-  .music-title-artist{max-width:42vw}
-  .music-bars{height:20px}
-  .music-bars .bar{width:2.5px;flex-basis:2.5px}
-  .volume-control{right:1px}
-  #volume-slider-container{width:40px}
-  .track-item{grid-template-columns:16px 32px minmax(0,1fr) auto;gap:7px;min-height:41px}
-  .track-item .t-cover{width:32px;height:32px}
-}
-
-@media(max-width:430px){
-  .volume-control{position:static;transform:none;margin-left:auto}
-  .music-controls-row{justify-content:space-between}
-}
-
 
 /* ===== PHOTO / TEXT ===== */
 .photo-wrap{
@@ -2063,162 +1900,142 @@ footer#footer-bar:hover .foot-hint svg{
                     id="disc-label"></span>
             </div>
 
-            <div class="music-right">
+            <div class="music-info"
+                 id="music-info">
 
-              <div class="music-title-box">
+              <!-- Tooltip này được JS cập nhật realtime
+                   mỗi khi bài hát thay đổi -->
+              <p class="music-title"
+                 id="music-title"
+                 data-tooltip="Tên bài hát — nghệ sĩ">
+                Tên bài hát — nghệ sĩ
+              </p>
 
-                <div class="music-info"
-                     id="music-info">
-
-                  <!-- Tooltip này được JS cập nhật realtime
-                       mỗi khi bài hát thay đổi -->
-                  <p class="music-title"
-                     id="music-title"
-                     data-tooltip="Tên bài hát — nghệ sĩ">
-                    <span class="music-title-main">Tên bài hát</span>
-                    <span class="music-title-sep">—</span>
-                    <span class="music-title-artist">nghệ sĩ</span>
-                  </p>
-
-                  <p class="music-sub"
-                     id="disc-tip">
-                    bấm để phát nhạc
-                  </p>
-                </div>
-
-                <!-- nút 3 chấm = mở danh sách phát -->
-                <button class="music-menu-btn"
-                        id="track-menu-btn"
-                        type="button"
-                        aria-label="Danh sách bài hát"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        data-tooltip="Danh sách bài hát"
-                        data-tooltip-fixed="true">
-                  <svg viewBox="0 0 24 24"
-                       fill="currentColor">
-                    <circle cx="12" cy="5" r="2"/>
-                    <circle cx="12" cy="12" r="2"/>
-                    <circle cx="12" cy="19" r="2"/>
-                  </svg>
-                </button>
-
-              </div>
-
-              <div class="music-progress-wrap">
-
-                <span id="current-time"
-                      class="time-label">
-                  0:00
-                </span>
-
-                <div class="progress-bar-container"
-                     id="progress-container">
-                  <div class="progress-bar-fill"
-                       id="progress-fill"></div>
-
-                  <div class="music-bars"
-                       id="music-bars"
-                       aria-hidden="true">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                  </div>
-                </div>
-
-                <span id="duration-time"
-                      class="time-label">
-                  0:00
-                </span>
-              </div>
-
+              <p class="music-sub"
+                 id="disc-tip">
+                bấm để phát nhạc
+              </p>
             </div>
+
+            <div class="music-bars"
+                 id="music-bars">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+
+            <!-- FIX:
+                 id disc-player chỉ tồn tại ở đây -->
+            <button class="music-playbtn"
+                    id="disc-player"
+                    type="button"
+                    aria-pressed="false"
+                    aria-label="Phát nhạc nền"
+                    data-tooltip="Phát nhạc">
+
+              <svg class="icon-play"
+                   viewBox="0 0 24 24"
+                   fill="#121212">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+
+              <svg class="icon-pause"
+                   viewBox="0 0 24 24"
+                   fill="#121212">
+                <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+              </svg>
+            </button>
+
+            <button class="music-menu-btn"
+                    id="track-menu-btn"
+                    type="button"
+                    aria-label="Danh sách bài hát"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    data-tooltip="Danh sách bài hát"
+                    data-tooltip-fixed="true">
+              <svg viewBox="0 0 24 24"
+                   fill="currentColor">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+              </svg>
+            </button>
 
           </div>
 
-          <div class="music-controls-row"
-               aria-label="Điều khiển phát nhạc">
+          <div class="music-progress-wrap">
 
-            <div class="transport-controls">
+            <span id="current-time"
+                  class="time-label">
+              0:00
+            </span>
 
-              <button type="button"
-                      id="music-prev"
-                      aria-label="Bài trước"
-                      data-tooltip="Bài trước"
-                      data-tooltip-fixed="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
-                </svg>
-              </button>
-
-              <!-- FIX:
-                   id disc-player chỉ tồn tại ở đây -->
-              <button class="music-playbtn"
-                      id="disc-player"
-                      type="button"
-                      aria-pressed="false"
-                      aria-label="Phát nhạc nền"
-                      data-tooltip="Phát nhạc">
-
-                <svg class="icon-play"
-                     viewBox="0 0 24 24"
-                     fill="#121212">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-
-                <svg class="icon-pause"
-                     viewBox="0 0 24 24"
-                     fill="#121212">
-                  <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
-                </svg>
-              </button>
-
-              <button type="button"
-                      id="music-next"
-                      aria-label="Bài tiếp theo"
-                      data-tooltip="Bài tiếp theo"
-                      data-tooltip-fixed="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/>
-                </svg>
-              </button>
-
+            <div class="progress-bar-container"
+                 id="progress-container">
+              <div class="progress-bar-fill"
+                   id="progress-fill"></div>
             </div>
 
-            <!-- ÂM LƯỢNG -->
-            <div class="volume-control" id="volume-control">
+            <span id="duration-time"
+                  class="time-label">
+              0:00
+            </span>
+          </div>
+
+          <div class="music-nav"
+               aria-label="Chuyển bài">
+
+            <button type="button"
+                    id="music-prev"
+                    aria-label="Bài trước"
+                    data-tooltip="Bài trước"
+                    data-tooltip-fixed="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+              </svg>
+            </button>
+
+            <button type="button"
+                    id="music-next"
+                    aria-label="Bài tiếp theo"
+                    data-tooltip="Bài tiếp theo"
+                    data-tooltip-fixed="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/>
+              </svg>
+            </button>
+
+            <div class="volume-container">
+
               <button type="button"
                       id="volume-btn"
                       aria-label="Âm lượng"
                       data-tooltip="Âm lượng"
                       data-tooltip-fixed="true">
                 <svg viewBox="0 0 24 24">
-                  <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
-                  <g class="vol-wave" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                    <path d="M16.2 8.8a5 5 0 0 1 0 6.4"/>
-                    <path d="M18.6 6.2a8.5 8.5 0 0 1 0 11.6"/>
-                  </g>
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                  <path class="vol-wave"
+                        d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                 </svg>
               </button>
 
-              <div class="progress-bar-container"
-                   id="volume-slider-container"
-                   aria-label="Thanh âm lượng"
-                   data-tooltip="Kéo để chỉnh âm lượng">
-                <div class="progress-bar-fill"
-                     id="volume-slider-fill"></div>
+              <div id="volume-slider-container"
+                   data-tooltip="Điều chỉnh âm lượng"
+                   data-tooltip-fixed="true">
+                <div id="volume-slider-fill"></div>
               </div>
-            </div>
 
+            </div>
           </div>
 
           <div class="track-list-panel"
