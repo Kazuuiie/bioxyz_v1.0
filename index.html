@@ -2096,6 +2096,97 @@ footer#footer-bar:hover .foot-hint svg{
   .vn-calendar-legend{height:auto!important;min-height:28px!important;flex-wrap:wrap!important}
 }
 </style>
+
+
+<style id="calendar-mini-final">
+/* ===== ULTRA COMPACT CALENDAR ===== */
+#vn-calendar-popover,.vn-calendar-popover{
+  width:min(600px,calc(100vw - 24px)) !important;
+  height:min(360px,calc(100vh - 24px)) !important;
+  max-height:min(360px,calc(100vh - 24px)) !important;
+  border-radius:12px !important;
+  backdrop-filter:blur(4px) !important;
+  -webkit-backdrop-filter:blur(4px) !important;
+  box-shadow:0 18px 45px -24px rgba(0,0,0,.78),0 0 0 1px rgba(139,92,246,.035) inset !important;
+}
+.vn-calendar-head{
+  min-height:40px !important;
+  padding:7px 10px !important;
+  gap:7px !important;
+}
+.vn-calendar-head-icon{width:24px !important;height:24px !important;border-radius:7px !important}
+.vn-calendar-head-icon svg{width:13px !important;height:13px !important}
+.vn-calendar-title{font-size:12px !important}
+.vn-calendar-sub{font-size:5.8px !important;margin-top:2px !important}
+.vn-calendar-close{width:22px !important;height:22px !important}
+.vn-calendar-close svg{width:12px !important;height:12px !important}
+.vn-calendar-body{height:calc(100% - 40px) !important;padding:6px 7px 5px !important}
+.vn-calendar-main-grid{height:calc(100% - 25px) !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;gap:7px !important}
+.vn-calendar-next{padding:8px !important;border-radius:9px !important}
+.vn-calendar-kicker{font-size:5.6px !important;letter-spacing:.1em !important;gap:4px !important}
+.vn-calendar-kicker svg{width:8px !important;height:8px !important}
+.vn-calendar-next-main{margin-top:10px !important}
+.vn-calendar-next-name{font-size:13px !important;line-height:1.12 !important}
+.vn-calendar-next-dates{margin-top:3px !important;font-size:6.2px !important}
+.vn-calendar-next-count{padding-top:6px !important}
+.vn-calendar-count-grid{gap:3px !important}
+.vn-count-box{padding:5px 2px 4px !important;border-radius:6px !important}
+.vn-count-value{font-size:11px !important}
+.vn-count-unit{margin-top:2px !important;font-size:4.8px !important}
+.vn-calendar-right{overflow:hidden !important}
+.vn-calendar-section-title{height:20px !important;padding:0 1px 3px !important;font-size:5.8px !important}
+.vn-calendar-filter{min-width:72px !important;padding:4px 16px 4px 6px !important;font-size:7px !important}
+.vn-calendar-events{height:calc(100% - 20px) !important;gap:3px !important;padding-right:2px !important}
+.vn-calendar-event{grid-template-columns:22px 36px minmax(0,1fr) auto !important;gap:4px !important;min-height:36px !important;padding:4px 5px !important;border-radius:7px !important}
+.vn-calendar-event-icon{width:20px !important;height:20px !important;border-radius:6px !important;font-size:10px !important}
+.vn-calendar-event-date{font-size:6.4px !important}
+.vn-calendar-event-name{font-size:7.6px !important}
+.vn-calendar-event-meta{font-size:5.3px !important;margin-top:1px !important}
+.vn-calendar-event-left{font-size:5.3px !important}
+.vn-calendar-legend{height:22px !important;margin-top:4px !important;padding:4px 1px 0 !important;gap:4px !important;font-size:5.4px !important}
+.vn-calendar-legend-items{gap:6px !important}
+.vn-calendar-legend-title,.vn-calendar-legend-item{font-size:5.3px !important}
+.vn-calendar-legend-dot{width:5px !important;height:5px !important}
+.vn-calendar-status{display:none !important}
+.vn-calendar-detail{padding:6px !important}
+.vn-calendar-detail-panel{width:min(300px,100%) !important;max-height:150px !important;padding:8px !important;border-radius:8px !important}
+.vn-calendar-detail-kicker{font-size:5.5px !important}
+.vn-calendar-detail-panel h3{font-size:12px !important;margin:2px 0 0 !important}
+.vn-calendar-detail-close{width:20px !important;height:20px !important;font-size:14px !important}
+.vn-calendar-detail-meta{margin-top:5px !important;font-size:5.8px !important}
+.vn-calendar-detail-type{margin-top:4px !important;padding:2px 5px !important;font-size:5px !important}
+.vn-calendar-detail-countdown-label{margin-top:7px !important;font-size:5px !important}
+.vn-calendar-detail-countdown{gap:3px !important;margin-top:4px !important}
+.vn-calendar-detail-countdown>div{padding:4px 2px 3px !important;border-radius:6px !important}
+.vn-calendar-detail-countdown strong{font-size:11px !important}
+.vn-calendar-detail-countdown span{font-size:4.7px !important;margin-top:1px !important}
+.vn-calendar-detail-now{margin-top:4px !important;font-size:5.4px !important}
+@media(max-width:700px){
+  #vn-calendar-popover,.vn-calendar-popover{
+    width:calc(100vw - 12px) !important;
+    height:min(500px,calc(100vh - 12px)) !important;
+    max-height:min(500px,calc(100vh - 12px)) !important;
+  }
+}
+@media(max-width:560px){
+  .vn-calendar-head{padding:7px 8px !important}
+  .vn-calendar-title{font-size:11px !important}
+  .vn-calendar-sub{font-size:5.3px !important}
+  .vn-calendar-body{padding:6px !important}
+  .vn-calendar-main-grid{grid-template-columns:1fr !important;gap:6px !important;height:auto !important}
+  .vn-calendar-next{height:122px !important;min-height:122px !important}
+  .vn-calendar-next-main{margin-top:8px !important}
+  .vn-calendar-next-name{font-size:12px !important}
+  .vn-calendar-count-grid{gap:3px !important}
+  .vn-count-value{font-size:10px !important}
+  .vn-calendar-right{height:205px !important;min-height:205px !important}
+  .vn-calendar-events{height:176px !important;max-height:176px !important}
+  .vn-calendar-event{grid-template-columns:21px 35px minmax(0,1fr) !important;min-height:34px !important}
+  .vn-calendar-event-left{grid-column:3 !important;text-align:left !important}
+  .vn-calendar-legend{height:auto !important;min-height:20px !important;flex-wrap:wrap !important}
+}
+</style>
+
 </head>
 <body data-calendar-layout="standalone-centered" oncontextmenu="return false;">
 <button aria-label="Click to enter" id="gate">
@@ -2530,5 +2621,6 @@ footer#footer-bar:hover .foot-hint svg{
 </div>
 </div>
 </div>
-
+</body>
+</html>
 <script src="javascript.js" defer></script>
