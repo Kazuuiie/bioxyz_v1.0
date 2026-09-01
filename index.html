@@ -2372,6 +2372,203 @@ footer#footer-bar:hover .foot-hint svg{
   .vn-calendar-detail-panel{padding:12px !important}
 }
 </style>
+
+<style id="calendar-performance-v4">
+/* ===== CALENDAR COMPACT + LOW-LAG ===== */
+#vn-calendar-backdrop{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  background:rgba(5,7,10,.62) !important;
+}
+#vn-calendar-popover,
+.vn-calendar-popover{
+  width:min(720px,calc(100vw - 32px)) !important;
+  height:min(420px,calc(100vh - 32px)) !important;
+  max-height:min(420px,calc(100vh - 32px)) !important;
+  border-radius:15px !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+  box-shadow:0 24px 60px -26px rgba(0,0,0,.82),0 0 0 1px rgba(139,92,246,.045) inset !important;
+}
+.vn-calendar-head{
+  min-height:48px !important;
+  padding:9px 12px !important;
+}
+.vn-calendar-head-icon{width:28px !important;height:28px !important;border-radius:8px !important}
+.vn-calendar-head-icon svg{width:15px !important;height:15px !important}
+.vn-calendar-title{font-size:14px !important}
+.vn-calendar-sub{font-size:6.6px !important}
+.vn-calendar-close{width:26px !important;height:26px !important}
+.vn-calendar-body{
+  height:calc(100% - 48px) !important;
+  padding:8px 10px 7px !important;
+  overflow:hidden !important;
+}
+.vn-calendar-main-grid{
+  height:calc(100% - 34px) !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.06fr) !important;
+  gap:9px !important;
+  align-items:stretch !important;
+}
+.vn-calendar-next,
+.vn-calendar-right{
+  height:100% !important;
+  min-height:0 !important;
+}
+.vn-calendar-next{
+  padding:11px !important;
+  border-radius:11px !important;
+}
+.vn-calendar-kicker{font-size:6.6px !important}
+.vn-calendar-kicker svg{width:9px !important;height:9px !important}
+.vn-calendar-next-main{margin-top:14px !important}
+.vn-calendar-next-name{font-size:16px !important}
+.vn-calendar-next-dates{margin-top:4px !important;font-size:7.2px !important}
+.vn-calendar-next-count{padding-top:8px !important}
+.vn-calendar-count-grid{gap:4px !important}
+.vn-count-box{padding:6px 3px 5px !important;border-radius:7px !important}
+.vn-count-value{font-size:14px !important}
+.vn-count-unit{margin-top:2px !important;font-size:5.7px !important}
+.vn-calendar-section-title{
+  height:24px !important;
+  padding:0 2px 4px !important;
+  font-size:6.7px !important;
+}
+.vn-calendar-list-controls{gap:6px !important}
+.vn-calendar-filter{
+  min-width:82px !important;
+  padding:5px 18px 5px 7px !important;
+  font-size:8px !important;
+}
+.vn-calendar-events{
+  height:calc(100% - 24px) !important;
+  max-height:none !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  gap:4px !important;
+  padding-right:3px !important;
+  scrollbar-width:thin !important;
+}
+.vn-calendar-event{
+  grid-template-columns:26px 43px minmax(0,1fr) auto !important;
+  gap:5px !important;
+  padding:5px 6px !important;
+  min-height:45px !important;
+  border-radius:8px !important;
+  box-shadow:none !important;
+}
+.vn-calendar-event-icon{width:24px !important;height:24px !important;border-radius:7px !important;font-size:12px !important}
+.vn-calendar-event-date{font-size:7.4px !important}
+.vn-calendar-event-name{font-size:8.7px !important}
+.vn-calendar-event-meta{font-size:6.1px !important;margin-top:1px !important}
+.vn-calendar-event-left{font-size:6.1px !important}
+.vn-calendar-legend{
+  height:28px !important;
+  margin-top:6px !important;
+  padding:6px 2px 0 !important;
+  gap:6px !important;
+  font-size:6.3px !important;
+}
+.vn-calendar-legend-items{gap:7px !important}
+.vn-calendar-legend-title{font-size:6.4px !important}
+.vn-calendar-legend-item{font-size:6.2px !important;gap:3px !important}
+.vn-calendar-legend-dot{width:6px !important;height:6px !important}
+.vn-calendar-status{display:none !important}
+
+/* Detail content: compact card, not giant empty panel */
+.vn-calendar-detail{
+  padding:10px !important;
+  border-radius:11px !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  background:rgba(4,6,10,.58) !important;
+}
+.vn-calendar-detail-panel{
+  width:100% !important;
+  height:auto !important;
+  max-height:230px !important;
+  padding:11px !important;
+  border-radius:10px !important;
+  justify-content:flex-start !important;
+  box-shadow:0 18px 42px -22px rgba(0,0,0,.72) !important;
+}
+.vn-calendar-detail-head{gap:8px !important}
+.vn-calendar-detail-kicker{font-size:6.5px !important}
+.vn-calendar-detail-panel h3{font-size:14px !important;margin:3px 0 0 !important}
+.vn-calendar-detail-close{width:24px !important;height:24px !important;font-size:16px !important}
+.vn-calendar-detail-meta{margin-top:7px !important;font-size:6.5px !important}
+.vn-calendar-detail-type{margin-top:5px !important;padding:3px 6px !important;font-size:5.8px !important}
+.vn-calendar-detail-countdown-label{margin-top:9px !important;font-size:5.8px !important}
+.vn-calendar-detail-countdown{gap:4px !important;margin-top:5px !important}
+.vn-calendar-detail-countdown>div{padding:6px 3px 5px !important;border-radius:7px !important}
+.vn-calendar-detail-countdown strong{font-size:14px !important}
+.vn-calendar-detail-countdown span{margin-top:2px !important;font-size:5.5px !important}
+.vn-calendar-detail-now{margin-top:6px !important;font-size:6.3px !important}
+
+/* Reduce animation work while calendar is open */
+.vn-calendar-popover,
+.vn-calendar-event,
+.vn-calendar-detail-panel{transition-duration:.12s !important}
+
+@media(max-width:900px){
+  .vn-calendar-popover,
+  #vn-calendar-popover{
+    width:min(640px,calc(100vw - 20px)) !important;
+    height:min(470px,calc(100vh - 20px)) !important;
+    max-height:min(470px,calc(100vh - 20px)) !important;
+  }
+  .vn-calendar-main-grid{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:8px !important;
+  }
+}
+@media(max-width:640px){
+  .vn-calendar-popover,
+  #vn-calendar-popover{
+    width:calc(100vw - 14px) !important;
+    height:min(520px,calc(100vh - 14px)) !important;
+    max-height:min(520px,calc(100vh - 14px)) !important;
+  }
+  .vn-calendar-head{padding:8px 10px !important}
+  .vn-calendar-title{font-size:13px !important}
+  .vn-calendar-main-grid{
+    height:auto !important;
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+    overflow:hidden !important;
+  }
+  .vn-calendar-next{
+    height:150px !important;
+    min-height:150px !important;
+  }
+  .vn-calendar-right{
+    height:220px !important;
+    min-height:220px !important;
+  }
+  .vn-calendar-events{
+    height:196px !important;
+    max-height:196px !important;
+  }
+  .vn-calendar-legend{
+    height:auto !important;
+    min-height:28px !important;
+    flex-wrap:wrap !important;
+  }
+  .vn-calendar-event{
+    grid-template-columns:25px 40px minmax(0,1fr) !important;
+    min-height:41px !important;
+  }
+  .vn-calendar-event-left{
+    grid-column:3 !important;
+    text-align:left !important;
+  }
+  .vn-calendar-detail-panel{max-height:210px !important}
+}
+@media(prefers-reduced-motion:reduce){
+  .vn-calendar-popover,.vn-calendar-event,.vn-calendar-detail-panel{transition:none !important}
+}
+</style>
+
 </head>
 <body data-calendar-layout="standalone-centered" oncontextmenu="return false;">
 <button aria-label="Click to enter" id="gate">
