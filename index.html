@@ -1425,9 +1425,20 @@ h1 em{
   color:#fff;
 }
 /* ===== EVENT CALENDAR — REDESIGN ===== */
+/* FIX QUAN TRỌNG: mặc định popover LUÔN hiện GIỮA MÀN HÌNH bằng CSS thuần
+   (không phụ thuộc JS chạy đúng). Trước đây top/left hoàn toàn do JS set,
+   nên nếu vì bất kỳ lý do gì JS không set được vị trí kịp (lỗi, thiết bị lạ,
+   race-condition khi chuyển đổi chế độ...), popover không có top/left nào
+   cả -> nằm ngoài khung nhìn -> người dùng chỉ thấy nền tối (backdrop) mà
+   không thấy hộp lịch. Giờ:
+   - Mặc định (không có class .corner): hiện giữa màn hình — LUÔN hoạt động.
+   - .corner (JS thêm khi đủ chỗ cạnh bio card): JS set left/top/transform
+     bằng inline style để đặt góc cạnh card — chỉ là NÂNG CẤP thêm, không
+     phải điều kiện bắt buộc để popover hiển thị được. */
 .vn-calendar-popover{
   position:fixed;
-  /* top/left được JS set động theo vị trí .card — không đặt cứng ở đây */
+  top:50%;
+  left:50%;
   z-index:3;
   width:400px;
   max-width:calc(100vw - 36px);
@@ -1447,14 +1458,20 @@ h1 em{
   opacity:0;
   visibility:hidden;
   pointer-events:none;
-  transform-origin:top left;
-  transform:translateY(-8px) scale(.96);
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(.96);
   transition:opacity .2s ease,transform .2s cubic-bezier(.2,.8,.2,1),visibility .2s ease;
 }
 .vn-calendar-popover.open{
   opacity:1;
   visibility:visible;
   pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1);
+}
+/* Chế độ góc — JS bật bằng class .corner + set left/top/transform inline.
+   transform-origin đổi sang top-left cho khớp hiệu ứng trượt từ góc. */
+.vn-calendar-popover.corner{
+  transform-origin:top left;
 }
 
 /* HEADER */
