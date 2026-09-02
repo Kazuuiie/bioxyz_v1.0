@@ -2098,7 +2098,255 @@ footer#footer-bar:hover .foot-hint svg{
   #global-tooltip{transition:none}
 }
 
+/* ============================================================
+ * REDESIGN — DASHBOARD LAYOUT (giữ nguyên logic JS phía trên,
+ * chỉ tổ chức lại bố cục + giao diện cho giống bản thiết kế mới)
+ * ============================================================ */
+.dash{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+  padding:34px 20px 0;
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:22px;
+  align-items:start;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.dash.in{opacity:1;transform:translateY(0)}
+.dash-col{display:flex;flex-direction:column;gap:18px;min-width:0}
 
+.panel{
+  position:relative;
+  background:var(--paper-dim);
+  background-image:var(--texture);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:12.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.panel-head svg{width:15px;height:15px;flex-shrink:0;color:var(--raspberry)}
+.panel-head .ph-toggle{
+  margin-left:auto;
+  width:26px;height:26px;
+  border-radius:50%;
+  border:none;
+  background:transparent;
+  color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+}
+.panel-head .ph-toggle:hover{background:rgba(74,51,54,.08);color:var(--ink)}
+.panel-body{padding:14px 16px 16px}
+
+/* ---- Events card ---- */
+.events-eyebrow{
+  display:flex;align-items:center;gap:6px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--raspberry);opacity:.85;margin:0 0 10px;
+}
+.events-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.event-row{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:12px;
+  background:rgba(255,255,255,.45);
+  border:1px solid var(--line);
+  cursor:pointer;transition:background .2s ease,transform .2s ease;
+}
+.event-row:hover{background:rgba(255,255,255,.75);transform:translateY(-1px)}
+.event-row .ev-icon{font-size:19px;flex-shrink:0}
+.event-row .ev-info{flex:1;min-width:0}
+.event-row .ev-title{
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:12.5px;
+  color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.event-row .ev-date{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-soft);margin-top:2px}
+.event-row .ev-count{
+  flex-shrink:0;text-align:center;
+  background:rgba(207,100,120,.12);
+  border-radius:10px;padding:5px 9px;
+  font-family:'DM Sans',sans-serif;
+}
+.event-row .ev-count b{display:block;font-size:14px;color:var(--raspberry);line-height:1.1}
+.event-row .ev-count span{display:block;font-size:8.5px;color:var(--ink-soft);letter-spacing:.03em}
+.events-viewall{
+  width:100%;margin-top:12px;padding:9px;border-radius:10px;
+  border:1px dashed var(--line);background:transparent;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.events-viewall:hover{color:var(--raspberry);border-color:var(--raspberry)}
+
+/* ---- relocated music-box → sidebar card ---- */
+.music-card .panel-body{padding:14px 16px 8px}
+.music-card .music-box{
+  position:static!important;width:100%!important;margin:0!important;
+  opacity:1!important;transform:none!important;filter:none!important;
+  background:transparent!important;border:none!important;box-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.music-card .disc-player{width:52px;height:52px}
+.music-card .music-title,.music-card .music-sub{color:var(--ink)}
+.music-card .music-sub{color:var(--ink-soft)}
+.music-card .track-list-panel{
+  position:static!important;width:100%!important;max-height:none!important;
+  opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+  transform:none!important;box-shadow:none!important;background:transparent!important;
+  border:none!important;border-top:1px solid var(--line)!important;
+  margin-top:12px;padding-top:10px;
+}
+.music-card .track-list-header{display:none}
+.music-card .track-list{max-height:220px}
+.music-card .track-item{background:rgba(255,255,255,.4)}
+
+/* ---- terminal card ---- */
+.terminal-panel .card{max-width:none;opacity:1;transform:none;width:100%}
+.terminal-panel .card-inner{padding:22px 26px 24px}
+.term-top{display:flex;align-items:flex-start;gap:22px;flex-wrap:wrap}
+.term-top .term-text{flex:1;min-width:220px}
+.term-cmd{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.02em;
+  color:var(--raspberry);opacity:.85;margin:20px 0 8px;
+}
+.term-cmd:first-child{margin-top:0}
+.tagline{
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-soft);
+  margin:6px 0 0;letter-spacing:.01em;
+}
+.about-text{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.65;color:var(--ink);margin:0}
+.currently-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.currently-list li{
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  display:flex;align-items:center;gap:8px;
+}
+.currently-list li::before{content:"•";color:var(--raspberry)}
+.locate-text{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);margin:0}
+.locate-text::before{content:"📍 "}
+.note-box{
+  margin-top:18px;padding:14px 16px;border-radius:12px;
+  background:rgba(255,255,255,.4);border:1px solid var(--line);
+}
+.note-box .term-cmd{margin:0 0 8px}
+.note-box p{margin:0 0 4px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--ink);line-height:1.55}
+.note-box p:last-child{margin-bottom:0}
+.terminal-panel .photo-wrap{margin:0;flex-shrink:0}
+.terminal-panel .now{margin-top:18px}
+.terminal-panel footer#footer-bar{margin-top:16px}
+
+/* ---- meta row: date + weather ---- */
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.meta-card{
+  background:var(--paper-dim);background-image:var(--texture);
+  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  padding:16px 18px;display:flex;align-items:center;gap:12px;
+}
+.meta-icon{
+  width:38px;height:38px;border-radius:11px;flex-shrink:0;
+  background:rgba(207,100,120,.12);color:var(--raspberry);
+  display:flex;align-items:center;justify-content:center;
+}
+.meta-icon svg{width:19px;height:19px}
+.meta-icon.sun{background:rgba(226,168,92,.16);color:#b9822f}
+.meta-body p{margin:0;font-family:'DM Sans',sans-serif}
+.meta-body .meta-primary{font-size:14px;font-weight:700;color:var(--ink)}
+.meta-body .meta-secondary{font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+
+/* ---- discord card (relocated discord-mini-profile) ---- */
+.discord-card{max-width:340px;margin-left:auto}
+.discord-card .discord-mini-profile{
+  width:100%!important;margin:0!important;opacity:1!important;
+  transform:none!important;filter:none!important;
+  border-left:none!important;border-radius:16px!important;
+  border-color:rgba(255,255,255,.14)!important;
+  background-color:transparent!important;
+  background-image:
+    radial-gradient(circle at 14% -12%,rgba(255,255,255,.12),transparent 48%),
+    linear-gradient(180deg,rgba(20,16,15,.9) 0%,rgba(20,16,15,.96) 100%)!important;
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55)!important;
+}
+.discord-card .discord-mini-profile::before{
+  content:"discord activity";color:rgba(255,248,238,.55);
+}
+.discord-card .dmp-nameplate-zone{background:transparent;padding:10px 14px 12px}
+.discord-card .dmp-username,.discord-card .dmp-act-name{color:#fff}
+.discord-card .dmp-activity,.discord-card .dmp-act-details,.discord-card .dmp-act-state,.discord-card .dmp-act-time{
+  color:rgba(255,248,238,.72);
+}
+.discord-card .dmp-icon{color:rgba(255,255,255,.82)}
+.discord-card .dmp-icon:hover{background:rgba(255,255,255,.16);color:#fff}
+.discord-card .dmp-status-dot{background:#14100f}
+.discord-join{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 14px;border-top:1px solid rgba(255,255,255,.1);
+}
+.discord-join span{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:rgba(255,248,238,.5);
+}
+.discord-join a{
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;
+  color:#14100f;background:#f3ece2;border-radius:9px;padding:7px 12px;
+  text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+}
+.discord-join a:hover{background:#fff}
+
+/* ---- bottom site nav ---- */
+.site-nav-wrap{position:relative;z-index:2;display:flex;justify-content:center;padding:26px 20px 8px}
+.site-nav{
+  display:flex;gap:6px;
+  background:var(--paper-dim);background-image:var(--texture);
+  border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+  padding:8px;
+}
+.site-nav a{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 16px;border-radius:12px;text-decoration:none;
+  font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:600;
+  color:var(--ink-soft);position:relative;transition:background .2s ease,color .2s ease;
+}
+.site-nav a svg{width:18px;height:18px}
+.site-nav a:hover{color:var(--ink);background:rgba(74,51,54,.06)}
+.site-nav a.active{color:var(--raspberry)}
+.site-nav a.active::after{
+  content:"";position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--raspberry);
+}
+
+/* ---- global page footer ---- */
+.site-footer{
+  position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;max-width:1180px;margin:14px auto 0;padding:16px 26px 32px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);
+}
+.site-footer .waveform{display:flex;align-items:center;gap:2px;opacity:.5}
+.site-footer .waveform span{width:2px;background:var(--raspberry);border-radius:2px}
+
+@media(max-width:960px){
+  .dash{grid-template-columns:1fr;max-width:560px}
+  .discord-card{max-width:none;margin-left:0}
+  .site-footer{justify-content:center;text-align:center}
+}
+@media(max-width:640px){
+  .meta-row{grid-template-columns:1fr}
+  .site-nav a{padding:7px 11px}
+  .site-nav a span{display:none}
+}
 </style>
 
 </head>
@@ -2203,96 +2451,34 @@ footer#footer-bar:hover .foot-hint svg{
     };
   </script>
 <main>
-<div class="card">
-<div aria-hidden="true" class="titlebar">
-<div class="dots">
-<span class="dot r"></span>
-<span class="dot y"></span>
-<span class="dot g"></span>
+<div class="dash" id="dash">
+<div class="dash-col dash-col-left">
+<!-- ===== EVENTS CARD ===== -->
+<div class="panel events-card" id="events-card">
+<div class="panel-head">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path></svg>
+Events
 </div>
-<span class="path">bio@terminal — 80x24</span>
-</div>
-<div class="card-inner">
-<div class="photo-wrap reveal" style="--i:1">
-<div aria-hidden="true" class="photo-shadow"></div>
-<div class="photo-frame" id="avatar-frame">
-<img alt="Ảnh đại diện" class="album-cover" id="album-cover" src="images1.png"/>
-</div>
-</div>
-<p class="eyebrow reveal" style="--i:2">
-          xin chào, mình là
-        </p>
-<h1 class="reveal" id="name-heading" style="--i:2">
-          ItsReal<em>Khanz</em>
-</h1>
-<p class="location reveal" style="--i:2">
-          Việt Nam
-        </p>
-<div class="vn-clock-wrap reveal" id="vn-clock-wrap" style="--i:2">
-<p class="vn-clock tooltip-host tooltip-center" data-tooltip="Giờ hiện tại" id="vn-clock">
-            Việt Nam (UTC+7) · --:--:--
-          </p>
-<button aria-expanded="false" aria-label="Mở lịch sự kiện Việt Nam" class="vn-calendar-btn tooltip-host tooltip-center" data-tooltip="Lịch sự kiện Việt Nam" id="vn-calendar-btn" type="button">
-<svg aria-hidden="true" viewbox="0 0 24 24">
-<rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect>
-<path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
-<path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path>
-</svg>
+<div class="panel-body">
+<p class="events-eyebrow">🔴 upcoming events</p>
+<ul class="events-list" id="events-list">
+<li class="event-row">Đang tải sự kiện…</li>
+</ul>
+<button class="events-viewall" id="events-viewall" type="button">
+Xem tất cả sự kiện
+<svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="M9 6l6 6-6 6"></path></svg>
 </button>
+</div>
 </div>
 
-<div class="divider reveal" style="--i:3">
-<span>❊</span>
+<!-- ===== MUSIC CARD (relocated .music-box, logic JS giữ nguyên) ===== -->
+<div class="panel music-card" id="music-section">
+<div class="panel-head">
+<svg fill="currentColor" viewbox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+Now Playing
 </div>
-<!-- ===== DISCORD ===== -->
-<div class="discord-mini-profile reveal" id="discord-mini-profile" style="--i:3.5">
-<div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
-<div class="dmp-top">
-<div class="dmp-avatar-wrap">
-<img alt="avatar Discord" class="dmp-avatar" id="dmp-avatar" src=""/>
-<img alt="" class="dmp-decoration" id="dmp-decoration" src="" style="display:none"/>
-<span aria-hidden="true" class="dmp-status-dot offline" id="dmp-status-dot"></span>
-</div>
-<div class="dmp-info">
-<div class="dmp-name-row">
-<span class="dmp-username" id="dmp-username">—</span>
-<span class="dmp-badges" id="dmp-badges"></span>
-</div>
-<span class="dmp-activity" id="dmp-activity">
-                  đang kết nối…
-                </span>
-</div>
-<div class="dmp-icons">
-<button aria-label="Ẩn/Hiện hoạt động" class="dmp-icon toggle-act-btn" data-tooltip="Ẩn hoạt động" data-tooltip-fixed="true" id="toggle-activity-btn" type="button">
-<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15">
-<circle cx="5" cy="12" r="2.2"></circle>
-<circle cx="12" cy="12" r="2.2"></circle>
-<circle cx="19" cy="12" r="2.2"></circle>
-</svg>
-</button>
-</div>
-</div>
-</div>
-<div class="dmp-activity-panel" id="dmp-activity-panel">
-<div class="dmp-activity-card">
-<div class="dmp-act-img-wrap">
-<img alt="" class="dmp-act-img" id="dmp-act-img" src="" style="display:none"/>
-<img alt="" class="dmp-act-img-small" id="dmp-act-img-small" src="" style="display:none"/>
-</div>
-<div class="dmp-act-text">
-<p class="dmp-act-name" id="dmp-act-name"></p>
-<p class="dmp-act-details" id="dmp-act-details" style="display:none"></p>
-<p class="dmp-act-state" id="dmp-act-state" style="display:none"></p>
-<p class="dmp-act-time" id="dmp-act-time"></p>
-</div>
-</div>
-</div>
-</div>
-<p class="bio reveal" style="--i:4">
-          Nothing Here.
-        </p>
-<!-- ===== MUSIC ===== -->
-<div class="music-box reveal" id="music-box" style="--i:5">
+<div class="panel-body">
+<div class="music-box" id="music-box">
 <div class="music-topline">
 <!-- FIX:
                  id này tách khỏi nút Play/Pause -->
@@ -2386,10 +2572,70 @@ footer#footer-bar:hover .foot-hint svg{
 <ul class="track-list" id="track-list"></ul>
 </div>
 </div>
+</div>
+</div>
+</div>
+
+<div class="dash-col dash-col-right">
+<!-- ===== TERMINAL / BIO CARD ===== -->
+<div class="panel terminal-panel" id="home">
+<div class="card in">
+<div aria-hidden="true" class="titlebar">
+<div class="dots">
+<span class="dot r"></span>
+<span class="dot y"></span>
+<span class="dot g"></span>
+</div>
+<span class="path">bio@terminal — 80x24</span>
+</div>
+<div class="card-inner">
+<div class="term-top">
+<div class="term-text">
+<p class="term-cmd">$ whoami</p>
+<p class="eyebrow reveal" style="--i:1">xin chào, mình là</p>
+<h1 class="reveal" id="name-heading" style="--i:1">ItsReal<em>Khanz</em></h1>
+<p class="tagline reveal" style="--i:1">Developer • Designer • Music Listener</p>
+</div>
+<div class="photo-wrap reveal" style="--i:1">
+<div aria-hidden="true" class="photo-shadow"></div>
+<div class="photo-frame" id="avatar-frame">
+<img alt="Ảnh đại diện" class="album-cover" id="album-cover" src="images1.png"/>
+</div>
+</div>
+</div>
+
+<p class="term-cmd reveal" style="--i:2">$ about.txt</p>
+<p class="about-text bio reveal" style="--i:2" id="about-section">Nothing Here.</p>
+
+<p class="term-cmd reveal" style="--i:3">$ currently</p>
+<ul class="currently-list reveal" id="projects-section" style="--i:3">
+<li>Building cool projects 🚀</li>
+<li>Listening to good music 🎵</li>
+<li>Drinking coffee ☕</li>
+</ul>
+
+<p class="term-cmd reveal" style="--i:4">$ locate</p>
+<p class="locate-text reveal location" style="--i:4">Da Nang, Vietnam</p>
+
+<div class="note-box reveal" style="--i:5">
+<p class="term-cmd">$ note to self</p>
+<p>Be better than yesterday.</p>
+<p>Stay focused and keep going.</p>
+</div>
+
 <div class="now reveal" style="--i:6">
 <strong>đang làm gì:</strong>
           đang nghỉ hè
         </div>
+
+<!-- vn-clock ẩn: vẫn chạy để giữ dữ liệu cho lịch sự kiện -->
+<div class="vn-clock-wrap reveal" id="vn-clock-wrap" style="--i:6;position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none">
+<p class="vn-clock tooltip-host tooltip-center" data-tooltip="Giờ hiện tại" id="vn-clock">Việt Nam (UTC+7) · --:--:--</p>
+<button aria-expanded="false" aria-label="Mở lịch sự kiện Việt Nam" class="vn-calendar-btn tooltip-host tooltip-center" data-tooltip="Lịch sự kiện Việt Nam" id="vn-calendar-btn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path></svg>
+</button>
+</div>
+
 <footer aria-label="Nhấn để chạy lệnh terminal" class="reveal" id="footer-bar" role="button" style="--i:7" tabindex="0">
 <span aria-hidden="true" class="dots foot-dots" id="foot-dots">
 <span class="dot r"></span>
@@ -2409,6 +2655,82 @@ footer#footer-bar:hover .foot-hint svg{
 </span>
 </footer>
 </div>
+</div>
+</div>
+
+<!-- ===== DATE + WEATHER ===== -->
+<div class="meta-row">
+<div class="meta-card" id="date-card">
+<span class="meta-icon" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path></svg></span>
+<div class="meta-body">
+<p class="meta-primary" id="date-weekday">—</p>
+<p class="meta-secondary" id="date-full">--/--/----</p>
+</div>
+</div>
+<div class="meta-card" id="weather-card">
+<span class="meta-icon sun" aria-hidden="true" id="weather-icon">☀️</span>
+<div class="meta-body">
+<p class="meta-primary" id="weather-temp">--°C</p>
+<p class="meta-secondary" id="weather-desc">Đà Nẵng</p>
+</div>
+</div>
+</div>
+
+<!-- ===== DISCORD ACTIVITY (relocated .discord-mini-profile) ===== -->
+<div class="discord-card" id="socials-section">
+<div class="discord-mini-profile" id="discord-mini-profile">
+<div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
+<div class="dmp-top">
+<div class="dmp-avatar-wrap">
+<img alt="avatar Discord" class="dmp-avatar" id="dmp-avatar" src=""/>
+<img alt="" class="dmp-decoration" id="dmp-decoration" src="" style="display:none"/>
+<span aria-hidden="true" class="dmp-status-dot offline" id="dmp-status-dot"></span>
+</div>
+<div class="dmp-info">
+<div class="dmp-name-row">
+<span class="dmp-username" id="dmp-username">—</span>
+<span class="dmp-badges" id="dmp-badges"></span>
+</div>
+<span class="dmp-activity" id="dmp-activity">đang kết nối…</span>
+</div>
+<div class="dmp-icons">
+<button aria-label="Ẩn/Hiện hoạt động" class="dmp-icon toggle-act-btn" data-tooltip="Ẩn hoạt động" data-tooltip-fixed="true" id="toggle-activity-btn" type="button">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15"><circle cx="5" cy="12" r="2.2"></circle><circle cx="12" cy="12" r="2.2"></circle><circle cx="19" cy="12" r="2.2"></circle></svg>
+</button>
+</div>
+</div>
+</div>
+<div class="dmp-activity-panel" id="dmp-activity-panel">
+<div class="dmp-activity-card">
+<div class="dmp-act-img-wrap">
+<img alt="" class="dmp-act-img" id="dmp-act-img" src="" style="display:none"/>
+<img alt="" class="dmp-act-img-small" id="dmp-act-img-small" src="" style="display:none"/>
+</div>
+<div class="dmp-act-text">
+<p class="dmp-act-name" id="dmp-act-name"></p>
+<p class="dmp-act-details" id="dmp-act-details" style="display:none"></p>
+<p class="dmp-act-state" id="dmp-act-state" style="display:none"></p>
+<p class="dmp-act-time" id="dmp-act-time"></p>
+</div>
+</div>
+</div>
+<div class="discord-join">
+<span>Join my Discord server</span>
+<a href="#" id="discord-join-link" rel="noopener" target="_blank">Join Server</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="site-nav-wrap">
+<nav class="site-nav" id="site-nav">
+<a class="active" data-target="#home" href="#home"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg><span>Home</span></a>
+<a data-target="#about-section" href="#about-section"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"></path></svg><span>About</span></a>
+<a data-target="#projects-section" href="#projects-section"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 7l3-4h12l3 4"></path><path d="M3 7h18v12H3z"></path></svg><span>Projects</span></a>
+<a data-target="#music-section" href="#music-section"><svg fill="currentColor" viewbox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg><span>Music</span></a>
+<a data-target="#socials-section" href="#socials-section"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01"></path><path d="M21 12c0 4.4-4 8-9 8-1.2 0-2.4-.2-3.4-.6L3 20l1-4.2C3.4 14.6 3 13.3 3 12c0-4.4 4-8 9-8s9 3.6 9 8Z"></path></svg><span>Socials</span></a>
+</nav>
 </div>
 </main>
 <div class="dock-wrap">
