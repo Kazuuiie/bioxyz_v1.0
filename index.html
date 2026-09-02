@@ -2549,6 +2549,192 @@ body:not(.page-unlocked) .vn-calendar-popover{opacity:0 !important;visibility:hi
   }
 }
 
+
+
+/* ===== V3 FINAL LAYOUT OVERRIDES ===== */
+/* Background: show the real video cleanly; remove all pink/peach wash layers. */
+html,body{background:#e9dccb !important}
+.bg-video-wrap{opacity:1 !important;mix-blend-mode:normal !important;filter:none !important;background:transparent !important;z-index:0 !important}
+.bg-video-wrap video{opacity:1 !important;filter:none !important}
+.bg-video-wrap::before,.bg-video-wrap::after{display:none !important;content:none !important}
+.orb-1{display:none !important}
+.orb-2,.orb-3{opacity:.14 !important;mix-blend-mode:normal !important}
+/* Keep UI paper, but let the background breathe around it. */
+main{isolation:isolate !important}
+
+/* Desktop: music is truly fixed to the bottom-left corner. */
+@media (min-width:981px){
+  .music-box{
+    position:fixed !important;
+    left:18px !important;
+    bottom:18px !important;
+    top:auto !important;
+    width:340px !important;
+    max-width:340px !important;
+    margin:0 !important;
+    z-index:140 !important;
+    opacity:.82 !important;
+    transform:none !important;
+  }
+  .music-box:hover,.music-box:focus-within,.music-box.is-playing{opacity:.97 !important}
+
+  /* Playlist opens to the RIGHT of the music box, never over the terminal. */
+  .music-box .track-list-panel{
+    position:absolute !important;
+    left:calc(100% + 12px) !important;
+    right:auto !important;
+    bottom:0 !important;
+    top:auto !important;
+    width:340px !important;
+    max-width:340px !important;
+    max-height:0 !important;
+    margin:0 !important;
+    padding:0 8px !important;
+    overflow:hidden !important;
+    z-index:141 !important;
+    transform:translateX(-8px) !important;
+    pointer-events:none !important;
+    opacity:0 !important;
+    transition:max-height .35s ease,opacity .25s ease,transform .35s ease,padding .3s ease !important;
+  }
+  .music-box .track-list-panel.open{
+    max-height:min(420px,calc(100vh - 36px)) !important;
+    overflow-y:auto !important;
+    padding:10px 8px !important;
+    transform:translateX(0) !important;
+    pointer-events:auto !important;
+    opacity:.97 !important;
+    background:rgba(248,236,217,.985) !important;
+    border:1px solid rgba(98,69,61,.14) !important;
+    border-radius:18px !important;
+    box-shadow:0 22px 44px -22px rgba(74,51,54,.45) !important;
+  }
+  .music-box .track-list-panel.open::-webkit-scrollbar{width:5px}
+  .music-box .track-list-panel.open::-webkit-scrollbar-thumb{background:rgba(98,69,61,.24);border-radius:6px}
+
+  /* Calendar: stable left column, with a real internal scroll area. */
+  .vn-calendar-popover{
+    left:18px !important;
+    top:46px !important;
+    width:340px !important;
+    max-width:340px !important;
+    height:min(430px,calc(100vh - 64px)) !important;
+    max-height:min(430px,calc(100vh - 64px)) !important;
+    overflow:hidden !important;
+    z-index:130 !important;
+  }
+  .vn-calendar-body{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+  .vn-calendar-events{
+    max-height:240px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+}
+
+/* Mid-sized desktop / tablet. */
+@media (min-width:981px) and (max-width:1220px){
+  .music-box{left:12px !important;width:300px !important;max-width:300px !important}
+  .music-box .track-list-panel.open{width:300px !important;max-width:300px !important}
+  .vn-calendar-popover{left:12px !important;width:300px !important;max-width:300px !important}
+}
+
+/* Phone: no floating side panels over the page. Music becomes a compact bottom dock. */
+@media (max-width:980px){
+  main{width:100% !important;padding:14px 10px 112px !important}
+  .card{width:100% !important}
+  .card-inner{padding:22px 16px 24px !important}
+  .photo-wrap{width:min(180px,62vw) !important;margin:0 auto 18px !important}
+  .photo-frame{width:100% !important;padding:8px 8px 22px !important}
+  .profile-avatar{width:100% !important;height:auto !important;aspect-ratio:1/1 !important}
+  .music-box{
+    position:fixed !important;
+    left:8px !important;
+    right:8px !important;
+    bottom:8px !important;
+    top:auto !important;
+    width:auto !important;
+    max-width:none !important;
+    margin:0 !important;
+    z-index:500 !important;
+    opacity:.96 !important;
+    transform:none !important;
+  }
+  .music-topline{gap:8px !important}
+  .disc-player{width:42px !important;height:42px !important}
+  .music-title{font-size:12px !important}
+  .music-sub{font-size:10px !important}
+  .music-bars{display:none !important}
+  .music-nav{gap:10px !important;margin-top:6px !important}
+  .music-nav button{width:26px !important;height:26px !important}
+  .music-progress-wrap{margin-top:7px !important}
+
+  /* On phones the playlist opens upward so it never gets clipped off-screen. */
+  .music-box .track-list-panel{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:calc(100% + 8px) !important;
+    top:auto !important;
+    width:100% !important;
+    max-width:none !important;
+    max-height:0 !important;
+    margin:0 !important;
+    overflow:hidden !important;
+    pointer-events:none !important;
+    transform:translateY(8px) !important;
+    opacity:0 !important;
+  }
+  .music-box .track-list-panel.open{
+    max-height:min(55vh,420px) !important;
+    overflow-y:auto !important;
+    pointer-events:auto !important;
+    transform:translateY(0) !important;
+    opacity:1 !important;
+    background:rgba(248,236,217,.985) !important;
+    border:1px solid rgba(98,69,61,.14) !important;
+    border-radius:16px !important;
+    padding:9px 8px !important;
+  }
+
+  .vn-calendar-popover,
+  .vn-calendar-popover.open{
+    position:fixed !important;
+    left:50% !important;
+    right:auto !important;
+    top:10px !important;
+    bottom:auto !important;
+    width:calc(100vw - 16px) !important;
+    max-width:380px !important;
+    height:min(70vh,520px) !important;
+    max-height:min(70vh,520px) !important;
+    transform:translateX(-50%) !important;
+    z-index:600 !important;
+  }
+  .vn-calendar-body{overflow-y:auto !important;min-height:0 !important}
+  .vn-calendar-events{max-height:32vh !important;overflow-y:auto !important}
+}
+
+@media (max-width:520px){
+  .titlebar{padding:9px 12px !important;border-radius:15px !important}
+  .titlebar .path{font-size:10px !important}
+  h1{font-size:clamp(34px,12vw,48px) !important}
+  .location{font-size:12px !important}
+  .vn-clock{font-size:9px !important;max-width:calc(100vw - 70px) !important}
+  .discord-mini-profile{margin-bottom:10px !important}
+  .bio{font-size:12.5px !important}
+  .now{font-size:12px !important}
+  .dock-wrap{bottom:82px !important}
+  .dock{gap:8px !important;padding:8px 10px !important}
+  .dock-item{width:36px !important;height:36px !important}
+  .footer{font-size:9px !important}
+}
+
 </style>
 
 
@@ -3008,7 +3194,6 @@ body:not(.page-unlocked) .vn-calendar-popover{opacity:0 !important;visibility:hi
 </div>
 </div>
 </div>
-
 </body>
 </html>
 <script src="javascript.js" defer></script>
