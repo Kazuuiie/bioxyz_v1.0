@@ -1,0 +1,2540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>itsrealkhanz — bio</title>
+<meta content="Trang bio cá nhân" name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&amp;family=DM+Sans:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg-a:#fbe7cf;
+  --bg-b:#f6d3c7;
+  --paper-dim:#f9ecdd;
+  --ink:#4a3336;
+  --ink-soft:#8a6b62;
+  --raspberry:#cf6478;
+  --mustard:#e2a85c;
+  --sage:#86a179;
+  --line:rgba(74,51,54,0.14);
+  --shadow:0 20px 44px -22px rgba(74,51,54,0.32);
+  --texture:
+    radial-gradient(circle at 12% -6%,rgba(255,255,255,0.35),transparent 52%),
+    radial-gradient(circle at 100% 108%,rgba(207,100,120,0.07),transparent 58%),
+    radial-gradient(circle at 90% 0%,rgba(226,168,92,0.06),transparent 46%);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{max-width:100%;overflow-x:hidden}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'DM Sans',sans-serif;
+  color:var(--ink);
+  background:var(--bg-a);
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+}
+a,button,.dock-item,.disc-player,.music-playbtn,.music-menu-btn,
+.music-nav button,#volume-btn,.track-item,.category-chip,
+.track-list-close,footer#footer-bar,.dmp-icon,
+.progress-bar-container,#volume-slider-container{
+  -webkit-tap-highlight-color:transparent;
+}
+::selection{background:var(--raspberry);color:#fff8ee}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:99;
+  pointer-events:none;
+  opacity:.035;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+  background:rgba(74,51,54,.22);
+  border-radius:8px;
+  border:2px solid var(--bg-a);
+}
+::-webkit-scrollbar-thumb:hover{background:rgba(74,51,54,.36)}
+
+@media (hover:hover) and (pointer:fine){
+  body{
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5,auto;
+  }
+  a,button{
+    cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="17" viewBox="0 0 15 17"><path d="M1.5 1.5 L1.5 13.5 L4.6 10.7 L6.6 15 L8.6 14 L6.7 9.7 L11.5 9.7 Z" fill="%23FFE4E1"/></svg>') 1.5 1.5,pointer;
+  }
+  .disc-player,.progress-bar-container,#volume-slider-container{
+    cursor:pointer!important;
+  }
+}
+
+/* ===== GATE ===== */
+#gate{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  width:100%;
+  border:none;
+  background:radial-gradient(circle at 50% 40%,#1a1412,#0d0b0a 70%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  overflow:hidden;
+  clip-path:circle(150% at 50% 50%);
+  transition:clip-path .6s ease,opacity .6s ease;
+}
+#gate.hidden{
+  opacity:0;
+  clip-path:circle(0% at 50% 50%);
+  pointer-events:none;
+}
+#gate::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 50%,transparent 45%,rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+.gate-inner{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+  padding:20px;
+}
+.gate-ring{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:122px;
+  height:122px;
+  border-radius:50%;
+  border:1px solid rgba(243,236,226,.22);
+  transition:transform .3s ease,border-color .3s ease;
+}
+#gate:hover .gate-ring{
+  transform:scale(1.05);
+  border-color:rgba(207,100,120,.4);
+}
+.gate-mark{
+  position:relative;
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:26px;
+  color:var(--raspberry);
+  opacity:.92;
+}
+.gate-text{
+  position:relative;
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-weight:500;
+  font-size:clamp(20px,4.5vw,28px);
+  letter-spacing:.02em;
+  color:#f3ece2;
+  opacity:.9;
+  transition:letter-spacing .3s ease,color .3s ease;
+}
+#gate:hover .gate-text{
+  letter-spacing:.06em;
+  color:#fff8ee;
+}
+.gate-text-underline{
+  display:block;
+  height:1px;
+  margin-top:8px;
+  background:linear-gradient(90deg,transparent,var(--raspberry),transparent);
+  transform:scaleX(.15);
+  opacity:.5;
+  transition:transform .35s ease,opacity .35s ease;
+}
+#gate:hover .gate-text-underline{
+  transform:scaleX(1);
+  opacity:1;
+}
+.gate-hint{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(243,236,226,.4);
+}
+.gate-burst{
+  position:fixed;
+  z-index:101;
+  pointer-events:none;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(243,236,226,.85),rgba(207,100,120,.3) 55%,transparent 72%);
+  transform:translate(-50%,-50%) scale(0);
+  animation:gate-burst-anim .5s ease-out forwards;
+}
+@keyframes gate-burst-anim{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:.9}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:0}
+}
+
+/* ===== BACKGROUND ===== */
+#main{position:relative;min-height:100vh}
+.bg-video-wrap{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:linear-gradient(160deg,var(--bg-a),var(--bg-b));
+}
+.bg-video-wrap video{
+  position:absolute;
+  top:50%;
+  left:50%;
+  min-width:100%;
+  min-height:100%;
+  width:auto;
+  height:auto;
+  transform:translate(-50%,-50%);
+  object-fit:cover;
+  object-position:68% center;
+}
+.bg-video-wrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 30%,rgba(255,248,238,.12),rgba(74,51,54,.16) 85%);
+  z-index:1;
+}
+.orb{
+  position:fixed;
+  z-index:1;
+  border-radius:50%;
+  filter:blur(44px);
+  pointer-events:none;
+  opacity:.55;
+  animation:orb-float 16s ease-in-out infinite;
+  will-change:transform;
+  transform:translateZ(0);
+}
+.orb-1{
+  width:260px;height:260px;top:6%;left:-6%;
+  background:radial-gradient(circle,var(--raspberry),transparent 70%);
+  animation-duration:18s;
+}
+.orb-2{
+  width:220px;height:220px;bottom:8%;right:-5%;
+  background:radial-gradient(circle,var(--mustard),transparent 70%);
+  animation-duration:21s;
+  animation-delay:-6s;
+}
+.orb-3{
+  width:180px;height:180px;bottom:32%;left:4%;
+  background:radial-gradient(circle,var(--sage),transparent 70%);
+  animation-duration:15s;
+  animation-delay:-3s;
+}
+@keyframes orb-float{
+  0%,100%{transform:translateZ(0) translate(0,0)}
+  33%{transform:translateZ(0) translate(26px,-32px)}
+  66%{transform:translateZ(0) translate(-20px,20px)}
+}
+@media(max-width:640px){
+  .orb-3,.orb-2{display:none}
+}
+
+/* ===== MAIN / CARD ===== */
+main{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:40px 20px 60px;
+  perspective:1200px;
+}
+.dock{
+  display:flex;
+  gap:14px;
+  width:fit-content;
+  margin:0 auto;
+  opacity:0;
+  translate:0 16px;
+  transition:opacity .6s ease;
+}
+.dock.in{opacity:1;translate:0 0}
+.dock-item{
+  width:40px;height:40px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  background:transparent;
+  overflow:hidden;
+  flex-shrink:0;
+  transition:translate .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.dock-item:hover{translate:0 -7px}
+.dock-item img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  filter:drop-shadow(0 3px 6px rgba(74,51,54,.28));
+}
+.dock-avatar{
+  width:100%;height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.dock-wrap{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  padding:0 20px 56px;
+}
+.card{
+  position:relative;
+  width:100%;
+  max-width:480px;
+  background:none;
+  border-radius:14px;
+  padding:0 0 36px;
+  opacity:0;
+  transform:translateY(28px) scale(.98);
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.card.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.card.tilt-ready{
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),opacity .8s ease;
+}
+.titlebar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 15px;
+  background:var(--paper-dim);
+  background-image:var(--texture);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  position:relative;
+  z-index:2;
+}
+.titlebar .dots{display:flex;gap:5px;flex-shrink:0}
+.titlebar .dot{
+  width:9px;height:9px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12);
+}
+.titlebar .dot.r{background:var(--raspberry)}
+.titlebar .dot.y{background:var(--mustard)}
+.titlebar .dot.g{background:var(--sage)}
+.titlebar .path{
+  flex:1;
+  text-align:right;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.04em;
+  color:var(--ink-soft);
+}
+.card-inner{
+  padding:26px 30px 0;
+  position:relative;
+  z-index:2;
+}
+.reveal{
+  opacity:0;
+  translate:0 12px;
+  filter:blur(3px);
+  transition:opacity .6s ease,translate .6s cubic-bezier(.2,.8,.2,1),filter .6s ease;
+  transition-delay:calc(var(--i,0) * 90ms + 150ms);
+}
+.card.in .reveal{
+  opacity:1;
+  translate:0 0;
+  filter:blur(0);
+}
+
+/* ===== DISCORD ===== */
+.discord-mini-profile{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  margin:0 auto 14px;
+  padding:0 0 8px;
+  background:rgba(255,255,255,.24);
+  background-image:
+    radial-gradient(circle at 14% -12%,rgba(255,255,255,.55),transparent 52%),
+    linear-gradient(150deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.4);
+  border-left:3px solid var(--raspberry);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset;
+  backdrop-filter:blur(6px) saturate(1.05);
+  -webkit-backdrop-filter:blur(6px) saturate(1.05);
+  transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.discord-mini-profile:hover{
+  box-shadow:0 20px 38px -20px rgba(74,51,54,.46),0 1px 0 rgba(255,255,255,.5) inset;
+}
+.discord-mini-profile:has(.dmp-status-dot.online){
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(35,165,90,.3);
+}
+.discord-mini-profile:has(.dmp-status-dot.idle){
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(240,178,50,.3);
+}
+.discord-mini-profile:has(.dmp-status-dot.dnd){
+  box-shadow:0 16px 30px -22px rgba(74,51,54,.4),0 1px 0 rgba(255,255,255,.5) inset,0 0 0 1px rgba(242,63,67,.3);
+}
+.discord-mini-profile::before{
+  content:"$ discord --whoami";
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.05em;
+  color:var(--ink-soft);
+  opacity:.65;
+  padding:9px 14px 7px;
+}
+.discord-mini-profile.has-nameplate{
+  border-color:rgba(255,255,255,.14);
+  border-left-color:transparent;
+  background-color:transparent;
+  background-image:
+    radial-gradient(circle at 14% -12%,rgba(255,255,255,.12),transparent 48%),
+    linear-gradient(180deg,rgba(20,16,15,.58) 0%,rgba(20,16,15,.74) 100%);
+  backdrop-filter:blur(10px) saturate(1.02);
+  -webkit-backdrop-filter:blur(10px) saturate(1.02);
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55);
+}
+.discord-mini-profile.has-nameplate:has(.dmp-status-dot.online){
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55),0 0 0 1px rgba(35,165,90,.35);
+}
+.discord-mini-profile.has-nameplate:has(.dmp-status-dot.idle){
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55),0 0 0 1px rgba(240,178,50,.35);
+}
+.discord-mini-profile.has-nameplate:has(.dmp-status-dot.dnd){
+  box-shadow:0 18px 34px -20px rgba(0,0,0,.55),0 0 0 1px rgba(242,63,67,.35);
+}
+.discord-mini-profile.has-nameplate::before{color:rgba(255,248,238,.55)}
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone{background:#14100f}
+
+.dmp-nameplate-zone{
+  position:relative;
+  overflow:hidden;
+  padding:10px 14px 8px 10px;
+  --dmp-nameplate:none;
+  --dmp-nameplate-color:rgba(20,13,15,.9);
+}
+.dmp-nameplate-zone::before,
+.dmp-nameplate-zone::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s ease;
+}
+.dmp-nameplate-zone::before{
+  background-image:var(--dmp-nameplate);
+  background-color:var(--dmp-nameplate-color);
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.06);
+}
+.dmp-nameplate-zone::after{
+  background:linear-gradient(115deg,rgba(20,13,15,.85) 12%,rgba(20,13,15,.45) 55%,rgba(20,13,15,.72) 100%);
+}
+.dmp-nameplate-zone .dmp-nameplate-video{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  pointer-events:none;
+  transform:scale(1.06);
+  transition:opacity .35s ease;
+}
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone::before,
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone::after,
+.discord-mini-profile.has-nameplate .dmp-nameplate-zone .dmp-nameplate-video{
+  opacity:1;
+}
+.discord-mini-profile.has-nameplate .dmp-username{
+  color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.55);
+}
+.discord-mini-profile.has-nameplate .dmp-activity{color:rgba(255,255,255,.78)}
+.discord-mini-profile.has-nameplate .dmp-status-dot{background:#14100f}
+.discord-mini-profile.has-nameplate .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 0 0 2px #14100f;
+}
+.discord-mini-profile.has-nameplate .dmp-activity-card{
+  background:transparent;
+  border:none;
+}
+.discord-mini-profile.has-nameplate .dmp-act-details,
+.discord-mini-profile.has-nameplate .dmp-act-state,
+.discord-mini-profile.has-nameplate .dmp-act-time{
+  color:rgba(255,248,238,.72);
+}
+.discord-mini-profile.has-nameplate .dmp-act-img{
+  box-shadow:0 4px 12px -3px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);
+}
+@media(max-width:640px){
+  .discord-mini-profile,
+  .discord-mini-profile.has-nameplate,
+  .music-box{
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .discord-mini-profile{background-color:rgba(255,255,255,.5)}
+  .discord-mini-profile.has-nameplate{background-color:rgba(20,16,15,.78)}
+  .music-box{background-color:rgba(18,16,15,.7)}
+}
+.dmp-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  width:100%;
+  position:relative;
+  z-index:1;
+}
+.dmp-avatar-wrap{
+  position:relative;
+  width:46px;
+  height:46px;
+  flex-shrink:0;
+}
+.dmp-avatar{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  background:var(--bg-b);
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35);
+  transition:box-shadow .4s ease;
+}
+.dmp-avatar-wrap:has(.dmp-status-dot.online) .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35),0 0 0 7px rgba(35,165,90,.16),0 0 18px 4px rgba(35,165,90,.22);
+}
+.dmp-avatar-wrap:has(.dmp-status-dot.idle) .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35),0 0 0 7px rgba(240,178,50,.14),0 0 18px 4px rgba(240,178,50,.18);
+}
+.dmp-avatar-wrap:has(.dmp-status-dot.dnd) .dmp-avatar{
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 3px 8px -2px rgba(74,51,54,.35),0 0 0 7px rgba(242,63,67,.14),0 0 18px 4px rgba(242,63,67,.18);
+}
+.dmp-decoration{
+  position:absolute;
+  inset:-6px;
+  width:58px;
+  height:58px;
+  pointer-events:none;
+}
+.dmp-info{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+  text-align:left;
+  flex:1;
+}
+.dmp-name-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.dmp-username{
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:14.5px;
+  letter-spacing:.005em;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:160px;
+  transition:color .3s ease;
+}
+.dmp-badges{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.dmp-badge{
+  font-size:12px;
+  line-height:1;
+  filter:drop-shadow(0 1px 1px rgba(74,51,54,.2));
+  transition:transform .2s ease;
+}
+.dmp-badge:hover{
+  transform:translateY(-1px) scale(1.12);
+}
+.dmp-activity{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+  letter-spacing:.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:color .3s ease;
+}
+.dmp-icons{
+  display:flex;
+  align-items:center;
+  gap:2px;
+  margin-left:auto;
+  position:relative;
+  z-index:1;
+  flex-shrink:0;
+}
+.dmp-icon{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:none;
+  padding:0;
+  margin:0;
+  color:var(--ink-soft);
+  transition:color .2s ease,background .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+button.dmp-icon{cursor:pointer}
+.dmp-icon:hover{
+  background:rgba(74,51,54,.08);
+  color:var(--ink);
+  transform:scale(1.08);
+}
+.dmp-icon:active{transform:scale(.94)}
+.discord-mini-profile.has-nameplate .dmp-icon{color:rgba(255,255,255,.82)}
+.discord-mini-profile.has-nameplate .dmp-icon:hover{
+  background:rgba(255,255,255,.16);
+  color:#fff;
+}
+.toggle-act-btn{
+  background:transparent;
+  border:none;
+  color:var(--ink-soft);
+  padding:4px 6px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:color .2s ease,background .2s ease,transform .2s cubic-bezier(.34,1.56,.64,1);
+  flex-shrink:0;
+  margin-left:0;
+}
+.toggle-act-btn:hover{
+  color:var(--ink);
+  background:rgba(74,51,54,.08);
+  transform:scale(1.1);
+}
+.toggle-act-btn:active{transform:scale(.92)}
+.toggle-act-btn.is-disabled{opacity:.4}
+
+.dmp-status-dot{
+  position:absolute;
+  right:-2px;
+  bottom:-2px;
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:var(--paper-dim);
+  box-sizing:border-box;
+  z-index:2;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+.dmp-status-dot::before{
+  content:"";
+  position:absolute;
+  inset:2.5px;
+  border-radius:50%;
+  background:#80848e;
+}
+.dmp-status-dot.online::before{background:#23a55a}
+.dmp-status-dot.online::after{
+  content:"";
+  position:absolute;
+  inset:2.5px;
+  border-radius:50%;
+  background:rgba(35,165,90,.55);
+  animation:status-glow-ring 2s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes status-glow-ring{
+  0%{transform:scale(1);opacity:.55}
+  100%{transform:scale(1.9);opacity:0}
+}
+.dmp-status-dot.idle::before{background:#f0b232}
+.dmp-status-dot.dnd::before{background:#f23f43}
+.dmp-status-dot.offline::before{background:#80848e}
+.dmp-status-dot.idle::after{
+  content:"";
+  position:absolute;
+  width:6.5px;
+  height:6.5px;
+  border-radius:50%;
+  background:var(--paper-dim);
+  top:1.5px;
+  left:1.5px;
+}
+.dmp-status-dot.dnd::after{
+  content:"";
+  position:absolute;
+  width:6.5px;
+  height:2px;
+  border-radius:1px;
+  background:#fff8ee;
+  top:6.5px;
+  left:4.2px;
+}
+.dmp-status-dot:hover{transform:scale(1.25)}
+
+.dmp-activity-panel{
+  width:100%;
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  margin-top:0;
+  padding:0 14px 0 10px;
+  box-sizing:border-box;
+  border-top:1px solid transparent;
+  transition:max-height .42s cubic-bezier(.2,.8,.2,1),opacity .32s ease,margin-top .42s ease,border-color .32s ease;
+}
+.dmp-activity-panel.open{
+  opacity:1;
+  margin-top:10px;
+  padding-top:10px;
+  border-top-color:rgba(74,51,54,.12);
+}
+.discord-mini-profile.has-nameplate .dmp-activity-panel.open{
+  border-top-color:rgba(255,255,255,.16);
+}
+.dmp-activity-panel.open .dmp-activity-card::before{
+  content:"▸ hoạt động";
+  display:block;
+  width:100%;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.08em;
+  color:var(--raspberry);
+  opacity:.7;
+  margin-bottom:8px;
+}
+.discord-mini-profile.has-nameplate .dmp-activity-panel.open .dmp-activity-card::before{
+  color:rgba(255,248,238,.7);
+}
+.dmp-activity-panel.user-collapsed{
+  max-height:0!important;
+  opacity:0!important;
+  margin-top:0!important;
+  pointer-events:none;
+}
+.dmp-activity-card{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:0;
+  background:transparent;
+  border:none;
+  border-radius:0;
+}
+.dmp-act-img-wrap{
+  position:relative;
+  width:40px;
+  height:40px;
+  flex-shrink:0;
+}
+.dmp-act-img{
+  width:40px;
+  height:40px;
+  border-radius:9px;
+  object-fit:cover;
+  display:block;
+  background:var(--bg-b);
+  box-shadow:0 4px 10px -4px rgba(74,51,54,.4);
+}
+.dmp-act-img-small{
+  position:absolute;
+  right:-4px;
+  bottom:-4px;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  border:2px solid var(--paper-dim);
+  object-fit:cover;
+  background:var(--bg-b);
+  box-shadow:0 2px 5px -1px rgba(74,51,54,.35);
+}
+.dmp-act-text{
+  min-width:0;
+  text-align:left;
+  flex:1;
+}
+.dmp-act-name{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:12.5px;
+  color:var(--raspberry);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.discord-mini-profile.has-nameplate .dmp-act-name{color:#fff}
+.dmp-act-details,.dmp-act-state{
+  margin:2px 0 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dmp-act-time{
+  margin:4px 0 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:var(--ink-soft);
+  opacity:.85;
+}
+
+/* ===== MUSIC ===== */
+.music-box{
+  position:relative;
+  z-index:10;
+  width:100%;
+  background-color:rgba(18,16,15,.42);
+  background-image:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:12px 14px;
+  margin:0 0 14px;
+  box-shadow:0 14px 28px -18px rgba(74,51,54,.45);
+  backdrop-filter:blur(8px) saturate(1.1);
+  -webkit-backdrop-filter:blur(8px) saturate(1.1);
+}
+.music-box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 15% 0%,rgba(29,185,84,.12),transparent 55%);
+  pointer-events:none;
+  border-radius:14px;
+}
+.music-box.is-playing{
+  box-shadow:0 14px 28px -18px rgba(74,51,54,.5),0 0 0 1px rgba(29,185,84,.32);
+}
+.music-topline{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.disc-player{
+  position:relative;
+  width:48px;
+  height:48px;
+  border-radius:6px;
+  background:rgba(255,255,255,.10);
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  border:none;
+  padding:0;
+  flex-shrink:0;
+  overflow:hidden;
+  z-index:1;
+}
+.disc-player .disc-label{
+  display:block;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,var(--raspberry),var(--mustard));
+  background-size:cover;
+  background-position:center;
+}
+.music-info{
+  flex:1;
+  min-width:0;
+  position:relative;
+  z-index:1;
+}
+.music-title{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:13.5px;
+  color:#fff8ee!important;
+  line-height:1.4;
+  white-space:normal;
+  word-break:break-word;
+  cursor:default;
+}
+.music-sub{
+  margin:3px 0 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:rgba(255,248,238,.62)!important;
+}
+.music-bars{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:2px;
+  height:18px;
+  padding:0 2px;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:2px;
+}
+.music-bars .bar{
+  width:2px;
+  height:100%;
+  background-color:#1db954;
+  transform-origin:bottom center!important;
+  transform:scaleY(.08);
+  transition:transform .06s ease;
+  will-change:transform;
+}
+.music-playbtn{
+  position:relative;
+  z-index:1;
+  width:34px;
+  height:34px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:rgba(255,248,238,.92);
+  border:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1);
+}
+.music-playbtn:hover{
+  transform:scale(1.06);
+  background:#fff;
+}
+.music-playbtn svg{width:14px;height:14px;display:block}
+.music-playbtn .icon-pause{display:none}
+.music-box.is-playing .music-playbtn .icon-play{display:none}
+.music-box.is-playing .music-playbtn .icon-pause{display:block}
+.music-menu-btn{
+  position:relative;
+  z-index:1;
+  width:28px;
+  height:28px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:transparent;
+  border:none;
+  color:rgba(255,248,238,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.music-menu-btn:hover{
+  color:#fff8ee;
+  background:rgba(255,255,255,.10);
+}
+.music-menu-btn svg{width:16px;height:16px}
+.music-menu-btn[aria-expanded="true"]{
+  color:#1DB954;
+  background:rgba(29,185,84,.14);
+}
+.music-progress-wrap{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  margin-top:12px;
+}
+.time-label{
+  font-family:'DM Sans',sans-serif;
+  font-size:10.5px;
+  color:#a7a7a7;
+  min-width:30px;
+  text-align:center;
+}
+.progress-bar-container{
+  flex:1;
+  height:4px;
+  background:rgba(255,248,238,.22);
+  border-radius:2px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:height .15s ease;
+}
+.progress-bar-container:hover{height:6px}
+.progress-bar-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  transform-origin:left;
+  transform:scaleX(0);
+  background:#fff8ee;
+  border-radius:2px;
+  will-change:transform;
+}
+.music-nav{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:10px;
+  height:32px;
+}
+.music-nav button{
+  width:28px;
+  height:28px;
+  border:none;
+  border-radius:50%;
+  background:transparent;
+  color:rgba(255,248,238,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:color .2s ease,transform .2s ease;
+}
+.music-nav button svg{width:16px;height:16px;fill:currentColor}
+.music-nav button:hover{
+  color:#fff8ee;
+  transform:scale(1.1);
+}
+.volume-container{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:2px 4px;
+  border-radius:20px;
+  transition:background .2s ease;
+}
+.volume-container:hover{background:rgba(255,255,255,.08)}
+#volume-btn{
+  background:transparent;
+  border:none;
+  color:rgba(255,248,238,.62);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  width:24px;
+  height:24px;
+  outline:none;
+  transition:color .2s ease;
+}
+#volume-btn:hover{color:#fff}
+#volume-slider-container{
+  position:relative;
+  width:0;
+  height:4px;
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
+  cursor:pointer;
+  opacity:0;
+  overflow:hidden;
+  transition:width .3s cubic-bezier(.4,0,.2,1),opacity .25s ease;
+}
+.volume-container:hover #volume-slider-container{
+  width:65px;
+  opacity:1;
+  overflow:visible;
+}
+#volume-slider-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  transform-origin:left;
+  transform:scaleX(1);
+  background:#1db954;
+  border-radius:4px;
+  pointer-events:none;
+  will-change:transform;
+}
+
+/* ===== PLAYLIST ===== */
+.track-list-panel{
+  position:relative;
+  margin-top:10px;
+  width:100%;
+  max-height:0;
+  overflow-y:hidden;
+  background:rgba(0,0,0,.25);
+  border-radius:10px;
+  padding:0 8px;
+  border:1px solid transparent;
+  opacity:0;
+  transition:max-height .35s ease,opacity .3s ease,padding .3s ease;
+}
+.track-list-panel.open{
+  opacity:1;
+  max-height:175px;
+  overflow-y:auto;
+  padding:8px;
+  border-color:rgba(255,255,255,.1);
+}
+.track-list-panel::-webkit-scrollbar{width:4px}
+.track-list-panel::-webkit-scrollbar-track{background:transparent}
+.track-list-panel::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.2);
+  border-radius:4px;
+}
+.track-list-panel::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.4)}
+.track-list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  font-weight:700;
+  color:#fff8ee;
+  user-select:none;
+}
+.track-list-header span::before{
+  content:"♪ ";
+  color:#1DB954;
+}
+.track-list-close{
+  width:22px;
+  height:22px;
+  border:none;
+  border-radius:50%;
+  background:transparent;
+  color:rgba(255,248,238,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  cursor:pointer;
+}
+.track-list-close:hover{
+  color:#fff8ee;
+  background:rgba(255,255,255,.12);
+}
+.track-category-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:8px;
+}
+.category-chip{
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:rgba(255,248,238,.65);
+  font-family:'DM Sans',sans-serif;
+  font-size:10.5px;
+  font-weight:600;
+  cursor:pointer;
+  user-select:none;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+  white-space:nowrap;
+  line-height:1.4;
+}
+.category-chip:hover{
+  background:rgba(255,255,255,.12);
+  color:#fff8ee;
+}
+.category-chip.active{
+  background:rgba(29,185,84,.22);
+  border-color:rgba(29,185,84,.5);
+  color:#1DB954;
+}
+.track-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.track-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 8px;
+  border-radius:8px;
+  cursor:pointer;
+  user-select:none;
+  transition:background .15s ease;
+}
+.track-item:hover{background:rgba(255,255,255,.1)}
+.track-item.active{background:rgba(29,185,84,.18)}
+.track-item .t-index{
+  width:16px;
+  text-align:center;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;
+  color:rgba(255,248,238,.4);
+}
+.track-item.active .t-index{
+  color:#1DB954;
+  font-weight:bold;
+}
+.track-item .t-cover{
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+.track-item .t-info{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  gap:1px;
+}
+.track-item .t-title{
+  margin:0;
+  min-width:0;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  color:#fff8ee;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.track-item.active .t-title{
+  color:#1DB954;
+  font-weight:700;
+}
+.track-item .t-category{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:rgba(255,248,238,.4);
+}
+.track-item.active .t-category{color:rgba(29,185,84,.75)}
+.track-list-empty{
+  text-align:center;
+  padding:16px 0;
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  color:rgba(255,248,238,.45);
+}
+.mini-bars{
+  display:none;
+  align-items:flex-end;
+  gap:2px;
+  height:12px;
+  margin-left:auto;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:1px;
+}
+.music-box.is-playing .track-item.active .mini-bars{display:flex}
+.mini-bars .m-bar{
+  width:2px;
+  height:100%;
+  background-color:#1DB954;
+  transform-origin:bottom center!important;
+  transform:scaleY(.1);
+  transition:transform .06s ease;
+}
+
+/* ===== PHOTO / TEXT ===== */
+.photo-wrap{
+  position:relative;
+  width:196px;
+  margin:-74px auto 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:photo-idle 5.5s ease-in-out infinite;
+}
+@keyframes photo-idle{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+.photo-shadow{
+  position:absolute;
+  width:76%;
+  height:72%;
+  top:12%;
+  border-radius:6px;
+  background:radial-gradient(circle,rgba(74,51,54,.22),transparent 75%);
+  filter:blur(12px);
+  transform:translateY(18px) rotate(-4deg);
+}
+.photo-frame{
+  position:relative;
+  width:176px;
+  background-color:rgba(255,254,252,.55);
+  background-image:var(--texture);
+  padding:10px 10px 26px;
+  border-radius:6px;
+  rotate:-4deg;
+  transition:rotate .4s ease;
+}
+.photo-frame:hover{rotate:0deg}
+.album-cover{
+  display:block;
+  width:156px;
+  height:156px;
+  object-fit:cover;
+  border-radius:2px;
+}
+.eyebrow{
+  text-align:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--ink-soft);
+  margin:0 0 6px;
+}
+.eyebrow::before{
+  content:"$ whoami";
+  display:block;
+  color:var(--raspberry);
+  margin-bottom:3px;
+  opacity:.75;
+}
+h1{
+  text-align:center;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(32px,8vw,42px);
+  margin:0 0 4px;
+  line-height:1.05;
+}
+h1 em{
+  font-style:italic;
+  font-weight:500;
+  color:var(--raspberry);
+}
+.location{
+  text-align:center;
+  font-size:14px;
+  color:var(--ink-soft);
+  margin:0 0 4px;
+}
+.location::before{content:"📍 "}
+.vn-clock-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  width:fit-content;
+  max-width:100%;
+  margin:0 auto 14px;
+  z-index:120;
+}
+.vn-clock{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  font-weight:500;
+  letter-spacing:.03em;
+  color:#fff8ee;
+  background:rgba(24,19,20,.58);
+  border:1px solid rgba(255,248,238,.18);
+  width:fit-content;
+  max-width:calc(100vw - 88px);
+  padding:5px 11px;
+  border-radius:999px;
+  margin:0;
+  text-shadow:0 1px 2px rgba(0,0,0,.25);
+  white-space:nowrap;
+  box-shadow:0 7px 18px -12px rgba(0,0,0,.7);
+}
+.vn-calendar-btn{
+  width:29px;height:29px;padding:0;
+  border:1px solid rgba(207,100,120,.40);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#e6d4ff;
+  background:rgba(26,19,27,.68);
+  box-shadow:0 7px 18px -12px rgba(0,0,0,.72),0 0 0 1px rgba(139,92,246,.08) inset;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease;
+}
+.vn-calendar-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.vn-calendar-btn:hover{
+  transform:scale(1.08);
+  background:rgba(139,92,246,.22);
+  border-color:rgba(231,143,162,.72);
+  color:#fff8ee;
+  box-shadow:0 8px 20px -12px rgba(0,0,0,.8),0 0 0 1px rgba(231,143,162,.15) inset;
+}
+.vn-calendar-btn:active{transform:scale(.94)}
+.vn-calendar-btn.is-open{
+  background:rgba(139,92,246,.32);
+  border-color:rgba(231,143,162,.82);
+  color:#fff;
+}
+/* ===== EVENT CALENDAR — REDESIGN ===== */
+/* FIX QUAN TRỌNG: mặc định popover LUÔN hiện GIỮA MÀN HÌNH bằng CSS thuần
+   (không phụ thuộc JS chạy đúng). Trước đây top/left hoàn toàn do JS set,
+   nên nếu vì bất kỳ lý do gì JS không set được vị trí kịp (lỗi, thiết bị lạ,
+   race-condition khi chuyển đổi chế độ...), popover không có top/left nào
+   cả -> nằm ngoài khung nhìn -> người dùng chỉ thấy nền tối (backdrop) mà
+   không thấy hộp lịch. Giờ:
+   - Mặc định (không có class .corner): hiện giữa màn hình — LUÔN hoạt động.
+   - .corner (JS thêm khi đủ chỗ cạnh bio card): JS set left/top/transform
+     bằng inline style để đặt góc cạnh card — chỉ là NÂNG CẤP thêm, không
+     phải điều kiện bắt buộc để popover hiển thị được. */
+.vn-calendar-popover{
+  position:fixed;
+  top:50%;
+  left:50%;
+  z-index:3;
+  width:400px;
+  max-width:calc(100vw - 36px);
+  max-height:min(70vh,560px);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(207,100,120,.10), transparent 45%),
+    linear-gradient(180deg,rgba(24,19,18,.98),rgba(15,12,11,.99));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03) inset;
+  backdrop-filter:blur(18px) saturate(1.15);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
+  color:#f5f0ea;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(.96);
+  transition:opacity .2s ease,transform .2s cubic-bezier(.2,.8,.2,1),visibility .2s ease;
+}
+.vn-calendar-popover.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1);
+}
+/* Chế độ góc — JS bật bằng class .corner + set left/top/transform inline.
+   transform-origin đổi sang top-left cho khớp hiệu ứng trượt từ góc. */
+.vn-calendar-popover.corner{
+  transform-origin:top left;
+}
+
+/* HEADER */
+.vn-calendar-head{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:15px 16px 13px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent);
+}
+.vn-calendar-head-icon{
+  width:34px;height:34px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#e78fa2;
+  border-radius:11px;
+  background:linear-gradient(135deg,rgba(231,143,162,.18),rgba(231,143,162,.06));
+  box-shadow:0 0 0 1px rgba(231,143,162,.14) inset;
+}
+.vn-calendar-head-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.vn-calendar-head-text{min-width:0;flex:1}
+.vn-calendar-title{
+  margin:0;font-family:'DM Sans',sans-serif;font-weight:700;
+  font-size:14.5px;line-height:1.2;color:#fff;letter-spacing:.005em;
+}
+.vn-calendar-title em{font-style:normal;color:#e78fa2}
+.vn-calendar-sub{
+  margin:3px 0 0;font-family:'IBM Plex Mono',monospace;
+  font-size:9px;color:rgba(245,240,234,.42);
+  letter-spacing:.05em;text-transform:uppercase;
+}
+.vn-calendar-close{
+  width:29px;height:29px;flex-shrink:0;
+  border:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(245,240,234,.5);background:rgba(255,255,255,.04);
+  transition:background .15s ease,color .15s ease,transform .15s ease;
+}
+.vn-calendar-close:hover{background:rgba(255,255,255,.1);color:#fff;transform:rotate(90deg)}
+.vn-calendar-close svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+/* BODY */
+.vn-calendar-body{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:13px 14px 14px;
+}
+.vn-calendar-body::-webkit-scrollbar{width:5px}
+.vn-calendar-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:6px}
+.vn-calendar-main-grid{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+/* NEXT EVENT — hero card */
+.vn-calendar-next{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  padding:16px 16px 14px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid color-mix(in srgb,var(--event-color,#cf6478) 30%,rgba(255,255,255,.07));
+  background:
+    radial-gradient(circle at 105% -10%,color-mix(in srgb,var(--event-color,#cf6478) 22%,transparent),transparent 55%),
+    linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  cursor:pointer;
+  --event-color:#cf6478;
+  transition:border-color .2s ease,transform .15s ease;
+}
+.vn-calendar-next:hover{transform:translateY(-1px)}
+.vn-calendar-next::after{
+  content:"";
+  position:absolute;
+  right:-30px;
+  bottom:-30px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--event-color),transparent 70%);
+  opacity:.10;
+  pointer-events:none;
+}
+.vn-calendar-next.kind-official{--event-color:#ff5b62}
+.vn-calendar-next.kind-lunar{--event-color:#f4c95d}
+.vn-calendar-next.kind-international{--event-color:#63b3ff}
+.vn-calendar-next.kind-vietnam{--event-color:#6ee7a0}
+.vn-calendar-next.kind-special{--event-color:#b98cff}
+.vn-calendar-kicker{
+  position:relative;
+  display:flex;align-items:center;gap:5px;
+  font-family:'IBM Plex Mono',monospace;font-size:8.5px;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--event-color);
+  font-weight:700;
+}
+.vn-calendar-kicker svg{width:10px;height:10px;fill:currentColor}
+.vn-calendar-next-main{position:relative;min-width:0;margin-top:10px}
+.vn-calendar-next-name{
+  margin:0;font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;line-height:1.25;color:#fff;
+  overflow-wrap:anywhere;
+}
+.vn-calendar-next-dates{
+  margin:7px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;line-height:1.5;color:rgba(245,240,234,.55);
+}
+.vn-calendar-next-dates .vn-lunar-highlight{color:#f4c95d;font-weight:600}
+.vn-calendar-next-count{position:relative;margin-top:13px}
+.vn-calendar-count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.vn-count-box{
+  min-width:0;padding:9px 3px 7px;border-radius:11px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.05);
+  text-align:center;
+  transition:background .3s ease;
+}
+.vn-count-value{
+  font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;line-height:1;color:var(--event-color);letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
+}
+.vn-count-unit{margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.08em;color:rgba(245,240,234,.35);text-transform:uppercase}
+.vn-calendar-ongoing{
+  position:relative;
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 12px;border-radius:999px;
+  background:rgba(110,231,160,.12);color:#6ee7a0;
+  font:700 9px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;
+}
+.vn-calendar-ongoing::before{content:"";width:6px;height:6px;border-radius:50%;background:#6ee7a0;box-shadow:0 0 10px rgba(110,231,160,.65);animation:vn-pulse-dot 1.6s ease-in-out infinite}
+@keyframes vn-pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* LIST HEADER */
+.vn-calendar-right{display:flex;flex-direction:column;min-width:0}
+.vn-calendar-section-title{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 9px;
+  font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,240,234,.4)
+}
+.vn-calendar-section-title strong{font-weight:700;color:#fff}
+.vn-calendar-list-controls{display:flex;align-items:center;gap:7px}
+#vn-calendar-year-label{
+  padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.05);
+  font-weight:600;color:rgba(245,240,234,.55);
+}
+.vn-calendar-filter{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  padding:5px 24px 5px 11px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.09);
+  color:#fff;background:
+    linear-gradient(45deg,transparent 50%,#9096a3 50%) calc(100% - 11px) 50% / 4px 4px no-repeat,
+    linear-gradient(135deg,#9096a3 50%,transparent 50%) calc(100% - 8px) 50% / 4px 4px no-repeat,
+    rgba(255,255,255,.03);
+  font:500 9.5px 'DM Sans',sans-serif;outline:none;
+  transition:border-color .15s ease,background-color .15s ease;
+}
+.vn-calendar-filter:hover{border-color:rgba(231,143,162,.32);background-color:rgba(231,143,162,.06)}
+.vn-calendar-filter option{background:#16120f;color:#fff}
+
+/* EVENT LIST — compact rows */
+.vn-calendar-events{display:flex;flex-direction:column;gap:4px}
+.vn-calendar-event{
+  --event-color:#cf6478;
+  display:grid;grid-template-columns:28px 44px minmax(0,1fr) auto;align-items:center;gap:9px;min-width:0;
+  padding:8px 9px;border:1px solid rgba(255,255,255,.04);border-radius:11px;background:rgba(255,255,255,.018);
+  transition:background .15s ease,border-color .15s ease,transform .12s ease;
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.vn-calendar-event:hover{
+  background:color-mix(in srgb,var(--event-color) 7%,rgba(255,255,255,.02));
+  border-color:color-mix(in srgb,var(--event-color) 30%,rgba(255,255,255,.05));
+  transform:translateX(2px);
+}
+.vn-calendar-event.kind-official{--event-color:#ff5b62}
+.vn-calendar-event.kind-lunar{--event-color:#f4c95d}
+.vn-calendar-event.kind-international{--event-color:#63b3ff}
+.vn-calendar-event.kind-vietnam{--event-color:#6ee7a0}
+.vn-calendar-event.kind-special{--event-color:#b98cff}
+.vn-calendar-event-icon{
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:9px;
+  color:var(--event-color);background:color-mix(in srgb,var(--event-color) 14%,transparent);font-size:12.5px;
+  flex-shrink:0;
+}
+.vn-calendar-event-date{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:var(--event-color);
+  white-space:nowrap;text-align:center;
+  padding:3px 4px;border-radius:6px;background:color-mix(in srgb,var(--event-color) 10%,transparent);
+}
+.vn-calendar-event-info{min-width:0}
+.vn-calendar-event-name{margin:0;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vn-calendar-event-meta{margin:2px 0 0;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vn-calendar-event-meta .vn-lunar-highlight{color:#f4c95d;font-weight:600}
+.vn-calendar-event-left{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.4);white-space:nowrap;flex-shrink:0}
+.vn-calendar-event.ongoing{border-color:color-mix(in srgb,#6ee7a0 32%,rgba(255,255,255,.05));background:rgba(110,231,160,.04)}
+.vn-calendar-event.ongoing .vn-calendar-event-date,.vn-calendar-event.ongoing .vn-calendar-event-left{color:#6ee7a0}
+.vn-calendar-live{font-weight:700;color:#6ee7a0;display:inline-flex;align-items:center;gap:4px}
+.vn-calendar-live::before{content:"";width:5px;height:5px;border-radius:50%;background:#6ee7a0;box-shadow:0 0 6px rgba(110,231,160,.7)}
+.vn-calendar-empty{padding:26px 8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(245,240,234,.4)}
+
+/* LEGEND */
+.vn-calendar-legend{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-top:12px;padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+.vn-calendar-legend-items{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.vn-calendar-legend-title{display:none}
+.vn-calendar-legend-item{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.42)}
+.vn-calendar-legend-dot{width:6px;height:6px;border-radius:50%}
+.vn-calendar-legend-dot.official{background:#ff5b62}.vn-calendar-legend-dot.lunar{background:#f4c95d}.vn-calendar-legend-dot.international{background:#63b3ff}.vn-calendar-legend-dot.vietnam{background:#6ee7a0}.vn-calendar-legend-dot.special{background:#b98cff}
+.vn-calendar-status{display:none}
+#vn-calendar-sync{font-family:'IBM Plex Mono',monospace;font-size:7px;color:rgba(245,240,234,.28);letter-spacing:.04em}
+.vn-calendar-source{color:#e78fa2;text-decoration:none}.vn-calendar-source:hover{text-decoration:underline}
+
+@media(max-width:640px){
+  .vn-clock{font-size:10px;padding:5px 9px;max-width:calc(100vw - 72px)}
+  .vn-calendar-btn{width:27px;height:27px}
+  .vn-calendar-popover{
+    width:calc(100vw - 28px);
+    max-width:360px;
+    max-height:min(74vh,560px);
+    border-radius:18px;
+  }
+  .vn-calendar-head{padding:12px 13px}
+  .vn-calendar-title{font-size:13px}
+  .vn-calendar-sub{font-size:8px}
+  .vn-calendar-next{padding:13px}
+  .vn-calendar-next-name{font-size:14.5px}
+  .vn-calendar-next-dates{font-size:8px}
+  .vn-calendar-count-grid{gap:5px}
+  .vn-count-box{padding:7px 2px 6px}
+  .vn-count-value{font-size:13.5px}
+  .vn-calendar-event{
+    grid-template-columns:22px 36px minmax(0,1fr);
+    gap:7px;
+    padding:7px 8px;
+  }
+  .vn-calendar-event-left{
+    grid-column:3;
+    text-align:left;
+    margin-top:1px;
+  }
+  .vn-calendar-event-name{font-size:10.5px}
+  .vn-calendar-event-meta{font-size:7px}
+  .vn-calendar-legend{flex-wrap:wrap}
+}
+
+.vn-calendar-popover.centered{
+  top:50%!important;
+  left:50%!important;
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(.96);
+}
+.vn-calendar-popover.centered.open{
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* DETAIL PANEL */
+.vn-calendar-detail{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  padding:16px 16px 14px;
+  border-radius:16px;
+  background:rgba(15,12,11,.99);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .15s ease,visibility .15s ease;
+}
+.vn-calendar-detail.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.vn-calendar-detail-panel{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.vn-calendar-detail-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+.vn-calendar-detail-kicker{
+  font:700 8px 'IBM Plex Mono',monospace;
+  letter-spacing:.12em;
+  color:#e78fa2;
+  text-transform:uppercase;
+}
+.vn-calendar-detail-panel h3{
+  margin:6px 0 0;
+  font-size:17px;
+  line-height:1.26;
+  color:#fff;
+  overflow-wrap:anywhere;
+}
+.vn-calendar-detail-close{
+  width:28px;height:28px;flex:0 0 auto;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.05);
+  color:rgba(245,240,234,.6);
+  font-size:16px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease,transform .15s ease;
+}
+.vn-calendar-detail-close:hover{background:rgba(255,255,255,.1);color:#fff;transform:rotate(90deg)}
+.vn-calendar-detail-meta{
+  margin-top:10px;
+  font:600 8.5px 'IBM Plex Mono',monospace;
+  color:rgba(245,240,234,.52);
+}
+.vn-calendar-detail-meta .vn-lunar-highlight{color:#f4c95d;font-weight:700}
+.vn-calendar-detail-type{
+  display:inline-flex;
+  margin-top:10px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(231,143,162,.12);
+  color:#e78fa2;
+  font:700 7px 'IBM Plex Mono',monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.vn-calendar-detail-countdown-label{
+  margin-top:17px;
+  color:rgba(245,240,234,.36);
+  font:700 7px 'IBM Plex Mono',monospace;
+  letter-spacing:.1em;
+}
+.vn-calendar-detail-countdown{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin-top:8px;
+}
+.vn-calendar-detail-countdown>div{
+  padding:9px 4px 8px;
+  text-align:center;
+  border-radius:11px;
+  background:rgba(255,255,255,.045);
+}
+.vn-calendar-detail-countdown strong{
+  display:block;
+  font:700 17px 'IBM Plex Mono',monospace;
+  color:#e78fa2;
+  letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
+}
+.vn-calendar-detail-countdown span{
+  display:block;
+  margin-top:4px;
+  color:rgba(245,240,234,.35);
+  font:600 6px 'IBM Plex Mono',monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.vn-calendar-detail-now{
+  margin-top:14px;
+  color:rgba(245,240,234,.4);
+  font:500 8px 'IBM Plex Mono',monospace;
+}
+
+/* BACKDROP — luôn phủ toàn màn hình.
+   Ở chế độ centered: tối rõ để tạo cảm giác modal thật sự.
+   Ở chế độ góc (không centered): tối nhẹ hơn vì đây chỉ là panel phụ
+   cạnh bio card, người dùng vẫn thấy/tương tác được phần còn lại. */
+#vn-calendar-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  background:rgba(10,8,7,.35);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease,visibility .18s ease,background .2s ease;
+}
+#vn-calendar-backdrop.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+/* Khi popover ở chế độ giữa màn hình, tối đậm hơn để rõ ràng là modal */
+.vn-calendar-popover.centered.open ~ #vn-calendar-backdrop,
+#vn-calendar-backdrop:has(~ .vn-calendar-popover.centered.open){
+  background:rgba(8,6,5,.6);
+}
+.vn-calendar-popover.open .vn-calendar-event{cursor:pointer}
+.vn-calendar-event:focus-visible{
+  outline:2px solid var(--event-color);
+  outline-offset:2px;
+}
+
+
+.divider{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 0 14px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--line);
+}
+.bio{
+  text-align:left;
+  font-size:14.5px;
+  line-height:1.6;
+  color:var(--ink);
+  margin:0 auto 14px;
+  font-family:'IBM Plex Mono',monospace;
+  background:rgba(255,255,255,.22);
+  border:1px solid rgba(255,255,255,.35);
+  border-left:3px solid var(--raspberry);
+  border-radius:8px;
+  padding:11px 14px;
+}
+.bio::before{
+  content:"# about.txt";
+  display:block;
+  font-size:10px;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.now{
+  margin-top:4px;
+  padding:11px 14px;
+  border-radius:12px;
+  background:rgba(124,148,115,.14);
+  border:1px dashed rgba(124,148,115,.5);
+  font-size:13.5px;
+  color:var(--ink-soft);
+  text-align:left;
+}
+.now::before{
+  content:"$ cat status.log";
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  margin-bottom:6px;
+  opacity:.7;
+}
+.now strong{
+  color:var(--sage);
+  font-family:'IBM Plex Mono',monospace;
+  font-weight:500;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-align:left;
+  margin-top:14px;
+  padding:12px 18px;
+  background:var(--paper-dim);
+  background-image:var(--texture);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--ink-soft);
+  margin-left:-30px;
+  margin-right:-30px;
+  width:calc(100% + 60px);
+}
+.foot-dots{
+  display:flex;
+  gap:6px;
+  flex-shrink:0;
+}
+.foot-dots .dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12);
+}
+.foot-dots .dot.r{background:var(--raspberry)}
+.foot-dots .dot.y{background:var(--mustard)}
+.foot-dots .dot.g{background:var(--sage)}
+footer#footer-bar{
+  cursor:pointer;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,border-color .25s ease;
+}
+footer#footer-bar:hover{
+  transform:translateY(-3px);
+  border-color:rgba(207,100,120,.35);
+  box-shadow:0 24px 44px -20px rgba(74,51,54,.4);
+}
+footer#footer-bar:active{
+  transform:translateY(-1px) scale(.995);
+}
+footer#footer-bar:focus-visible{
+  outline:2px solid var(--raspberry);
+  outline-offset:2px;
+}
+.foot-text{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.foot-text::before{
+  content:"$";
+  flex-shrink:0;
+  color:var(--raspberry);
+  opacity:.8;
+}
+.foot-typed{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--ink);
+}
+.foot-cursor{
+  display:inline-block;
+  width:6px;
+  margin-left:1px;
+  color:var(--raspberry);
+  animation:foot-cursor-blink 1s step-end infinite;
+}
+@keyframes foot-cursor-blink{
+  0%,49%{opacity:1}
+  50%,100%{opacity:0}
+}
+.foot-hint{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.04em;
+  color:var(--ink-soft);
+  opacity:.75;
+}
+.foot-hint svg{
+  width:11px;
+  height:11px;
+  flex-shrink:0;
+  transition:transform .35s ease;
+}
+footer#footer-bar:hover .foot-hint{
+  opacity:1;
+  color:var(--raspberry);
+}
+footer#footer-bar:hover .foot-hint svg{
+  transform:rotate(180deg);
+}
+
+/* ===== GLOBAL TOOLTIP ===== */
+.tooltip-host[data-tooltip]{cursor:default}
+.tooltip-host[data-tooltip]::before,
+.tooltip-host[data-tooltip]::after,
+.dock-item[data-tooltip]::before,
+.dock-item[data-tooltip]::after,
+.dock-item[data-tip]::before,
+.dock-item[data-tip]::after{
+  content:none!important;
+  display:none!important;
+}
+
+#global-tooltip{
+  position:fixed;
+  left:0;
+  top:0;
+  max-width:min(280px,calc(100vw - 20px));
+  padding:7px 10px;
+  background:var(--ink);
+  color:#fdf6ec;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  font-weight:500;
+  letter-spacing:.03em;
+  line-height:1.45;
+  text-align:center;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+  border:1px solid rgba(207,100,120,.35);
+  border-radius:8px;
+  box-shadow:0 10px 24px -8px rgba(0,0,0,.5);
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  transform:translate3d(0,4px,0) scale(.98);
+  transition:opacity .16s ease,transform .16s cubic-bezier(.34,1.56,.64,1),visibility .16s ease;
+  z-index:2147483647;
+}
+#global-tooltip.is-visible{
+  opacity:1;
+  visibility:visible;
+  transform:translate3d(0,0,0) scale(1);
+}
+#global-tooltip.tooltip-bottom{
+  transform-origin:center top;
+}
+#global-tooltip::after{
+  content:""!important;
+  display:block!important;
+  position:absolute;
+  width:8px;
+  height:8px;
+  left:50%;
+  bottom:-4.5px;
+  margin-left:-4px;
+  background:var(--ink);
+  border-right:1px solid rgba(207,100,120,.35);
+  border-bottom:1px solid rgba(207,100,120,.35);
+  transform:rotate(45deg);
+}
+#global-tooltip.tooltip-bottom::after{
+  top:-4.5px;
+  bottom:auto;
+  transform:rotate(225deg);
+}
+@media(prefers-reduced-motion:reduce){
+  #global-tooltip{transition:none}
+}
+
+
+</style>
+
+</head>
+<body data-calendar-layout="corner-desktop-center-mobile" oncontextmenu="return false;">
+<button aria-label="Click to enter" id="gate">
+<span class="gate-inner">
+<span aria-hidden="true" class="gate-ring">
+<span class="gate-mark">✦</span>
+</span>
+<span class="gate-text">click to enter</span>
+<span aria-hidden="true" class="gate-text-underline"></span>
+<span class="gate-hint">bấm để mở khóa</span>
+</span>
+</button>
+<div hidden="" id="main">
+<div class="bg-video-wrap">
+<video autoplay="" id="bg-video" loop="" muted="" onerror="this.closest('.bg-video-wrap').classList.add('novideo')" playsinline="">
+<source src="bg.mp4" type="video/mp4"/>
+</video>
+</div>
+<div aria-hidden="true" class="orb orb-1"></div>
+<div aria-hidden="true" class="orb orb-2"></div>
+<div aria-hidden="true" class="orb orb-3"></div>
+<audio crossorigin="anonymous" id="bg-music">
+<source src="song1.mp3" type="audio/mpeg"/>
+</audio>
+<script>
+    window.bioConfig = {
+      defaultIndex: 0,
+
+      avatar: 'https://static2.klipy.com/ii/4e7bea9f7a3371424e6c16ebc93252fe/a8/d8/AHgMD8cH1v4MnHbSHcV.gif',
+
+      discordId: '1473247060298961040',
+
+      discordNameplateWorkerUrl:
+        'https://gentle-dust-08b8.ten870865.workers.dev/',
+
+      discordNameplateStaticUrl: '',
+
+      tracks: [
+        {
+          title: 'Id Thang Máy - W/n ft.267',
+          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/id%20thang%20m%C3%A1y%20(feat.%20267).mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02c138ef03555390be900f338e',
+          category: 'bth'
+        },
+        {
+          title: 'Nguyễn Văn Mười - MCK',
+          file: 'song2.mp3',
+          disc: 'images2.png',
+          category: 'bth'
+        },
+        {
+          title: 'Wrong Times - Puppy,Dangrangto',
+          file: 'Wrong Times.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02566178ff844ca2b57f959374',
+          category: 'bth'
+        },
+        {
+          title: 'Có Công Mài "Sắc" - Ngô Lan Hương | Drill Mix (Prod, By Hades)',
+          file: 'cocongmaisac.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ebcdc310f026bb7600fb085d',
+          category: 'drill'
+        },
+        {
+          title: 'Đường Tôi Chở Em Về - buitruonglinh',
+          file: 'duongtoichoemve.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0222029966c28f9d19ab54143c',
+          category: 'bth'
+        },
+        {
+          title: '3 1 0 7 - W/n ft. Nâu, Duongg',
+          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/3107.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02adc789d731eff56c9b448737',
+          category: 'bth'
+        },
+        {
+          title: 'Dù Cho Mai Về Sau - buitruonglinh',
+          file: 'duchomaivesau.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ff2d5a6f74d5141af7a371ea',
+          category: 'bth'
+        },
+        {
+          title: 'Em Là Nhất - kis, Hoàng Kaylee, YAHY',
+          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/SpotiDownloader.com%20-%20Em%20L%C3%A0%20Nh%E1%BA%A5t%20-%20kis.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02a84cceb4e4e08f388cf16b28',
+          category: 'bth'
+        },
+        {
+          title: '2 4 - W/n',
+          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/W_n%20%20-%20%20a%20b%20c%20d%20x%20y%20z%20n%20m%20a%20s%20a%20d%20(song%2024)%20%203107%20-%20W_n.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d2d41a6ed463bbd19006e78b',
+          category: 'bth'
+        },
+        {
+          title: 'ĐẢO NGHỊCH - (REMIX)',
+          file: 'song1.mp3',
+          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d2721ed222151ab6869fa714',
+          category: 'nhactrungremix'
+        }
+      ]
+    };
+  </script>
+<main>
+<div class="card">
+<div aria-hidden="true" class="titlebar">
+<div class="dots">
+<span class="dot r"></span>
+<span class="dot y"></span>
+<span class="dot g"></span>
+</div>
+<span class="path">bio@terminal — 80x24</span>
+</div>
+<div class="card-inner">
+<div class="photo-wrap reveal" style="--i:1">
+<div aria-hidden="true" class="photo-shadow"></div>
+<div class="photo-frame" id="avatar-frame">
+<img alt="Ảnh đại diện" class="album-cover" id="album-cover" src="images1.png"/>
+</div>
+</div>
+<p class="eyebrow reveal" style="--i:2">
+          xin chào, mình là
+        </p>
+<h1 class="reveal" id="name-heading" style="--i:2">
+          ItsReal<em>Khanz</em>
+</h1>
+<p class="location reveal" style="--i:2">
+          Việt Nam
+        </p>
+<div class="vn-clock-wrap reveal" id="vn-clock-wrap" style="--i:2">
+<p class="vn-clock tooltip-host tooltip-center" data-tooltip="Giờ hiện tại" id="vn-clock">
+            Việt Nam (UTC+7) · --:--:--
+          </p>
+<button aria-expanded="false" aria-label="Mở lịch sự kiện Việt Nam" class="vn-calendar-btn tooltip-host tooltip-center" data-tooltip="Lịch sự kiện Việt Nam" id="vn-calendar-btn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect>
+<path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
+<path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path>
+</svg>
+</button>
+</div>
+
+<div class="divider reveal" style="--i:3">
+<span>❊</span>
+</div>
+<!-- ===== DISCORD ===== -->
+<div class="discord-mini-profile reveal" id="discord-mini-profile" style="--i:3.5">
+<div class="dmp-nameplate-zone" id="dmp-nameplate-zone">
+<div class="dmp-top">
+<div class="dmp-avatar-wrap">
+<img alt="avatar Discord" class="dmp-avatar" id="dmp-avatar" src=""/>
+<img alt="" class="dmp-decoration" id="dmp-decoration" src="" style="display:none"/>
+<span aria-hidden="true" class="dmp-status-dot offline" id="dmp-status-dot"></span>
+</div>
+<div class="dmp-info">
+<div class="dmp-name-row">
+<span class="dmp-username" id="dmp-username">—</span>
+<span class="dmp-badges" id="dmp-badges"></span>
+</div>
+<span class="dmp-activity" id="dmp-activity">
+                  đang kết nối…
+                </span>
+</div>
+<div class="dmp-icons">
+<button aria-label="Ẩn/Hiện hoạt động" class="dmp-icon toggle-act-btn" data-tooltip="Ẩn hoạt động" data-tooltip-fixed="true" id="toggle-activity-btn" type="button">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15">
+<circle cx="5" cy="12" r="2.2"></circle>
+<circle cx="12" cy="12" r="2.2"></circle>
+<circle cx="19" cy="12" r="2.2"></circle>
+</svg>
+</button>
+</div>
+</div>
+</div>
+<div class="dmp-activity-panel" id="dmp-activity-panel">
+<div class="dmp-activity-card">
+<div class="dmp-act-img-wrap">
+<img alt="" class="dmp-act-img" id="dmp-act-img" src="" style="display:none"/>
+<img alt="" class="dmp-act-img-small" id="dmp-act-img-small" src="" style="display:none"/>
+</div>
+<div class="dmp-act-text">
+<p class="dmp-act-name" id="dmp-act-name"></p>
+<p class="dmp-act-details" id="dmp-act-details" style="display:none"></p>
+<p class="dmp-act-state" id="dmp-act-state" style="display:none"></p>
+<p class="dmp-act-time" id="dmp-act-time"></p>
+</div>
+</div>
+</div>
+</div>
+<p class="bio reveal" style="--i:4">
+          Nothing Here.
+        </p>
+<!-- ===== MUSIC ===== -->
+<div class="music-box reveal" id="music-box" style="--i:5">
+<div class="music-topline">
+<!-- FIX:
+                 id này tách khỏi nút Play/Pause -->
+<div class="disc-player" data-tooltip="Tên bài hát" id="disc-player-cover">
+<span class="disc-label" id="disc-label"></span>
+</div>
+<div class="music-info" id="music-info">
+<!-- Tooltip này được JS cập nhật realtime
+                   mỗi khi bài hát thay đổi -->
+<p class="music-title" data-tooltip="Tên bài hát — nghệ sĩ" id="music-title">
+                Tên bài hát — nghệ sĩ
+              </p>
+<p class="music-sub" id="disc-tip">
+                bấm để phát nhạc
+              </p>
+</div>
+<div class="music-bars" id="music-bars">
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+<span class="bar"></span>
+</div>
+<!-- FIX:
+                 id disc-player chỉ tồn tại ở đây -->
+<button aria-label="Phát nhạc nền" aria-pressed="false" class="music-playbtn" data-tooltip="Phát nhạc" id="disc-player" type="button">
+<svg class="icon-play" fill="#121212" viewbox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+<svg class="icon-pause" fill="#121212" viewbox="0 0 24 24">
+<path d="M6 5h4v14H6zM14 5h4v14h-4z"></path>
+</svg>
+</button>
+<button aria-expanded="false" aria-haspopup="true" aria-label="Danh sách bài hát" class="music-menu-btn" data-tooltip="Danh sách bài hát" data-tooltip-fixed="true" id="track-menu-btn" type="button">
+<svg fill="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="5" r="2"></circle>
+<circle cx="12" cy="12" r="2"></circle>
+<circle cx="12" cy="19" r="2"></circle>
+</svg>
+</button>
+</div>
+<div class="music-progress-wrap">
+<span class="time-label" id="current-time">
+              0:00
+            </span>
+<div class="progress-bar-container" id="progress-container">
+<div class="progress-bar-fill" id="progress-fill"></div>
+</div>
+<span class="time-label" id="duration-time">
+              0:00
+            </span>
+</div>
+<div aria-label="Chuyển bài" class="music-nav">
+<button aria-label="Bài trước" data-tooltip="Bài trước" data-tooltip-fixed="true" id="music-prev" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"></path>
+</svg>
+</button>
+<button aria-label="Bài tiếp theo" data-tooltip="Bài tiếp theo" data-tooltip-fixed="true" id="music-next" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"></path>
+</svg>
+</button>
+<div class="volume-container">
+<button aria-label="Âm lượng" data-tooltip="Âm lượng" data-tooltip-fixed="true" id="volume-btn" type="button">
+<svg viewbox="0 0 24 24">
+<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"></path>
+<path class="vol-wave" d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+</svg>
+</button>
+<div data-tooltip="Điều chỉnh âm lượng" data-tooltip-fixed="true" id="volume-slider-container">
+<div id="volume-slider-fill"></div>
+</div>
+</div>
+</div>
+<div class="track-list-panel" id="track-list-panel">
+<div class="track-list-header">
+<span>Danh sách phát</span>
+<button aria-label="Đóng danh sách" class="track-list-close" data-tooltip="Đóng danh sách" data-tooltip-fixed="true" id="track-list-close" type="button">
+                ✕
+              </button>
+</div>
+<div aria-label="Lọc theo thể loại" class="track-category-filters" id="track-category-filters" role="tablist"></div>
+<ul class="track-list" id="track-list"></ul>
+</div>
+</div>
+<div class="now reveal" style="--i:6">
+<strong>đang làm gì:</strong>
+          đang nghỉ hè
+        </div>
+<footer aria-label="Nhấn để chạy lệnh terminal" class="reveal" id="footer-bar" role="button" style="--i:7" tabindex="0">
+<span aria-hidden="true" class="dots foot-dots" id="foot-dots">
+<span class="dot r"></span>
+<span class="dot y"></span>
+<span class="dot g"></span>
+</span>
+<span class="foot-text" id="foot-text">
+<span class="foot-typed" id="foot-typed"></span>
+<span class="foot-cursor" id="foot-cursor">▌</span>
+</span>
+<span aria-hidden="true" class="foot-hint">
+            next
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M4 4v5h5"></path>
+<path d="M4 9a8 8 0 1 1 2 5.3"></path>
+</svg>
+</span>
+</footer>
+</div>
+</div>
+</main>
+<div class="dock-wrap">
+<nav aria-label="Mạng xã hội" class="dock" id="dock">
+<a class="dock-item discord" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="Discord" src="discord.png"/>
+</span>
+</a>
+<a class="dock-item youtube" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="YouTube" src="youtube.png"/>
+</span>
+</a>
+<a class="dock-item facebook" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="Facebook" src="facebook.png"/>
+</span>
+</a>
+<a class="dock-item roblox" data-tooltip="" href="#" onclick="return false;">
+<span class="dock-avatar">
+<img alt="Roblox" src="roblox.png"/>
+</span>
+</a>
+</nav>
+</div>
+</div>
+<div aria-hidden="true" id="global-tooltip"></div>
+
+<div aria-hidden="true" id="vn-calendar-backdrop"></div><div aria-labelledby="vn-calendar-title" aria-modal="false" class="vn-calendar-popover" id="vn-calendar-popover" role="dialog">
+<div class="vn-calendar-head">
+<div aria-hidden="true" class="vn-calendar-head-icon">
+<svg viewbox="0 0 24 24">
+<rect height="15" rx="2.5" width="17" x="3.5" y="5.5"></rect>
+<path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"></path>
+</svg>
+</div>
+<div class="vn-calendar-head-text">
+<h2 class="vn-calendar-title" id="vn-calendar-title">
+                Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em>
+</h2>
+<p class="vn-calendar-sub" id="vn-calendar-sub">
+                Lịch dương + âm · cập nhật realtime · UTC+7
+              </p>
+</div>
+<button aria-label="Đóng lịch" class="vn-calendar-close" id="vn-calendar-close" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M6 6l12 12M18 6L6 18"></path>
+</svg>
+</button>
+</div>
+<div class="vn-calendar-body" id="vn-calendar-body">
+<div class="vn-calendar-main-grid">
+<div class="vn-calendar-next" id="vn-calendar-next">
+<div class="vn-calendar-kicker">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="m12 3 2.78 5.63 6.22.9-4.5 4.38 1.06 6.2L12 17.18 6.44 20.1l1.06-6.2L3 9.53l6.22-.9z"></path>
+</svg>
+                  Next event
+                </div>
+<div class="vn-calendar-next-main">
+<p class="vn-calendar-next-name" id="vn-calendar-next-name">Đang tải…</p>
+<p class="vn-calendar-next-dates" id="vn-calendar-next-dates">—</p>
+</div>
+<div class="vn-calendar-next-count" id="vn-calendar-next-count">
+<div class="vn-calendar-count-grid">
+<div class="vn-count-box"><div class="vn-count-value" id="vn-days">00</div><div class="vn-count-unit">Ngày</div></div>
+<div class="vn-count-box"><div class="vn-count-value" id="vn-hours">00</div><div class="vn-count-unit">Giờ</div></div>
+<div class="vn-count-box"><div class="vn-count-value" id="vn-minutes">00</div><div class="vn-count-unit">Phút</div></div>
+<div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
+</div>
+</div>
+</div>
+<div class="vn-calendar-right">
+<div class="vn-calendar-section-title">
+<span><strong id="vn-calendar-list-count">0</strong> sự kiện sắp tới</span>
+<span class="vn-calendar-list-controls">
+<span id="vn-calendar-year-label">2026</span>
+<select aria-label="Lọc loại sự kiện" class="vn-calendar-filter" id="vn-calendar-filter">
+<option value="all">Tất cả</option>
+<option value="official">🇻🇳 Chính thức</option>
+<option value="lunar">🌙 Âm lịch</option>
+<option value="international">🌐 Quốc tế</option>
+<option value="vietnam">🇻🇳 Việt Nam</option>
+<option value="special">⭐ Đặc biệt</option>
+</select>
+</span>
+</div>
+<div class="vn-calendar-events" id="vn-calendar-events"></div>
+</div>
+</div>
+<div class="vn-calendar-legend">
+<div class="vn-calendar-legend-items">
+<span class="vn-calendar-legend-title">Chú thích</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot official"></i> Chính thức</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot lunar"></i> Ngày âm</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot international"></i> Quốc tế</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot vietnam"></i> Việt Nam</span>
+<span class="vn-calendar-legend-item"><i class="vn-calendar-legend-dot special"></i> Đặc biệt</span>
+</div>
+<span id="vn-calendar-sync">Cập nhật theo thời gian thực (UTC+7)</span>
+</div>
+</div>
+
+<div aria-hidden="true" class="vn-calendar-detail" id="vn-calendar-detail">
+<div aria-labelledby="vn-calendar-detail-title" aria-modal="false" class="vn-calendar-detail-panel" role="dialog">
+<div class="vn-calendar-detail-head">
+<div>
+<div class="vn-calendar-detail-kicker">CHI TIẾT SỰ KIỆN</div>
+<h3 id="vn-calendar-detail-title">—</h3>
+</div>
+<button aria-label="Đóng chi tiết" class="vn-calendar-detail-close" id="vn-calendar-detail-close" type="button">×</button>
+</div>
+<div class="vn-calendar-detail-meta" id="vn-calendar-detail-meta">—</div>
+<div class="vn-calendar-detail-type" id="vn-calendar-detail-type">—</div>
+<div class="vn-calendar-detail-countdown-label">ĐẾM NGƯỢC THỜI GIAN THỰC</div>
+<div class="vn-calendar-detail-countdown" id="vn-calendar-detail-countdown">
+<div><strong id="detail-days">00</strong><span>Ngày</span></div>
+<div><strong id="detail-hours">00</strong><span>Giờ</span></div>
+<div><strong id="detail-minutes">00</strong><span>Phút</span></div>
+<div><strong id="detail-seconds">00</strong><span>Giây</span></div>
+</div>
+<div class="vn-calendar-detail-now" id="vn-calendar-detail-now">Giờ Việt Nam (UTC+7): --:--:--</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+<script src="javascript.js" defer></script>
