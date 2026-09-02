@@ -22,6 +22,7 @@ const trackListEl = document.getElementById('track-list');
 
 const card = document.querySelector('.card');
 const dock = document.getElementById('dock');
+const dash = document.getElementById('dash');
 const bioConfig = window.bioConfig || {};
 
 /* ============ FIX: khai báo sớm để tránh lỗi TDZ (ReferenceError) ============
@@ -482,6 +483,7 @@ if (gate) {
         requestAnimationFrame(() => {
           if (card) card.classList.add('in');
           if (dock) dock.classList.add('in');
+          if (dash) dash.classList.add('in');
         });
 
         if (bgVideo) {
