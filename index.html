@@ -1424,32 +1424,33 @@ h1 em{
   border-color:rgba(231,143,162,.82);
   color:#fff;
 }
-
-/* ===== EVENT CALENDAR ===== */
+/* ===== EVENT CALENDAR — REDESIGN ===== */
 .vn-calendar-popover{
   position:fixed;
   top:20px;
   left:20px;
-  z-index:240;
-  width:380px;
+  z-index:3;
+  width:400px;
   max-width:calc(100vw - 36px);
-  max-height:min(68vh,520px);
+  max-height:min(70vh,560px);
   display:flex;
   flex-direction:column;
   overflow:hidden;
-  background:linear-gradient(180deg,rgba(22,18,17,.97),rgba(16,13,12,.98));
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:18px;
-  box-shadow:0 28px 70px -24px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.02) inset;
-  backdrop-filter:blur(16px) saturate(1.1);
-  -webkit-backdrop-filter:blur(16px) saturate(1.1);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(207,100,120,.10), transparent 45%),
+    linear-gradient(180deg,rgba(24,19,18,.98),rgba(15,12,11,.99));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03) inset;
+  backdrop-filter:blur(18px) saturate(1.15);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
   color:#f5f0ea;
   opacity:0;
   visibility:hidden;
   pointer-events:none;
   transform-origin:top left;
-  transform:translateY(-8px) scale(.97);
-  transition:opacity .18s ease,transform .18s ease,visibility .18s ease;
+  transform:translateY(-8px) scale(.96);
+  transition:opacity .2s ease,transform .2s cubic-bezier(.2,.8,.2,1),visibility .2s ease;
 }
 .vn-calendar-popover.open{
   opacity:1;
@@ -1458,26 +1459,29 @@ h1 em{
   transform:translateY(0) scale(1);
 }
 
+/* HEADER */
 .vn-calendar-head{
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:14px 16px;
+  gap:11px;
+  padding:15px 16px 13px;
   border-bottom:1px solid rgba(255,255,255,.06);
   flex-shrink:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent);
 }
 .vn-calendar-head-icon{
-  width:32px;height:32px;flex-shrink:0;
+  width:34px;height:34px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   color:#e78fa2;
-  border-radius:10px;
-  background:rgba(231,143,162,.12);
+  border-radius:11px;
+  background:linear-gradient(135deg,rgba(231,143,162,.18),rgba(231,143,162,.06));
+  box-shadow:0 0 0 1px rgba(231,143,162,.14) inset;
 }
-.vn-calendar-head-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.vn-calendar-head-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .vn-calendar-head-text{min-width:0;flex:1}
 .vn-calendar-title{
   margin:0;font-family:'DM Sans',sans-serif;font-weight:700;
-  font-size:14px;line-height:1.2;color:#fff;letter-spacing:.005em;
+  font-size:14.5px;line-height:1.2;color:#fff;letter-spacing:.005em;
 }
 .vn-calendar-title em{font-style:normal;color:#e78fa2}
 .vn-calendar-sub{
@@ -1486,40 +1490,58 @@ h1 em{
   letter-spacing:.05em;text-transform:uppercase;
 }
 .vn-calendar-close{
-  width:28px;height:28px;flex-shrink:0;
+  width:29px;height:29px;flex-shrink:0;
   border:none;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  color:rgba(245,240,234,.55);background:transparent;
+  color:rgba(245,240,234,.5);background:rgba(255,255,255,.04);
   transition:background .15s ease,color .15s ease,transform .15s ease;
 }
-.vn-calendar-close:hover{background:rgba(255,255,255,.08);color:#fff;transform:rotate(4deg)}
-.vn-calendar-close svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.vn-calendar-close:hover{background:rgba(255,255,255,.1);color:#fff;transform:rotate(90deg)}
+.vn-calendar-close svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 
+/* BODY */
 .vn-calendar-body{
   flex:1;
   min-height:0;
   overflow-y:auto;
-  padding:12px 14px 12px;
+  padding:13px 14px 14px;
 }
 .vn-calendar-body::-webkit-scrollbar{width:5px}
 .vn-calendar-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:6px}
 .vn-calendar-main-grid{
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:11px;
 }
+
+/* NEXT EVENT — hero card */
 .vn-calendar-next{
   position:relative;
   display:flex;
   flex-direction:column;
-  padding:14px 14px 13px;
-  border-radius:13px;
-  border:1px solid color-mix(in srgb,var(--event-color,#cf6478) 32%,rgba(255,255,255,.07));
+  padding:16px 16px 14px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid color-mix(in srgb,var(--event-color,#cf6478) 30%,rgba(255,255,255,.07));
   background:
-    radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--event-color,#cf6478) 16%,transparent),transparent 55%),
-    rgba(255,255,255,.025);
+    radial-gradient(circle at 105% -10%,color-mix(in srgb,var(--event-color,#cf6478) 22%,transparent),transparent 55%),
+    linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
   cursor:pointer;
   --event-color:#cf6478;
+  transition:border-color .2s ease,transform .15s ease;
+}
+.vn-calendar-next:hover{transform:translateY(-1px)}
+.vn-calendar-next::after{
+  content:"";
+  position:absolute;
+  right:-30px;
+  bottom:-30px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--event-color),transparent 70%);
+  opacity:.10;
+  pointer-events:none;
 }
 .vn-calendar-next.kind-official{--event-color:#ff5b62}
 .vn-calendar-next.kind-lunar{--event-color:#f4c95d}
@@ -1527,154 +1549,177 @@ h1 em{
 .vn-calendar-next.kind-vietnam{--event-color:#6ee7a0}
 .vn-calendar-next.kind-special{--event-color:#b98cff}
 .vn-calendar-kicker{
+  position:relative;
   display:flex;align-items:center;gap:5px;
   font-family:'IBM Plex Mono',monospace;font-size:8.5px;
-  text-transform:uppercase;letter-spacing:.1em;color:var(--event-color);
+  text-transform:uppercase;letter-spacing:.12em;color:var(--event-color);
+  font-weight:700;
 }
 .vn-calendar-kicker svg{width:10px;height:10px;fill:currentColor}
-.vn-calendar-next-main{min-width:0;margin-top:9px}
+.vn-calendar-next-main{position:relative;min-width:0;margin-top:10px}
 .vn-calendar-next-name{
-  margin:0;font-family:'DM Sans',sans-serif;font-size:15.5px;font-weight:700;line-height:1.22;color:#fff;
+  margin:0;font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;line-height:1.25;color:#fff;
   overflow-wrap:anywhere;
 }
 .vn-calendar-next-dates{
-  margin:6px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.5;color:rgba(245,240,234,.55);
+  margin:7px 0 0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;line-height:1.5;color:rgba(245,240,234,.55);
 }
 .vn-calendar-next-dates .vn-lunar-highlight{color:#f4c95d;font-weight:600}
-.vn-calendar-next-count{margin-top:11px}
-.vn-calendar-count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.vn-calendar-next-count{position:relative;margin-top:13px}
+.vn-calendar-count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
 .vn-count-box{
-  min-width:0;padding:7px 3px 6px;border-radius:9px;
-  background:rgba(255,255,255,.04);text-align:center;
+  min-width:0;padding:9px 3px 7px;border-radius:11px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.05);
+  text-align:center;
+  transition:background .3s ease;
 }
 .vn-count-value{
-  font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;line-height:1;color:var(--event-color);letter-spacing:.02em;
+  font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;line-height:1;color:var(--event-color);letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
 }
-.vn-count-unit{margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.06em;color:rgba(245,240,234,.35);text-transform:uppercase}
+.vn-count-unit{margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.08em;color:rgba(245,240,234,.35);text-transform:uppercase}
 .vn-calendar-ongoing{
-  display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:6px 11px;border-radius:999px;
+  position:relative;
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 12px;border-radius:999px;
   background:rgba(110,231,160,.12);color:#6ee7a0;
   font:700 9px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;
 }
-.vn-calendar-ongoing::before{content:"";width:6px;height:6px;border-radius:50%;background:#6ee7a0;box-shadow:0 0 10px rgba(110,231,160,.55)}
+.vn-calendar-ongoing::before{content:"";width:6px;height:6px;border-radius:50%;background:#6ee7a0;box-shadow:0 0 10px rgba(110,231,160,.65);animation:vn-pulse-dot 1.6s ease-in-out infinite}
+@keyframes vn-pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 
+/* LIST HEADER */
 .vn-calendar-right{display:flex;flex-direction:column;min-width:0}
 .vn-calendar-section-title{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 8px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 9px;
   font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,240,234,.4)
 }
 .vn-calendar-section-title strong{font-weight:700;color:#fff}
-.vn-calendar-list-controls{display:flex;align-items:center;gap:6px}
+.vn-calendar-list-controls{display:flex;align-items:center;gap:7px}
+#vn-calendar-year-label{
+  padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.05);
+  font-weight:600;color:rgba(245,240,234,.55);
+}
 .vn-calendar-filter{
   appearance:none;-webkit-appearance:none;cursor:pointer;
-  padding:5px 22px 5px 10px;border-radius:999px;
+  padding:5px 24px 5px 11px;border-radius:999px;
   border:1px solid rgba(255,255,255,.09);
   color:#fff;background:
     linear-gradient(45deg,transparent 50%,#9096a3 50%) calc(100% - 11px) 50% / 4px 4px no-repeat,
     linear-gradient(135deg,#9096a3 50%,transparent 50%) calc(100% - 8px) 50% / 4px 4px no-repeat,
     rgba(255,255,255,.03);
   font:500 9.5px 'DM Sans',sans-serif;outline:none;
+  transition:border-color .15s ease,background-color .15s ease;
 }
 .vn-calendar-filter:hover{border-color:rgba(231,143,162,.32);background-color:rgba(231,143,162,.06)}
 .vn-calendar-filter option{background:#16120f;color:#fff}
-.vn-calendar-events{display:flex;flex-direction:column;gap:5px}
+
+/* EVENT LIST — compact rows */
+.vn-calendar-events{display:flex;flex-direction:column;gap:4px}
 .vn-calendar-event{
   --event-color:#cf6478;
-  display:grid;grid-template-columns:26px 40px minmax(0,1fr) auto;align-items:center;gap:8px;min-width:0;
-  padding:7px 8px;border:1px solid rgba(255,255,255,.045);border-radius:10px;background:rgba(255,255,255,.02);
-  transition:background .15s ease,border-color .15s ease;
+  display:grid;grid-template-columns:28px 44px minmax(0,1fr) auto;align-items:center;gap:9px;min-width:0;
+  padding:8px 9px;border:1px solid rgba(255,255,255,.04);border-radius:11px;background:rgba(255,255,255,.018);
+  transition:background .15s ease,border-color .15s ease,transform .12s ease;
   position:relative;overflow:hidden;cursor:pointer;
 }
-.vn-calendar-event:hover{background:color-mix(in srgb,var(--event-color) 6%,rgba(255,255,255,.02));border-color:color-mix(in srgb,var(--event-color) 26%,rgba(255,255,255,.045))}
+.vn-calendar-event:hover{
+  background:color-mix(in srgb,var(--event-color) 7%,rgba(255,255,255,.02));
+  border-color:color-mix(in srgb,var(--event-color) 30%,rgba(255,255,255,.05));
+  transform:translateX(2px);
+}
 .vn-calendar-event.kind-official{--event-color:#ff5b62}
 .vn-calendar-event.kind-lunar{--event-color:#f4c95d}
 .vn-calendar-event.kind-international{--event-color:#63b3ff}
 .vn-calendar-event.kind-vietnam{--event-color:#6ee7a0}
 .vn-calendar-event.kind-special{--event-color:#b98cff}
 .vn-calendar-event-icon{
-  width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:8px;
-  color:var(--event-color);background:color-mix(in srgb,var(--event-color) 13%,transparent);font-size:12px
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:9px;
+  color:var(--event-color);background:color-mix(in srgb,var(--event-color) 14%,transparent);font-size:12.5px;
+  flex-shrink:0;
 }
-.vn-calendar-event-date{font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:700;color:var(--event-color);white-space:nowrap}
+.vn-calendar-event-date{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:var(--event-color);
+  white-space:nowrap;text-align:center;
+  padding:3px 4px;border-radius:6px;background:color-mix(in srgb,var(--event-color) 10%,transparent);
+}
 .vn-calendar-event-info{min-width:0}
-.vn-calendar-event-name{margin:0;font-size:10.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vn-calendar-event-name{margin:0;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vn-calendar-event-meta{margin:2px 0 0;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vn-calendar-event-meta .vn-lunar-highlight{color:#f4c95d;font-weight:600}
-.vn-calendar-event-left{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.42);white-space:nowrap}
-.vn-calendar-event.ongoing{border-color:color-mix(in srgb,#6ee7a0 28%,rgba(255,255,255,.045));background:rgba(110,231,160,.035)}
+.vn-calendar-event-left{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.4);white-space:nowrap;flex-shrink:0}
+.vn-calendar-event.ongoing{border-color:color-mix(in srgb,#6ee7a0 32%,rgba(255,255,255,.05));background:rgba(110,231,160,.04)}
 .vn-calendar-event.ongoing .vn-calendar-event-date,.vn-calendar-event.ongoing .vn-calendar-event-left{color:#6ee7a0}
-.vn-calendar-live{font-weight:700;color:#6ee7a0}
-.vn-calendar-empty{padding:22px 8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(245,240,234,.4)}
+.vn-calendar-live{font-weight:700;color:#6ee7a0;display:inline-flex;align-items:center;gap:4px}
+.vn-calendar-live::before{content:"";width:5px;height:5px;border-radius:50%;background:#6ee7a0;box-shadow:0 0 6px rgba(110,231,160,.7)}
+.vn-calendar-empty{padding:26px 8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(245,240,234,.4)}
 
+/* LEGEND */
 .vn-calendar-legend{
-  display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:11px;padding-top:10px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-top:12px;padding-top:11px;
   border-top:1px solid rgba(255,255,255,.05);
 }
-.vn-calendar-legend-items{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.vn-calendar-legend-items{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
 .vn-calendar-legend-title{display:none}
 .vn-calendar-legend-item{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:rgba(245,240,234,.42)}
 .vn-calendar-legend-dot{width:6px;height:6px;border-radius:50%}
 .vn-calendar-legend-dot.official{background:#ff5b62}.vn-calendar-legend-dot.lunar{background:#f4c95d}.vn-calendar-legend-dot.international{background:#63b3ff}.vn-calendar-legend-dot.vietnam{background:#6ee7a0}.vn-calendar-legend-dot.special{background:#b98cff}
 .vn-calendar-status{display:none}
+#vn-calendar-sync{font-family:'IBM Plex Mono',monospace;font-size:7px;color:rgba(245,240,234,.28);letter-spacing:.04em}
 .vn-calendar-source{color:#e78fa2;text-decoration:none}.vn-calendar-source:hover{text-decoration:underline}
 
 @media(max-width:640px){
   .vn-clock{font-size:10px;padding:5px 9px;max-width:calc(100vw - 72px)}
   .vn-calendar-btn{width:27px;height:27px}
-
-  /* Điện thoại/màn hình nhỏ: popup chỉ thu gọn.
-     Vị trí góc hay giữa do JS tự quyết định dựa trên không gian thật. */
   .vn-calendar-popover{
     width:calc(100vw - 28px);
-    max-width:340px;
-    max-height:min(72vh,520px);
-    border-radius:15px;
+    max-width:360px;
+    max-height:min(74vh,560px);
+    border-radius:18px;
   }
-
-  .vn-calendar-head{padding:11px 12px}
-  .vn-calendar-title{font-size:12.5px}
+  .vn-calendar-head{padding:12px 13px}
+  .vn-calendar-title{font-size:13px}
   .vn-calendar-sub{font-size:8px}
-  .vn-calendar-next{padding:11px}
-  .vn-calendar-next-name{font-size:13.5px}
+  .vn-calendar-next{padding:13px}
+  .vn-calendar-next-name{font-size:14.5px}
   .vn-calendar-next-dates{font-size:8px}
-  .vn-calendar-count-grid{gap:4px}
-  .vn-count-box{padding:6px 2px 5px}
-  .vn-count-value{font-size:12.5px}
+  .vn-calendar-count-grid{gap:5px}
+  .vn-count-box{padding:7px 2px 6px}
+  .vn-count-value{font-size:13.5px}
   .vn-calendar-event{
-    grid-template-columns:22px 34px minmax(0,1fr);
-    gap:6px;
-    padding:6px 7px;
+    grid-template-columns:22px 36px minmax(0,1fr);
+    gap:7px;
+    padding:7px 8px;
   }
   .vn-calendar-event-left{
     grid-column:3;
     text-align:left;
     margin-top:1px;
   }
-  .vn-calendar-event-name{font-size:10px}
+  .vn-calendar-event-name{font-size:10.5px}
   .vn-calendar-event-meta{font-size:7px}
   .vn-calendar-legend{flex-wrap:wrap}
 }
 
-/* JS thêm class này khi góc trên-trái không còn đủ chỗ. */
 .vn-calendar-popover.centered{
   top:50%;
   left:50%;
   transform-origin:center center;
-  transform:translate(-50%,-50%) scale(.97);
+  transform:translate(-50%,-50%) scale(.96);
 }
-
 .vn-calendar-popover.centered.open{
   transform:translate(-50%,-50%) scale(1);
 }
 
+/* DETAIL PANEL */
 .vn-calendar-detail{
   position:absolute;
   inset:0;
-  z-index:20;
+  z-index:2;
   display:flex;
-  padding:14px 14px 13px;
-  border-radius:13px;
-  background:rgba(16,13,12,.98);
+  padding:16px 16px 14px;
+  border-radius:16px;
+  background:rgba(15,12,11,.99);
   opacity:0;
   visibility:hidden;
   pointer-events:none;
@@ -1699,19 +1744,19 @@ h1 em{
 }
 .vn-calendar-detail-kicker{
   font:700 8px 'IBM Plex Mono',monospace;
-  letter-spacing:.1em;
+  letter-spacing:.12em;
   color:#e78fa2;
   text-transform:uppercase;
 }
 .vn-calendar-detail-panel h3{
-  margin:5px 0 0;
-  font-size:15.5px;
-  line-height:1.24;
+  margin:6px 0 0;
+  font-size:17px;
+  line-height:1.26;
   color:#fff;
   overflow-wrap:anywhere;
 }
 .vn-calendar-detail-close{
-  width:26px;height:26px;flex:0 0 auto;
+  width:28px;height:28px;flex:0 0 auto;
   border:none;
   border-radius:50%;
   background:rgba(255,255,255,.05);
@@ -1721,17 +1766,17 @@ h1 em{
   cursor:pointer;
   transition:background .15s ease,color .15s ease,transform .15s ease;
 }
-.vn-calendar-detail-close:hover{background:rgba(255,255,255,.1);color:#fff;transform:rotate(4deg)}
+.vn-calendar-detail-close:hover{background:rgba(255,255,255,.1);color:#fff;transform:rotate(90deg)}
 .vn-calendar-detail-meta{
-  margin-top:9px;
+  margin-top:10px;
   font:600 8.5px 'IBM Plex Mono',monospace;
   color:rgba(245,240,234,.52);
 }
 .vn-calendar-detail-meta .vn-lunar-highlight{color:#f4c95d;font-weight:700}
 .vn-calendar-detail-type{
   display:inline-flex;
-  margin-top:9px;
-  padding:5px 9px;
+  margin-top:10px;
+  padding:6px 10px;
   border-radius:999px;
   background:rgba(231,143,162,.12);
   color:#e78fa2;
@@ -1740,7 +1785,7 @@ h1 em{
   text-transform:uppercase;
 }
 .vn-calendar-detail-countdown-label{
-  margin-top:15px;
+  margin-top:17px;
   color:rgba(245,240,234,.36);
   font:700 7px 'IBM Plex Mono',monospace;
   letter-spacing:.1em;
@@ -1748,20 +1793,21 @@ h1 em{
 .vn-calendar-detail-countdown{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:6px;
-  margin-top:7px;
+  gap:7px;
+  margin-top:8px;
 }
 .vn-calendar-detail-countdown>div{
-  padding:8px 4px 7px;
+  padding:9px 4px 8px;
   text-align:center;
-  border-radius:9px;
-  background:rgba(255,255,255,.04);
+  border-radius:11px;
+  background:rgba(255,255,255,.045);
 }
 .vn-calendar-detail-countdown strong{
   display:block;
-  font:700 15px 'IBM Plex Mono',monospace;
+  font:700 17px 'IBM Plex Mono',monospace;
   color:#e78fa2;
   letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
 }
 .vn-calendar-detail-countdown span{
   display:block;
@@ -1772,10 +1818,33 @@ h1 em{
   text-transform:uppercase;
 }
 .vn-calendar-detail-now{
-  margin-top:12px;
+  margin-top:14px;
   color:rgba(245,240,234,.4);
   font:500 8px 'IBM Plex Mono',monospace;
 }
+
+/* BACKDROP */
+#vn-calendar-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  background:rgba(10,8,7,.35);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+#vn-calendar-backdrop.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.vn-calendar-popover.open .vn-calendar-event{cursor:pointer}
+.vn-calendar-event:focus-visible{
+  outline:2px solid var(--event-color);
+  outline-offset:2px;
+}
+
 
 .divider{
   display:flex;
@@ -2006,27 +2075,6 @@ footer#footer-bar:hover .foot-hint svg{
   #global-tooltip{transition:none}
 }
 
-/* ===== CALENDAR BACKDROP ===== */
-#vn-calendar-backdrop{
-  position:fixed;
-  inset:0;
-  z-index:230;
-  background:rgba(10,8,7,.32);
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:opacity .18s ease,visibility .18s ease;
-}
-#vn-calendar-backdrop.open{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-.vn-calendar-popover.open .vn-calendar-event{cursor:pointer}
-.vn-calendar-event:focus-visible{
-  outline:2px solid var(--event-color);
-  outline-offset:2px;
-}
 
 </style>
 
