@@ -90,7 +90,7 @@ body::before{
 
 /* ===== GATE ===== */
 /* Lock the real page until the enter animation has completed. */
-body:not(.page-unlocked) #main{visibility:hidden !important;}
+body:not(.page-unlocked) #main{visibility:visible !important;}
 body.page-unlocked #main{visibility:visible !important;}
 
 #gate{
@@ -2452,6 +2452,24 @@ body:not(.page-unlocked) .vn-calendar-popover{opacity:0 !important;visibility:hi
 <span class="gate-hint">bấm để mở khóa</span>
 </span>
 </button>
+<script>
+/* Independent gate fallback: the page must still unlock even if the large feature JS throws. */
+(function(){
+  const g = document.getElementById("gate");
+  if (!g) return;
+  let unlocked = false;
+  g.addEventListener("click", function(ev){
+    if (unlocked) return;
+    unlocked = true;
+    document.body.classList.add("page-unlocked");
+    g.classList.add("hidden");
+    g.setAttribute("aria-hidden","true");
+    g.style.pointerEvents = "none";
+    setTimeout(function(){ g.hidden = true; }, 650);
+    try { window.dispatchEvent(new Event("bio:unlocked")); } catch(_) {}
+  }, {capture:true});
+})();
+</script>
 <div id="main">
 <div class="bg-video-wrap">
 <video autoplay="" id="bg-video" loop="" muted="" onerror="this.closest('.bg-video-wrap').classList.add('novideo')" playsinline="">
@@ -2877,6 +2895,6 @@ body:not(.page-unlocked) .vn-calendar-popover{opacity:0 !important;visibility:hi
 </div>
 </div>
 </div>
-<script src="javascript.js" defer></script>
 </body>
 </html>
+<script src="javascript.js" defer></script>
