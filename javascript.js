@@ -2835,28 +2835,10 @@ if (music) {
     }
   }
 
-  /* ================= VỊ TRÍ POPOVER — THEO CẠNH BIO CARD ================= */
-  /*
-   * Quy tắc mới:
-   * - Lấy vị trí thật của .card (bio card) trên màn hình.
-   * - Nếu có đủ khoảng trống bên TRÁI của card để đặt popover
-   *   (>= chiều rộng popover + margin), đặt popover ngay sát cạnh trái
-   *   của card, canh theo chiều dọc với đỉnh card.
-   * - Nếu không đủ chỗ (màn hình hẹp / card đã sát mép), chuyển sang
-   *   chế độ "centered": popover ra giữa màn hình, nền tối đều toàn trang.
-   * - Backdrop luôn phủ toàn màn hình để làm tối phần còn lại; ở chế độ
-   *   góc thì phần "khoét" quanh card+popover được tạo cảm giác không bị
-   *   che nhờ z-index thấp hơn card (card z-index:2, backdrop z-index:2
-   *   nhưng sau card trong DOM nên card vẫn hiện rõ, không bị tối).
-   */
-  /* FIX QUAN TRỌNG (chống lỗi "chỉ thấy màn hình tối"):
-     CSS mặc định của .vn-calendar-popover giờ đã LUÔN canh giữa màn hình
-     (không cần JS). Hàm này chỉ có nhiệm vụ NÂNG CẤP thêm: nếu đủ chỗ,
-     thêm class .corner + set inline left/top/transform để đặt popover
-     cạnh bio card. Nếu KHÔNG đủ chỗ, hoặc có bất kỳ lỗi/tính toán bất
-     thường nào xảy ra, hàm sẽ dọn sạch mọi inline style đã set trước đó
-     và để CSS mặc định (canh giữa) tự đảm nhiệm — popover luôn hiển thị
-     được, không bao giờ "biến mất" chỉ vì JS tính lệch. */
+  /* ================= VỊ TRÍ POPOVER — SMART DESKTOP / MOBILE ================= */
+  /* Desktop rộng: đặt lịch bên trái bio card, canh theo music-box.
+     Bio card là ranh giới; thiếu chỗ thì chuyển về giữa.
+     Mobile / màn hình hẹp: luôn giữa. */
   function resetToCenteredFallback() {
     isCornerMode = false;
     popover.classList.remove('corner');
@@ -2864,6 +2846,7 @@ if (music) {
     popover.style.left = '';
     popover.style.top = '';
     popover.style.right = '';
+    popover.style.bottom = '';
     popover.style.transform = '';
   }
 
@@ -2872,47 +2855,60 @@ if (music) {
 
     try {
       const margin = 18;
-      const rect = popover.getBoundingClientRect();
-      const popupWidth = rect.width || Math.min(400, window.innerWidth - margin * 2);
-      const popupHeight = rect.height || Math.min(window.innerHeight * 0.7, 560);
+      const mobileBreakpoint = 820;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-      let cardRect = null;
-      if (bioCard) cardRect = bioCard.getBoundingClientRect();
-
-      // Không gian bên trái của card (hoặc toàn màn hình nếu không có card)
-      const spaceLeftOfCard = cardRect ? cardRect.left : 0;
-
-      const fitsBesideCard =
-        cardRect &&
-        popupWidth > 0 &&
-        popupHeight > 0 &&
-        spaceLeftOfCard >= popupWidth + margin * 2 &&
-        window.innerHeight >= popupHeight + margin * 2;
-
-      if (fitsBesideCard) {
-        isCornerMode = true;
-        popover.classList.remove('centered');
-        popover.classList.add('corner');
-
-        let left = cardRect.left - margin - popupWidth;
-        if (left < margin) left = margin;
-
-        let top = cardRect.top;
-        const maxTop = window.innerHeight - popupHeight - margin;
-        top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
-
-        popover.style.left = Math.round(left) + 'px';
-        popover.style.top = Math.round(top) + 'px';
-        popover.style.right = 'auto';
-        popover.style.transform = popover.classList.contains('open')
-          ? 'translateY(0) scale(1)'
-          : 'translateY(-8px) scale(.96)';
-      } else {
+      // Điện thoại / màn hình hẹp: luôn ở giữa.
+      if (width <= mobileBreakpoint) {
         resetToCenteredFallback();
+        return;
       }
+
+      const rect = popover.getBoundingClientRect();
+      const popupWidth = rect.width || Math.min(400, width - margin * 2);
+      const popupHeight = rect.height || Math.min(height * 0.7, 560);
+      const cardRect = bioCard?.getBoundingClientRect();
+
+      if (!cardRect || popupWidth <= 0 || popupHeight <= 0) {
+        resetToCenteredFallback();
+        return;
+      }
+
+      // Chỉ dùng vùng TRÁI bio card. Popup không được đè lên card.
+      const availableLeft = cardRect.left - margin;
+      const fitsLeft = availableLeft >= popupWidth + margin;
+      const fitsHeight = height >= popupHeight + margin * 2;
+
+      if (!fitsLeft || !fitsHeight) {
+        resetToCenteredFallback();
+        return;
+      }
+
+      const musicBox = document.getElementById('music-box');
+      const musicRect = musicBox?.getBoundingClientRect();
+
+      // Canh trên với music box để hai khu vực nằm cùng hàng.
+      let top = musicRect?.top ?? cardRect.top;
+      const maxTop = height - popupHeight - margin;
+      top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
+
+      const left = Math.max(margin, Math.min(
+        cardRect.left - popupWidth - margin,
+        width - popupWidth - margin
+      ));
+
+      isCornerMode = true;
+      popover.classList.remove('centered');
+      popover.classList.add('corner');
+      popover.style.left = Math.round(left) + 'px';
+      popover.style.top = Math.round(top) + 'px';
+      popover.style.right = 'auto';
+      popover.style.bottom = 'auto';
+      popover.style.transform = popover.classList.contains('open')
+        ? 'translateY(0) scale(1)'
+        : 'translateY(-8px) scale(.96)';
     } catch (err) {
-      // Bất kỳ lỗi bất ngờ nào (kích thước lạ, thiết bị lạ...) đều rơi về
-      // chế độ canh giữa an toàn thay vì để popover không có vị trí nào.
       console.warn('[VN CALENDAR] positionPopover lỗi, dùng chế độ giữa màn hình:', err);
       resetToCenteredFallback();
     }
