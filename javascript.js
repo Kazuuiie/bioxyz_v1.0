@@ -11,7 +11,7 @@ const discLabel = document.getElementById('disc-label');
 const discTip = document.getElementById('disc-tip');
 const musicBox = document.getElementById('music-box');
 const musicTitle = document.getElementById('music-title');
-const albumCover = document.getElementById('album-cover');
+const profileAvatar = document.getElementById('profile-avatar');
 const musicPrev = document.getElementById('music-prev');
 const musicNext = document.getElementById('music-next');
 
@@ -40,20 +40,19 @@ if (gate) {
       spawnGateBurst(cx, cy);
     } catch (_) {}
 
+    // Reveal the real page immediately, then let the gate fade above it.
+    // This prevents a pink/blank frame from appearing when the gate closes.
+    document.body.classList.add('page-unlocked');
+    if (main) main.hidden = false;
     gate.classList.add('hidden');
+
+    requestAnimationFrame(() => {
+      if (card) card.classList.add('in');
+      if (dock) dock.classList.add('in');
+    });
 
     setTimeout(() => {
       gate.hidden = true;
-
-      if (main) {
-        main.hidden = false;
-        document.body.classList.add('page-unlocked');
-      }
-
-      requestAnimationFrame(() => {
-        if (card) card.classList.add('in');
-        if (dock) dock.classList.add('in');
-      });
 
       // Visual dashboard mode: reveal the paper event panel immediately after unlock.
       window.dispatchEvent(new Event('bio:unlocked'));
@@ -153,8 +152,8 @@ function renderCategoryFilters() {
   `).join('');
 }
 
-if (albumCover && bioConfig.avatar) {
-  albumCover.src = bioConfig.avatar;
+if (profileAvatar && bioConfig.avatar) {
+  profileAvatar.src = bioConfig.avatar;
 }
 
 /* ============ MUSIC ============ */
@@ -379,6 +378,7 @@ if (trackCategoryFiltersEl) {
 }
 
 if (trackMenuBtn && trackListPanel) {
+  trackMenuBtn.style.pointerEvents = 'auto';
   renderCategoryFilters();
   renderTrackList();
 
