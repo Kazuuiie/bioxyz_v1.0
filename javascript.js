@@ -2843,11 +2843,15 @@ if (music) {
     isCornerMode = false;
     popover.classList.remove('corner');
     popover.classList.add('centered');
-    popover.style.left = '';
-    popover.style.top = '';
-    popover.style.right = '';
-    popover.style.bottom = '';
-    popover.style.transform = '';
+
+    // Không để inline style của chế độ corner giữ lại vị trí cũ.
+    // Dùng !important để việc đổi kích thước cửa sổ có hiệu lực NGAY,
+    // không cần reload trang.
+    popover.style.setProperty('left', '50%', 'important');
+    popover.style.setProperty('top', '50%', 'important');
+    popover.style.setProperty('right', 'auto', 'important');
+    popover.style.setProperty('bottom', 'auto', 'important');
+    popover.style.setProperty('transform', 'translate(-50%, -50%) scale(1)', 'important');
   }
 
   function positionPopover() {
@@ -2901,6 +2905,14 @@ if (music) {
       isCornerMode = true;
       popover.classList.remove('centered');
       popover.classList.add('corner');
+
+      // Gỡ !important của centered trước khi chuyển lại sang corner.
+      popover.style.removeProperty('left');
+      popover.style.removeProperty('top');
+      popover.style.removeProperty('right');
+      popover.style.removeProperty('bottom');
+      popover.style.removeProperty('transform');
+
       popover.style.left = Math.round(left) + 'px';
       popover.style.top = Math.round(top) + 'px';
       popover.style.right = 'auto';
@@ -2977,11 +2989,18 @@ if (music) {
 
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && popover.classList.contains('open')) closeCalendar(); });
 
-  window.addEventListener('resize', () => {
-    if (popover.classList.contains('open')) {
+  function repositionCalendarSoon() {
+    if (!popover.classList.contains('open')) return;
+    requestAnimationFrame(() => {
       requestAnimationFrame(positionPopover);
-    }
-  });
+    });
+  }
+
+  window.addEventListener('resize', repositionCalendarSoon);
+  window.addEventListener('orientationchange', repositionCalendarSoon);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', repositionCalendarSoon);
+  }
 
   if (filterEl) {
     filterEl.addEventListener('change', () => {
