@@ -90,8 +90,8 @@ body::before{
 
 /* ===== GATE ===== */
 /* Lock the real page until the enter animation has completed. */
-body:not(.page-unlocked) #main{display:none !important;}
-body.page-unlocked #main{display:block !important;}
+body:not(.page-unlocked) #main{visibility:hidden !important;}
+body.page-unlocked #main{visibility:visible !important;}
 
 #gate{
   position:fixed;
@@ -2203,9 +2203,11 @@ main{
   width:100%;
   max-width:none;
   padding:0 0 30px;
-  opacity:0;
-  transform:translateY(22px) scale(.985);
+  opacity:1;
+  transform:none;
 }
+.card.in{opacity:1;transform:none}
+.reveal{opacity:1 !important;translate:0 0 !important;filter:none !important;}
 .card.in{opacity:1;transform:translateY(0) scale(1)}
 .titlebar{
   background:rgba(248,236,217,.94);
@@ -2420,7 +2422,7 @@ body:not(.page-unlocked) .vn-calendar-popover{opacity:0 !important;visibility:hi
 <span class="gate-hint">bấm để mở khóa</span>
 </span>
 </button>
-<div hidden="" id="main">
+<div id="main">
 <div class="bg-video-wrap">
 <video autoplay="" id="bg-video" loop="" muted="" onerror="this.closest('.bg-video-wrap').classList.add('novideo')" playsinline="">
 <source src="bg.mp4" type="video/mp4"/>
