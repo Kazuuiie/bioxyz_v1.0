@@ -2365,18 +2365,9 @@ if (music) {
 
 
 /* ============================================================
- * LỊCH SỰ KIỆN VIỆT NAM + QUỐC TẾ
+ * LỊCH SỰ KIỆN VIỆT NAM + QUỐC TẾ (BẢN SỬA)
  * ============================================================
- * - Dương lịch lưu trực tiếp trong JS.
- * - Âm lịch đổi sang dương qua Huyền Minh /api/amlich.
- * - Chỉ hiển thị ngày âm cho event có trường `lunar`.
- * - Mỗi loại event có màu riêng + chú thích.
- * - Event đã qua tự loại khỏi danh sách.
- * - Ưu tiên event còn lại của năm hiện tại.
- * - Vị trí: góc trên-trái màn hình trên desktop, giữa màn hình
- *   trên mobile/màn hình nhỏ — xử lý hoàn toàn bằng CSS
- *   (xem media query max-width:640px của .vn-calendar-popover),
- *   nên JS không cần tự tính toán left/top nữa.
+ * Thay thế toàn bộ IIFE initVietnamCalendar() cũ bằng bản này.
  * ============================================================ */
 (function initVietnamCalendar() {
   'use strict';
@@ -2411,66 +2402,71 @@ if (music) {
   const detailMinutes = document.getElementById('detail-minutes');
   const detailSeconds = document.getElementById('detail-seconds');
   const detailNow = document.getElementById('vn-calendar-detail-now');
+  const backdrop = document.getElementById('vn-calendar-backdrop');
+  const bioCard = document.querySelector('.card');
 
   if (!btn || !popover || !closeBtn || !nextCard || !nextName || !nextDates || !nextCount || !listEl) return;
 
-  // Detail panel lives inside the left column so clicking an event
-  // replaces the left "Next event" content without covering the list.
   if (detail && detail.parentElement !== nextCard) {
     nextCard.appendChild(detail);
   }
 
   let selectedEvent = null;
+  // true khi popover đang ở chế độ góc (đặt cạnh bio card, desktop)
+  // false khi đang ở chế độ giữa màn hình (mobile / không đủ chỗ)
+  let isCornerMode = false;
 
+  /* ================= ICON SỰ KIỆN — ĐA DẠNG, ĐẶC SẮC HƠN ================= */
+  // Mỗi sự kiện dùng emoji/icon riêng biệt, tránh trùng lặp, gợi hình rõ.
   const EVENTS = [
     // ===== VIỆT NAM — CHÍNH THỨC =====
-    { id:'tet-duong-lich', title:'Tết Dương lịch', icon:'🎉', kind:'official', solar:{day:1,month:1} },
-    { id:'thanh-lap-dang', title:'Ngày thành lập Đảng Cộng sản Việt Nam', icon:'🔴', kind:'official', solar:{day:3,month:2} },
-    { id:'hung-vuong', title:'Giỗ Tổ Hùng Vương', icon:'🏯', kind:'official', lunar:{day:10,month:3,leap:false}, lunarLabel:'10/03 Âm lịch' },
-    { id:'giai-phong-mien-nam', title:'Ngày Chiến thắng 30/4', icon:'🇻🇳', kind:'official', solar:{day:30,month:4} },
-    { id:'quoc-khanh', title:'Quốc Khánh Việt Nam', icon:'🇻🇳', kind:'official', solar:{day:2,month:9} },
-    { id:'thuong-binh-liet-si', title:'Ngày Thương binh - Liệt sĩ', icon:'🎖️', kind:'official', solar:{day:27,month:7} },
+    { id:'tet-duong-lich', title:'Tết Dương lịch', icon:'🎆', kind:'official', solar:{day:1,month:1} },
+    { id:'thanh-lap-dang', title:'Ngày thành lập Đảng Cộng sản Việt Nam', icon:'🚩', kind:'official', solar:{day:3,month:2} },
+    { id:'hung-vuong', title:'Giỗ Tổ Hùng Vương', icon:'⛩️', kind:'official', lunar:{day:10,month:3,leap:false}, lunarLabel:'10/03 Âm lịch' },
+    { id:'giai-phong-mien-nam', title:'Ngày Chiến thắng 30/4', icon:'🕊️', kind:'official', solar:{day:30,month:4} },
+    { id:'quoc-khanh', title:'Quốc Khánh Việt Nam', icon:'🎇', kind:'official', solar:{day:2,month:9} },
+    { id:'thuong-binh-liet-si', title:'Ngày Thương binh - Liệt sĩ', icon:'🕯️', kind:'official', solar:{day:27,month:7} },
 
     // ===== VIỆT NAM — NGÀY KỶ NIỆM =====
-    { id:'hoc-sinh-sinh-vien', title:'Ngày truyền thống Học sinh, Sinh viên Việt Nam', icon:'🎓', kind:'vietnam', solar:{day:9,month:1} },
-    { id:'thay-thuoc', title:'Ngày Thầy thuốc Việt Nam', icon:'🩺', kind:'vietnam', solar:{day:27,month:2} },
-    { id:'thanh-lap-doan', title:'Ngày thành lập Đoàn TNCS Hồ Chí Minh', icon:'🌱', kind:'vietnam', solar:{day:26,month:3} },
-    { id:'sach-doc', title:'Ngày Sách và Văn hóa đọc Việt Nam', icon:'📚', kind:'vietnam', solar:{day:21,month:4} },
-    { id:'dien-bien-phu', title:'Ngày Chiến thắng Điện Biên Phủ', icon:'🎖️', kind:'vietnam', solar:{day:7,month:5} },
-    { id:'ho-chi-minh', title:'Ngày sinh Chủ tịch Hồ Chí Minh', icon:'🌿', kind:'vietnam', solar:{day:19,month:5} },
-    { id:'thieu-nhi', title:'Ngày Quốc tế Thiếu nhi', icon:'🧸', kind:'vietnam', solar:{day:1,month:6} },
-    { id:'bao-chi', title:'Ngày Báo chí Cách mạng Việt Nam', icon:'📰', kind:'vietnam', solar:{day:21,month:6} },
-    { id:'cach-mang-thang-tam', title:'Ngày Cách mạng Tháng Tám', icon:'⭐', kind:'vietnam', solar:{day:19,month:8} },
-    { id:'doanh-nhan', title:'Ngày Doanh nhân Việt Nam', icon:'💼', kind:'vietnam', solar:{day:13,month:10} },
-    { id:'phu-nu', title:'Ngày Phụ nữ Việt Nam', icon:'👩', kind:'vietnam', solar:{day:20,month:10} },
-    { id:'nha-giao', title:'Ngày Nhà giáo Việt Nam', icon:'📖', kind:'vietnam', solar:{day:20,month:11} },
+    { id:'hoc-sinh-sinh-vien', title:'Ngày truyền thống Học sinh, Sinh viên Việt Nam', icon:'🎒', kind:'vietnam', solar:{day:9,month:1} },
+    { id:'thay-thuoc', title:'Ngày Thầy thuốc Việt Nam', icon:'⚕️', kind:'vietnam', solar:{day:27,month:2} },
+    { id:'thanh-lap-doan', title:'Ngày thành lập Đoàn TNCS Hồ Chí Minh', icon:'🌾', kind:'vietnam', solar:{day:26,month:3} },
+    { id:'sach-doc', title:'Ngày Sách và Văn hóa đọc Việt Nam', icon:'📖', kind:'vietnam', solar:{day:21,month:4} },
+    { id:'dien-bien-phu', title:'Ngày Chiến thắng Điện Biên Phủ', icon:'🏔️', kind:'vietnam', solar:{day:7,month:5} },
+    { id:'ho-chi-minh', title:'Ngày sinh Chủ tịch Hồ Chí Minh', icon:'🌸', kind:'vietnam', solar:{day:19,month:5} },
+    { id:'thieu-nhi', title:'Ngày Quốc tế Thiếu nhi', icon:'🎈', kind:'vietnam', solar:{day:1,month:6} },
+    { id:'bao-chi', title:'Ngày Báo chí Cách mạng Việt Nam', icon:'🗞️', kind:'vietnam', solar:{day:21,month:6} },
+    { id:'cach-mang-thang-tam', title:'Ngày Cách mạng Tháng Tám', icon:'✨', kind:'vietnam', solar:{day:19,month:8} },
+    { id:'doanh-nhan', title:'Ngày Doanh nhân Việt Nam', icon:'📈', kind:'vietnam', solar:{day:13,month:10} },
+    { id:'phu-nu', title:'Ngày Phụ nữ Việt Nam', icon:'🌺', kind:'vietnam', solar:{day:20,month:10} },
+    { id:'nha-giao', title:'Ngày Nhà giáo Việt Nam', icon:'🍎', kind:'vietnam', solar:{day:20,month:11} },
     { id:'di-san', title:'Ngày Di sản Văn hóa Việt Nam', icon:'🏛️', kind:'vietnam', solar:{day:23,month:11} },
-    { id:'quan-doi', title:'Ngày thành lập Quân đội Nhân dân Việt Nam', icon:'🪖', kind:'vietnam', solar:{day:22,month:12} },
+    { id:'quan-doi', title:'Ngày thành lập Quân đội Nhân dân Việt Nam', icon:'⭐', kind:'vietnam', solar:{day:22,month:12} },
 
     // ===== SỰ KIỆN ÂM LỊCH / VĂN HÓA =====
     { id:'tet-nguyen-dan', title:'Tết Nguyên Đán', icon:'🧧', kind:'lunar', lunar:{day:1,month:1,leap:false}, lunarLabel:'01/01 Âm lịch' },
-    { id:'ram-thang-gieng', title:'Rằm tháng Giêng', icon:'🌕', kind:'lunar', lunar:{day:15,month:1,leap:false}, lunarLabel:'15/01 Âm lịch' },
-    { id:'han-thuc', title:'Tết Hàn Thực', icon:'🥮', kind:'lunar', lunar:{day:3,month:3,leap:false}, lunarLabel:'03/03 Âm lịch' },
-    { id:'doan-ngo', title:'Tết Đoan Ngọ', icon:'🍉', kind:'lunar', lunar:{day:5,month:5,leap:false}, lunarLabel:'05/05 Âm lịch' },
-    { id:'that-tich', title:'Thất Tịch', icon:'💫', kind:'lunar', lunar:{day:7,month:7,leap:false}, lunarLabel:'07/07 Âm lịch' },
+    { id:'ram-thang-gieng', title:'Rằm tháng Giêng', icon:'🏮', kind:'lunar', lunar:{day:15,month:1,leap:false}, lunarLabel:'15/01 Âm lịch' },
+    { id:'han-thuc', title:'Tết Hàn Thực', icon:'🥟', kind:'lunar', lunar:{day:3,month:3,leap:false}, lunarLabel:'03/03 Âm lịch' },
+    { id:'doan-ngo', title:'Tết Đoan Ngọ', icon:'🍑', kind:'lunar', lunar:{day:5,month:5,leap:false}, lunarLabel:'05/05 Âm lịch' },
+    { id:'that-tich', title:'Thất Tịch', icon:'🌌', kind:'lunar', lunar:{day:7,month:7,leap:false}, lunarLabel:'07/07 Âm lịch' },
     { id:'vu-lan', title:'Lễ Vu Lan', icon:'🪷', kind:'lunar', lunar:{day:15,month:7,leap:false}, lunarLabel:'15/07 Âm lịch' },
-    { id:'trung-thu', title:'Tết Trung Thu', icon:'🌙', kind:'lunar', lunar:{day:15,month:8,leap:false}, lunarLabel:'15/08 Âm lịch' },
-    { id:'ong-tao', title:'Ông Công Ông Táo', icon:'🔥', kind:'lunar', lunar:{day:23,month:12,leap:false}, lunarLabel:'23/12 Âm lịch' },
+    { id:'trung-thu', title:'Tết Trung Thu', icon:'🥮', kind:'lunar', lunar:{day:15,month:8,leap:false}, lunarLabel:'15/08 Âm lịch' },
+    { id:'ong-tao', title:'Ông Công Ông Táo', icon:'🐟', kind:'lunar', lunar:{day:23,month:12,leap:false}, lunarLabel:'23/12 Âm lịch' },
 
     // ===== QUỐC TẾ =====
-    { id:'education-day', title:'Ngày Quốc tế Giáo dục', icon:'📘', kind:'international', solar:{day:24,month:1} },
+    { id:'education-day', title:'Ngày Quốc tế Giáo dục', icon:'🎓', kind:'international', solar:{day:24,month:1} },
     { id:'cancer-day', title:'Ngày Thế giới Phòng chống Ung thư', icon:'🎗️', kind:'international', solar:{day:4,month:2} },
-    { id:'valentines', title:'Valentine', icon:'❤️', kind:'international', solar:{day:14,month:2} },
+    { id:'valentines', title:'Valentine', icon:'💘', kind:'international', solar:{day:14,month:2} },
     { id:'womens-day', title:'Ngày Quốc tế Phụ nữ', icon:'🌷', kind:'international', solar:{day:8,month:3} },
-    { id:'happiness-day', title:'Ngày Quốc tế Hạnh phúc', icon:'😊', kind:'international', solar:{day:20,month:3} },
+    { id:'happiness-day', title:'Ngày Quốc tế Hạnh phúc', icon:'☀️', kind:'international', solar:{day:20,month:3} },
     { id:'world-water', title:'Ngày Nước Thế giới', icon:'💧', kind:'international', solar:{day:22,month:3} },
     { id:'earth-day', title:'Ngày Trái Đất', icon:'🌍', kind:'international', solar:{day:22,month:4} },
     { id:'book-day', title:'Ngày Sách và Bản quyền Thế giới', icon:'📚', kind:'international', solar:{day:23,month:4} },
     { id:'environment-day', title:'Ngày Môi trường Thế giới', icon:'🌱', kind:'international', solar:{day:5,month:6} },
-    { id:'oceans-day', title:'Ngày Đại dương Thế giới', icon:'🌊', kind:'international', solar:{day:8,month:6} },
-    { id:'youth-day', title:'Ngày Quốc tế Thanh niên', icon:'🧑‍🤝‍🧑', kind:'international', solar:{day:12,month:8} },
+    { id:'oceans-day', title:'Ngày Đại dương Thế giới', icon:'🐋', kind:'international', solar:{day:8,month:6} },
+    { id:'youth-day', title:'Ngày Quốc tế Thanh niên', icon:'🚀', kind:'international', solar:{day:12,month:8} },
     { id:'peace-day', title:'Ngày Quốc tế Hòa bình', icon:'🕊️', kind:'international', solar:{day:21,month:9} },
-    { id:'tourism-day', title:'Ngày Du lịch Thế giới', icon:'✈️', kind:'international', solar:{day:27,month:9} },
+    { id:'tourism-day', title:'Ngày Du lịch Thế giới', icon:'🧳', kind:'international', solar:{day:27,month:9} },
     { id:'food-day', title:'Ngày Lương thực Thế giới', icon:'🌾', kind:'international', solar:{day:16,month:10} },
     { id:'un-day', title:'Ngày Liên Hợp Quốc', icon:'🌐', kind:'international', solar:{day:24,month:10} },
     { id:'halloween', title:'Halloween', icon:'🎃', kind:'special', solar:{day:31,month:10} },
@@ -2583,8 +2579,6 @@ if (music) {
         for (const year of years) jobs.push([event, year]);
       }
 
-      // Resolve dates concurrently. Solar dates are instant; lunar dates
-      // may hit the cache/API. Promise.all avoids a long serial waterfall.
       const settled = await Promise.all(
         jobs.map(async ([event, year]) => {
           try { return await resolveEvent(event, year); }
@@ -2647,6 +2641,15 @@ if (music) {
     if (kind) el.classList.add(`kind-${kind}`);
   }
 
+  /* FIX: đảm bảo 4 ô đếm ngược luôn tồn tại trong DOM trước khi set giá trị.
+     Trước đây nextCountMarkup() bị gọi lại (innerHTML) mỗi lần "upcoming",
+     nhưng nếu render() chạy nhanh liên tiếp trong lúc setInterval 1s đang
+     thao tác trên các #vn-days/#vn-hours cũ (đã bị destroy bởi lần
+     innerHTML trước đó nhưng biến DOM cache ở nơi khác vẫn giữ tham chiếu),
+     giá trị set vào sẽ rơi vào node đã rời DOM -> hiển thị "mất" đếm ngược.
+     Giải pháp: chỉ ghi lại innerHTML khi thực sự cần (đổi từ ongoing sang
+     upcoming hoặc ngược lại), còn lại luôn truy vấn lại phần tử bằng
+     document.getElementById ngay tại thời điểm set số. */
   function setCountdown(target, now) {
     const value = countdown(target, now);
     const days = document.getElementById('vn-days');
@@ -2717,10 +2720,6 @@ if (music) {
     if (detailMinutes) detailMinutes.textContent = pad2(value.minutes);
     if (detailSeconds) detailSeconds.textContent = pad2(value.seconds);
     if (detailNow) detailNow.textContent = formatDetailNow(now);
-
-    if (status === 'ongoing') {
-      detailDays?.setAttribute('aria-label','Đang diễn ra');
-    }
   }
 
   function openDetail(event) {
@@ -2740,8 +2739,19 @@ if (music) {
     updateDetail(new Date());
   }
 
+  /* FIX ĐẾM NGƯỢC BỊ MẤT:
+     Trước đây renderNext() ghi đè nextCount.innerHTML mỗi khi trạng thái
+     là "upcoming", kể cả khi trước đó nó đã là "upcoming" rồi — điều này
+     phá huỷ #vn-days/#vn-hours/... liên tục 1 lần/giây một cách không cần
+     thiết và có thể đụng độ với setCountdown() đang chạy cùng lúc trong
+     interval khác, khiến số bị "đứng hình" hoặc trắng. Giờ chỉ ghi lại
+     markup khi trạng thái THỰC SỰ đổi (ongoing <-> upcoming) hoặc khi
+     sự kiện tiếp theo đổi (next.id đổi), còn lại chỉ update số qua
+     setCountdown(). */
+  let lastNextId = null;
+  let lastNextStatus = null;
+
   function renderNext(now) {
-    // When a detail is open, keep the selected event in the left panel.
     if (selectedEvent && detail?.classList.contains('open')) {
       updateDetail(now);
       return;
@@ -2749,21 +2759,32 @@ if (music) {
 
     const events = visibleEvents(now);
     const next = events[0];
+
     if (!next) {
-      applyKindClass(nextCard, 'special');
-      nextName.textContent = 'Không còn sự kiện';
-      nextDates.textContent = 'Hẹn gặp lại vào năm mới.';
-      nextCount.innerHTML = '<div class="vn-calendar-ongoing">đã hoàn tất</div>';
+      if (lastNextId !== null) {
+        applyKindClass(nextCard, 'special');
+        nextName.textContent = 'Không còn sự kiện';
+        nextDates.textContent = 'Hẹn gặp lại vào năm mới.';
+        nextCount.innerHTML = '<div class="vn-calendar-ongoing">đã hoàn tất</div>';
+        lastNextId = null;
+        lastNextStatus = null;
+      }
       return;
     }
 
-    applyKindClass(nextCard, next.kind);
-    nextName.textContent = `${next.icon} ${next.title}`;
-    nextDates.innerHTML = formatMeta(next);
-
     const status = eventStatus(next, now);
-    nextCard.classList.toggle('is-ongoing', status === 'ongoing');
-    nextCount.innerHTML = status === 'ongoing' ? '<div class="vn-calendar-ongoing">đang diễn ra</div>' : nextCountMarkup();
+    const idOrStatusChanged = next.id !== lastNextId || status !== lastNextStatus;
+
+    if (idOrStatusChanged) {
+      applyKindClass(nextCard, next.kind);
+      nextName.textContent = `${next.icon} ${next.title}`;
+      nextDates.innerHTML = formatMeta(next);
+      nextCard.classList.toggle('is-ongoing', status === 'ongoing');
+      nextCount.innerHTML = status === 'ongoing' ? '<div class="vn-calendar-ongoing">đang diễn ra</div>' : nextCountMarkup();
+      lastNextId = next.id;
+      lastNextStatus = status;
+    }
+
     if (status !== 'ongoing') setCountdown(next.start, now);
   }
 
@@ -2814,41 +2835,76 @@ if (music) {
     }
   }
 
+  /* ================= VỊ TRÍ POPOVER — THEO CẠNH BIO CARD ================= */
   /*
-   * FIX: Vị trí của popover (góc trên-trái trên desktop, giữa màn hình
-   * trên mobile/màn hình nhỏ) giờ được xử lý HOÀN TOÀN bằng CSS thông
-   * qua media query max-width:640px trên .vn-calendar-popover. Hàm này
-   * được giữ lại (no-op) để các lời gọi cũ (resize/scroll/openCalendar)
-   * không bị lỗi, nhưng không còn ghi đè left/top bằng inline style nữa —
-   * việc đó trước đây luôn ép popover về giữa màn hình bất kể kích thước.
+   * Quy tắc mới:
+   * - Lấy vị trí thật của .card (bio card) trên màn hình.
+   * - Nếu có đủ khoảng trống bên TRÁI của card để đặt popover
+   *   (>= chiều rộng popover + margin), đặt popover ngay sát cạnh trái
+   *   của card, canh theo chiều dọc với đỉnh card.
+   * - Nếu không đủ chỗ (màn hình hẹp / card đã sát mép), chuyển sang
+   *   chế độ "centered": popover ra giữa màn hình, nền tối đều toàn trang.
+   * - Backdrop luôn phủ toàn màn hình để làm tối phần còn lại; ở chế độ
+   *   góc thì phần "khoét" quanh card+popover được tạo cảm giác không bị
+   *   che nhờ z-index thấp hơn card (card z-index:2, backdrop z-index:2
+   *   nhưng sau card trong DOM nên card vẫn hiện rõ, không bị tối).
    */
   function positionPopover() {
     if (!popover) return;
 
     const margin = 18;
-
-    // Đo kích thước thật của popup để quyết định vị trí.
-    // Desktop đủ chỗ -> góc trên bên trái.
-    // Không đủ chỗ -> chính giữa màn hình.
     const rect = popover.getBoundingClientRect();
+    const popupWidth = rect.width || Math.min(400, window.innerWidth - margin * 2);
+    const popupHeight = rect.height || Math.min(window.innerHeight * 0.7, 560);
 
-    const popupWidth = rect.width || Math.min(380, window.innerWidth - margin * 2);
-    const popupHeight = rect.height || Math.min(window.innerHeight * 0.68, 520);
+    let cardRect = null;
+    if (bioCard) cardRect = bioCard.getBoundingClientRect();
 
-    const fitsTopLeft =
-      window.innerWidth >= popupWidth + margin * 2 &&
+    // Không gian bên trái của card (hoặc toàn màn hình nếu không có card)
+    const spaceLeftOfCard = cardRect ? cardRect.left : window.innerWidth;
+
+    const fitsBesideCard =
+      cardRect &&
+      spaceLeftOfCard >= popupWidth + margin * 2 &&
       window.innerHeight >= popupHeight + margin * 2;
 
-    popover.classList.toggle('centered', !fitsTopLeft);
+    if (fitsBesideCard) {
+      isCornerMode = true;
+      popover.classList.remove('centered');
+
+      let left = cardRect.left - margin - popupWidth;
+      if (left < margin) left = margin;
+
+      let top = cardRect.top;
+      const maxTop = window.innerHeight - popupHeight - margin;
+      top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
+
+      popover.style.left = Math.round(left) + 'px';
+      popover.style.top = Math.round(top) + 'px';
+      popover.style.right = 'auto';
+      popover.style.transform = popover.classList.contains('open')
+        ? 'translateY(0) scale(1)'
+        : 'translateY(-8px) scale(.96)';
+    } else {
+      isCornerMode = false;
+      popover.classList.add('centered');
+      popover.style.left = '';
+      popover.style.top = '';
+      popover.style.right = '';
+    }
   }
 
   function openCalendar() {
     render();
 
-    // Mở tạm để đo kích thước thật, sau đó chọn góc trái hay giữa.
+    popover.style.visibility = 'hidden';
     popover.classList.add('open');
-    positionPopover();
-    const backdrop = document.getElementById('vn-calendar-backdrop');
+    // Đo kích thước thật trước, chọn vị trí, rồi mới hiện.
+    requestAnimationFrame(() => {
+      positionPopover();
+      popover.style.visibility = '';
+    });
+
     backdrop?.classList.add('open');
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded','true');
@@ -2857,7 +2913,6 @@ if (music) {
   function closeCalendar() {
     resetDetail();
     popover.classList.remove('open');
-    const backdrop = document.getElementById('vn-calendar-backdrop');
     backdrop?.classList.remove('open');
     btn.classList.remove('is-open');
     btn.setAttribute('aria-expanded','false');
@@ -2870,15 +2925,24 @@ if (music) {
 
   closeBtn.addEventListener('click', event => { event.stopPropagation(); closeCalendar(); });
   popover.addEventListener('click', event => event.stopPropagation());
-  const backdrop = document.getElementById('vn-calendar-backdrop');
   backdrop?.addEventListener('click', closeCalendar);
 
+  /* FIX: TẮT "bấm ra ngoài để đóng" khi đang ở chế độ góc (isCornerMode).
+     Ở chế độ góc, popover đứng cạnh bio card như một panel phụ — bấm ra
+     ngoài (vào phần nền/orb/video) không nên đóng nó, người dùng vẫn có
+     thể tương tác với trang phía sau. Chỉ khi ở chế độ giữa màn hình
+     (mobile / không đủ chỗ) mới giữ hành vi bấm ra ngoài để đóng, vì lúc
+     đó backdrop đóng vai trò modal thực sự. */
   document.addEventListener('click', event => {
-    if (popover.classList.contains('open') && !popover.contains(event.target) && !btn.contains(event.target)) closeCalendar();
+    if (!popover.classList.contains('open')) return;
+    if (isCornerMode) return; // đã tắt bấm ra ngoài ở chế độ góc
+    if (!popover.contains(event.target) && !btn.contains(event.target)) {
+      closeCalendar();
+    }
   });
+
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && popover.classList.contains('open')) closeCalendar(); });
 
-  // Tự kiểm tra lại khi người dùng thay đổi kích thước cửa sổ.
   window.addEventListener('resize', () => {
     if (popover.classList.contains('open')) {
       requestAnimationFrame(positionPopover);
@@ -2888,6 +2952,8 @@ if (music) {
   if (filterEl) {
     filterEl.addEventListener('change', () => {
       currentFilter = filterEl.value || 'all';
+      lastNextId = null;
+      lastNextStatus = null;
       render();
     });
   }
@@ -2916,6 +2982,8 @@ if (music) {
     detailCloseBtn.addEventListener('click', event => {
       event.stopPropagation();
       resetDetail();
+      lastNextId = null;
+      lastNextStatus = null;
       render(new Date());
     });
   }
@@ -2957,11 +3025,9 @@ if (music) {
 
     if (!popover.classList.contains('open')) return;
 
-    // Update only the changing countdowns every second.
+    // Cập nhật đếm ngược mỗi giây — luôn chạy, không phụ thuộc render list.
     renderNext(now);
 
-    // Rebuild the list only when the day changes, so the DOM is not
-    // destroyed/recreated 60 times per minute.
     if (dayKey !== lastDayKey) {
       lastDayKey = dayKey;
       removeEnded(now);
