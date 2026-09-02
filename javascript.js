@@ -2849,48 +2849,72 @@ if (music) {
    *   che nhờ z-index thấp hơn card (card z-index:2, backdrop z-index:2
    *   nhưng sau card trong DOM nên card vẫn hiện rõ, không bị tối).
    */
+  /* FIX QUAN TRỌNG (chống lỗi "chỉ thấy màn hình tối"):
+     CSS mặc định của .vn-calendar-popover giờ đã LUÔN canh giữa màn hình
+     (không cần JS). Hàm này chỉ có nhiệm vụ NÂNG CẤP thêm: nếu đủ chỗ,
+     thêm class .corner + set inline left/top/transform để đặt popover
+     cạnh bio card. Nếu KHÔNG đủ chỗ, hoặc có bất kỳ lỗi/tính toán bất
+     thường nào xảy ra, hàm sẽ dọn sạch mọi inline style đã set trước đó
+     và để CSS mặc định (canh giữa) tự đảm nhiệm — popover luôn hiển thị
+     được, không bao giờ "biến mất" chỉ vì JS tính lệch. */
+  function resetToCenteredFallback() {
+    isCornerMode = false;
+    popover.classList.remove('corner');
+    popover.classList.add('centered');
+    popover.style.left = '';
+    popover.style.top = '';
+    popover.style.right = '';
+    popover.style.transform = '';
+  }
+
   function positionPopover() {
     if (!popover) return;
 
-    const margin = 18;
-    const rect = popover.getBoundingClientRect();
-    const popupWidth = rect.width || Math.min(400, window.innerWidth - margin * 2);
-    const popupHeight = rect.height || Math.min(window.innerHeight * 0.7, 560);
+    try {
+      const margin = 18;
+      const rect = popover.getBoundingClientRect();
+      const popupWidth = rect.width || Math.min(400, window.innerWidth - margin * 2);
+      const popupHeight = rect.height || Math.min(window.innerHeight * 0.7, 560);
 
-    let cardRect = null;
-    if (bioCard) cardRect = bioCard.getBoundingClientRect();
+      let cardRect = null;
+      if (bioCard) cardRect = bioCard.getBoundingClientRect();
 
-    // Không gian bên trái của card (hoặc toàn màn hình nếu không có card)
-    const spaceLeftOfCard = cardRect ? cardRect.left : window.innerWidth;
+      // Không gian bên trái của card (hoặc toàn màn hình nếu không có card)
+      const spaceLeftOfCard = cardRect ? cardRect.left : 0;
 
-    const fitsBesideCard =
-      cardRect &&
-      spaceLeftOfCard >= popupWidth + margin * 2 &&
-      window.innerHeight >= popupHeight + margin * 2;
+      const fitsBesideCard =
+        cardRect &&
+        popupWidth > 0 &&
+        popupHeight > 0 &&
+        spaceLeftOfCard >= popupWidth + margin * 2 &&
+        window.innerHeight >= popupHeight + margin * 2;
 
-    if (fitsBesideCard) {
-      isCornerMode = true;
-      popover.classList.remove('centered');
+      if (fitsBesideCard) {
+        isCornerMode = true;
+        popover.classList.remove('centered');
+        popover.classList.add('corner');
 
-      let left = cardRect.left - margin - popupWidth;
-      if (left < margin) left = margin;
+        let left = cardRect.left - margin - popupWidth;
+        if (left < margin) left = margin;
 
-      let top = cardRect.top;
-      const maxTop = window.innerHeight - popupHeight - margin;
-      top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
+        let top = cardRect.top;
+        const maxTop = window.innerHeight - popupHeight - margin;
+        top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
 
-      popover.style.left = Math.round(left) + 'px';
-      popover.style.top = Math.round(top) + 'px';
-      popover.style.right = 'auto';
-      popover.style.transform = popover.classList.contains('open')
-        ? 'translateY(0) scale(1)'
-        : 'translateY(-8px) scale(.96)';
-    } else {
-      isCornerMode = false;
-      popover.classList.add('centered');
-      popover.style.left = '';
-      popover.style.top = '';
-      popover.style.right = '';
+        popover.style.left = Math.round(left) + 'px';
+        popover.style.top = Math.round(top) + 'px';
+        popover.style.right = 'auto';
+        popover.style.transform = popover.classList.contains('open')
+          ? 'translateY(0) scale(1)'
+          : 'translateY(-8px) scale(.96)';
+      } else {
+        resetToCenteredFallback();
+      }
+    } catch (err) {
+      // Bất kỳ lỗi bất ngờ nào (kích thước lạ, thiết bị lạ...) đều rơi về
+      // chế độ canh giữa an toàn thay vì để popover không có vị trí nào.
+      console.warn('[VN CALENDAR] positionPopover lỗi, dùng chế độ giữa màn hình:', err);
+      resetToCenteredFallback();
     }
   }
 
@@ -2899,11 +2923,25 @@ if (music) {
 
     popover.style.visibility = 'hidden';
     popover.classList.add('open');
+
+    // FIX: dùng try/finally để dù positionPopover() có lỗi bất ngờ,
+    // inline visibility:hidden VẪN được gỡ bỏ ngay sau đó — tránh trường
+    // hợp popover kẹt ở trạng thái ẩn vĩnh viễn (chỉ thấy nền tối).
+    const reveal = () => {
+      try {
+        positionPopover();
+      } finally {
+        popover.style.visibility = '';
+      }
+    };
+
     // Đo kích thước thật trước, chọn vị trí, rồi mới hiện.
-    requestAnimationFrame(() => {
-      positionPopover();
-      popover.style.visibility = '';
-    });
+    requestAnimationFrame(reveal);
+    // Lưới an toàn: nếu vì lý do gì đó rAF không chạy (tab ẩn, trình
+    // duyệt lạ...), vẫn đảm bảo popover hiện ra sau tối đa 120ms.
+    setTimeout(() => {
+      if (popover.style.visibility === 'hidden') reveal();
+    }, 120);
 
     backdrop?.classList.add('open');
     btn.classList.add('is-open');
