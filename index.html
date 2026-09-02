@@ -1,132 +1,556 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>itsrealkhanz — bio</title><meta name="description" content="itsrealkhanz personal bio">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>khanz.dev — bio</title>
 <style>
-:root{--paper:#f7f2eb;--ink:#251c18;--muted:#7b6d65;--red:#c95e67;--line:rgba(53,41,35,.13);--shadow:0 24px 52px rgba(34,27,23,.22)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;overflow-x:hidden}body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#879ca7;user-select:none;-webkit-font-smoothing:antialiased}button,a{font:inherit}img{max-width:100%}
-#main{position:relative;min-height:100vh}.bg-video-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;background:#788e99}.bg-video-wrap video{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.85) brightness(.80)}.bg-video-wrap:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(21,28,33,.12),rgba(20,25,28,.28))}body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.04;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
-#gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,#211b18,#0e0b0a 72%);color:#f8f0e7;cursor:pointer;clip-path:circle(145% at 50% 50%);transition:opacity .55s ease,clip-path .65s ease}#gate.hidden{opacity:0;clip-path:circle(0 at 50% 50%);pointer-events:none}.gate-inner{display:flex;flex-direction:column;align-items:center;gap:18px}.gate-ring{width:110px;height:110px;border:1px solid rgba(255,255,255,.2);border-radius:50%;display:grid;place-items:center}.gate-mark{font:500 28px Fraunces,serif;font-style:italic;color:#df7b83}.gate-text{font:500 28px Fraunces,serif;font-style:italic;letter-spacing:.03em}.gate-hint{font:10px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;opacity:.45}
-.shell{position:relative;z-index:3;width:min(1415px,calc(100vw - 64px));margin:26px auto 74px;display:grid;grid-template-columns:280px minmax(0,820px);gap:24px;align-items:start}.side-stack{display:flex;flex-direction:column;gap:16px}.panel{background:linear-gradient(180deg,rgba(250,247,242,.95),rgba(243,236,228,.92));border:1px solid rgba(65,48,40,.14);border-radius:17px;box-shadow:var(--shadow);overflow:hidden;backdrop-filter:blur(10px)}.panel-head{display:flex;align-items:center;justify-content:space-between;padding:15px 17px 13px;border-bottom:1px solid var(--line)}.panel-title{display:flex;align-items:center;gap:9px;font-weight:700;font-size:12px;letter-spacing:.05em}.panel-title svg{width:17px;height:17px;color:#554840;flex:none}.panel-meta{font:8px 'IBM Plex Mono',monospace;color:#8f8278;letter-spacing:.08em}
-.event-list{padding:10px 10px 8px}.event-row{display:grid;grid-template-columns:32px minmax(0,1fr) 48px;gap:10px;align-items:center;padding:10px 9px;border:1px solid rgba(70,52,44,.11);border-radius:11px;background:rgba(255,255,255,.22);margin-bottom:7px;transition:.18s ease}.event-row:hover{background:#f5ece4;transform:translateY(-1px)}.event-icon{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#ece4db;font-size:16px}.event-main{min-width:0;display:flex;flex-direction:column;gap:3px}.event-main strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.event-main span{font:8.5px 'IBM Plex Mono',monospace;color:#7f7169}.event-days{text-align:center;background:#e9ded5;border-radius:8px;padding:5px 3px}.event-days b{display:block;font-size:15px;line-height:1}.event-days small{font-size:8px;color:#776a62}.panel-link{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;font-size:12px;border-top:1px solid var(--line);cursor:pointer}.panel-link:hover{background:rgba(207,100,120,.07)}
-.player-panel{padding-bottom:10px}.player-body{padding:14px 16px 12px}.player-top{display:flex;align-items:center;gap:17px;padding:5px 2px 12px}.player-art-wrap{position:relative;width:105px;height:100px;flex:none;display:flex;align-items:center}.record{position:absolute;right:-9px;top:10px;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at center,#777 0 8%,#2a2928 9% 14%,#111 15% 26%,#303030 27% 29%,#121212 30% 100%);box-shadow:0 6px 12px rgba(0,0,0,.28)}.record:after{content:"";position:absolute;inset:5px;border-radius:50%;border:2px solid rgba(255,255,255,.04);box-shadow:inset 0 0 0 2px rgba(255,255,255,.03),inset 0 0 0 7px rgba(255,255,255,.02),inset 0 0 0 12px rgba(255,255,255,.02)}.disc-player{position:relative;z-index:2;width:62px;height:76px;border-radius:5px;overflow:hidden;background:#d8d0c7;box-shadow:0 7px 14px rgba(0,0,0,.16);cursor:pointer}.disc-label{display:block;width:100%;height:100%;background-position:center;background-size:cover;background-repeat:no-repeat}.player-info{min-width:0;flex:1}.music-title{margin:0;color:#332821;font-size:12.5px;line-height:1.25;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}#disc-tip{margin:5px 0 0;font-size:9.5px;color:#8e7f76}.player-controls{display:flex;align-items:center;justify-content:center;gap:17px;padding:0 0 9px}.player-controls button{width:25px;height:25px;border-radius:50%;background:transparent;color:#786b63;display:grid;place-items:center;cursor:pointer}.player-controls button:hover{background:#ece3da;color:#322721}.music-playbtn{width:35px!important;height:35px!important;background:#cb626b!important;color:#fff!important}.music-playbtn svg{width:13px;height:13px}.music-playbtn .icon-pause{display:none}.music-box.is-playing .music-playbtn .icon-play{display:none}.music-box.is-playing .music-playbtn .icon-pause{display:block}.music-progress-wrap{display:flex;align-items:center;gap:8px}.time-label{min-width:27px;text-align:center;font:8px 'IBM Plex Mono',monospace;color:#8b7c74}.progress-bar-container{height:4px;flex:1;background:#d9cfc6;border-radius:99px;position:relative;overflow:hidden;cursor:pointer}.progress-bar-fill{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:#cb626b;border-radius:99px}.music-extra{height:24px;display:flex;justify-content:flex-end;align-items:center}.volume-container{display:flex;align-items:center;gap:6px}#volume-btn{background:none;color:#766960;cursor:pointer}#volume-slider-container{width:48px;height:4px;background:#ddd4cc;border-radius:99px;cursor:pointer;overflow:hidden}#volume-slider-fill{height:100%;width:100%;background:#cb626b;transform-origin:left}.music-menu-btn{width:25px;height:25px;border-radius:6px;background:#fff;color:#665b54;cursor:pointer}.music-menu-btn:hover{background:#f0e7de}
-.track-list-panel{margin-top:10px;max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease,padding .3s ease}.track-list-panel.open{max-height:310px;opacity:1;padding-top:8px}.track-list-header{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;margin-bottom:6px}.track-list-close{background:none;color:#887a71;cursor:pointer}.track-category-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px}.category-chip{padding:3px 8px;border:1px solid #ddd2c9;border-radius:999px;background:#f7f1eb;color:#786c64;font-size:8.5px;cursor:pointer}.category-chip.active{background:#e8d0d1;border-color:#d99097;color:#a44b57}.track-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.track-item{display:grid;grid-template-columns:18px 30px minmax(0,1fr) auto;gap:7px;align-items:center;padding:5px;border-radius:8px;cursor:pointer}.track-item:hover{background:#f3ebe4}.track-item.active{background:#eadbdd}.t-index{font:8px 'IBM Plex Mono',monospace;color:#9a8c83;text-align:center}.t-cover{width:30px;height:30px;border-radius:5px;object-fit:cover}.t-info{min-width:0}.t-title{margin:0;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.t-category{font:7px 'IBM Plex Mono',monospace;color:#a19086}.mini-bars{display:none}.music-box.is-playing .track-item.active .mini-bars{display:flex;gap:2px;height:10px;align-items:flex-end}.mini-bars .m-bar{width:2px;height:100%;background:#c95e67;transform-origin:bottom center}
-.card{position:relative;min-height:680px;border-radius:18px;background:linear-gradient(180deg,rgba(249,247,243,.97),rgba(241,236,230,.94));border:1px solid rgba(65,48,40,.14);box-shadow:0 28px 75px rgba(22,20,18,.25);overflow:visible}.titlebar{height:43px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--line);gap:10px}.dots{display:flex;gap:6px}.dot{width:10px;height:10px;border-radius:50%}.dot.r{background:#d75a5a}.dot.y{background:#e1a945}.dot.g{background:#53a66a}.path{font:11px 'IBM Plex Mono',monospace;color:#4c4039}.card-content{padding:28px 34px 26px}.hero{display:grid;grid-template-columns:minmax(0,1fr) 315px;gap:30px}.terminal{min-width:0;padding-top:3px}.prompt,.block-title{font:12px 'IBM Plex Mono',monospace;color:#c95e67;margin:0 0 10px}.kicker{font:11px 'IBM Plex Mono',monospace;margin:0 0 5px;color:#4d4038}.name{font:600 clamp(36px,4.2vw,50px) Fraunces,serif;line-height:1;margin:0 0 7px;letter-spacing:-.02em}.name span{color:var(--red)}.role{font:11.5px 'IBM Plex Mono',monospace;margin:0;color:#544842}.rule{height:1px;background:#ddd2c8;margin:18px 0 20px}.about p,.bullets,.loc,.note{font:11px 'IBM Plex Mono',monospace;line-height:1.7}.about p{margin:0}.block-title{margin-top:24px;margin-bottom:8px}.bullets{list-style:none;padding:0;margin:0 0 6px}.bullets li:before{content:'• ';color:#4f4742}.loc{margin:0 0 10px}.loc strong{font-weight:500}.live-meta{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#4b4744;color:#fff5ec;font:8px 'IBM Plex Mono',monospace;margin-top:2px}.live-dot{width:6px;height:6px;border-radius:50%;background:#ca6670;animation:livePulse 1.8s ease-in-out infinite}@keyframes livePulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}.note{margin-top:22px;border:1px solid #d9cdc2;border-left:2px solid #c95e67;border-radius:9px;padding:12px 13px;background:rgba(255,255,255,.20)}.note b{display:block;color:#c95e67;margin-bottom:5px;font-weight:500}
-.visual{position:relative;min-height:620px;padding-top:2px}.photo-wrap{width:205px;margin:10px auto 16px;position:relative}.tape{position:absolute;width:88px;height:27px;background:#d8b990;top:-10px;left:57px;rotate:-2deg;opacity:.72;z-index:3;border-radius:3px}.photo-frame{background:#f8f5f0;padding:10px 10px 24px;rotate:-4deg;box-shadow:0 11px 25px rgba(44,34,30,.16);border:1px solid rgba(65,48,40,.10)}.album-cover{display:block;width:185px;height:185px;object-fit:cover}.photo-caption{font:italic 13px Fraunces,serif;text-align:center;margin-top:6px;color:#4b3d36}.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}.status-card{border:1px solid #ded4ca;border-radius:11px;padding:13px 14px;background:rgba(255,255,255,.23)}.status-label{display:flex;align-items:center;gap:8px;font-size:10px;color:#433730;margin-bottom:9px}.status-value{font:11px 'IBM Plex Mono',monospace;margin-bottom:7px}.clockline{font:8px 'IBM Plex Mono',monospace;color:#7f7067;line-height:1.5}
-.discord-mini-profile{position:absolute;right:-8px;bottom:2px;width:310px;color:#fff;background:#242424;border-radius:16px;box-shadow:0 18px 35px rgba(0,0,0,.25);overflow:hidden;border:1px solid rgba(255,255,255,.08)}.dmp-nameplate-zone{position:relative;padding:12px 13px 10px;background:linear-gradient(135deg,#202020,#111)}.dmp-top{display:flex;align-items:center;gap:11px;position:relative;z-index:1}.dmp-avatar-wrap{position:relative;width:43px;height:43px;flex:none}.dmp-avatar{width:43px;height:43px;border-radius:50%;object-fit:cover;background:#333}.dmp-decoration{position:absolute;inset:-6px;width:55px;height:55px;pointer-events:none}.dmp-status-dot{position:absolute;right:-2px;bottom:-2px;width:14px;height:14px;border-radius:50%;background:#111;border:3px solid #242424}.dmp-status-dot:before{content:"";position:absolute;inset:2px;border-radius:50%;background:#80848e}.dmp-status-dot.online:before{background:#23a55a}.dmp-status-dot.idle:before{background:#f0b232}.dmp-status-dot.dnd:before{background:#f23f43}.dmp-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px}.dmp-name-row{display:flex;align-items:center;gap:6px;min-width:0}.dmp-username{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dmp-badges{display:flex;gap:3px}.dmp-badge{font-size:10px}.dmp-activity{font:8.5px 'IBM Plex Mono',monospace;color:rgba(255,255,255,.63);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dmp-icons{margin-left:auto}.dmp-icon{width:26px;height:26px;border-radius:50%;background:transparent;color:#bbb;display:grid;place-items:center;cursor:pointer}.dmp-icon:hover{background:#333;color:#fff}.dmp-activity-panel{max-height:0;opacity:0;overflow:hidden;padding:0 13px;transition:max-height .35s ease,opacity .25s ease,padding .35s ease}.dmp-activity-panel.open{max-height:160px;opacity:1;padding:10px 13px 13px;border-top:1px solid rgba(255,255,255,.08)}.dmp-activity-card{display:flex;gap:9px;align-items:center}.dmp-act-img-wrap{width:40px;height:40px;position:relative;flex:none}.dmp-act-img{width:40px;height:40px;border-radius:9px;object-fit:cover;background:#333}.dmp-act-img-small{position:absolute;right:-3px;bottom:-3px;width:16px;height:16px;border-radius:50%;border:2px solid #242424;object-fit:cover}.dmp-act-text{min-width:0;flex:1}.dmp-act-name,.dmp-act-details,.dmp-act-state,.dmp-act-time{margin:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dmp-act-name{font-size:11px;font-weight:700}.dmp-act-details,.dmp-act-state{font-size:9.5px;color:#c7c7c7}.dmp-act-time{font:8px 'IBM Plex Mono',monospace;color:#999}
-.bottom-dock-wrap{position:fixed;z-index:20;left:50%;bottom:22px;transform:translateX(-50%);padding:7px 13px;border-radius:999px;background:rgba(250,247,243,.94);border:1px solid rgba(65,48,40,.12);box-shadow:0 16px 36px rgba(28,24,20,.18);backdrop-filter:blur(9px)}.dock{display:flex;align-items:center;gap:22px}.dock-item{width:37px;height:37px;border-radius:50%;display:grid;place-items:center;text-decoration:none;transition:.2s}.dock-item:hover{transform:translateY(-3px);background:#eee3da}.dock-item img{width:22px;height:22px;object-fit:cover;border-radius:6px}footer{position:fixed;left:40px;right:40px;bottom:18px;z-index:10;height:31px;border-radius:17px;background:rgba(249,245,240,.92);border:1px solid rgba(65,48,40,.12);display:flex;align-items:center;padding:0 18px;box-shadow:0 10px 28px rgba(30,25,21,.12);font:9px 'IBM Plex Mono',monospace;color:#544943}.foot-text{min-width:0;flex:1}.foot-hint{font-size:8.5px;color:#6e625b}
-#global-tooltip{position:fixed;z-index:2000;left:0;top:0;pointer-events:none;opacity:0;background:#24201e;color:#fff;padding:6px 9px;border-radius:7px;font-size:9px;transition:opacity .12s ease;max-width:260px}#global-tooltip.is-visible{opacity:1}
-#vn-calendar-backdrop{position:fixed;inset:0;background:rgba(10,8,7,.23);z-index:900;opacity:0;visibility:hidden;pointer-events:none;transition:.2s}#vn-calendar-backdrop.open{opacity:1;visibility:visible;pointer-events:auto}.vn-calendar-popover{position:fixed;z-index:901;top:50%;left:50%;width:430px;max-width:calc(100vw - 24px);max-height:min(78vh,600px);transform:translate(-50%,-50%) scale(.96);opacity:0;visibility:hidden;pointer-events:none;overflow:hidden;border-radius:20px;background:linear-gradient(180deg,#28211e,#171210);color:#f8efe7;border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px rgba(0,0,0,.45);transition:.2s}.vn-calendar-popover.open{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}.vn-calendar-head{display:flex;align-items:center;gap:11px;padding:14px 15px;border-bottom:1px solid rgba(255,255,255,.07)}.vn-calendar-head-icon{width:34px;height:34px;border-radius:10px;background:rgba(201,94,103,.15);display:grid;place-items:center;color:#e9969e}.vn-calendar-head-icon svg{width:17px;fill:none;stroke:currentColor;stroke-width:1.7}.vn-calendar-head-text{flex:1;min-width:0}.vn-calendar-title{font-size:13px;margin:0}.vn-calendar-title em{font-style:normal;color:#e6929b}.vn-calendar-sub{font:8px 'IBM Plex Mono',monospace;color:#9d9089;margin:4px 0 0}.vn-calendar-close{width:28px;height:28px;border-radius:50%;background:#322824;color:#ddd;cursor:pointer}.vn-calendar-body{padding:12px;overflow:auto}.vn-calendar-main-grid{display:flex;flex-direction:column;gap:10px}.vn-calendar-next,.vn-calendar-right{border:1px solid rgba(255,255,255,.08);border-radius:13px;background:rgba(255,255,255,.025)}.vn-calendar-next{padding:13px}.vn-calendar-kicker{font:8px 'IBM Plex Mono',monospace;color:#e6929b;text-transform:uppercase;letter-spacing:.08em}.vn-calendar-next-name{font-size:14px;font-weight:700;margin:7px 0 3px}.vn-calendar-next-dates{font:8px 'IBM Plex Mono',monospace;color:#b7aaa3;margin:0}.vn-calendar-count-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:10px}.vn-count-box{background:#201a18;border-radius:8px;padding:8px 3px;text-align:center}.vn-count-value{font-size:16px;font-weight:700}.vn-count-unit{font:7px 'IBM Plex Mono',monospace;color:#9f928b;margin-top:2px}.vn-calendar-ongoing{padding:10px 0;text-align:center;font:700 10px 'IBM Plex Mono',monospace;color:#79c18e}.vn-calendar-right{padding:11px}.vn-calendar-section-title{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:10px;margin-bottom:8px}.vn-calendar-filter{max-width:110px;padding:4px 6px;background:#241d1a;color:#eee;border:1px solid rgba(255,255,255,.08);border-radius:7px;font-size:8px}.vn-calendar-events{display:flex;flex-direction:column;gap:5px}.vn-calendar-event{display:grid;grid-template-columns:25px 40px minmax(0,1fr) auto;gap:7px;align-items:center;padding:7px 8px;border-radius:9px;background:rgba(255,255,255,.025);cursor:pointer}.vn-calendar-event:hover{background:rgba(201,94,103,.10)}.vn-calendar-event-icon{font-size:14px}.vn-calendar-event-date{font:9px 'IBM Plex Mono',monospace;color:#ddd}.vn-calendar-event-name{font-size:10px;font-weight:700;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vn-calendar-event-meta{font:7px 'IBM Plex Mono',monospace;color:#9b8f89;margin:2px 0 0}.vn-calendar-event-left{font:8px 'IBM Plex Mono',monospace;color:#e18b93}.vn-calendar-legend{padding-top:9px;margin-top:9px;border-top:1px solid rgba(255,255,255,.07);font:7px 'IBM Plex Mono',monospace;color:#8f8580;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}.vn-calendar-detail{position:absolute;inset:0;z-index:2;padding:15px;background:#171210;opacity:0;visibility:hidden;pointer-events:none;transition:.16s}.vn-calendar-detail.open{opacity:1;visibility:visible;pointer-events:auto}.vn-calendar-detail-panel{height:100%;display:flex;flex-direction:column}.vn-calendar-detail-head{display:flex;justify-content:space-between;gap:10px}.vn-calendar-detail-kicker{font:8px 'IBM Plex Mono',monospace;color:#e6929b;letter-spacing:.1em}.vn-calendar-detail-panel h3{font-size:16px;margin:6px 0 0}.vn-calendar-detail-close{width:28px;height:28px;border-radius:50%;background:#2d2521;color:#eee;cursor:pointer}.vn-calendar-detail-meta{margin-top:15px;font:9px 'IBM Plex Mono',monospace;color:#bcb0a8}.vn-calendar-detail-type{display:inline-block;margin-top:9px;padding:4px 7px;border-radius:999px;background:rgba(201,94,103,.14);color:#e6929b;font:8px 'IBM Plex Mono',monospace}.vn-calendar-detail-countdown-label{margin-top:20px;font:8px 'IBM Plex Mono',monospace;color:#8e837d}.vn-calendar-detail-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}.vn-calendar-detail-countdown>div{background:#211a17;border-radius:9px;padding:10px 4px;text-align:center}.vn-calendar-detail-countdown strong{font-size:17px;display:block}.vn-calendar-detail-countdown span{font:7px 'IBM Plex Mono',monospace;color:#92867f}.vn-calendar-detail-now{margin-top:12px;font:8px 'IBM Plex Mono',monospace;color:#8e837d}
-@media(max-width:1120px){.shell{grid-template-columns:250px minmax(0,1fr);width:min(100% - 30px,1000px);gap:14px}.hero{grid-template-columns:minmax(0,1fr) 280px;gap:20px}.discord-mini-profile{width:280px;right:0}.album-cover{width:165px;height:165px}.photo-frame{padding:9px 9px 22px}.photo-wrap{width:185px}}
-@media(max-width:860px){.shell{display:flex;flex-direction:column;width:min(100% - 20px,640px);margin:15px auto 85px}.side-stack{order:2;width:100%}.card{order:1;width:100%;min-height:auto}.hero{grid-template-columns:1fr}.visual{min-height:auto;padding:0 0 280px}.discord-mini-profile{position:absolute;left:0;right:0;bottom:0;width:100%}.bottom-dock-wrap{bottom:10px}footer{left:10px;right:10px;bottom:58px}}
-@media(max-width:520px){.card-content{padding:22px 18px 22px}.titlebar{height:40px;padding:0 12px}.path{font-size:9px}.name{font-size:35px}.visual{padding-bottom:240px}.photo-wrap{width:175px}.album-cover{width:155px;height:155px}.status-grid{grid-template-columns:1fr 1fr;gap:7px}.status-card{padding:11px 10px}.player-top{gap:12px}.player-art-wrap{width:95px}.vn-calendar-popover{width:calc(100vw - 18px);max-height:82vh;border-radius:17px}.vn-calendar-event{grid-template-columns:22px 34px minmax(0,1fr)}.vn-calendar-event-left{grid-column:3;text-align:left}}
-</style></head>
-<body oncontextmenu="return false;">
-<button id="gate" aria-label="Click to enter"><span class="gate-inner"><span class="gate-ring"><span class="gate-mark">✦</span></span><span class="gate-text">click to enter</span><span class="gate-hint">bấm để mở khóa</span></span></button>
-<div id="main" hidden><div class="bg-video-wrap"><video id="bg-video" autoplay muted loop playsinline><source src="bg.mp4" type="video/mp4"></video></div><audio id="bg-music" crossorigin="anonymous"><source src="song1.mp3" type="audio/mpeg"></audio>
-<script>    window.bioConfig = {
-      defaultIndex: 0,
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
 
-      avatar: 'https://static2.klipy.com/ii/4e7bea9f7a3371424e6c16ebc93252fe/a8/d8/AHgMD8cH1v4MnHbSHcV.gif',
+:root{
+  --sky-1:#2b3a55;
+  --sky-2:#7d5a68;
+  --sky-3:#e08a5b;
+  --sky-4:#f5c26b;
+  --panel:#fbf8f2;
+  --panel-2:#ffffff;
+  --ink:#20201c;
+  --ink-soft:#6b6459;
+  --line:#e7e0d2;
+  --coral:#d9694f;
+  --green:#4a9b6e;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Be Vietnam Pro', sans-serif;
+}
 
-      discordId: '1473247060298961040',
+*{box-sizing:border-box;}
 
-      discordNameplateWorkerUrl:
-        'https://gentle-dust-08b8.ten870865.workers.dev/',
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:var(--sans);
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 100%, rgba(0,0,0,0.25), transparent 60%),
+    linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 35%, var(--sky-3) 65%, var(--sky-4) 100%);
+  padding:32px 24px 90px;
+  position:relative;
+  overflow-x:hidden;
+}
 
-      discordNameplateStaticUrl: '',
+/* faint skyline silhouette */
+body::before{
+  content:"";
+  position:fixed;
+  left:0; right:0; bottom:0;
+  height:38vh;
+  background-image:
+    linear-gradient(180deg, transparent, rgba(20,16,26,0.55) 90%),
+    repeating-linear-gradient(90deg, rgba(20,16,26,0.32) 0 38px, transparent 38px 64px);
+  pointer-events:none;
+  z-index:0;
+}
 
-      tracks: [
-        {
-          title: 'Id Thang Máy - W/n ft.267',
-          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/id%20thang%20m%C3%A1y%20(feat.%20267).mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02c138ef03555390be900f338e',
-          category: 'bth'
-        },
-        {
-          title: 'Nguyễn Văn Mười - MCK',
-          file: 'song2.mp3',
-          disc: 'images2.png',
-          category: 'bth'
-        },
-        {
-          title: 'Wrong Times - Puppy,Dangrangto',
-          file: 'Wrong Times.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02566178ff844ca2b57f959374',
-          category: 'bth'
-        },
-        {
-          title: 'Có Công Mài "Sắc" - Ngô Lan Hương | Drill Mix (Prod, By Hades)',
-          file: 'cocongmaisac.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ebcdc310f026bb7600fb085d',
-          category: 'drill'
-        },
-        {
-          title: 'Đường Tôi Chở Em Về - buitruonglinh',
-          file: 'duongtoichoemve.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0222029966c28f9d19ab54143c',
-          category: 'bth'
-        },
-        {
-          title: '3 1 0 7 - W/n ft. Nâu, Duongg',
-          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/3107.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02adc789d731eff56c9b448737',
-          category: 'bth'
-        },
-        {
-          title: 'Dù Cho Mai Về Sau - buitruonglinh',
-          file: 'duchomaivesau.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02ff2d5a6f74d5141af7a371ea',
-          category: 'bth'
-        },
-        {
-          title: 'Em Là Nhất - kis, Hoàng Kaylee, YAHY',
-          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/SpotiDownloader.com%20-%20Em%20L%C3%A0%20Nh%E1%BA%A5t%20-%20kis.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02a84cceb4e4e08f388cf16b28',
-          category: 'bth'
-        },
-        {
-          title: '2 4 - W/n',
-          file: 'https://raw.githubusercontent.com/Kazuuiie/music/main/W_n%20%20-%20%20a%20b%20c%20d%20x%20y%20z%20n%20m%20a%20s%20a%20d%20(song%2024)%20%203107%20-%20W_n.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d2d41a6ed463bbd19006e78b',
-          category: 'bth'
-        },
-        {
-          title: 'ĐẢO NGHỊCH - (REMIX)',
-          file: 'song1.mp3',
-          disc: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d2721ed222151ab6869fa714',
-          category: 'nhactrungremix'
-        }
-      ]
-    };
-</script>
-<div class="shell"><aside class="side-stack">
-<section class="panel events-panel"><div class="panel-head"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>EVENTS</div><span class="panel-meta">UPCOMING</span></div><div class="event-list" id="event-preview-list">
-<div class="event-row"><div class="event-icon">🎆</div><div class="event-main"><strong>Quốc Khánh Việt Nam</strong><span>02/09/2026</span></div><div class="event-days"><b id="event-days-0">0</b><small>ngày</small></div></div>
-<div class="event-row"><div class="event-icon">🥮</div><div class="event-main"><strong>Tết Trung Thu</strong><span>06/10/2026</span></div><div class="event-days"><b id="event-days-1">33</b><small>ngày</small></div></div>
-<div class="event-row"><div class="event-icon">🎄</div><div class="event-main"><strong>Giáng sinh</strong><span>25/12/2026</span></div><div class="event-days"><b id="event-days-2">113</b><small>ngày</small></div></div>
-</div><div class="panel-link" id="open-calendar-shortcut" role="button" tabindex="0"><span>Xem tất cả sự kiện</span><span>›</span></div></section>
-<section class="panel player-panel"><div class="panel-head"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>NOW PLAYING</div><button id="track-menu-btn" class="music-menu-btn" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Danh sách bài hát" data-tooltip="Danh sách bài hát" data-tooltip-fixed="true">•••</button></div>
-<div class="player-body" id="music-box"><div class="player-top"><div class="player-art-wrap"><div class="record"></div><div class="disc-player" id="disc-player-cover" data-tooltip="Tên bài hát"><span id="disc-label" class="disc-label"></span></div></div><div class="player-info"><h3 id="music-title" class="music-title" data-tooltip="Tên bài hát — nghệ sĩ">Tên bài hát — nghệ sĩ</h3><p id="disc-tip">bấm để phát nhạc</p></div></div>
-<div class="player-controls"><button id="music-prev" type="button" aria-label="Bài trước" data-tooltip="Bài trước" data-tooltip-fixed="true"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" fill="currentColor"/></svg></button><button id="disc-player" class="music-playbtn" type="button" aria-label="Phát nhạc nền" aria-pressed="false" data-tooltip="Phát nhạc"><svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button><button id="music-next" type="button" aria-label="Bài tiếp theo" data-tooltip="Bài tiếp theo" data-tooltip-fixed="true"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z" fill="currentColor"/></svg></button></div>
-<div class="music-progress-wrap"><span id="current-time" class="time-label">0:00</span><div id="progress-container" class="progress-bar-container"><div id="progress-fill" class="progress-bar-fill"></div></div><span id="duration-time" class="time-label">0:00</span></div>
-<div class="music-extra"><div class="volume-container"><button id="volume-btn" type="button" aria-label="Âm lượng" data-tooltip="Âm lượng" data-tooltip-fixed="true"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></button><div id="volume-slider-container"><div id="volume-slider-fill"></div></div></div></div>
-<div id="track-list-panel" class="track-list-panel"><div class="track-list-header"><span>Playlist</span><button id="track-list-close" class="track-list-close" type="button">✕</button></div><div id="track-category-filters" class="track-category-filters" role="tablist" aria-label="Lọc theo thể loại"></div><ul id="track-list" class="track-list"></ul></div>
-</div></section></aside>
-<section class="card"><div class="titlebar"><span class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></span><span class="path">&gt; bio@terminal — 80x24</span></div><div class="card-content"><div class="hero">
-<div class="terminal"><p class="prompt">$ whoami</p><p class="kicker">xin chào, mình là</p><h1 class="name" id="name-heading">ItsReal<span>Khanz</span></h1><p class="role">Developer&nbsp;&nbsp;•&nbsp;&nbsp;Designer&nbsp;&nbsp;•&nbsp;&nbsp;Music Listener</p><div class="rule"></div><p class="block-title">$ about.txt</p><div class="about"><p>I build things for the web.</p><p>Learning every day.</p><p>Turning ideas into real experiences.</p></div><p class="block-title">$ currently</p><ul class="bullets"><li>Building cool projects 🚀</li><li>Listening to good music 🎵</li><li>Drinking coffee ☕</li></ul><p class="block-title">$ locate</p><p class="loc"><strong>Da Nang, Vietnam</strong> &nbsp;📍</p><div class="live-meta"><span class="live-dot"></span><span id="vn-clock">Thứ Tư, 02/09/2026 · 16:19:00</span></div><p class="block-title">$ cat status.log</p><p class="loc" style="margin-bottom:0">đang làm gì: <strong>coding &amp; learning</strong> ☕</p><div class="note"><b>$ note to self</b>Be better than yesterday.<br>Stay focused and keep going.</div></div>
-<div class="visual"><div class="photo-wrap"><div class="tape"></div><div class="photo-frame" id="avatar-frame"><img class="album-cover" id="album-cover" src="images1.png" alt="Ảnh đại diện"><div class="photo-caption">coding the future ♡</div></div></div><div class="status-grid"><div class="status-card"><div class="status-label">▣ <span id="vn-day-name">Thứ Tư</span></div><div class="status-value" id="vn-date-main">02/09/2026</div><div class="clockline" id="vn-clock-mini">16:19:00 (UTC+7)</div></div><div class="status-card"><div class="status-label">☁ <span>Da Nang</span></div><div class="status-value">32°C</div><div class="clockline">nhiều mây</div></div></div>
-<div id="discord-mini-profile" class="discord-mini-profile"><div id="dmp-nameplate-zone" class="dmp-nameplate-zone"><div class="dmp-top"><div class="dmp-avatar-wrap"><img id="dmp-avatar" class="dmp-avatar" src="" alt="avatar Discord"><img id="dmp-decoration" class="dmp-decoration" src="" alt="" style="display:none"><span id="dmp-status-dot" class="dmp-status-dot offline" aria-hidden="true"></span></div><div class="dmp-info"><div class="dmp-name-row"><span id="dmp-username" class="dmp-username">—</span><span id="dmp-badges" class="dmp-badges"></span></div><span id="dmp-activity" class="dmp-activity">đang kết nối…</span></div><div class="dmp-icons"><button id="toggle-activity-btn" class="dmp-icon toggle-act-btn" type="button" aria-label="Ẩn/Hiện hoạt động" data-tooltip="Ẩn hoạt động" data-tooltip-fixed="true"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg></button></div></div></div><div id="dmp-activity-panel" class="dmp-activity-panel"><div class="dmp-activity-card"><div class="dmp-act-img-wrap"><img id="dmp-act-img" class="dmp-act-img" src="" alt="" style="display:none"><img id="dmp-act-img-small" class="dmp-act-img-small" src="" alt="" style="display:none"></div><div class="dmp-act-text"><p id="dmp-act-name" class="dmp-act-name"></p><p id="dmp-act-details" class="dmp-act-details" style="display:none"></p><p id="dmp-act-state" class="dmp-act-state" style="display:none"></p><p id="dmp-act-time" class="dmp-act-time"></p></div></div></div></div></div>
-</div></div></section></div>
-<div class="bottom-dock-wrap"><nav id="dock" class="dock" aria-label="Mạng xã hội"><a class="dock-item" href="#" onclick="return false;"><img src="discord.png" alt="Discord"></a><a class="dock-item" href="#" onclick="return false;"><img src="youtube.png" alt="YouTube"></a><a class="dock-item" href="#" onclick="return false;"><img src="facebook.png" alt="Facebook"></a><a class="dock-item" href="#" onclick="return false;"><img src="roblox.png" alt="Roblox"></a></nav></div></div>
-<div id="global-tooltip" aria-hidden="true"></div><div id="vn-calendar-backdrop" aria-hidden="true"></div>
-<div id="vn-calendar-popover" class="vn-calendar-popover" role="dialog" aria-modal="false" aria-labelledby="vn-calendar-title"><div class="vn-calendar-head"><div class="vn-calendar-head-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="15" rx="2.5"/><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17"/></svg></div><div class="vn-calendar-head-text"><h2 id="vn-calendar-title" class="vn-calendar-title">Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em></h2><p id="vn-calendar-sub" class="vn-calendar-sub">Lịch dương + âm · cập nhật realtime · UTC+7</p></div><button id="vn-calendar-close" class="vn-calendar-close" type="button" aria-label="Đóng lịch">✕</button></div><div id="vn-calendar-body" class="vn-calendar-body"><div class="vn-calendar-main-grid"><div id="vn-calendar-next" class="vn-calendar-next"><div class="vn-calendar-kicker">Next event</div><p id="vn-calendar-next-name" class="vn-calendar-next-name">Đang tải…</p><p id="vn-calendar-next-dates" class="vn-calendar-next-dates">—</p><div id="vn-calendar-next-count" class="vn-calendar-next-count"></div></div><div class="vn-calendar-right"><div class="vn-calendar-section-title"><span><strong id="vn-calendar-list-count">0</strong> sự kiện sắp tới</span><span><span id="vn-calendar-year-label">2026</span> · <select id="vn-calendar-filter" class="vn-calendar-filter" aria-label="Lọc loại sự kiện"><option value="all">Tất cả</option><option value="official">Chính thức</option><option value="lunar">Âm lịch</option><option value="international">Quốc tế</option><option value="vietnam">Việt Nam</option><option value="special">Đặc biệt</option></select></span></div><div id="vn-calendar-events" class="vn-calendar-events"></div></div></div><div class="vn-calendar-legend"><span>Chính thức · Âm lịch · Quốc tế · Việt Nam · Đặc biệt</span><span id="vn-calendar-sync">Cập nhật theo thời gian thực (UTC+7)</span></div></div><div id="vn-calendar-detail" class="vn-calendar-detail" aria-hidden="true"><div class="vn-calendar-detail-panel" role="dialog" aria-modal="false" aria-labelledby="vn-calendar-detail-title"><div class="vn-calendar-detail-head"><div><div class="vn-calendar-detail-kicker">CHI TIẾT SỰ KIỆN</div><h3 id="vn-calendar-detail-title">—</h3></div><button id="vn-calendar-detail-close" class="vn-calendar-detail-close" type="button" aria-label="Đóng chi tiết">×</button></div><div id="vn-calendar-detail-meta" class="vn-calendar-detail-meta">—</div><div id="vn-calendar-detail-type" class="vn-calendar-detail-type">—</div><div class="vn-calendar-detail-countdown-label">ĐẾM NGƯỢC TỚI SỰ KIỆN</div><div id="vn-calendar-detail-countdown" class="vn-calendar-detail-countdown"><div><strong id="detail-days">00</strong><span>Ngày</span></div><div><strong id="detail-hours">00</strong><span>Giờ</span></div><div><strong id="detail-minutes">00</strong><span>Phút</span></div><div><strong id="detail-seconds">00</strong><span>Giây</span></div></div><div id="vn-calendar-detail-now" class="vn-calendar-detail-now">Giờ Việt Nam (UTC+7): --:--:--</div></div></div></div></div>
-<footer id="footer-bar" role="button" tabindex="0" aria-label="Nhấn để chạy lệnh terminal"><span class="foot-text"><span id="foot-typed" class="foot-typed"></span><span id="foot-cursor">▌</span></span><span class="foot-hint">made with ♡ and lots of coffee ☕</span></footer>
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:340px 1fr;
+  gap:20px;
+  align-items:start;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 18px 40px -20px rgba(20,16,10,0.45);
+  overflow:hidden;
+}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+.card-head h2{
+  margin:0;
+  font-size:14px;
+  letter-spacing:0.4px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.card-head .dot{width:6px;height:6px;border-radius:50%;background:var(--coral);}
+
+/* ---- Events ---- */
+.tag-live{
+  font-size:10.5px;
+  font-weight:700;
+  color:var(--coral);
+  background:rgba(217,105,79,0.1);
+  padding:3px 8px;
+  border-radius:20px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin:14px 18px 6px;
+}
+.tag-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--coral);}
+
+.event-list{padding:2px 12px 14px;}
+.event-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 6px;
+  border-radius:10px;
+}
+.event-row:hover{background:rgba(0,0,0,0.03);}
+.event-emoji{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;background:var(--panel-2);border:1px solid var(--line);
+  flex-shrink:0;
+}
+.event-info{flex:1;min-width:0;}
+.event-info .name{font-size:13.5px;font-weight:600;}
+.event-info .date{font-size:11.5px;color:var(--ink-soft);}
+.event-days{
+  text-align:center;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:5px 10px;
+  min-width:52px;
+}
+.event-days .n{font-size:14px;font-weight:800;line-height:1;}
+.event-days .u{font-size:9px;color:var(--ink-soft);}
+
+.view-all{
+  display:block;
+  text-align:center;
+  padding:11px;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+  border-top:1px solid var(--line);
+  cursor:default;
+}
+
+/* ---- Now playing ---- */
+.player{padding:16px 18px 6px;display:flex;gap:12px;align-items:center;}
+.cover{
+  width:52px;height:52px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#e08a5b,#7d5a68);
+  position:relative; overflow:hidden;
+}
+.cover::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%);
+}
+.track-meta{flex:1;min-width:0;}
+.track-meta .t{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.track-meta .a{font-size:11.5px;color:var(--ink-soft);}
+.transport{display:flex;align-items:center;gap:6px;}
+.transport button{
+  border:none;background:none;cursor:pointer;
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink);
+}
+.transport .play{
+  background:var(--coral);color:#fff;border-radius:50%;width:32px;height:32px;
+}
+.seek-wrap{padding:8px 18px 4px;}
+.seek-time{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-soft);font-family:var(--mono);margin-bottom:5px;}
+.bar{height:4px;border-radius:3px;background:var(--line);position:relative;overflow:hidden;}
+.bar > i{position:absolute;left:0;top:0;bottom:0;background:var(--coral);border-radius:3px;width:0%;}
+
+.playlist{padding:10px 8px 6px;}
+.plist-toggle{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;font-weight:700;letter-spacing:.3px;
+  padding:8px 10px;color:var(--ink-soft);
+}
+.p-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:9px;
+}
+.p-row.active{background:rgba(217,105,79,0.08);}
+.p-row.active .p-title{color:var(--coral);}
+.p-cover{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#cbb9a5,#7d5a68);flex-shrink:0;}
+.p-title{font-size:12.5px;font-weight:600;}
+.p-artist{font-size:10.5px;color:var(--ink-soft);}
+.p-dur{margin-left:auto;font-size:11px;color:var(--ink-soft);font-family:var(--mono);}
+
+/* ---- Terminal ---- */
+.term-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 18px;border-bottom:1px solid var(--line);
+}
+.term-title{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);display:flex;gap:8px;align-items:center;}
+.term-title::before{content:"›";color:var(--coral);font-weight:700;}
+.traffic{display:flex;gap:7px;}
+.traffic span{width:11px;height:11px;border-radius:50%;display:block;}
+.traffic .r{background:#e5695a;} .traffic .y{background:#f0b429;} .traffic .g{background:#4a9b6e;}
+
+.term-body{padding:22px 24px 26px;font-family:var(--mono);}
+.line{color:var(--ink-soft);font-size:13px;margin:0 0 4px;}
+.line .cmd{color:var(--coral);font-weight:700;}
+.term-body h1{
+  font-size:clamp(30px,4.2vw,52px);
+  margin:2px 0 6px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+.term-body h1 .accent{color:var(--coral);}
+.cursor{display:inline-block;width:9px;height:0.85em;background:var(--ink);margin-left:3px;vertical-align:middle;animation:blink 1s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.role{font-size:14px;color:var(--ink-soft);margin:6px 0 18px;}
+hr.rule{border:none;border-top:1px solid var(--line);margin:18px 0;}
+.term-body p{font-size:13.5px;line-height:1.75;margin:2px 0 16px;color:#3a362f;}
+.term-body ul{margin:2px 0 16px;padding-left:0;list-style:none;font-size:13.5px;line-height:2;color:#3a362f;}
+.term-body ul li::before{content:"•";color:var(--coral);margin-right:8px;}
+.loc{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#3a362f;}
+
+.note{
+  margin-top:18px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-left:3px solid var(--coral);
+  border-radius:10px;
+  padding:16px 18px;
+  font-size:13px;
+  color:var(--ink-soft);
+}
+.note .cmd{color:var(--coral);font-weight:700;font-family:var(--mono);}
+.note p{margin:8px 0 0;color:#3a362f;font-style:italic;}
+
+.right-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+.mini-card{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;display:flex;align-items:center;gap:12px;
+}
+.mini-ic{font-size:20px;}
+.mini-card .big{font-size:15px;font-weight:700;font-family:var(--mono);}
+.mini-card .small{font-size:11.5px;color:var(--ink-soft);}
+
+.polaroid{
+  position:absolute; top:20px; right:24px; width:180px;
+  background:#fff; padding:8px 8px 26px; border-radius:2px;
+  box-shadow:0 20px 40px -14px rgba(0,0,0,0.5);
+  transform:rotate(3deg);
+  text-align:center;
+}
+.polaroid .img{
+  width:100%;aspect-ratio:1/1;border-radius:2px;
+  background:linear-gradient(160deg,#e08a5b 0%,#7d5a68 55%,#2b3a55 100%);
+}
+.polaroid .cap{font-family:'Segoe Script','Brush Script MT',cursive;font-size:13px;margin-top:8px;color:#3a362f;}
+
+.discord{
+  margin-top:16px;
+  background:#111014;color:#e7e6ea;border-radius:14px;overflow:hidden;
+  border:1px solid #232228;
+}
+.d-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #232228;font-size:12px;font-weight:700;color:#9a97a3;}
+.d-body{padding:12px 14px;display:flex;gap:10px;align-items:center;}
+.d-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#e08a5b,#3a3560);position:relative;flex-shrink:0;}
+.d-avatar i{position:absolute;bottom:-1px;right:-1px;width:11px;height:11px;border-radius:50%;background:var(--green);border:2px solid #111014;}
+.d-name{font-size:13.5px;font-weight:700;}
+.d-status{font-size:11px;color:#9a97a3;}
+.d-online{margin-left:auto;font-size:11px;color:var(--green);}
+.d-game{padding:0 14px 14px;display:flex;gap:10px;}
+.d-icon{width:40px;height:40px;border-radius:9px;background:#1c1c22;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.d-game-name{font-size:13px;font-weight:700;}
+.d-game-sub{font-size:11px;color:#9a97a3;line-height:1.5;}
+
+.nav-bar{
+  position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
+  background:var(--panel); border:1px solid var(--line); border-radius:22px;
+  display:flex; gap:6px; padding:8px; box-shadow:0 16px 34px -14px rgba(0,0,0,0.45);
+  z-index:5;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 16px;border-radius:16px;font-size:11px;color:var(--ink-soft);font-weight:600;
+}
+.nav-item.active{background:rgba(0,0,0,0.04);color:var(--ink);}
+.nav-item .ic{font-size:16px;}
+
+.foot{
+  max-width:1180px;margin:60px auto 0;
+  display:flex;align-items:center;justify-content:space-between;
+  color:rgba(255,255,255,0.75);font-size:11.5px;position:relative;z-index:1;
+}
+.wave{display:flex;align-items:flex-end;gap:2px;height:16px;}
+.wave i{width:2px;background:rgba(255,255,255,0.55);border-radius:1px;animation:wv 1.2s ease-in-out infinite;}
+@keyframes wv{0%,100%{height:20%;}50%{height:100%;}}
+
+@media (max-width:860px){
+  .grid{grid-template-columns:1fr;}
+  .polaroid{display:none;}
+  .right-row{grid-template-columns:1fr;}
+  .foot{flex-direction:column;gap:10px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="grid">
+
+    <!-- LEFT COLUMN -->
+    <div>
+      <div class="card">
+        <div class="card-head"><h2><span class="dot"></span>SỰ KIỆN</h2></div>
+        <div class="tag-live">SẮP DIỄN RA</div>
+        <div class="event-list" id="eventList"></div>
+        <div class="view-all">Xem tất cả sự kiện ›</div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-head"><h2>🎵 ĐANG PHÁT</h2></div>
+        <div class="player">
+          <div class="cover"></div>
+          <div class="track-meta">
+            <div class="t" id="trackTitle">Sunset Lover</div>
+            <div class="a" id="trackArtist">Petit Biscuit</div>
+          </div>
+          <div class="transport">
+            <button onclick="prevTrack()">⏮</button>
+            <button class="play" id="playBtn" onclick="togglePlay()">⏸</button>
+            <button onclick="nextTrack()">⏭</button>
+          </div>
+        </div>
+        <div class="seek-wrap">
+          <div class="seek-time"><span id="curTime">0:00</span><span id="durTime">3:57</span></div>
+          <div class="bar"><i id="seekFill"></i></div>
+        </div>
+        <div class="playlist" id="playlist"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="position:relative;">
+      <div class="card">
+        <div class="term-bar">
+          <div class="term-title">bio@terminal — 80x24</div>
+          <div class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        </div>
+        <div class="term-body">
+          <p class="line"><span class="cmd">$</span> whoami</p>
+          <p style="margin:0 0 14px;color:#3a362f;">xin chào, mình là</p>
+          <h1>ItsReal<span class="accent">Khanz</span><span class="cursor"></span></h1>
+          <div class="role">Developer • Designer • Music Listener</div>
+          <hr class="rule">
+
+          <p class="line"><span class="cmd">$</span> about.txt</p>
+          <p>Mình xây dựng những thứ cho web.<br>Học mỗi ngày một chút.<br>Biến ý tưởng thành trải nghiệm thật.</p>
+
+          <p class="line"><span class="cmd">$</span> currently</p>
+          <ul>
+            <li>Đang làm vài dự án hay ho 🚀</li>
+            <li>Nghe nhạc chill mỗi khi code 🎧</li>
+            <li>Uống cà phê ☕</li>
+          </ul>
+
+          <p class="line"><span class="cmd">$</span> locate</p>
+          <p class="loc">📍 Đà Nẵng, Việt Nam</p>
+
+          <p class="line"><span class="cmd">$</span> cat status.log</p>
+          <p>đang làm gì: coding &amp; learning ⌘</p>
+
+          <div class="note">
+            <span class="cmd">$</span> note to self
+            <p>Be better than yesterday.<br>Stay focused and keep going.</p>
+          </div>
+
+          <div class="right-row">
+            <div class="mini-card">
+              <div class="mini-ic">📅</div>
+              <div>
+                <div class="big" id="clockDate">—</div>
+                <div class="small" id="clockTime">—</div>
+              </div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-ic">⛅</div>
+              <div>
+                <div class="big">Đà Nẵng</div>
+                <div class="small">Xem thời tiết trực tiếp cần API riêng</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="polaroid">
+        <div class="img"></div>
+        <div class="cap">coding the future ♡</div>
+      </div>
+
+      <div class="discord">
+        <div class="d-head">💬 DISCORD ACTIVITY</div>
+        <div class="d-body">
+          <div class="d-avatar"><i></i></div>
+          <div>
+            <div class="d-name">itsrealkhanz</div>
+            <div class="d-status">#khanz.dev</div>
+          </div>
+          <div class="d-online">● Online</div>
+        </div>
+        <div style="padding:0 14px 8px;font-size:10.5px;color:#7a7885;">ĐANG CHƠI</div>
+        <div class="d-game">
+          <div class="d-icon">🧩</div>
+          <div>
+            <div class="d-game-name">Visual Studio Code</div>
+            <div class="d-game-sub">Editing bio.html<br>Workspace: bio-terminal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-item active"><span class="ic">🏠</span>Home</div>
+  <div class="nav-item"><span class="ic">👤</span>About</div>
+  <div class="nav-item"><span class="ic">📁</span>Projects</div>
+  <div class="nav-item"><span class="ic">🎵</span>Music</div>
+  <div class="nav-item"><span class="ic">💬</span>Socials</div>
+</div>
+
+<div class="foot">
+  <span>© <span id="year"></span> itsrealkhanz. All rights reserved.</span>
+  <span class="wave" id="wave"></span>
+  <span>made with ♥ and lots of coffee ☕</span>
+</div>
+
 <script>
-(function(){const root=document.getElementById('vn-clock'),mini=document.getElementById('vn-clock-mini'),dateEl=document.getElementById('vn-date-main'),dayEl=document.getElementById('vn-day-name');if(!root)return;const tz='Asia/Ho_Chi_Minh';const dayFmt=new Intl.DateTimeFormat('vi-VN',{timeZone:tz,weekday:'long'}),dateFmt=new Intl.DateTimeFormat('vi-VN',{timeZone:tz,day:'2-digit',month:'2-digit',year:'numeric'}),timeFmt=new Intl.DateTimeFormat('vi-VN',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}function tick(){const n=new Date(),d=cap(dayFmt.format(n)),dt=dateFmt.format(n),tm=timeFmt.format(n);root.textContent=`${d}, ${dt} · ${tm}`;if(mini)mini.textContent=`${tm} (UTC+7)`;if(dateEl)dateEl.textContent=dt;if(dayEl)dayEl.textContent=d}tick();setInterval(tick,1000)})();
-(function(){const s=document.getElementById('open-calendar-shortcut');s?.addEventListener('click',()=>document.getElementById('vn-calendar-btn')?.click());s?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();document.getElementById('vn-calendar-btn')?.click()}});let b=document.getElementById('vn-calendar-btn');if(!b){b=document.createElement('button');b.id='vn-calendar-btn';b.type='button';b.setAttribute('aria-expanded','false');b.style.display='none';document.body.appendChild(b)}})();
-(function(){const rows=[['event-days-0','2026-09-02'],['event-days-1','2026-10-06'],['event-days-2','2026-12-25']];const fmt=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit'});function vnToday(){const p=fmt.formatToParts(new Date()).reduce((o,x)=>(o[x.type]=x.value,o),{});return Date.UTC(+p.year,+p.month-1,+p.day)}function tick(){const now=vnToday();rows.forEach(([id,iso])=>{const t=Date.parse(iso+'T00:00:00Z'),el=document.getElementById(id);if(el)el.textContent=String(Math.max(0,Math.ceil((t-now)/86400000)))})}tick();setInterval(tick,60000)})();
-</script><script src="javascript.js" defer></script></body></html>
+/* ---------- Live clock ---------- */
+const dayNames = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+function pad(n){return n.toString().padStart(2,'0');}
+function updateClock(){
+  const now = new Date();
+  document.getElementById('clockDate').textContent =
+    `${dayNames[now.getDay()]}, ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
+  document.getElementById('clockTime').textContent =
+    `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} (UTC${now.getTimezoneOffset()<=0?'+':'-'}${Math.abs(now.getTimezoneOffset()/60)})`;
+}
+setInterval(updateClock,1000);
+updateClock();
+
+/* ---------- Events countdown (live, recalculated every render) ---------- */
+const events = [
+  {name:'Tết Dương Lịch', emoji:'🎉', month:1, day:1},
+  {name:'Giỗ Tổ Hùng Vương', emoji:'🏮', month:4, day:18},
+  {name:'Quốc Khánh Việt Nam', emoji:'🇻🇳', month:9, day:2},
+  {name:'Tết Trung Thu', emoji:'🌕', month:10, day:6},
+  {name:'Giáng Sinh', emoji:'🎄', month:12, day:25},
+];
+function nextOccurrence(m,d){
+  const now = new Date();
+  let y = now.getFullYear();
+  let target = new Date(y,m-1,d);
+  target.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if(target < today){ target = new Date(y+1,m-1,d); }
+  return target;
+}
+function renderEvents(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const withDays = events.map(e=>{
+    const target = nextOccurrence(e.month,e.day);
+    const days = Math.round((target-today)/86400000);
+    return {...e, days, target};
+  }).sort((a,b)=>a.days-b.days).slice(0,3);
+
+  const list = document.getElementById('eventList');
+  list.innerHTML = withDays.map(e=>`
+    <div class="event-row">
+      <div class="event-emoji">${e.emoji}</div>
+      <div class="event-info">
+        <div class="name">${e.name}</div>
+        <div class="date">${pad(e.target.getDate())}/${pad(e.target.getMonth()+1)}/${e.target.getFullYear()}</div>
+      </div>
+      <div class="event-days">
+        <div class="n">${e.days === 0 ? 'Hôm nay' : e.days}</div>
+        ${e.days === 0 ? '' : '<div class="u">ngày</div>'}
+      </div>
+    </div>
+  `).join('');
+}
+renderEvents();
+setInterval(renderEvents, 60000);
+
+/* ---------- Music player (simulated real-time progress) ---------- */
+const tracks = [
+  {title:'Sunset Lover', artist:'Petit Biscuit', dur:237},
+  {title:'Another Love', artist:'Tom Odell', dur:244},
+  {title:'Until I Found You', artist:'Stephen Sanchez', dur:176},
+  {title:'The Night We Met', artist:'Lord Huron', dur:208},
+  {title:'Dancing In The Moonlight', artist:'Toploader', dur:233},
+];
+let curTrack = 0, elapsed = 84, playing = true;
+
+function fmt(s){ return `${Math.floor(s/60)}:${pad(Math.floor(s%60))}`; }
+
+function renderPlaylist(){
+  document.getElementById('playlist').innerHTML =
+    `<div class="plist-toggle">PLAYLIST <span>▾</span></div>` +
+    tracks.map((t,i)=>`
+      <div class="p-row ${i===curTrack?'active':''}" onclick="selectTrack(${i})">
+        <div class="p-cover"></div>
+        <div>
+          <div class="p-title">${t.title}</div>
+          <div class="p-artist">${t.artist}</div>
+        </div>
+        <div class="p-dur">${fmt(t.dur)}</div>
+      </div>
+    `).join('');
+}
+function selectTrack(i){ curTrack=i; elapsed=0; playing=true; renderNow(); renderPlaylist(); }
+function nextTrack(){ selectTrack((curTrack+1)%tracks.length); }
+function prevTrack(){ selectTrack((curTrack-1+tracks.length)%tracks.length); }
+function togglePlay(){ playing=!playing; document.getElementById('playBtn').textContent = playing ? '⏸' : '▶'; }
+
+function renderNow(){
+  const t = tracks[curTrack];
+  document.getElementById('trackTitle').textContent = t.title;
+  document.getElementById('trackArtist').textContent = t.artist;
+  document.getElementById('durTime').textContent = fmt(t.dur);
+  document.getElementById('curTime').textContent = fmt(elapsed);
+  document.getElementById('seekFill').style.width = `${(elapsed/t.dur)*100}%`;
+  document.getElementById('playBtn').textContent = playing ? '⏸' : '▶';
+}
+setInterval(()=>{
+  if(!playing) return;
+  const t = tracks[curTrack];
+  elapsed++;
+  if(elapsed >= t.dur){ nextTrack(); return; }
+  renderNow();
+},1000);
+renderPlaylist();
+renderNow();
+
+/* ---------- Footer waveform ---------- */
+const wave = document.getElementById('wave');
+for(let i=0;i<40;i++){
+  const bar = document.createElement('i');
+  bar.style.animationDelay = (i*0.05)+'s';
+  wave.appendChild(bar);
+}
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
