@@ -2363,6 +2363,91 @@ if (music) {
   );
 })();
 
+/* ============ META ROW: NGÀY THÁNG + THỜI TIẾT ============ */
+(function initDateWeather() {
+  'use strict';
+
+  const weekdayEl = document.getElementById('date-weekday');
+  const fullEl = document.getElementById('date-full');
+  const tempEl = document.getElementById('weather-temp');
+  const descEl = document.getElementById('weather-desc');
+  const iconEl = document.getElementById('weather-icon');
+
+  if (!weekdayEl && !fullEl && !tempEl) return;
+
+  // Toạ độ Đà Nẵng, Việt Nam — đổi nếu cần vị trí khác.
+  const LAT = 16.0544;
+  const LON = 108.2022;
+
+  const weekdayFormatter = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    weekday: 'long'
+  });
+  const fullDateFormatter = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function updateDate() {
+    const now = new Date();
+    if (weekdayEl) weekdayEl.textContent = capitalize(weekdayFormatter.format(now));
+    if (fullEl) fullEl.textContent = fullDateFormatter.format(now).replace(/\//g, '/');
+  }
+
+  // WMO weather codes -> icon + mô tả tiếng Việt.
+  const WEATHER_CODES = {
+    0: ['☀️', 'Trời quang'],
+    1: ['🌤️', 'Ít mây'],
+    2: ['⛅', 'Có mây'],
+    3: ['☁️', 'Nhiều mây'],
+    45: ['🌫️', 'Sương mù'],
+    48: ['🌫️', 'Sương mù'],
+    51: ['🌦️', 'Mưa phùn nhẹ'],
+    53: ['🌦️', 'Mưa phùn'],
+    55: ['🌧️', 'Mưa phùn dày'],
+    61: ['🌧️', 'Mưa nhỏ'],
+    63: ['🌧️', 'Mưa vừa'],
+    65: ['🌧️', 'Mưa to'],
+    80: ['🌦️', 'Mưa rào nhẹ'],
+    81: ['🌧️', 'Mưa rào'],
+    82: ['⛈️', 'Mưa rào lớn'],
+    95: ['⛈️', 'Dông'],
+    96: ['⛈️', 'Dông kèm mưa đá'],
+    99: ['⛈️', 'Dông kèm mưa đá']
+  };
+
+  async function updateWeather() {
+    if (!tempEl) return;
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&timezone=Asia%2FHo_Chi_Minh`;
+      const response = await fetch(url, {cache: 'no-store'});
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const temp = data?.current?.temperature_2m;
+      const code = data?.current?.weather_code;
+      if (typeof temp === 'number') tempEl.textContent = `${Math.round(temp)}°C`;
+      const [icon, desc] = WEATHER_CODES[code] || ['🌡️', 'Đà Nẵng'];
+      if (iconEl) iconEl.textContent = icon;
+      if (descEl) descEl.textContent = desc;
+    } catch (error) {
+      console.warn('[WEATHER] Không lấy được dữ liệu thời tiết:', error);
+      if (descEl) descEl.textContent = 'Đà Nẵng';
+    }
+  }
+
+  updateDate();
+  updateWeather();
+
+  setInterval(updateDate, 60 * 1000);
+  setInterval(updateWeather, 15 * 60 * 1000);
+})();
+
 
 /* ============================================================
  * LỊCH SỰ KIỆN VIỆT NAM + QUỐC TẾ (BẢN SỬA)
@@ -2833,7 +2918,65 @@ if (music) {
       lastRenderedListDay = dayKey;
       renderList(now);
     }
+    renderSidebarEvents(now);
   }
+
+  /* ================= EVENTS CARD (SIDEBAR TRÁI) ================= */
+  const sidebarListEl = document.getElementById('events-list');
+  const sidebarViewAllBtn = document.getElementById('events-viewall');
+
+  function renderSidebarEvents(now = new Date()) {
+    if (!sidebarListEl) return;
+    const events = visibleEvents(now).slice(0, 3);
+
+    if (!events.length) {
+      sidebarListEl.innerHTML = '<li class="event-row">Không có sự kiện sắp tới.</li>';
+      return;
+    }
+
+    sidebarListEl.innerHTML = events.map(event => {
+      const status = eventStatus(event, now);
+      const daysLeft = Math.max(0, Math.ceil((event.start.getTime() - now.getTime()) / 86400000));
+      const countMarkup = status === 'ongoing'
+        ? '<b>•</b><span>diễn ra</span>'
+        : `<b>${daysLeft}</b><span>days</span>`;
+      return `<li class="event-row" data-event-id="${escapeHTML(event.id)}" tabindex="0" role="button" aria-label="Xem chi tiết ${escapeHTML(event.title)}">
+        <span class="ev-icon" aria-hidden="true">${escapeHTML(event.icon)}</span>
+        <span class="ev-info">
+          <span class="ev-title">${escapeHTML(event.title)}</span>
+          <span class="ev-date">${pad2(event.day)}/${pad2(event.month)}/${event.year}</span>
+        </span>
+        <span class="ev-count">${countMarkup}</span>
+      </li>`;
+    }).join('');
+  }
+
+  function openEventFromSidebar(id) {
+    const event = resolvedEvents.find(item => item.id === id);
+    openCalendar();
+    if (event) {
+      requestAnimationFrame(() => {
+        const target = listEl?.querySelector(`[data-event-id="${CSS.escape(id)}"]`);
+        target?.click();
+      });
+    }
+  }
+
+  sidebarListEl?.addEventListener('click', event => {
+    const row = event.target.closest('.event-row[data-event-id]');
+    if (!row) return;
+    openEventFromSidebar(row.getAttribute('data-event-id'));
+  });
+
+  sidebarListEl?.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const row = event.target.closest('.event-row[data-event-id]');
+    if (!row) return;
+    event.preventDefault();
+    openEventFromSidebar(row.getAttribute('data-event-id'));
+  });
+
+  sidebarViewAllBtn?.addEventListener('click', () => openCalendar());
 
   /* ================= VỊ TRÍ POPOVER — SMART DESKTOP / MOBILE ================= */
   /* Desktop rộng: đặt lịch bên trái bio card, canh theo music-box.
