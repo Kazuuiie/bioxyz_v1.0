@@ -1427,8 +1427,7 @@ h1 em{
 /* ===== EVENT CALENDAR — REDESIGN ===== */
 .vn-calendar-popover{
   position:fixed;
-  top:20px;
-  left:20px;
+  /* top/left được JS set động theo vị trí .card — không đặt cứng ở đây */
   z-index:3;
   width:400px;
   max-width:calc(100vw - 36px);
@@ -1456,7 +1455,6 @@ h1 em{
   opacity:1;
   visibility:visible;
   pointer-events:auto;
-  transform:translateY(0) scale(1);
 }
 
 /* HEADER */
@@ -1702,8 +1700,8 @@ h1 em{
 }
 
 .vn-calendar-popover.centered{
-  top:50%;
-  left:50%;
+  top:50%!important;
+  left:50%!important;
   transform-origin:center center;
   transform:translate(-50%,-50%) scale(.96);
 }
@@ -1823,7 +1821,10 @@ h1 em{
   font:500 8px 'IBM Plex Mono',monospace;
 }
 
-/* BACKDROP */
+/* BACKDROP — luôn phủ toàn màn hình.
+   Ở chế độ centered: tối rõ để tạo cảm giác modal thật sự.
+   Ở chế độ góc (không centered): tối nhẹ hơn vì đây chỉ là panel phụ
+   cạnh bio card, người dùng vẫn thấy/tương tác được phần còn lại. */
 #vn-calendar-backdrop{
   position:fixed;
   inset:0;
@@ -1832,12 +1833,17 @@ h1 em{
   opacity:0;
   visibility:hidden;
   pointer-events:none;
-  transition:opacity .18s ease,visibility .18s ease;
+  transition:opacity .18s ease,visibility .18s ease,background .2s ease;
 }
 #vn-calendar-backdrop.open{
   opacity:1;
   visibility:visible;
   pointer-events:auto;
+}
+/* Khi popover ở chế độ giữa màn hình, tối đậm hơn để rõ ràng là modal */
+.vn-calendar-popover.centered.open ~ #vn-calendar-backdrop,
+#vn-calendar-backdrop:has(~ .vn-calendar-popover.centered.open){
+  background:rgba(8,6,5,.6);
 }
 .vn-calendar-popover.open .vn-calendar-event{cursor:pointer}
 .vn-calendar-event:focus-visible{
