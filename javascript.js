@@ -2384,10 +2384,7 @@ if (music) {
   const nextName = document.getElementById('vn-calendar-next-name');
   const nextDates = document.getElementById('vn-calendar-next-dates');
   const nextCount = document.getElementById('vn-calendar-next-count');
-  const nextKicker = nextCard?.querySelector('.vn-calendar-kicker');
   const listEl = document.getElementById('vn-calendar-events');
-  const listToggle = document.getElementById('vn-calendar-list-toggle');
-  const rightPanel = document.getElementById('vn-calendar-right');
   const listCountEl = document.getElementById('vn-calendar-list-count');
   const yearLabelEl = document.getElementById('vn-calendar-year-label');
   const subEl = document.getElementById('vn-calendar-sub');
@@ -2418,7 +2415,6 @@ if (music) {
   // true khi popover đang ở chế độ góc (đặt cạnh bio card, desktop)
   // false khi đang ở chế độ giữa màn hình (mobile / không đủ chỗ)
   let isCornerMode = false;
-  let listExpanded = false;
 
   /* ================= ICON SỰ KIỆN — ĐA DẠNG, ĐẶC SẮC HƠN ================= */
   // Mỗi sự kiện dùng emoji/icon riêng biệt, tránh trùng lặp, gợi hình rõ.
@@ -2767,7 +2763,6 @@ if (music) {
     if (!next) {
       if (lastNextId !== null) {
         applyKindClass(nextCard, 'special');
-        if (nextKicker) nextKicker.lastChild.textContent = ' Không còn sự kiện';
         nextName.textContent = 'Không còn sự kiện';
         nextDates.textContent = 'Hẹn gặp lại vào năm mới.';
         nextCount.innerHTML = '<div class="vn-calendar-ongoing">đã hoàn tất</div>';
@@ -2782,7 +2777,6 @@ if (music) {
 
     if (idOrStatusChanged) {
       applyKindClass(nextCard, next.kind);
-      if (nextKicker) nextKicker.lastChild.textContent = status === 'ongoing' ? ' Current event' : ' Next event';
       nextName.textContent = `${next.icon} ${next.title}`;
       nextDates.innerHTML = formatMeta(next);
       nextCard.classList.toggle('is-ongoing', status === 'ongoing');
@@ -2823,7 +2817,7 @@ if (music) {
 
   function updateSubtitle() {
     if (subEl) subEl.textContent = currentFilter === 'all'
-      ? 'Dương + âm · VN + quốc tế · UTC+7'
+      ? 'Lịch dương + âm · Việt Nam + quốc tế · UTC+7'
       : `${KIND_LABELS[currentFilter]} · cập nhật realtime · UTC+7`;
   }
 
@@ -2933,9 +2927,6 @@ if (music) {
   }
 
   function openCalendar() {
-    listExpanded = false;
-    popover.classList.remove('show-list');
-    listToggle?.setAttribute('aria-expanded', 'false');
     render();
 
     popover.style.visibility = 'hidden';
@@ -3009,21 +3000,6 @@ if (music) {
   window.addEventListener('orientationchange', repositionCalendarSoon);
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', repositionCalendarSoon);
-  }
-
-  if (listToggle) {
-    listToggle.addEventListener('click', event => {
-      event.stopPropagation();
-      listExpanded = !listExpanded;
-      popover.classList.toggle('show-list', listExpanded);
-      listToggle.setAttribute('aria-expanded', String(listExpanded));
-      listToggle.setAttribute('aria-label', listExpanded ? 'Ẩn danh sách sự kiện' : 'Hiện danh sách sự kiện');
-      if (listExpanded) {
-        renderList(new Date());
-      }
-      // Danh sách làm popover cao hơn, nên tính lại vị trí ngay lập tức.
-      requestAnimationFrame(() => positionPopover());
-    });
   }
 
   if (filterEl) {
