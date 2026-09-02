@@ -89,6 +89,10 @@ body::before{
 }
 
 /* ===== GATE ===== */
+/* Lock the real page until the enter animation has completed. */
+body:not(.page-unlocked) #main{display:none !important;}
+body.page-unlocked #main{display:block !important;}
+
 #gate{
   position:fixed;
   inset:0;
@@ -2095,7 +2099,314 @@ footer#footer-bar:hover .foot-hint svg{
 }
 
 
+
+/* ===== CALENDAR COMPACT EVENT-FIRST v4 ===== */
+.vn-calendar-popover{
+  width:min(360px,calc(100vw - 28px)) !important;
+  height:auto !important;
+  max-height:min(72vh,560px) !important;
+  border-radius:16px !important;
+}
+.vn-calendar-head{padding:10px 12px 9px !important;gap:8px !important}
+.vn-calendar-head-icon{width:28px !important;height:28px !important;border-radius:9px !important}
+.vn-calendar-head-icon svg{width:14px !important;height:14px !important}
+.vn-calendar-title{font-size:12.5px !important}
+.vn-calendar-sub{font-size:7.5px !important;margin-top:2px !important}
+.vn-calendar-close{width:25px !important;height:25px !important}
+.vn-calendar-close svg{width:11px !important;height:11px !important}
+.vn-calendar-body{padding:9px !important;overflow:visible !important}
+.vn-calendar-main-grid{display:flex !important;flex-direction:column !important;gap:7px !important}
+.vn-calendar-next{padding:12px !important;border-radius:13px !important}
+.vn-calendar-kicker{font-size:7px !important}
+.vn-calendar-next-main{margin-top:7px !important}
+.vn-calendar-next-name{font-size:14px !important;line-height:1.22 !important}
+.vn-calendar-next-dates{margin-top:5px !important;font-size:7.5px !important;line-height:1.45 !important}
+.vn-calendar-next-count{margin-top:9px !important}
+.vn-calendar-count-grid{gap:4px !important}
+.vn-count-box{padding:7px 2px 6px !important;border-radius:8px !important}
+.vn-count-value{font-size:13px !important}
+.vn-count-unit{margin-top:4px !important;font-size:5.5px !important}
+.vn-calendar-ongoing{margin-top:7px !important;padding:6px 9px !important;font-size:7px !important}
+.vn-calendar-list-toggle{
+  position:relative;z-index:3;width:100%;margin-top:9px;padding:7px 9px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  border:1px solid rgba(255,255,255,.07);border-radius:9px;
+  color:rgba(245,240,234,.58);background:rgba(255,255,255,.025);
+  font:600 7px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.vn-calendar-list-toggle:hover{background:rgba(231,143,162,.07);border-color:rgba(231,143,162,.24);color:#fff}
+.vn-calendar-list-toggle svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+.vn-calendar-popover.show-list .vn-calendar-list-toggle svg{transform:rotate(180deg)}
+.vn-calendar-right{display:none !important;min-height:0 !important}
+.vn-calendar-popover.show-list .vn-calendar-right{display:flex !important}
+.vn-calendar-section-title{padding:1px 1px 6px !important;font-size:7px !important}
+.vn-calendar-list-controls{gap:5px !important}
+#vn-calendar-year-label{padding:2px 6px !important}
+.vn-calendar-filter{padding:4px 19px 4px 8px !important;font-size:8px !important}
+.vn-calendar-events{max-height:min(36vh,300px) !important;overflow-y:auto !important;gap:3px !important}
+.vn-calendar-event{grid-template-columns:23px 38px minmax(0,1fr) auto !important;gap:6px !important;padding:6px 7px !important;border-radius:9px !important}
+.vn-calendar-event-icon{width:22px !important;height:22px !important;border-radius:7px !important;font-size:11px !important}
+.vn-calendar-event-date{font-size:8px !important}
+.vn-calendar-event-name{font-size:9.5px !important}
+.vn-calendar-event-meta,.vn-calendar-event-left{font-size:6.5px !important}
+.vn-calendar-legend{margin-top:7px !important;padding-top:7px !important;gap:6px !important}
+.vn-calendar-legend-items{gap:6px !important}
+.vn-calendar-legend-item{font-size:6.5px !important}
+#vn-calendar-sync{font-size:6px !important}
+@media(max-width:640px){
+  .vn-calendar-popover{width:calc(100vw - 20px) !important;max-width:360px !important;max-height:78vh !important}
+  .vn-calendar-body{padding:8px !important}
+  .vn-calendar-next{padding:11px !important}
+  .vn-calendar-next-name{font-size:13px !important}
+  .vn-calendar-events{max-height:35vh !important}
+}
+
+
+/* ===== MOCKUP INSPIRED LAYOUT — paper bio dashboard ===== */
+:root{
+  --mock-paper:#f8ecd9;
+  --mock-paper-2:#fbf1e2;
+  --mock-brown:#62453d;
+  --mock-muted:#987b6b;
+  --mock-pink:#c96d73;
+  --mock-shadow:0 24px 55px -28px rgba(74,51,54,.42),0 1px 0 rgba(255,255,255,.65) inset;
+}
+
+body{
+  background:
+    radial-gradient(circle at 9% 14%,rgba(255,255,255,.35),transparent 23%),
+    radial-gradient(circle at 90% 84%,rgba(207,100,120,.08),transparent 26%),
+    linear-gradient(135deg,#ead7c1 0%,#f6e4cf 52%,#e7d1bb 100%);
+}
+body::before{z-index:1 !important;opacity:.28 !important;pointer-events:none !important}
+
+#main{min-height:100vh;position:relative;z-index:2}
+.bg-video-wrap{opacity:.16;mix-blend-mode:multiply}
+.bg-video-wrap::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(145deg,rgba(248,236,217,.86),rgba(246,211,199,.72));
+}
+main{
+  width:min(1240px,calc(100vw - 56px));
+  min-height:100vh;
+  margin:0 auto;
+  padding:46px 0 120px;
+  display:grid;
+  grid-template-columns:340px minmax(0,1fr);
+  align-items:start;
+  gap:28px;
+  perspective:none;
+}
+.card{
+  grid-column:2;
+  width:100%;
+  max-width:none;
+  padding:0 0 30px;
+  opacity:0;
+  transform:translateY(22px) scale(.985);
+}
+.card.in{opacity:1;transform:translateY(0) scale(1)}
+.titlebar{
+  background:rgba(248,236,217,.94);
+  background-image:var(--texture);
+  border:1px solid rgba(98,69,61,.16);
+  border-radius:18px;
+  box-shadow:var(--mock-shadow);
+  padding:12px 18px;
+}
+.titlebar .dots{gap:6px}
+.titlebar .dot{width:11px;height:11px}
+.titlebar .path{font-size:13px;color:var(--mock-brown);font-weight:600}
+.card-inner{
+  margin-top:0;
+  padding:34px 36px 28px;
+  background:rgba(248,236,217,.95);
+  background-image:var(--texture);
+  border:1px solid rgba(98,69,61,.13);
+  border-top:0;
+  border-radius:0 0 20px 20px;
+  box-shadow:var(--mock-shadow);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 250px;
+  column-gap:34px;
+  align-items:start;
+}
+.photo-wrap{grid-column:2;grid-row:1 / span 5;margin:8px 0 0;justify-self:end;width:228px}
+.photo-frame{
+  transform:rotate(2.5deg);
+  border:10px solid #fbf3e7 !important;
+  border-bottom-width:28px !important;
+  box-shadow:0 19px 30px -18px rgba(74,51,54,.48);
+}
+.photo-frame::before{
+  content:"";position:absolute;top:-18px;left:50%;transform:translateX(-50%);
+  width:82px;height:23px;border-radius:2px;
+  background:rgba(213,181,133,.62);box-shadow:0 1px 0 rgba(255,255,255,.28) inset;
+  z-index:3;pointer-events:none;
+}
+.eyebrow,.location,h1,.vn-clock-wrap,.divider,.bio{grid-column:1}
+.eyebrow{text-align:left;margin-top:4px;color:var(--mock-muted);letter-spacing:.08em}
+h1{text-align:left;font-size:clamp(42px,5vw,62px);margin:0;line-height:.98;color:#5f423b}
+h1 em{color:var(--mock-pink)}
+.location{text-align:left;margin:12px 0 8px}
+.vn-clock-wrap{justify-content:flex-start;margin:4px 0 16px}
+.vn-clock{background:#6b4b43;color:#fbf1e4;border:0;box-shadow:0 9px 20px -13px rgba(74,51,54,.6)}
+.divider{margin-top:6px}
+.discord-mini-profile,.bio,.music-box,.now,footer#footer-bar{grid-column:1 / -1}
+.discord-mini-profile{margin-top:3px}
+.bio{text-align:left;margin:16px 0 8px;color:var(--mock-muted)}
+.music-box{
+  position:fixed !important;
+  left:max(18px,calc(50vw - 620px));
+  top:410px;
+  width:340px !important;
+  margin:0 !important;
+  z-index:91 !important;
+  background:rgba(248,236,217,.95) !important;
+  color:var(--mock-brown) !important;
+  border:1px solid rgba(98,69,61,.14) !important;
+  border-radius:18px !important;
+  box-shadow:var(--mock-shadow) !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+}
+.music-topline{color:var(--mock-brown)}
+.music-title{color:var(--mock-brown) !important}
+.music-sub,.time-label{color:var(--mock-muted) !important}
+.music-nav button,.music-menu-btn{color:var(--mock-brown) !important}
+.music-playbtn{background:var(--mock-pink) !important}
+.music-box .track-list-panel{background:var(--mock-paper) !important;color:var(--mock-brown) !important}
+
+/* Calendar becomes the left paper panel of the dashboard. */
+body:not(.page-unlocked) .vn-calendar-popover{opacity:0 !important;visibility:hidden !important;pointer-events:none !important}
+.vn-calendar-popover{
+  position:fixed !important;
+  left:max(18px,calc(50vw - 620px)) !important;
+  right:auto !important;
+  top:46px !important;
+  bottom:auto !important;
+  width:340px !important;
+  max-height:350px !important;
+  height:auto !important;
+  transform:none !important;
+  overflow:hidden !important;
+  z-index:90 !important;
+  background:rgba(248,236,217,.96) !important;
+  color:var(--mock-brown) !important;
+  border:1px solid rgba(98,69,61,.14) !important;
+  border-radius:18px !important;
+  box-shadow:var(--mock-shadow) !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+}
+.vn-calendar-popover.open{opacity:1 !important;visibility:visible !important;pointer-events:auto !important}
+.vn-calendar-head{
+  padding:16px 16px 13px !important;
+  border-bottom:1px solid rgba(98,69,61,.12) !important;
+  background:transparent !important;
+}
+.vn-calendar-head-icon{color:var(--mock-brown) !important;background:rgba(207,100,120,.12) !important}
+.vn-calendar-title{color:var(--mock-brown) !important;font-size:17px !important}
+.vn-calendar-title em{color:var(--mock-pink) !important}
+.vn-calendar-sub{color:var(--mock-muted) !important}
+.vn-calendar-close{color:var(--mock-brown) !important}
+.vn-calendar-body{padding:13px !important;overflow-y:auto !important;max-height:calc(350px - 70px) !important}
+.vn-calendar-next{
+  padding:15px !important;
+  border:1px solid rgba(98,69,61,.10) !important;
+  border-radius:15px !important;
+  background:rgba(255,252,246,.64) !important;
+}
+.vn-calendar-kicker{color:var(--mock-pink) !important}
+.vn-calendar-next-name{color:var(--mock-brown) !important}
+.vn-calendar-next-dates{color:var(--mock-muted) !important}
+.vn-calendar-next-dates .vn-lunar-highlight{color:#bd8750 !important}
+.vn-count-box{background:#f5e6d3 !important;border-color:rgba(98,69,61,.08) !important}
+.vn-count-value{color:var(--mock-brown) !important}
+.vn-count-unit{color:var(--mock-muted) !important}
+.vn-calendar-next .vn-calendar-list-toggle{
+  width:30px !important;height:30px !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  margin:10px auto 0 !important;
+  border:1px solid rgba(98,69,61,.12) !important;
+  border-radius:50% !important;
+  color:var(--mock-brown) !important;
+  background:#f4e4d1 !important;
+}
+.vn-calendar-right{margin-top:10px !important}
+.vn-calendar-section-title{color:var(--mock-muted) !important}
+.vn-calendar-section-title strong{color:var(--mock-brown) !important}
+.vn-calendar-event{background:rgba(255,252,246,.62) !important;border-color:rgba(98,69,61,.08) !important}
+.vn-calendar-event-name{color:var(--mock-brown) !important}
+.vn-calendar-event-meta,.vn-calendar-event-left{color:var(--mock-muted) !important}
+.vn-calendar-legend{border-top-color:rgba(98,69,61,.10) !important}
+.vn-calendar-legend-item,#vn-calendar-sync{color:var(--mock-muted) !important}
+
+/* Visual keepsake notes */
+.card-inner::after{
+  content:"Focus\A Believe\A Achieve  ♡";
+  white-space:pre;
+  position:fixed;
+  right:max(18px,calc(50vw - 610px));
+  top:110px;
+  width:132px;
+  padding:24px 20px 27px;
+  font:italic 24px/1.55 'Fraunces',serif;
+  color:#63483f;
+  background:#f4e5cf;
+  box-shadow:0 18px 30px -20px rgba(74,51,54,.45);
+  transform:rotate(3deg);
+  opacity:.9;
+  pointer-events:none;
+  z-index:3;
+}
+.card-inner::before{
+  content:"";
+  position:fixed;
+  right:max(58px,calc(50vw - 575px));
+  top:91px;
+  width:55px;height:23px;
+  background:rgba(210,179,130,.65);
+  transform:rotate(5deg);
+  z-index:4;pointer-events:none;
+}
+
+.dock-wrap{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:0;z-index:85}
+.dock{
+  padding:13px 22px;
+  gap:28px;
+  background:rgba(248,236,217,.96);
+  border:1px solid rgba(98,69,61,.14);
+  border-radius:18px;
+  box-shadow:var(--mock-shadow);
+}
+.dock-item{width:46px;height:46px}
+
+#footer-bar{margin-top:4px}
+
+@media(max-width:980px){
+  main{width:min(760px,calc(100vw - 28px));grid-template-columns:1fr;padding-top:28px}
+  .card{grid-column:1}
+  .music-box{position:relative !important;left:auto;top:auto;width:100% !important}
+  .vn-calendar-popover{position:fixed !important;left:50% !important;top:18px !important;transform:translateX(-50%) !important;width:min(360px,calc(100vw - 20px)) !important;z-index:120 !important}
+  .card-inner{grid-template-columns:1fr 200px}
+  .photo-wrap{width:185px}
+  .card-inner::before,.card-inner::after{display:none}
+}
+@media(max-width:680px){
+  main{width:calc(100vw - 20px);padding:15px 0 105px}
+  .card-inner{display:block;padding:24px 18px}
+  .photo-wrap{width:min(210px,75vw);margin:0 auto 24px}
+  .eyebrow,h1,.location,.vn-clock-wrap,.divider,.bio{text-align:center}
+  .vn-clock-wrap{justify-content:center}
+  .dock{gap:12px;padding:10px 13px}
+  .dock-item{width:40px;height:40px}
+  .vn-calendar-popover{top:10px !important}
+}
 </style>
+
+
 
 </head>
 <body data-calendar-layout="corner-desktop-center-mobile" oncontextmenu="return false;">
@@ -2444,10 +2755,10 @@ footer#footer-bar:hover .foot-hint svg{
 </div>
 <div class="vn-calendar-head-text">
 <h2 class="vn-calendar-title" id="vn-calendar-title">
-                Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em>
+                Sự kiện <em>VN + Quốc tế</em>
 </h2>
 <p class="vn-calendar-sub" id="vn-calendar-sub">
-                Lịch dương + âm · cập nhật realtime · UTC+7
+                Dương + âm · UTC+7
               </p>
 </div>
 <button aria-label="Đóng lịch" class="vn-calendar-close" id="vn-calendar-close" type="button">
@@ -2477,8 +2788,11 @@ footer#footer-bar:hover .foot-hint svg{
 <div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
 </div>
 </div>
+<button aria-controls="vn-calendar-right" aria-expanded="false" aria-label="Hiện danh sách sự kiện" class="vn-calendar-list-toggle" id="vn-calendar-list-toggle" type="button">
+  <svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
 </div>
-<div class="vn-calendar-right">
+<div class="vn-calendar-right" id="vn-calendar-right">
 <div class="vn-calendar-section-title">
 <span><strong id="vn-calendar-list-count">0</strong> sự kiện sắp tới</span>
 <span class="vn-calendar-list-controls">
@@ -2531,6 +2845,6 @@ footer#footer-bar:hover .foot-hint svg{
 </div>
 </div>
 </div>
+<script src="javascript.js" defer></script>
 </body>
 </html>
-<script src="javascript.js" defer></script>
