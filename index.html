@@ -2097,6 +2097,70 @@ footer#footer-bar:hover .foot-hint svg{
 
 </style>
 
+
+
+/* ===== CALENDAR COMPACT EVENT-FIRST v4 ===== */
+.vn-calendar-popover{
+  width:min(360px,calc(100vw - 28px)) !important;
+  height:auto !important;
+  max-height:min(72vh,560px) !important;
+  border-radius:16px !important;
+}
+.vn-calendar-head{padding:10px 12px 9px !important;gap:8px !important}
+.vn-calendar-head-icon{width:28px !important;height:28px !important;border-radius:9px !important}
+.vn-calendar-head-icon svg{width:14px !important;height:14px !important}
+.vn-calendar-title{font-size:12.5px !important}
+.vn-calendar-sub{font-size:7.5px !important;margin-top:2px !important}
+.vn-calendar-close{width:25px !important;height:25px !important}
+.vn-calendar-close svg{width:11px !important;height:11px !important}
+.vn-calendar-body{padding:9px !important;overflow:visible !important}
+.vn-calendar-main-grid{display:flex !important;flex-direction:column !important;gap:7px !important}
+.vn-calendar-next{padding:12px !important;border-radius:13px !important}
+.vn-calendar-kicker{font-size:7px !important}
+.vn-calendar-next-main{margin-top:7px !important}
+.vn-calendar-next-name{font-size:14px !important;line-height:1.22 !important}
+.vn-calendar-next-dates{margin-top:5px !important;font-size:7.5px !important;line-height:1.45 !important}
+.vn-calendar-next-count{margin-top:9px !important}
+.vn-calendar-count-grid{gap:4px !important}
+.vn-count-box{padding:7px 2px 6px !important;border-radius:8px !important}
+.vn-count-value{font-size:13px !important}
+.vn-count-unit{margin-top:4px !important;font-size:5.5px !important}
+.vn-calendar-ongoing{margin-top:7px !important;padding:6px 9px !important;font-size:7px !important}
+.vn-calendar-list-toggle{
+  position:relative;z-index:3;width:100%;margin-top:9px;padding:7px 9px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  border:1px solid rgba(255,255,255,.07);border-radius:9px;
+  color:rgba(245,240,234,.58);background:rgba(255,255,255,.025);
+  font:600 7px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.vn-calendar-list-toggle:hover{background:rgba(231,143,162,.07);border-color:rgba(231,143,162,.24);color:#fff}
+.vn-calendar-list-toggle svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+.vn-calendar-popover.show-list .vn-calendar-list-toggle svg{transform:rotate(180deg)}
+.vn-calendar-right{display:none !important;min-height:0 !important}
+.vn-calendar-popover.show-list .vn-calendar-right{display:flex !important}
+.vn-calendar-section-title{padding:1px 1px 6px !important;font-size:7px !important}
+.vn-calendar-list-controls{gap:5px !important}
+#vn-calendar-year-label{padding:2px 6px !important}
+.vn-calendar-filter{padding:4px 19px 4px 8px !important;font-size:8px !important}
+.vn-calendar-events{max-height:min(36vh,300px) !important;overflow-y:auto !important;gap:3px !important}
+.vn-calendar-event{grid-template-columns:23px 38px minmax(0,1fr) auto !important;gap:6px !important;padding:6px 7px !important;border-radius:9px !important}
+.vn-calendar-event-icon{width:22px !important;height:22px !important;border-radius:7px !important;font-size:11px !important}
+.vn-calendar-event-date{font-size:8px !important}
+.vn-calendar-event-name{font-size:9.5px !important}
+.vn-calendar-event-meta,.vn-calendar-event-left{font-size:6.5px !important}
+.vn-calendar-legend{margin-top:7px !important;padding-top:7px !important;gap:6px !important}
+.vn-calendar-legend-items{gap:6px !important}
+.vn-calendar-legend-item{font-size:6.5px !important}
+#vn-calendar-sync{font-size:6px !important}
+@media(max-width:640px){
+  .vn-calendar-popover{width:calc(100vw - 20px) !important;max-width:360px !important;max-height:78vh !important}
+  .vn-calendar-body{padding:8px !important}
+  .vn-calendar-next{padding:11px !important}
+  .vn-calendar-next-name{font-size:13px !important}
+  .vn-calendar-events{max-height:35vh !important}
+}
+
 </head>
 <body data-calendar-layout="corner-desktop-center-mobile" oncontextmenu="return false;">
 <button aria-label="Click to enter" id="gate">
@@ -2444,10 +2508,10 @@ footer#footer-bar:hover .foot-hint svg{
 </div>
 <div class="vn-calendar-head-text">
 <h2 class="vn-calendar-title" id="vn-calendar-title">
-                Lịch sự kiện <em>Việt Nam &amp; Quốc tế</em>
+                Sự kiện <em>VN + Quốc tế</em>
 </h2>
 <p class="vn-calendar-sub" id="vn-calendar-sub">
-                Lịch dương + âm · cập nhật realtime · UTC+7
+                Dương + âm · UTC+7
               </p>
 </div>
 <button aria-label="Đóng lịch" class="vn-calendar-close" id="vn-calendar-close" type="button">
@@ -2477,8 +2541,12 @@ footer#footer-bar:hover .foot-hint svg{
 <div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
 </div>
 </div>
+<button aria-controls="vn-calendar-right" aria-expanded="false" aria-label="Hiện danh sách sự kiện" class="vn-calendar-list-toggle" id="vn-calendar-list-toggle" type="button">
+  <span>Danh sách sự kiện</span>
+  <svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
 </div>
-<div class="vn-calendar-right">
+<div class="vn-calendar-right" id="vn-calendar-right">
 <div class="vn-calendar-section-title">
 <span><strong id="vn-calendar-list-count">0</strong> sự kiện sắp tới</span>
 <span class="vn-calendar-list-controls">
