@@ -2373,6 +2373,10 @@ if (music) {
  * - Mỗi loại event có màu riêng + chú thích.
  * - Event đã qua tự loại khỏi danh sách.
  * - Ưu tiên event còn lại của năm hiện tại.
+ * - Vị trí: góc trên-trái màn hình trên desktop, giữa màn hình
+ *   trên mobile/màn hình nhỏ — xử lý hoàn toàn bằng CSS
+ *   (xem media query max-width:640px của .vn-calendar-popover),
+ *   nên JS không cần tự tính toán left/top nữa.
  * ============================================================ */
 (function initVietnamCalendar() {
   'use strict';
@@ -2810,11 +2814,16 @@ if (music) {
     }
   }
 
+  /*
+   * FIX: Vị trí của popover (góc trên-trái trên desktop, giữa màn hình
+   * trên mobile/màn hình nhỏ) giờ được xử lý HOÀN TOÀN bằng CSS thông
+   * qua media query max-width:640px trên .vn-calendar-popover. Hàm này
+   * được giữ lại (no-op) để các lời gọi cũ (resize/scroll/openCalendar)
+   * không bị lỗi, nhưng không còn ghi đè left/top bằng inline style nữa —
+   * việc đó trước đây luôn ép popover về giữa màn hình bất kể kích thước.
+   */
   function positionPopover() {
-    if (!popover.classList.contains('open')) return;
-    popover.style.left = '50%';
-    popover.style.top = '50%';
-    popover.style.transformOrigin = 'center center';
+    // Không cần làm gì — CSS đã tự responsive.
   }
 
   function openCalendar() {
@@ -2824,7 +2833,6 @@ if (music) {
     backdrop?.classList.add('open');
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded','true');
-    requestAnimationFrame(positionPopover);
   }
 
   function closeCalendar() {
@@ -2850,14 +2858,11 @@ if (music) {
     if (popover.classList.contains('open') && !popover.contains(event.target) && !btn.contains(event.target)) closeCalendar();
   });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && popover.classList.contains('open')) closeCalendar(); });
-  window.addEventListener('resize', positionPopover, {passive:true});
-  window.addEventListener('scroll', positionPopover, {passive:true});
 
   if (filterEl) {
     filterEl.addEventListener('change', () => {
       currentFilter = filterEl.value || 'all';
       render();
-      requestAnimationFrame(positionPopover);
     });
   }
 
@@ -2916,7 +2921,6 @@ if (music) {
       rebuildEvents().then(() => {
         if (popover.classList.contains('open')) {
           render(now);
-          requestAnimationFrame(positionPopover);
         }
       });
       return;
