@@ -89,6 +89,10 @@ body::before{
 }
 
 /* ===== GATE ===== */
+/* Lock the real page until the enter animation has completed. */
+body:not(.page-unlocked) #main{display:none !important;}
+body.page-unlocked #main{display:block !important;}
+
 #gate{
   position:fixed;
   inset:0;
@@ -2095,9 +2099,6 @@ footer#footer-bar:hover .foot-hint svg{
 }
 
 
-</style>
-
-
 
 /* ===== CALENDAR COMPACT EVENT-FIRST v4 ===== */
 .vn-calendar-popover{
@@ -2160,6 +2161,9 @@ footer#footer-bar:hover .foot-hint svg{
   .vn-calendar-next-name{font-size:13px !important}
   .vn-calendar-events{max-height:35vh !important}
 }
+</style>
+
+
 
 </head>
 <body data-calendar-layout="corner-desktop-center-mobile" oncontextmenu="return false;">
@@ -2542,7 +2546,6 @@ footer#footer-bar:hover .foot-hint svg{
 </div>
 </div>
 <button aria-controls="vn-calendar-right" aria-expanded="false" aria-label="Hiện danh sách sự kiện" class="vn-calendar-list-toggle" id="vn-calendar-list-toggle" type="button">
-  <span>Danh sách sự kiện</span>
   <svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
 </button>
 </div>
