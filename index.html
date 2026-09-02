@@ -1432,7 +1432,8 @@ h1 em{
   left:20px;
   z-index:240;
   width:380px;
-  max-height:min(72vh,540px);
+  max-width:calc(100vw - 36px);
+  max-height:min(68vh,520px);
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -1620,27 +1621,50 @@ h1 em{
 @media(max-width:640px){
   .vn-clock{font-size:10px;padding:5px 9px;max-width:calc(100vw - 72px)}
   .vn-calendar-btn{width:27px;height:27px}
+
+  /* Điện thoại/màn hình nhỏ: popup chỉ thu gọn.
+     Vị trí góc hay giữa do JS tự quyết định dựa trên không gian thật. */
   .vn-calendar-popover{
-    left:50%;
-    top:50%;
-    width:calc(100vw - 24px);
-    max-width:380px;
-    max-height:min(78vh,560px);
-    transform-origin:center center;
-    transform:translate(-50%,-50%) scale(.97);
-    border-radius:16px;
+    width:calc(100vw - 28px);
+    max-width:340px;
+    max-height:min(72vh,520px);
+    border-radius:15px;
   }
-  .vn-calendar-popover.open{transform:translate(-50%,-50%) scale(1)}
-  .vn-calendar-head{padding:12px 13px}
-  .vn-calendar-title{font-size:13px}
-  .vn-calendar-next{padding:12px}
-  .vn-calendar-next-name{font-size:14px}
+
+  .vn-calendar-head{padding:11px 12px}
+  .vn-calendar-title{font-size:12.5px}
+  .vn-calendar-sub{font-size:8px}
+  .vn-calendar-next{padding:11px}
+  .vn-calendar-next-name{font-size:13.5px}
+  .vn-calendar-next-dates{font-size:8px}
   .vn-calendar-count-grid{gap:4px}
   .vn-count-box{padding:6px 2px 5px}
-  .vn-count-value{font-size:13px}
-  .vn-calendar-event{grid-template-columns:22px 36px minmax(0,1fr);gap:6px;padding:6px 7px}
-  .vn-calendar-event-left{grid-column:3;text-align:left;margin-top:1px}
+  .vn-count-value{font-size:12.5px}
+  .vn-calendar-event{
+    grid-template-columns:22px 34px minmax(0,1fr);
+    gap:6px;
+    padding:6px 7px;
+  }
+  .vn-calendar-event-left{
+    grid-column:3;
+    text-align:left;
+    margin-top:1px;
+  }
+  .vn-calendar-event-name{font-size:10px}
+  .vn-calendar-event-meta{font-size:7px}
   .vn-calendar-legend{flex-wrap:wrap}
+}
+
+/* JS thêm class này khi góc trên-trái không còn đủ chỗ. */
+.vn-calendar-popover.centered{
+  top:50%;
+  left:50%;
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(.97);
+}
+
+.vn-calendar-popover.centered.open{
+  transform:translate(-50%,-50%) scale(1);
 }
 
 .vn-calendar-detail{
