@@ -2823,12 +2823,31 @@ if (music) {
    * việc đó trước đây luôn ép popover về giữa màn hình bất kể kích thước.
    */
   function positionPopover() {
-    // Không cần làm gì — CSS đã tự responsive.
+    if (!popover) return;
+
+    const margin = 18;
+
+    // Đo kích thước thật của popup để quyết định vị trí.
+    // Desktop đủ chỗ -> góc trên bên trái.
+    // Không đủ chỗ -> chính giữa màn hình.
+    const rect = popover.getBoundingClientRect();
+
+    const popupWidth = rect.width || Math.min(380, window.innerWidth - margin * 2);
+    const popupHeight = rect.height || Math.min(window.innerHeight * 0.68, 520);
+
+    const fitsTopLeft =
+      window.innerWidth >= popupWidth + margin * 2 &&
+      window.innerHeight >= popupHeight + margin * 2;
+
+    popover.classList.toggle('centered', !fitsTopLeft);
   }
 
   function openCalendar() {
     render();
+
+    // Mở tạm để đo kích thước thật, sau đó chọn góc trái hay giữa.
     popover.classList.add('open');
+    positionPopover();
     const backdrop = document.getElementById('vn-calendar-backdrop');
     backdrop?.classList.add('open');
     btn.classList.add('is-open');
@@ -2858,6 +2877,13 @@ if (music) {
     if (popover.classList.contains('open') && !popover.contains(event.target) && !btn.contains(event.target)) closeCalendar();
   });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && popover.classList.contains('open')) closeCalendar(); });
+
+  // Tự kiểm tra lại khi người dùng thay đổi kích thước cửa sổ.
+  window.addEventListener('resize', () => {
+    if (popover.classList.contains('open')) {
+      requestAnimationFrame(positionPopover);
+    }
+  });
 
   if (filterEl) {
     filterEl.addEventListener('change', () => {
