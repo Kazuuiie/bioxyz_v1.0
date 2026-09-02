@@ -24,6 +24,50 @@ const card = document.querySelector('.card');
 const dock = document.getElementById('dock');
 const bioConfig = window.bioConfig || {};
 
+if (gate) {
+  /* Keep the unlock handler near the top of the file so another initializer
+     can never prevent the "click to enter" screen from working. */
+  let gateOpened = false;
+
+  gate.addEventListener('click', e => {
+    if (gateOpened) return;
+    gateOpened = true;
+
+    const cx = e.clientX || window.innerWidth / 2;
+    const cy = e.clientY || window.innerHeight / 2;
+
+    try {
+      spawnGateBurst(cx, cy);
+    } catch (_) {}
+
+    gate.classList.add('hidden');
+
+    setTimeout(() => {
+      gate.hidden = true;
+
+      if (main) {
+        main.hidden = false;
+        document.body.classList.add('page-unlocked');
+      }
+
+      requestAnimationFrame(() => {
+        if (card) card.classList.add('in');
+        if (dock) dock.classList.add('in');
+      });
+
+      // Visual dashboard mode: reveal the paper event panel immediately after unlock.
+      window.dispatchEvent(new Event('bio:unlocked'));
+
+      if (bgVideo) bgVideo.play().catch(() => {});
+      if (music) {
+        music.play()
+          .then(() => setMusicState(true))
+          .catch(() => setMusicState(false));
+      }
+    }, 600);
+  }, { once:false });
+}
+
 /* ============ FIX: khai báo sớm để tránh lỗi TDZ (ReferenceError) ============
  * Các biến này trước đây được khai báo ở section VISUALIZER (bên dưới),
  * nhưng lại được dùng sớm hơn qua cacheTrackMiniBars() -> renderTrackList()
@@ -456,47 +500,6 @@ function spawnGateBurst(x, y) {
   );
 }
 
-if (gate) {
-  gate.addEventListener(
-    'click',
-    e => {
-      const cx =
-        e.clientX ||
-        window.innerWidth / 2;
-
-      const cy =
-        e.clientY ||
-        window.innerHeight / 2;
-
-      spawnGateBurst(cx, cy);
-
-      gate.classList.add('hidden');
-
-      setTimeout(() => {
-        gate.hidden = true;
-
-        if (main) {
-          main.hidden = false;
-        }
-
-        requestAnimationFrame(() => {
-          if (card) card.classList.add('in');
-          if (dock) dock.classList.add('in');
-        });
-
-        if (bgVideo) {
-          bgVideo.play().catch(() => {});
-        }
-
-        if (music) {
-          music.play()
-            .then(() => setMusicState(true))
-            .catch(() => setMusicState(false));
-        }
-      }, 600);
-    }
-  );
-}
 
 /* ============ CARD TILT ============ */
 if (
@@ -2384,7 +2387,10 @@ if (music) {
   const nextName = document.getElementById('vn-calendar-next-name');
   const nextDates = document.getElementById('vn-calendar-next-dates');
   const nextCount = document.getElementById('vn-calendar-next-count');
+  const nextKicker = nextCard?.querySelector('.vn-calendar-kicker');
   const listEl = document.getElementById('vn-calendar-events');
+  const listToggle = document.getElementById('vn-calendar-list-toggle');
+  const rightPanel = document.getElementById('vn-calendar-right');
   const listCountEl = document.getElementById('vn-calendar-list-count');
   const yearLabelEl = document.getElementById('vn-calendar-year-label');
   const subEl = document.getElementById('vn-calendar-sub');
@@ -2415,6 +2421,7 @@ if (music) {
   // true khi popover đang ở chế độ góc (đặt cạnh bio card, desktop)
   // false khi đang ở chế độ giữa màn hình (mobile / không đủ chỗ)
   let isCornerMode = false;
+  let listExpanded = false;
 
   /* ================= ICON SỰ KIỆN — ĐA DẠNG, ĐẶC SẮC HƠN ================= */
   // Mỗi sự kiện dùng emoji/icon riêng biệt, tránh trùng lặp, gợi hình rõ.
@@ -2763,6 +2770,7 @@ if (music) {
     if (!next) {
       if (lastNextId !== null) {
         applyKindClass(nextCard, 'special');
+        if (nextKicker) nextKicker.lastChild.textContent = ' Không còn sự kiện';
         nextName.textContent = 'Không còn sự kiện';
         nextDates.textContent = 'Hẹn gặp lại vào năm mới.';
         nextCount.innerHTML = '<div class="vn-calendar-ongoing">đã hoàn tất</div>';
@@ -2777,6 +2785,7 @@ if (music) {
 
     if (idOrStatusChanged) {
       applyKindClass(nextCard, next.kind);
+      if (nextKicker) nextKicker.lastChild.textContent = status === 'ongoing' ? ' Current event' : ' Next event';
       nextName.textContent = `${next.icon} ${next.title}`;
       nextDates.innerHTML = formatMeta(next);
       nextCard.classList.toggle('is-ongoing', status === 'ongoing');
@@ -2817,7 +2826,7 @@ if (music) {
 
   function updateSubtitle() {
     if (subEl) subEl.textContent = currentFilter === 'all'
-      ? 'Lịch dương + âm · Việt Nam + quốc tế · UTC+7'
+      ? 'Dương + âm · VN + quốc tế · UTC+7'
       : `${KIND_LABELS[currentFilter]} · cập nhật realtime · UTC+7`;
   }
 
@@ -2835,18 +2844,11 @@ if (music) {
     }
   }
 
-  /* ================= VỊ TRÍ POPOVER — SMART DESKTOP / MOBILE ================= */
-  /* Desktop rộng: đặt lịch bên trái bio card, canh theo music-box.
-     Bio card là ranh giới; thiếu chỗ thì chuyển về giữa.
-     Mobile / màn hình hẹp: luôn giữa. */
+  /* ================= VỊ TRÍ POPOVER — NGANG TITLEBAR ================= */
   function resetToCenteredFallback() {
     isCornerMode = false;
     popover.classList.remove('corner');
     popover.classList.add('centered');
-
-    // Không để inline style của chế độ corner giữ lại vị trí cũ.
-    // Dùng !important để việc đổi kích thước cửa sổ có hiệu lực NGAY,
-    // không cần reload trang.
     popover.style.setProperty('left', '50%', 'important');
     popover.style.setProperty('top', '50%', 'important');
     popover.style.setProperty('right', 'auto', 'important');
@@ -2856,77 +2858,57 @@ if (music) {
 
   function positionPopover() {
     if (!popover) return;
-
     try {
-      const margin = 18;
-      const mobileBreakpoint = 820;
       const width = window.innerWidth;
-      const height = window.innerHeight;
+      const mobileBreakpoint = 820;
+      const titlebar = document.querySelector('.titlebar');
 
-      // Điện thoại / màn hình hẹp: luôn ở giữa.
-      if (width <= mobileBreakpoint) {
+      if (width <= mobileBreakpoint || !titlebar) {
         resetToCenteredFallback();
         return;
       }
-
-      const rect = popover.getBoundingClientRect();
-      const popupWidth = rect.width || Math.min(400, width - margin * 2);
-      const popupHeight = rect.height || Math.min(height * 0.7, 560);
-      const cardRect = bioCard?.getBoundingClientRect();
-
-      if (!cardRect || popupWidth <= 0 || popupHeight <= 0) {
-        resetToCenteredFallback();
-        return;
-      }
-
-      // Chỉ dùng vùng TRÁI bio card. Popup không được đè lên card.
-      const availableLeft = cardRect.left - margin;
-      const fitsLeft = availableLeft >= popupWidth + margin;
-      const fitsHeight = height >= popupHeight + margin * 2;
-
-      if (!fitsLeft || !fitsHeight) {
-        resetToCenteredFallback();
-        return;
-      }
-
-      const musicBox = document.getElementById('music-box');
-      const musicRect = musicBox?.getBoundingClientRect();
-
-      // Canh trên với music box để hai khu vực nằm cùng hàng.
-      let top = musicRect?.top ?? cardRect.top;
-      const maxTop = height - popupHeight - margin;
-      top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
-
-      const left = Math.max(margin, Math.min(
-        cardRect.left - popupWidth - margin,
-        width - popupWidth - margin
-      ));
 
       isCornerMode = true;
       popover.classList.remove('centered');
       popover.classList.add('corner');
-
-      // Gỡ !important của centered trước khi chuyển lại sang corner.
-      popover.style.removeProperty('left');
-      popover.style.removeProperty('top');
       popover.style.removeProperty('right');
       popover.style.removeProperty('bottom');
-      popover.style.removeProperty('transform');
 
-      popover.style.left = Math.round(left) + 'px';
-      popover.style.top = Math.round(top) + 'px';
-      popover.style.right = 'auto';
-      popover.style.bottom = 'auto';
-      popover.style.transform = popover.classList.contains('open')
-        ? 'translateY(0) scale(1)'
-        : 'translateY(-8px) scale(.96)';
+      const rect = titlebar.getBoundingClientRect();
+      const gap = 14;
+      const popWidth = Math.min(360, Math.max(280, width - 28));
+      const leftOnRight = rect.right + gap;
+      const leftOnLeft = rect.left - gap - popWidth;
+      const fitsRight = leftOnRight + popWidth <= width - 14;
+      const left = fitsRight ? leftOnRight : Math.max(14, leftOnLeft);
+
+      popover.style.setProperty('left', `${Math.round(left)}px`, 'important');
+      popover.style.setProperty('top', `${Math.max(14, Math.round(rect.top))}px`, 'important');
+      popover.style.setProperty(
+        'transform',
+        popover.classList.contains('open')
+          ? 'translateY(0) scale(1)'
+          : 'translateY(-8px) scale(.96)',
+        'important'
+      );
     } catch (err) {
-      console.warn('[VN CALENDAR] positionPopover lỗi, dùng chế độ giữa màn hình:', err);
+      console.warn('[VN CALENDAR] positionPopover lỗi:', err);
       resetToCenteredFallback();
     }
   }
 
+  window.addEventListener('bio:unlocked', () => {
+    try {
+      if (!popover.classList.contains('open')) openCalendar();
+    } catch (err) {
+      console.warn('[VN CALENDAR] auto-open lỗi:', err);
+    }
+  }, { once: true });
+
   function openCalendar() {
+    listExpanded = false;
+    popover.classList.remove('show-list');
+    listToggle?.setAttribute('aria-expanded', 'false');
     render();
 
     popover.style.visibility = 'hidden';
@@ -3000,6 +2982,21 @@ if (music) {
   window.addEventListener('orientationchange', repositionCalendarSoon);
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', repositionCalendarSoon);
+  }
+
+  if (listToggle) {
+    listToggle.addEventListener('click', event => {
+      event.stopPropagation();
+      listExpanded = !listExpanded;
+      popover.classList.toggle('show-list', listExpanded);
+      listToggle.setAttribute('aria-expanded', String(listExpanded));
+      listToggle.setAttribute('aria-label', listExpanded ? 'Ẩn danh sách sự kiện' : 'Hiện danh sách sự kiện');
+      if (listExpanded) {
+        renderList(new Date());
+      }
+      // Danh sách làm popover cao hơn, nên tính lại vị trí ngay lập tức.
+      requestAnimationFrame(() => positionPopover());
+    });
   }
 
   if (filterEl) {
