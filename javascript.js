@@ -1161,7 +1161,84 @@ if (music) {
     }
   );
 }
+const waveformPath = document.getElementById('waveform-path');
 
+let wavePoints = [];
+let wavePhase = 0;
+
+function createWaveform() {
+  const width = 1000;
+  const centerY = 40;
+  const step = 8;
+
+  wavePoints = [];
+
+  for (let x = 0; x <= width; x += step) {
+    wavePoints.push({
+      x,
+      base: centerY,
+      amp:
+        3 +
+        Math.random() * 10 +
+        Math.sin(x * 0.035) * 3 +
+        Math.sin(x * 0.09) * 2
+    });
+  }
+}
+
+function drawWaveform(level = 1) {
+  if (!waveformPath || !wavePoints.length) return;
+
+  let d = '';
+
+  wavePoints.forEach((p, i) => {
+    const wave =
+      Math.sin(i * 0.8 + wavePhase) *
+        p.amp *
+        level +
+      Math.sin(i * 0.22 + wavePhase * 1.7) *
+        p.amp *
+        0.45 *
+        level;
+
+    const y = p.base + wave;
+
+    d += `${i === 0 ? 'M' : 'L'} ${p.x} ${y.toFixed(2)} `;
+  });
+
+  waveformPath.setAttribute('d', d);
+}
+
+createWaveform();
+drawWaveform(0.4);
+
+function animateWaveform() {
+  const music = document.getElementById('bg-music');
+
+  if (!music) return;
+
+  if (!music.paused && !music.ended) {
+    wavePhase += 0.08;
+
+    const level =
+      0.7 +
+      Math.sin(wavePhase * 1.4) * 0.15 +
+      Math.random() * 0.18;
+
+    drawWaveform(level);
+  } else {
+    drawWaveform(0.25);
+  }
+
+  requestAnimationFrame(animateWaveform);
+}
+
+animateWaveform();
+
+window.addEventListener('resize', () => {
+  createWaveform();
+  drawWaveform(0.5);
+});
 /* ============ TASKBAR / FRAMES (Home · Calendar · Social) ============ */
 (function initTaskbar() {
   const taskbar = document.getElementById('taskbar');
