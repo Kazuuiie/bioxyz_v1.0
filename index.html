@@ -354,6 +354,60 @@ main{
 .status-bar.is-paused #waveform-path{
   opacity:.3;
 }
+#waveform-path{display:none}
+.status-bar.is-paused #waveform-path{display:none}
+
+/* ===== REAL AUDIO CENTER BARS ===== */
+.center-bars{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  overflow:hidden;
+  padding:0 12px;
+  isolation:isolate;
+}
+.center-bars::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#e2a85c;
+  box-shadow:0 0 10px rgba(226,168,92,.5);
+  transform:translate(-50%,-50%);
+  opacity:.9;
+  pointer-events:none;
+}
+.center-bar{
+  width:2px;
+  min-width:2px;
+  height:4px;
+  flex:0 0 2px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#e2a85c 0%,#cf6478 100%);
+  box-shadow:0 0 5px rgba(207,100,120,.22);
+  transform-origin:center center;
+  transform:scaleY(.08);
+  opacity:.92;
+  will-change:transform,opacity,height;
+  transition:transform .045s linear,opacity .08s linear;
+}
+.center-bar.edge{opacity:.46}
+.status-bar.is-paused .center-bar{
+  transform:scaleY(.06)!important;
+  opacity:.22;
+}
+@media(max-width:480px){
+  .center-bars{gap:1.5px;padding:0 8px}
+  .center-bar{width:1.7px;min-width:1.7px;flex-basis:1.7px}
+}
 .status-bar-note{
   flex-shrink:0;
   display:flex;
@@ -2909,7 +2963,9 @@ social: [
 <div class="status-bar-wrap" id="status-bar-wrap">
 <div aria-hidden="true" class="status-bar" id="status-bar">
 <span class="status-bar-handle" id="status-bar-handle">@itsrealkhanz</span>
-<div aria-hidden="true" class="status-bar-viz" id="status-bar-viz"></div>
+<div aria-hidden="true" class="status-bar-viz" id="status-bar-viz">
+  <div class="center-bars" id="center-bars"></div>
+</div>
 <span class="status-bar-note" id="status-bar-note">
 <span aria-hidden="true" class="status-bar-note-icon">♪</span>
 <span id="status-bar-note-text">đang phát nhạc</span>
