@@ -936,40 +936,27 @@ let analyser = null;
 let source = null;
 let isAudioContextInit = false;
 
-/* FIX: mainBarsCache / miniBarsPerTrack / allMiniBarsFlat /
-   visualizerDataArray / barsAreReset đã được khai báo sớm ở đầu file
-   (xem section "BIẾN CƠ BẢN") để tránh lỗi TDZ ReferenceError. */
+let rafId = null;
 
+/* ===== CACHE MINI BARS ===== */
 function cacheTrackMiniBars() {
   if (!trackListEl) return;
 
-  const items =
-    trackListEl.querySelectorAll(
-      '.track-item'
-    );
+  const items = trackListEl.querySelectorAll('.track-item');
 
-  miniBarsPerTrack =
-    Array.from(items).map(item =>
-      Array.from(
-        item.querySelectorAll(
-          '.m-bar'
-        )
-      )
-    );
+  miniBarsPerTrack = Array.from(items).map(item =>
+    Array.from(item.querySelectorAll('.m-bar'))
+  );
 
-  allMiniBarsFlat =
-    miniBarsPerTrack.flat();
+  allMiniBarsFlat = miniBarsPerTrack.flat();
 }
 
 cacheTrackMiniBars();
 
-let rafId = null;
 
+/* ===== INIT AUDIO ANALYSER ===== */
 function initVisualizer() {
-  if (
-    isAudioContextInit ||
-    !music
-  ) {
+  if (isAudioContextInit || !music) {
     return;
   }
 
@@ -979,31 +966,177 @@ function initVisualizer() {
 
   if (!AudioContext) return;
 
-  audioCtx =
-    new AudioContext();
+  try {
+    audioCtx = new AudioContext();
 
-  analyser =
-    audioCtx.createAnalyser();
+    analyser = audioCtx.createAnalyser();
 
-  analyser.fftSize = 256;
+    /*
+      512 giúp waveform chi tiết hơn
+      nhưng vẫn khá nhẹ.
+    */
+    analyser.fftSize = 512;
 
-  visualizerDataArray =
-    new Uint8Array(
-      analyser.frequencyBinCount
+    analyser.smoothingTimeConstant = 0.72;
+
+    visualizerDataArray =
+      new Uint8Array(analyser.fftSize);
+
+    source =
+      audioCtx.createMediaElementSource(music);
+
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+
+    isAudioContextInit = true;
+
+  } catch (error) {
+    console.warn(
+      'Visualizer init failed:',
+      error
     );
+  }
+}
 
-  source =
-    audioCtx.createMediaElementSource(
-      music
-    );
 
-  source.connect(analyser);
-  analyser.connect(
-    audioCtx.destination
+/* =========================================================
+   WAVEFORM
+========================================================= */
+
+const waveformPath =
+  document.getElementById('waveform-path');
+
+const WAVE_POINTS = 180;
+
+
+/*
+  Lọc tín hiệu để waveform mượt hơn
+*/
+let smoothWave = new Float32Array(WAVE_POINTS);
+
+
+/*
+  Vẽ waveform khi chưa phát
+*/
+function drawIdleWaveform() {
+
+  if (!waveformPath) return;
+
+  const width = 1000;
+  const centerY = 40;
+
+  let d = '';
+
+  for (let i = 0; i < WAVE_POINTS; i++) {
+
+    const x =
+      (i / (WAVE_POINTS - 1)) * width;
+
+    const y =
+      centerY +
+      Math.sin(i * 0.22) * 1.4 +
+      Math.sin(i * 0.08) * 1.0;
+
+    d +=
+      `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)} `;
+  }
+
+  waveformPath.setAttribute('d', d);
+}
+
+
+/*
+  Vẽ waveform thật từ AudioAnalyser
+*/
+function renderWaveform() {
+
+  if (
+    !waveformPath ||
+    !analyser ||
+    !visualizerDataArray ||
+    music.paused
+  ) {
+    drawIdleWaveform();
+    return;
+  }
+
+  /*
+    Lấy waveform RAW
+    thay vì frequency spectrum.
+  */
+  analyser.getByteTimeDomainData(
+    visualizerDataArray
   );
 
-  isAudioContextInit = true;
+  const width = 1000;
+  const centerY = 40;
+
+  let d = '';
+
+  const sampleStep =
+    visualizerDataArray.length /
+    WAVE_POINTS;
+
+  for (let i = 0; i < WAVE_POINTS; i++) {
+
+    const index =
+      Math.min(
+        Math.floor(i * sampleStep),
+        visualizerDataArray.length - 1
+      );
+
+    /*
+      0 -> 255
+      center = 128
+    */
+    const raw =
+      (visualizerDataArray[index] - 128) / 128;
+
+    /*
+      Làm mượt dữ liệu
+    */
+    const previous =
+      smoothWave[i] || 0;
+
+    const smoothed =
+      previous * 0.72 +
+      raw * 0.28;
+
+    smoothWave[i] = smoothed;
+
+    /*
+      Biên độ waveform
+    */
+    const amplitude = 34;
+
+    let y =
+      centerY +
+      smoothed * amplitude;
+
+    /*
+      giới hạn tránh tràn
+    */
+    y =
+      Math.max(
+        5,
+        Math.min(75, y)
+      );
+
+    const x =
+      (i / (WAVE_POINTS - 1)) *
+      width;
+
+    d +=
+      `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)} `;
+  }
+
+  waveformPath.setAttribute('d', d);
 }
+
+
+/* =========================================================
+   MINI / MAIN BARS
+========================================================= */
 
 const SAMPLE_INDICES = [
   1, 2, 4, 6, 8, 10,
@@ -1012,38 +1145,53 @@ const SAMPLE_INDICES = [
 
 const MINI_INDICES = [1, 4, 8];
 
+
 function resetBarsOnce() {
+
   if (barsAreReset) return;
 
-  mainBarsCache.forEach(
-    bar => {
-      bar.style.transform =
-        'scaleY(0.08)';
-    }
-  );
+  mainBarsCache.forEach(bar => {
+    bar.style.transform =
+      'scaleY(0.08)';
+  });
 
-  allMiniBarsFlat.forEach(
-    bar => {
-      bar.style.transform =
-        'scaleY(0.1)';
-    }
-  );
+  allMiniBarsFlat.forEach(bar => {
+    bar.style.transform =
+      'scaleY(0.1)';
+  });
 
   barsAreReset = true;
 }
 
+
+/* =========================================================
+   MAIN RENDER LOOP
+========================================================= */
+
 function renderFrame() {
+
+  /*
+    Không phát nhạc
+  */
   if (
     !analyser ||
     !visualizerDataArray ||
     music.paused
   ) {
+
     resetBarsOnce();
+
+    drawIdleWaveform();
+
     rafId = null;
+
     return;
   }
 
   barsAreReset = false;
+
+
+  /* ===== MINI / OLD BARS ===== */
 
   analyser.getByteFrequencyData(
     visualizerDataArray
@@ -1051,10 +1199,12 @@ function renderFrame() {
 
   mainBarsCache.forEach(
     (bar, index) => {
+
       const value =
         visualizerDataArray[
           SAMPLE_INDICES[
-            index % SAMPLE_INDICES.length
+            index %
+            SAMPLE_INDICES.length
           ]
         ] || 0;
 
@@ -1064,7 +1214,10 @@ function renderFrame() {
       scale =
         Math.max(
           0.08,
-          Math.min(1.0, scale)
+          Math.min(
+            1.0,
+            scale
+          )
         );
 
       bar.style.transform =
@@ -1072,12 +1225,14 @@ function renderFrame() {
     }
   );
 
+
+  /* ===== MINI BARS ===== */
+
   if (
     trackListPanel &&
-    trackListPanel.classList.contains(
-      'open'
-    )
+    trackListPanel.classList.contains('open')
   ) {
+
     const activeMiniBars =
       miniBarsPerTrack[
         currentTrackIndex
@@ -1087,8 +1242,10 @@ function renderFrame() {
       activeMiniBars &&
       activeMiniBars.length
     ) {
+
       activeMiniBars.forEach(
         (mBar, index) => {
+
           const val =
             visualizerDataArray[
               MINI_INDICES[index]
@@ -1113,43 +1270,62 @@ function renderFrame() {
     }
   }
 
+
+  /* ===== REAL WAVEFORM ===== */
+
+  renderWaveform();
+
+
+  /* ===== NEXT FRAME ===== */
+
   rafId =
     requestAnimationFrame(
       renderFrame
     );
 }
 
+
+/* =========================================================
+   AUDIO EVENTS
+========================================================= */
+
 if (music) {
+
   music.addEventListener(
     'play',
     () => {
+
       if (!isAudioContextInit) {
         initVisualizer();
       }
 
       if (
         audioCtx &&
-        audioCtx.state ===
-          'suspended'
+        audioCtx.state === 'suspended'
       ) {
-        audioCtx.resume().catch(
-          () => {}
-        );
+        audioCtx
+          .resume()
+          .catch(() => {});
       }
 
       if (rafId === null) {
+
         rafId =
           requestAnimationFrame(
             renderFrame
           );
       }
+
     }
   );
+
 
   music.addEventListener(
     'pause',
     () => {
+
       if (rafId !== null) {
+
         cancelAnimationFrame(
           rafId
         );
@@ -1158,87 +1334,38 @@ if (music) {
       }
 
       resetBarsOnce();
+
+      drawIdleWaveform();
+
+    }
+  );
+
+
+  music.addEventListener(
+    'ended',
+    () => {
+
+      if (rafId !== null) {
+
+        cancelAnimationFrame(
+          rafId
+        );
+
+        rafId = null;
+      }
+
+      resetBarsOnce();
+
+      drawIdleWaveform();
+
     }
   );
 }
-const waveformPath = document.getElementById('waveform-path');
 
-let wavePoints = [];
-let wavePhase = 0;
 
-function createWaveform() {
-  const width = 1000;
-  const centerY = 40;
-  const step = 8;
+/* ===== INITIAL ===== */
 
-  wavePoints = [];
-
-  for (let x = 0; x <= width; x += step) {
-    wavePoints.push({
-      x,
-      base: centerY,
-      amp:
-        3 +
-        Math.random() * 10 +
-        Math.sin(x * 0.035) * 3 +
-        Math.sin(x * 0.09) * 2
-    });
-  }
-}
-
-function drawWaveform(level = 1) {
-  if (!waveformPath || !wavePoints.length) return;
-
-  let d = '';
-
-  wavePoints.forEach((p, i) => {
-    const wave =
-      Math.sin(i * 0.8 + wavePhase) *
-        p.amp *
-        level +
-      Math.sin(i * 0.22 + wavePhase * 1.7) *
-        p.amp *
-        0.45 *
-        level;
-
-    const y = p.base + wave;
-
-    d += `${i === 0 ? 'M' : 'L'} ${p.x} ${y.toFixed(2)} `;
-  });
-
-  waveformPath.setAttribute('d', d);
-}
-
-createWaveform();
-drawWaveform(0.4);
-
-function animateWaveform() {
-  const music = document.getElementById('bg-music');
-
-  if (!music) return;
-
-  if (!music.paused && !music.ended) {
-    wavePhase += 0.08;
-
-    const level =
-      0.7 +
-      Math.sin(wavePhase * 1.4) * 0.15 +
-      Math.random() * 0.18;
-
-    drawWaveform(level);
-  } else {
-    drawWaveform(0.25);
-  }
-
-  requestAnimationFrame(animateWaveform);
-}
-
-animateWaveform();
-
-window.addEventListener('resize', () => {
-  createWaveform();
-  drawWaveform(0.5);
-});
+drawIdleWaveform();
 /* ============ TASKBAR / FRAMES (Home · Calendar · Social) ============ */
 (function initTaskbar() {
   const taskbar = document.getElementById('taskbar');
