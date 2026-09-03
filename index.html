@@ -2864,6 +2864,74 @@ footer#footer-bar:hover .foot-hint svg{
   .vn-calendar-detail-countdown strong{font-size:17px;}
 }
 
+\n/* ===== CALENDAR RIGHT PANEL — decorative lower area ===== */\n.vn-calendar-next{display:flex;flex-direction:column;}\n.vn-calendar-next-count{margin-top:18px;}\n.vn-calendar-next-footer{\n  position:relative;\n  margin-top:auto;\n  min-height:96px;\n  padding-top:18px;\n  display:flex;\n  align-items:flex-end;\n  justify-content:space-between;\n  gap:12px;\n  overflow:hidden;\n}\n.vn-calendar-next-footer::before{\n  content:"";\n  position:absolute;\n  inset:23px 0 0;\n  border-radius:18px;\n  background:\n    linear-gradient(rgba(74,51,54,.045) 1px,transparent 1px) 0 0/14px 14px,\n    linear-gradient(90deg,rgba(74,51,54,.045) 1px,transparent 1px) 0 0/14px 14px;\n  -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.75),transparent 92%);\n  mask-image:linear-gradient(to top,rgba(0,0,0,.75),transparent 92%);\n  opacity:.72;\n  pointer-events:none;\n}\n.vn-calendar-next-footer-line{position:absolute;left:0;right:0;top:10px;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--event-color) 24%,transparent),transparent);}\n.vn-calendar-next-footer-copy{position:relative;z-index:1;display:flex;flex-direction:column;gap:5px;max-width:78%;}\n.vn-calendar-next-footer-copy span:first-child{font:700 7px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--event-color);}\n.vn-calendar-next-footer-copy span:last-child{font:500 8.5px/1.45 'IBM Plex Mono',monospace;color:var(--ink-soft);}\n.vn-calendar-mini-orbit{position:relative;width:62px;height:62px;flex:0 0 auto;border:1px solid color-mix(in srgb,var(--event-color) 20%,transparent);border-radius:50%;opacity:.74;}\n.vn-calendar-mini-orbit::before,.vn-calendar-mini-orbit::after{content:"";position:absolute;border-radius:50%;border:1px dashed color-mix(in srgb,var(--event-color) 24%,transparent);}\n.vn-calendar-mini-orbit::before{inset:8px;transform:rotate(24deg);}\n.vn-calendar-mini-orbit::after{inset:17px;transform:rotate(-28deg);}\n.vn-calendar-mini-orbit span{position:absolute;left:50%;top:50%;width:8px;height:8px;transform:translate(-50%,-50%);border-radius:50%;background:var(--event-color);box-shadow:0 0 14px color-mix(in srgb,var(--event-color) 55%,transparent);}\n.vn-calendar-mini-orbit b{position:absolute;left:7px;top:12px;width:5px;height:5px;border-radius:50%;background:var(--event-color);opacity:.5;}\n.vn-calendar-detail-footer{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid rgba(74,51,54,.08);color:var(--ink-soft);font:600 7px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;}\n.vn-calendar-detail-footer span:last-child{text-align:right;opacity:.72;}\n@media(max-width:540px){.vn-calendar-next-footer{min-height:70px}.vn-calendar-mini-orbit{width:48px;height:48px}.vn-calendar-next-footer-copy span:last-child{font-size:7.5px}.vn-calendar-detail-footer{font-size:6.5px;}}\n
+
+
+
+/* ===== GLASS TRANSPARENCY TUNING ===== */
+.vn-calendar-right{
+  background:transparent;
+}
+.vn-calendar-grid,
+.vn-calendar-weekdays{
+  background:transparent;
+}
+.vn-calendar-day{
+  background:rgba(255,255,255,.13);
+  border-color:rgba(74,51,54,.075);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.vn-calendar-day:hover,
+.vn-calendar-day.is-selected{
+  background:rgba(255,255,255,.22);
+}
+.vn-calendar-event{
+  background:rgba(255,255,255,.13);
+  border-color:rgba(74,51,54,.07);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.vn-calendar-event:hover{
+  background:rgba(255,255,255,.19);
+}
+.vn-calendar-next,
+.vn-calendar-detail{
+  background-color:rgba(249,236,221,.48);
+  background-image:
+    radial-gradient(circle at 105% -10%,color-mix(in srgb,var(--event-color,#cf6478) 11%,transparent),transparent 55%),
+    linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.035));
+  border-color:rgba(74,51,54,.11);
+  box-shadow:0 16px 34px -24px rgba(74,51,54,.34),0 1px 0 rgba(255,255,255,.28) inset;
+  backdrop-filter:blur(12px) saturate(1.05);
+  -webkit-backdrop-filter:blur(12px) saturate(1.05);
+}
+.vn-calendar-next:hover{
+  box-shadow:0 20px 38px -24px color-mix(in srgb,var(--event-color) 30%,rgba(74,51,54,.35)),0 1px 0 rgba(255,255,255,.3) inset;
+}
+.vn-calendar-detail.open{
+  background-color:rgba(249,236,221,.48);
+}
+.vn-count-box,
+.vn-calendar-detail-countdown>div{
+  background:rgba(255,255,255,.18);
+  border-color:rgba(74,51,54,.07);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+.vn-calendar-detail-description{
+  background:rgba(255,255,255,.15);
+  border-color:rgba(74,51,54,.065);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+@media(max-width:640px){
+  .vn-calendar-day{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.17)}
+  .vn-calendar-event{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.16)}
+  .vn-calendar-next,
+  .vn-calendar-detail{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+}
+
 </style>
 
 </head>
@@ -3250,6 +3318,15 @@ social: [
 <div class="vn-count-box"><div class="vn-count-value" id="vn-seconds">00</div><div class="vn-count-unit">Giây</div></div>
 </div>
 </div>
+
+<div class="vn-calendar-next-footer" aria-hidden="true">
+  <div class="vn-calendar-next-footer-line"></div>
+  <div class="vn-calendar-next-footer-copy">
+    <span>CALENDAR / VIEW</span>
+    <span id="vn-calendar-next-footer-note">Chọn một ngày để xem sự kiện</span>
+  </div>
+  <div class="vn-calendar-mini-orbit"><span></span><b></b></div>
+</div>
 </div>
 <div class="vn-calendar-right">
 <div class="vn-calendar-date-toolbar" aria-label="Điều khiển lịch">
@@ -3305,6 +3382,10 @@ social: [
 <div><strong id="detail-seconds">00</strong><span>Giây</span></div>
 </div>
 <div class="vn-calendar-detail-now" id="vn-calendar-detail-now">Giờ Việt Nam (UTC+7): --:--:--</div>
+<div class="vn-calendar-detail-footer" aria-hidden="true">
+  <span>EVENT DETAIL</span>
+  <span>THỜI GIAN THỰC · UTC+7</span>
+</div>
 </div>
 </div>
 </div>
@@ -3429,4 +3510,3 @@ social: [
 <script src="javascript.js" defer></script>
 </body>
 </html>
-
