@@ -39,7 +39,7 @@ if (statusBarHandle && bioConfig.handle) {
  * toàn bộ script phía sau (gate, tooltip, discord...) không chạy được.
  * => Khai báo chúng NGAY TỪ ĐẦU, và đã xoá phần khai báo trùng ở dưới.
  */
-const mainBarsCache = document.querySelectorAll('.music-bars .bar, .status-bar-viz .bar');
+const mainBarsCache = document.querySelectorAll('.music-bars .bar');
 let miniBarsPerTrack = [];
 let allMiniBarsFlat = [];
 let visualizerDataArray = null;
@@ -1006,6 +1006,9 @@ function initVisualizer() {
 const waveformPath =
   document.getElementById('waveform-path');
 
+const waveformGlowPath =
+  document.getElementById('waveform-path-glow');
+
 const WAVE_POINTS = 180;
 
 
@@ -1013,6 +1016,12 @@ const WAVE_POINTS = 180;
   Lọc tín hiệu để waveform mượt hơn
 */
 let smoothWave = new Float32Array(WAVE_POINTS);
+
+
+function applyWaveformPath(d) {
+  if (waveformPath) waveformPath.setAttribute('d', d);
+  if (waveformGlowPath) waveformGlowPath.setAttribute('d', d);
+}
 
 
 /*
@@ -1041,7 +1050,7 @@ function drawIdleWaveform() {
       `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)} `;
   }
 
-  waveformPath.setAttribute('d', d);
+  applyWaveformPath(d);
 }
 
 
@@ -1130,7 +1139,7 @@ function renderWaveform() {
       `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)} `;
   }
 
-  waveformPath.setAttribute('d', d);
+  applyWaveformPath(d);
 }
 
 
