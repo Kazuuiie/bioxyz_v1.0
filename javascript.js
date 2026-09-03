@@ -456,6 +456,8 @@ function spawnGateBurst(x, y) {
   );
 }
 
+const taskbarWrap = document.getElementById('taskbar-wrap');
+
 if (gate) {
   gate.addEventListener(
     'click',
@@ -482,6 +484,7 @@ if (gate) {
         requestAnimationFrame(() => {
           if (card) card.classList.add('in');
           if (dock) dock.classList.add('in');
+          if (taskbarWrap) taskbarWrap.classList.add('in');
         });
 
         if (bgVideo) {
@@ -1135,6 +1138,96 @@ if (music) {
     }
   );
 }
+
+/* ============ TASKBAR / FRAMES (Home · Calendar · Social) ============ */
+(function initTaskbar() {
+  const taskbar = document.getElementById('taskbar');
+  const thumb = document.getElementById('taskbar-thumb');
+  const items = taskbar
+    ? Array.from(taskbar.querySelectorAll('.taskbar-item'))
+    : [];
+  const frames = Array.from(document.querySelectorAll('.frame'));
+
+  if (!taskbar || !items.length || !frames.length) return;
+
+  let currentTarget = 'home';
+
+  function moveThumb(index) {
+    if (!thumb) return;
+    thumb.style.transform = `translateX(${index * 100}%)`;
+  }
+
+  function showFrame(target) {
+    frames.forEach(frame => {
+      frame.classList.toggle(
+        'active',
+        frame.dataset.frame === target
+      );
+    });
+
+    items.forEach(item => {
+      const isActive = item.dataset.target === target;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-selected', String(isActive));
+    });
+
+    const index = items.findIndex(
+      item => item.dataset.target === target
+    );
+
+    if (index >= 0) moveThumb(index);
+
+    currentTarget = target;
+
+    // Khi chuyển sang khung Lịch, vẽ lại ngay để số liệu luôn mới.
+    if (target === 'calendar' && window.__vnCalendarRender) {
+      window.__vnCalendarRender();
+    }
+  }
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.target;
+      if (target === currentTarget) return;
+      showFrame(target);
+    });
+  });
+
+  // Đặt vị trí ban đầu cho thanh trượt (thumb) theo khung đang active.
+  const activeIndex = items.findIndex(item =>
+    item.classList.contains('active')
+  );
+  moveThumb(activeIndex >= 0 ? activeIndex : 0);
+})();
+
+/* ============ SOCIAL FRAME ============ */
+(function initSocialFrame() {
+  const grid = document.getElementById('social-grid');
+  if (!grid) return;
+
+  const items = Array.isArray(bioConfig.social) ? bioConfig.social : [];
+
+  if (!items.length) {
+    grid.innerHTML =
+      '<p style="text-align:center;font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:var(--ink-soft)">Chưa có liên kết nào.</p>';
+    return;
+  }
+
+  grid.innerHTML = items.map(item => `
+    <a class="social-card" href="${escapeHtml(item.url || '#')}" target="_blank" rel="noopener noreferrer">
+      <span class="social-card-icon">
+        <img src="${escapeHtml(item.icon || '')}" alt="${escapeHtml(item.name || '')}" loading="lazy">
+      </span>
+      <span class="social-card-text">
+        <p class="social-card-name">${escapeHtml(item.name || '')}</p>
+        <p class="social-card-handle">${escapeHtml(item.handle || '')}</p>
+      </span>
+      <svg class="social-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 17 17 7"></path><path d="M8 7h9v9"></path>
+      </svg>
+    </a>
+  `).join('');
+})();
 
 /* ============ DISCORD / LANYARD ============ */
 (function initDiscord() {
@@ -2036,7 +2129,7 @@ if (music) {
     ).matches;
 
   const lines = [
-    'cập nhật lần cuối · tháng 8, 2026',
+    'cập nhật lần cuối · tháng 9, 2026',
     'hmm ✦',
     'hmm ✦'
   ];
@@ -2255,7 +2348,7 @@ if (music) {
         'owner-view-count';
 
       el.style.cssText =
-        'position:fixed;bottom:12px;right:12px;z-index:200;' +
+        'position:fixed;bottom:78px;right:12px;z-index:200;' +
         'font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;' +
         'background:rgba(20,16,15,.72);color:#fff8ee;padding:6px 12px;border-radius:20px;' +
         'backdrop-filter:blur(6px);pointer-events:none;';
@@ -2365,9 +2458,11 @@ if (music) {
 
 
 /* ============================================================
- * LỊCH SỰ KIỆN VIỆT NAM + QUỐC TẾ (BẢN SỬA)
+ * LỊCH SỰ KIỆN VIỆT NAM + QUỐC TẾ — PHIÊN BẢN NHÚNG VÀO FRAME
  * ============================================================
- * Thay thế toàn bộ IIFE initVietnamCalendar() cũ bằng bản này.
+ * Không còn là popover: lịch giờ nằm nguyên trong frame-calendar,
+ * được taskbar bật/tắt hiển thị. Toàn bộ logic vị trí (corner /
+ * centered / backdrop) đã được gỡ bỏ vì không còn cần thiết.
  * ============================================================ */
 (function initVietnamCalendar() {
   'use strict';
@@ -2377,10 +2472,8 @@ if (music) {
   const CACHE_KEY = 'vn-calendar-amlich-cache-v4';
   const CACHE_TTL = 30 * 24 * 60 * 60 * 1000;
 
-  const btn = document.getElementById('vn-calendar-btn');
-  const popover = document.getElementById('vn-calendar-popover');
-  const closeBtn = document.getElementById('vn-calendar-close');
   const nextCard = document.getElementById('vn-calendar-next');
+  const nextIconEl = document.getElementById('vn-calendar-next-icon');
   const nextName = document.getElementById('vn-calendar-next-name');
   const nextDates = document.getElementById('vn-calendar-next-dates');
   const nextCount = document.getElementById('vn-calendar-next-count');
@@ -2402,22 +2495,12 @@ if (music) {
   const detailMinutes = document.getElementById('detail-minutes');
   const detailSeconds = document.getElementById('detail-seconds');
   const detailNow = document.getElementById('vn-calendar-detail-now');
-  const backdrop = document.getElementById('vn-calendar-backdrop');
-  const bioCard = document.querySelector('.card');
 
-  if (!btn || !popover || !closeBtn || !nextCard || !nextName || !nextDates || !nextCount || !listEl) return;
-
-  if (detail && detail.parentElement !== nextCard) {
-    nextCard.appendChild(detail);
-  }
+  if (!nextCard || !nextName || !nextDates || !nextCount || !listEl) return;
 
   let selectedEvent = null;
-  // true khi popover đang ở chế độ góc (đặt cạnh bio card, desktop)
-  // false khi đang ở chế độ giữa màn hình (mobile / không đủ chỗ)
-  let isCornerMode = false;
 
-  /* ================= ICON SỰ KIỆN — ĐA DẠNG, ĐẶC SẮC HƠN ================= */
-  // Mỗi sự kiện dùng emoji/icon riêng biệt, tránh trùng lặp, gợi hình rõ.
+  /* ================= DỮ LIỆU SỰ KIỆN ================= */
   const EVENTS = [
     // ===== VIỆT NAM — CHÍNH THỨC =====
     { id:'tet-duong-lich', title:'Tết Dương lịch', icon:'🎆', kind:'official', solar:{day:1,month:1} },
@@ -2641,15 +2724,6 @@ if (music) {
     if (kind) el.classList.add(`kind-${kind}`);
   }
 
-  /* FIX: đảm bảo 4 ô đếm ngược luôn tồn tại trong DOM trước khi set giá trị.
-     Trước đây nextCountMarkup() bị gọi lại (innerHTML) mỗi lần "upcoming",
-     nhưng nếu render() chạy nhanh liên tiếp trong lúc setInterval 1s đang
-     thao tác trên các #vn-days/#vn-hours cũ (đã bị destroy bởi lần
-     innerHTML trước đó nhưng biến DOM cache ở nơi khác vẫn giữ tham chiếu),
-     giá trị set vào sẽ rơi vào node đã rời DOM -> hiển thị "mất" đếm ngược.
-     Giải pháp: chỉ ghi lại innerHTML khi thực sự cần (đổi từ ongoing sang
-     upcoming hoặc ngược lại), còn lại luôn truy vấn lại phần tử bằng
-     document.getElementById ngay tại thời điểm set số. */
   function setCountdown(target, now) {
     const value = countdown(target, now);
     const days = document.getElementById('vn-days');
@@ -2739,15 +2813,6 @@ if (music) {
     updateDetail(new Date());
   }
 
-  /* FIX ĐẾM NGƯỢC BỊ MẤT:
-     Trước đây renderNext() ghi đè nextCount.innerHTML mỗi khi trạng thái
-     là "upcoming", kể cả khi trước đó nó đã là "upcoming" rồi — điều này
-     phá huỷ #vn-days/#vn-hours/... liên tục 1 lần/giây một cách không cần
-     thiết và có thể đụng độ với setCountdown() đang chạy cùng lúc trong
-     interval khác, khiến số bị "đứng hình" hoặc trắng. Giờ chỉ ghi lại
-     markup khi trạng thái THỰC SỰ đổi (ongoing <-> upcoming) hoặc khi
-     sự kiện tiếp theo đổi (next.id đổi), còn lại chỉ update số qua
-     setCountdown(). */
   let lastNextId = null;
   let lastNextStatus = null;
 
@@ -2763,6 +2828,7 @@ if (music) {
     if (!next) {
       if (lastNextId !== null) {
         applyKindClass(nextCard, 'special');
+        if (nextIconEl) nextIconEl.textContent = '✦';
         nextName.textContent = 'Không còn sự kiện';
         nextDates.textContent = 'Hẹn gặp lại vào năm mới.';
         nextCount.innerHTML = '<div class="vn-calendar-ongoing">đã hoàn tất</div>';
@@ -2777,7 +2843,8 @@ if (music) {
 
     if (idOrStatusChanged) {
       applyKindClass(nextCard, next.kind);
-      nextName.textContent = `${next.icon} ${next.title}`;
+      if (nextIconEl) nextIconEl.textContent = next.icon;
+      nextName.textContent = next.title;
       nextDates.innerHTML = formatMeta(next);
       nextCard.classList.toggle('is-ongoing', status === 'ongoing');
       nextCount.innerHTML = status === 'ongoing' ? '<div class="vn-calendar-ongoing">đang diễn ra</div>' : nextCountMarkup();
@@ -2817,8 +2884,8 @@ if (music) {
 
   function updateSubtitle() {
     if (subEl) subEl.textContent = currentFilter === 'all'
-      ? 'Lịch dương + âm · Việt Nam + quốc tế · UTC+7'
-      : `${KIND_LABELS[currentFilter]} · cập nhật realtime · UTC+7`;
+      ? 'Lịch dương + âm · UTC+7'
+      : `${KIND_LABELS[currentFilter]} · UTC+7`;
   }
 
   let lastRenderedListDay = '';
@@ -2835,172 +2902,8 @@ if (music) {
     }
   }
 
-  /* ================= VỊ TRÍ POPOVER — SMART DESKTOP / MOBILE ================= */
-  /* Desktop rộng: đặt lịch bên trái bio card, canh theo music-box.
-     Bio card là ranh giới; thiếu chỗ thì chuyển về giữa.
-     Mobile / màn hình hẹp: luôn giữa. */
-  function resetToCenteredFallback() {
-    isCornerMode = false;
-    popover.classList.remove('corner');
-    popover.classList.add('centered');
-
-    // Không để inline style của chế độ corner giữ lại vị trí cũ.
-    // Dùng !important để việc đổi kích thước cửa sổ có hiệu lực NGAY,
-    // không cần reload trang.
-    popover.style.setProperty('left', '50%', 'important');
-    popover.style.setProperty('top', '50%', 'important');
-    popover.style.setProperty('right', 'auto', 'important');
-    popover.style.setProperty('bottom', 'auto', 'important');
-    popover.style.setProperty('transform', 'translate(-50%, -50%) scale(1)', 'important');
-  }
-
-  function positionPopover() {
-    if (!popover) return;
-
-    try {
-      const margin = 18;
-      const mobileBreakpoint = 820;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      // Điện thoại / màn hình hẹp: luôn ở giữa.
-      if (width <= mobileBreakpoint) {
-        resetToCenteredFallback();
-        return;
-      }
-
-      const rect = popover.getBoundingClientRect();
-      const popupWidth = rect.width || Math.min(400, width - margin * 2);
-      const popupHeight = rect.height || Math.min(height * 0.7, 560);
-      const cardRect = bioCard?.getBoundingClientRect();
-
-      if (!cardRect || popupWidth <= 0 || popupHeight <= 0) {
-        resetToCenteredFallback();
-        return;
-      }
-
-      // Chỉ dùng vùng TRÁI bio card. Popup không được đè lên card.
-      const availableLeft = cardRect.left - margin;
-      const fitsLeft = availableLeft >= popupWidth + margin;
-      const fitsHeight = height >= popupHeight + margin * 2;
-
-      if (!fitsLeft || !fitsHeight) {
-        resetToCenteredFallback();
-        return;
-      }
-
-      const musicBox = document.getElementById('music-box');
-      const musicRect = musicBox?.getBoundingClientRect();
-
-      // Canh trên với music box để hai khu vực nằm cùng hàng.
-      let top = musicRect?.top ?? cardRect.top;
-      const maxTop = height - popupHeight - margin;
-      top = Math.max(margin, Math.min(top, Math.max(margin, maxTop)));
-
-      const left = Math.max(margin, Math.min(
-        cardRect.left - popupWidth - margin,
-        width - popupWidth - margin
-      ));
-
-      isCornerMode = true;
-      popover.classList.remove('centered');
-      popover.classList.add('corner');
-
-      // Gỡ !important của centered trước khi chuyển lại sang corner.
-      popover.style.removeProperty('left');
-      popover.style.removeProperty('top');
-      popover.style.removeProperty('right');
-      popover.style.removeProperty('bottom');
-      popover.style.removeProperty('transform');
-
-      popover.style.left = Math.round(left) + 'px';
-      popover.style.top = Math.round(top) + 'px';
-      popover.style.right = 'auto';
-      popover.style.bottom = 'auto';
-      popover.style.transform = popover.classList.contains('open')
-        ? 'translateY(0) scale(1)'
-        : 'translateY(-8px) scale(.96)';
-    } catch (err) {
-      console.warn('[VN CALENDAR] positionPopover lỗi, dùng chế độ giữa màn hình:', err);
-      resetToCenteredFallback();
-    }
-  }
-
-  function openCalendar() {
-    render();
-
-    popover.style.visibility = 'hidden';
-    popover.classList.add('open');
-
-    // FIX: dùng try/finally để dù positionPopover() có lỗi bất ngờ,
-    // inline visibility:hidden VẪN được gỡ bỏ ngay sau đó — tránh trường
-    // hợp popover kẹt ở trạng thái ẩn vĩnh viễn (chỉ thấy nền tối).
-    const reveal = () => {
-      try {
-        positionPopover();
-      } finally {
-        popover.style.visibility = '';
-      }
-    };
-
-    // Đo kích thước thật trước, chọn vị trí, rồi mới hiện.
-    requestAnimationFrame(reveal);
-    // Lưới an toàn: nếu vì lý do gì đó rAF không chạy (tab ẩn, trình
-    // duyệt lạ...), vẫn đảm bảo popover hiện ra sau tối đa 120ms.
-    setTimeout(() => {
-      if (popover.style.visibility === 'hidden') reveal();
-    }, 120);
-
-    backdrop?.classList.add('open');
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded','true');
-  }
-
-  function closeCalendar() {
-    resetDetail();
-    popover.classList.remove('open');
-    backdrop?.classList.remove('open');
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded','false');
-  }
-
-  btn.addEventListener('click', event => {
-    event.stopPropagation();
-    popover.classList.contains('open') ? closeCalendar() : openCalendar();
-  });
-
-  closeBtn.addEventListener('click', event => { event.stopPropagation(); closeCalendar(); });
-  popover.addEventListener('click', event => event.stopPropagation());
-  backdrop?.addEventListener('click', closeCalendar);
-
-  /* FIX: TẮT "bấm ra ngoài để đóng" khi đang ở chế độ góc (isCornerMode).
-     Ở chế độ góc, popover đứng cạnh bio card như một panel phụ — bấm ra
-     ngoài (vào phần nền/orb/video) không nên đóng nó, người dùng vẫn có
-     thể tương tác với trang phía sau. Chỉ khi ở chế độ giữa màn hình
-     (mobile / không đủ chỗ) mới giữ hành vi bấm ra ngoài để đóng, vì lúc
-     đó backdrop đóng vai trò modal thực sự. */
-  document.addEventListener('click', event => {
-    if (!popover.classList.contains('open')) return;
-    if (isCornerMode) return; // đã tắt bấm ra ngoài ở chế độ góc
-    if (!popover.contains(event.target) && !btn.contains(event.target)) {
-      closeCalendar();
-    }
-  });
-
-  document.addEventListener('keydown', event => { if (event.key === 'Escape' && popover.classList.contains('open')) closeCalendar(); });
-
-  function repositionCalendarSoon() {
-    if (!popover.classList.contains('open')) return;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(positionPopover);
-    });
-  }
-
-  window.addEventListener('resize', repositionCalendarSoon);
-  window.addEventListener('orientationchange', repositionCalendarSoon);
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', repositionCalendarSoon);
-  }
+  // Cho phép taskbar gọi render lại ngay khi chuyển sang khung Lịch.
+  window.__vnCalendarRender = () => render(new Date());
 
   if (filterEl) {
     filterEl.addEventListener('change', () => {
@@ -3045,6 +2948,15 @@ if (music) {
     detailPanel.addEventListener('click', event => event.stopPropagation());
   }
 
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && detail?.classList.contains('open')) {
+      resetDetail();
+      lastNextId = null;
+      lastNextStatus = null;
+      render(new Date());
+    }
+  });
+
   if (nextCard) {
     nextCard.addEventListener('click', event => {
       if (detail?.classList.contains('open')) return;
@@ -3065,20 +2977,15 @@ if (music) {
 
     if (parts.year !== lastYear) {
       lastYear = parts.year;
-      rebuildEvents().then(() => {
-        if (popover.classList.contains('open')) {
-          render(now);
-        }
-      });
+      rebuildEvents().then(() => render(now));
       return;
     }
 
     if (parts.second === lastSecond) return;
     lastSecond = parts.second;
 
-    if (!popover.classList.contains('open')) return;
-
-    // Cập nhật đếm ngược mỗi giây — luôn chạy, không phụ thuộc render list.
+    // Cập nhật đếm ngược mỗi giây — luôn chạy để lần đầu bấm vào
+    // khung Lịch đã thấy số liệu mới nhất.
     renderNext(now);
 
     if (dayKey !== lastDayKey) {
@@ -3197,8 +3104,6 @@ if (music) {
     );
   }
 
-  /* FIX: tooltip đuổi theo con trỏ chuột thay vì cố định
-     theo vị trí phần tử. Dùng cho các sự kiện mouseenter/mousemove. */
   function positionAtMouse(x, y) {
     if (
       !tooltip.classList.contains(
@@ -3273,8 +3178,6 @@ if (music) {
       );
   }
 
-  /* FIX: show() giờ nhận thêm mouseEvt (tuỳ chọn) để định vị theo
-     con trỏ chuột khi tooltip được mở bằng hover chuột. */
   function show(el, mouseEvt) {
     const text =
       getText(el);
@@ -3371,11 +3274,6 @@ if (music) {
     el.dataset.tooltipBound =
       '1';
 
-    /* FIX: mouseenter truyền kèm sự kiện chuột để tooltip xuất hiện
-       ngay tại vị trí con trỏ; mousemove giúp tooltip "đuổi" theo
-       chuột trong lúc hover. */
-    /* data-tooltip-fixed="true" -> tooltip đứng yên theo vị trí
-       phần tử (dùng position()), không đuổi theo chuột */
     const isFixed =
       el.getAttribute('data-tooltip-fixed') === 'true';
 
@@ -3493,16 +3391,6 @@ if (music) {
     { passive: true }
   );
 
-  /*
-   * THEO DÕI REALTIME:
-   * - node mới có data-tooltip
-   * - data-tooltip bị đổi giá trị
-   *
-   * Trường hợp music-title đang hover:
-   * applyTrack() -> setAttribute('data-tooltip', ...)
-   * -> MutationObserver chạy
-   * -> tooltip.textContent được thay ngay.
-   */
   const observer =
     new MutationObserver(
       mutations => {
