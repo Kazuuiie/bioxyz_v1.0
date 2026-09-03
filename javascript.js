@@ -21,8 +21,15 @@ const trackListClose = document.getElementById('track-list-close');
 const trackListEl = document.getElementById('track-list');
 
 const card = document.querySelector('.card');
-const dock = document.getElementById('dock');
+const statusBarWrap = document.getElementById('status-bar-wrap');
+const statusBarHandle = document.getElementById('status-bar-handle');
+const statusBarNoteText = document.getElementById('status-bar-note-text');
+const statusBarEl = document.getElementById('status-bar');
 const bioConfig = window.bioConfig || {};
+
+if (statusBarHandle && bioConfig.handle) {
+  statusBarHandle.textContent = bioConfig.handle;
+}
 
 /* ============ FIX: khai báo sớm để tránh lỗi TDZ (ReferenceError) ============
  * Các biến này trước đây được khai báo ở section VISUALIZER (bên dưới),
@@ -32,7 +39,7 @@ const bioConfig = window.bioConfig || {};
  * toàn bộ script phía sau (gate, tooltip, discord...) không chạy được.
  * => Khai báo chúng NGAY TỪ ĐẦU, và đã xoá phần khai báo trùng ở dưới.
  */
-const mainBarsCache = document.querySelectorAll('.music-bars .bar');
+const mainBarsCache = document.querySelectorAll('.music-bars .bar, .status-bar-viz .bar');
 let miniBarsPerTrack = [];
 let allMiniBarsFlat = [];
 let visualizerDataArray = null;
@@ -423,6 +430,20 @@ function setMusicState(isPlaying) {
       tip
     );
   }
+
+  if (statusBarEl) {
+    statusBarEl.classList.toggle(
+      'is-paused',
+      !isPlaying
+    );
+  }
+
+  if (statusBarNoteText) {
+    statusBarNoteText.textContent =
+      isPlaying
+        ? 'đang phát nhạc'
+        : 'tạm dừng';
+  }
 }
 
 /* ============ GATE ============ */
@@ -483,7 +504,7 @@ if (gate) {
 
         requestAnimationFrame(() => {
           if (card) card.classList.add('in');
-          if (dock) dock.classList.add('in');
+          if (statusBarWrap) statusBarWrap.classList.add('in');
           if (taskbarWrap) taskbarWrap.classList.add('in');
         });
 
@@ -1032,7 +1053,9 @@ function renderFrame() {
     (bar, index) => {
       const value =
         visualizerDataArray[
-          SAMPLE_INDICES[index]
+          SAMPLE_INDICES[
+            index % SAMPLE_INDICES.length
+          ]
         ] || 0;
 
       let scale =
