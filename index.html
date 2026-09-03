@@ -2013,7 +2013,31 @@ footer#footer-bar:hover .foot-hint svg{
 .vn-calendar-filter option{background:#fbe7cf;color:var(--ink)}
 
 /* EVENT LIST — rich rows */
-.vn-calendar-events{display:flex;flex-direction:column;gap:5px;max-height:340px;overflow-y:auto;padding-right:2px}
+/* ===== DANH SÁCH SỰ KIỆN ===== */
+.vn-calendar-events{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+
+  /* Ban đầu chỉ hiển thị khoảng 3–4 sự kiện */
+  max-height:255px;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-right:5px;
+
+  scroll-behavior:smooth;
+}
+
+/* Mỗi thẻ cao hơn một chút để đọc rõ */
+.vn-calendar-event{
+  min-height:58px;
+  height:auto;
+  flex:0 0 auto;
+
+  padding:10px 11px;
+  align-items:center;
+}
 .vn-calendar-events::-webkit-scrollbar{width:5px}
 .vn-calendar-events::-webkit-scrollbar-thumb{background:rgba(74,51,54,.16);border-radius:6px}
 .vn-calendar-event{
@@ -2046,7 +2070,7 @@ footer#footer-bar:hover .foot-hint svg{
   padding:4px 5px;border-radius:7px;background:color-mix(in srgb,var(--event-color) 14%,transparent);
 }
 .vn-calendar-event-info{min-width:0}
-.vn-calendar-event-name{margin:0;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vn-calendar-event-name{margin:0;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;color:var(--ink);white-space:normal;overflow:hidden;text-overflow:ellipsis;line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;}
 .vn-calendar-event-meta{margin:2px 0 0;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vn-calendar-event-meta .vn-lunar-highlight{color:#b9812f;font-weight:600}
 .vn-calendar-event-left{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--ink-soft);white-space:nowrap;flex-shrink:0}
@@ -2286,6 +2310,22 @@ footer#footer-bar:hover .foot-hint svg{
 }
 @media(prefers-reduced-motion:reduce){
   #global-tooltip{transition:none}
+}
+@media(max-width:640px){
+  .vn-calendar-events{
+    max-height:250px;
+    gap:6px;
+  }
+
+  .vn-calendar-event{
+    min-height:60px;
+    padding:10px;
+  }
+
+  .vn-calendar-event-name{
+    font-size:10.5px;
+    line-height:1.35;
+  }
 }
 
 
