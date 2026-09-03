@@ -2152,115 +2152,411 @@ footer#footer-bar:hover .foot-hint svg{
 }
 .vn-calendar-filter:hover{border-color:rgba(207,100,120,.35);background-color:rgba(207,100,120,.08)}
 .vn-calendar-filter option{background:#fbe7cf;color:var(--ink)}
+/* =========================================================
+   EVENT LIST
+========================================================= */
 
-/* EVENT LIST — rich rows */
-/* ===== DANH SÁCH SỰ KIỆN ===== */
 .vn-calendar-events{
   display:flex;
   flex-direction:column;
   gap:7px;
 
-  /* Ban đầu chỉ hiển thị khoảng 3–4 sự kiện */
+  /* ban đầu thấy khoảng 3–4 sự kiện */
   max-height:255px;
 
   overflow-y:auto;
   overflow-x:hidden;
-  padding-right:5px;
 
+  padding-right:5px;
   scroll-behavior:smooth;
 }
 
-/* Mỗi thẻ cao hơn một chút để đọc rõ */
+.vn-calendar-events::-webkit-scrollbar{
+  width:5px;
+}
+
+.vn-calendar-events::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+.vn-calendar-events::-webkit-scrollbar-thumb{
+  background:rgba(74,51,54,.16);
+  border-radius:6px;
+}
+
+.vn-calendar-events::-webkit-scrollbar-thumb:hover{
+  background:rgba(74,51,54,.28);
+}
+
+
+/* ===== EVENT CARD ===== */
+
 .vn-calendar-event{
-  min-height:58px;
-  height:auto;
+  --event-color:#cf6478;
+
+  display:grid;
+
+  /* dành nhiều không gian nhất cho tên */
+  grid-template-columns:30px 43px minmax(0,1fr);
+
+  align-items:center;
+  gap:9px;
+
+  min-width:0;
+  min-height:60px;
+
   flex:0 0 auto;
 
   padding:10px 11px;
-  align-items:center;
+
+  border:1px solid rgba(74,51,54,.07);
+  border-radius:13px;
+
+  background:rgba(255,255,255,.24);
+
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .12s ease,
+    box-shadow .15s ease;
 }
-.vn-calendar-events::-webkit-scrollbar{width:5px}
-.vn-calendar-events::-webkit-scrollbar-thumb{background:rgba(74,51,54,.16);border-radius:6px}
-.vn-calendar-event{
-  --event-color:#cf6478;
-  display:grid;grid-template-columns:32px 46px minmax(0,1fr) auto;align-items:center;gap:10px;min-width:0;
-  flex-shrink:0;
-  padding:10px 11px;border:1px solid rgba(74,51,54,.07);border-radius:13px;background:rgba(255,255,255,.24);
-  transition:background .15s ease,border-color .15s ease,transform .12s ease,box-shadow .15s ease;
-  position:relative;overflow:hidden;cursor:pointer;
-}
+
 .vn-calendar-event:hover{
-  background:color-mix(in srgb,var(--event-color) 10%,rgba(255,255,255,.3));
-  border-color:color-mix(in srgb,var(--event-color) 38%,rgba(74,51,54,.1));
+  background:
+    color-mix(
+      in srgb,
+      var(--event-color) 10%,
+      rgba(255,255,255,.3)
+    );
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--event-color) 38%,
+      rgba(74,51,54,.1)
+    );
+
   transform:translateX(3px);
-  box-shadow:0 8px 18px -14px rgba(74,51,54,.4);
+
+  box-shadow:
+    0 8px 18px -14px rgba(74,51,54,.4);
 }
-.vn-calendar-event.kind-official{--event-color:#e0555f}
-.vn-calendar-event.kind-lunar{--event-color:#e2a85c}
-.vn-calendar-event.kind-international{--event-color:#5f9bd6}
-.vn-calendar-event.kind-vietnam{--event-color:#86a179}
-.vn-calendar-event.kind-special{--event-color:#a884d1}
+
+.vn-calendar-event.kind-official{
+  --event-color:#e0555f;
+}
+
+.vn-calendar-event.kind-lunar{
+  --event-color:#e2a85c;
+}
+
+.vn-calendar-event.kind-international{
+  --event-color:#5f9bd6;
+}
+
+.vn-calendar-event.kind-vietnam{
+  --event-color:#86a179;
+}
+
+.vn-calendar-event.kind-special{
+  --event-color:#a884d1;
+}
+
+
+/* ===== ICON ===== */
+
 .vn-calendar-event-icon{
-  width:29px;height:29px;display:flex;align-items:center;justify-content:center;border-radius:10px;
-  color:var(--event-color);background:color-mix(in srgb,var(--event-color) 16%,transparent);font-size:13.5px;
+  width:29px;
+  height:29px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:10px;
+
+  color:var(--event-color);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--event-color) 16%,
+      transparent
+    );
+
+  font-size:13.5px;
+
   flex-shrink:0;
 }
+
+
+/* ===== DATE ===== */
+
 .vn-calendar-event-date{
-  font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;color:var(--event-color);
-  white-space:nowrap;text-align:center;
-  padding:4px 5px;border-radius:7px;background:color-mix(in srgb,var(--event-color) 14%,transparent);
-}
-.vn-calendar-event-info{min-width:0}
-.vn-calendar-event-name{margin:0;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:700;color:var(--ink);white-space:normal;overflow:hidden;text-overflow:ellipsis;line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;}
-.vn-calendar-event-meta{margin:2px 0 0;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vn-calendar-event-meta .vn-lunar-highlight{color:#b9812f;font-weight:600}
-.vn-calendar-event-left{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--ink-soft);white-space:nowrap;flex-shrink:0}
-.vn-calendar-event.ongoing{border-color:rgba(134,161,121,.4);background:rgba(134,161,121,.08)}
-.vn-calendar-event.ongoing .vn-calendar-event-date,.vn-calendar-event.ongoing .vn-calendar-event-left{color:var(--sage)}
-.vn-calendar-live{font-weight:700;color:var(--sage);display:inline-flex;align-items:center;gap:4px}
-.vn-calendar-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--sage);box-shadow:0 0 6px rgba(134,161,121,.7)}
-.vn-calendar-empty{padding:30px 8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-soft)}
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  font-weight:700;
 
-/* LEGEND */
-.vn-calendar-legend{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-top:13px;padding-top:12px;
-  border-top:1px solid var(--line);
-}
-.vn-calendar-legend-items{display:flex;align-items:center;flex-wrap:wrap;gap:11px}
-.vn-calendar-legend-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--ink-soft)}
-.vn-calendar-legend-dot{width:6px;height:6px;border-radius:50%}
-.vn-calendar-legend-dot.official{background:#e0555f}.vn-calendar-legend-dot.lunar{background:#e2a85c}.vn-calendar-legend-dot.international{background:#5f9bd6}.vn-calendar-legend-dot.vietnam{background:#86a179}.vn-calendar-legend-dot.special{background:#a884d1}
-#vn-calendar-sync{font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:var(--ink-soft);opacity:.7;letter-spacing:.04em}
+  color:var(--event-color);
 
-@media(min-width:560px){
-  .vn-calendar-main-grid{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
-    align-items:start;
-    gap:16px;
-  }
+  white-space:nowrap;
+  text-align:center;
+
+  padding:4px 5px;
+
+  border-radius:7px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--event-color) 14%,
+      transparent
+    );
 }
+
+
+/* ===== EVENT INFO ===== */
+
+.vn-calendar-event-info{
+  min-width:0;
+  width:100%;
+}
+
+
+/* ===== EVENT NAME — tối đa 2 dòng ===== */
+
+.vn-calendar-event-name{
+  margin:0;
+
+  font-family:'DM Sans',sans-serif;
+  font-size:11.5px;
+  font-weight:700;
+
+  color:var(--ink);
+
+  line-height:1.35;
+
+  white-space:normal;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+
+  overflow-wrap:anywhere;
+}
+
+
+/* ===== META ===== */
+
+.vn-calendar-event-meta{
+  margin:3px 0 0;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8px;
+
+  color:var(--ink-soft);
+
+  white-space:nowrap;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.vn-calendar-event-meta .vn-lunar-highlight{
+  color:#b9812f;
+  font-weight:600;
+}
+
+
+/* ===== RIGHT STATUS ===== */
+
+.vn-calendar-event-left{
+  display:none;
+}
+
+
+/* ===== ONGOING ===== */
+
+.vn-calendar-event.ongoing{
+  border-color:rgba(134,161,121,.4);
+  background:rgba(134,161,121,.08);
+}
+
+.vn-calendar-event.ongoing
+.vn-calendar-event-date{
+  color:var(--sage);
+}
+
+.vn-calendar-live{
+  font-weight:700;
+  color:var(--sage);
+
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+
+.vn-calendar-live::before{
+  content:"";
+
+  width:5px;
+  height:5px;
+
+  border-radius:50%;
+
+  background:var(--sage);
+
+  box-shadow:
+    0 0 6px rgba(134,161,121,.7);
+}
+
+
+/* ===== EMPTY ===== */
+
+.vn-calendar-empty{
+  padding:30px 8px;
+
+  text-align:center;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+
+  color:var(--ink-soft);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media(max-width:640px){
-  .vn-calendar-head{padding:13px 14px}
-  .vn-calendar-title{font-size:13.5px}
-  .vn-calendar-next{padding:14px}
-  .vn-calendar-next-name{font-size:15.5px}
-  .vn-calendar-next-dates{font-size:8.5px}
-  .vn-calendar-count-grid{gap:6px}
-  .vn-count-box{padding:8px 2px 7px}
-  .vn-count-value{font-size:14.5px}
+
+  .vn-calendar-events{
+    max-height:250px;
+    gap:6px;
+  }
+
   .vn-calendar-event{
     grid-template-columns:24px 40px minmax(0,1fr);
+
     gap:8px;
-    padding:9px 10px;
+
+    min-height:62px;
+
+    padding:10px;
   }
-  .vn-calendar-event-left{
-    grid-column:3;
-    text-align:left;
-    margin-top:1px;
+
+  .vn-calendar-event-icon{
+    width:24px;
+    height:24px;
+
+    font-size:12px;
   }
-  .vn-calendar-event-name{font-size:11px}
-  .vn-calendar-event-meta{font-size:7.5px}
+
+  .vn-calendar-event-date{
+    font-size:8.5px;
+    padding:4px;
+  }
+
+  .vn-calendar-event-name{
+    font-size:10.5px;
+    line-height:1.35;
+
+    -webkit-line-clamp:2;
+    line-clamp:2;
+  }
+
+  .vn-calendar-event-meta{
+    font-size:7.5px;
+    line-height:1.3;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+
+
+/* =========================================================
+   LEGEND
+========================================================= */
+
+.vn-calendar-legend{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:9px;
+
+  margin-top:13px;
+  padding-top:12px;
+
+  border-top:1px solid var(--line);
+}
+
+.vn-calendar-legend-items{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:11px;
+}
+
+.vn-calendar-legend-item{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+
+  white-space:nowrap;
+
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8px;
+
+  color:var(--ink-soft);
+}
+
+.vn-calendar-legend-dot{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+}
+
+.vn-calendar-legend-dot.official{
+  background:#e0555f;
+}
+
+.vn-calendar-legend-dot.lunar{
+  background:#e2a85c;
+}
+
+.vn-calendar-legend-dot.international{
+  background:#5f9bd6;
+}
+
+.vn-calendar-legend-dot.vietnam{
+  background:#86a179;
+}
+
+.vn-calendar-legend-dot.special{
+  background:#a884d1;
+}
+
+#vn-calendar-sync{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:7.5px;
+
+  color:var(--ink-soft);
+  opacity:.7;
+
+  letter-spacing:.04em;
 }
 
 /* DETAIL PANEL — overlays inside the calendar panel */
