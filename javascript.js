@@ -1197,33 +1197,60 @@ function renderFrame() {
     visualizerDataArray
   );
 
-  mainBarsCache.forEach(
-    (bar, index) => {
+mainBarsCache.forEach((bar, index) => {
 
-      const value =
-        visualizerDataArray[
-          SAMPLE_INDICES[
-            index %
-            SAMPLE_INDICES.length
-          ]
-        ] || 0;
+  const value =
+    visualizerDataArray[
+      SAMPLE_INDICES[
+        index % SAMPLE_INDICES.length
+      ]
+    ] || 0;
 
-      let scale =
-        (value / 255) * 0.85;
+  const total =
+    mainBarsCache.length;
 
-      scale =
-        Math.max(
-          0.08,
-          Math.min(
-            1.0,
-            scale
-          )
-        );
+  /*
+    Vị trí từ -1 → 1
+    giúp hai đầu waveform nhỏ dần.
+  */
+  const position =
+    (index / (total - 1)) * 2 - 1;
 
-      bar.style.transform =
-        `scaleY(${scale})`;
-    }
-  );
+  /*
+    Hai đầu thấp hơn,
+    trung tâm mạnh hơn.
+  */
+  const edgeFade =
+    1 - Math.pow(Math.abs(position), 1.7) * 0.55;
+
+  /*
+    Biến thiên nhẹ giữa từng bar.
+  */
+  const variation =
+    0.82 +
+    Math.sin(index * 1.73) * 0.10 +
+    Math.sin(index * 0.47) * 0.08;
+
+  /*
+    Âm lượng thật.
+  */
+  let scale =
+    (value / 255) *
+    edgeFade *
+    variation;
+
+  /*
+    Giới hạn.
+  */
+  scale =
+    Math.max(
+      0.07,
+      Math.min(1, scale)
+    );
+
+  bar.style.transform =
+    `scaleY(${scale})`;
+});
 
 
   /* ===== MINI BARS ===== */
