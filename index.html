@@ -1135,105 +1135,40 @@ button.dmp-icon{cursor:pointer}
   pointer-events:none;
 }
 
-/* ===== BAR ===== */
-
-.status-bar-viz .bar{
+.status-bar-viz .waveform-svg{
   position:relative;
+  z-index:1;
+}
 
-  width:2px;
-  height:100%;
+#waveform-path-glow{
+  opacity:.65;
+  transition:opacity .25s ease;
+}
+.status-bar.is-paused #waveform-path-glow{opacity:.15}
 
-  flex:0 0 2px;
-
+/* quầng sáng nhẹ phía sau waveform, thở nhịp nhàng khi đang phát */
+.status-bar-viz::after{
+  content:"";
+  position:absolute;
+  inset:-6px 8px;
   border-radius:999px;
-
-  /* gradient nhẹ để bar bớt "cứng" */
-  background:linear-gradient(
-    to bottom,
-    rgba(207,100,120,.9) 0%,
-    rgba(226,168,92,1) 48%,
-    rgba(207,100,120,.9) 100%
-  );
-
-  transform-origin:center center;
-
-  transform:
-    scaleY(.08)
-    translateZ(0);
-
-  transition:
-    transform .075s cubic-bezier(.22,.61,.36,1),
-    opacity .2s ease;
-
-  will-change:transform;
-
-  box-shadow:
-    0 0 4px rgba(207,100,120,.12);
-
-  opacity:.9;
+  background:radial-gradient(ellipse at center,rgba(226,168,92,.14),transparent 70%);
+  opacity:0;
+  transition:opacity .4s ease;
+  pointer-events:none;
+  z-index:0;
+}
+.status-bar:not(.is-paused) .status-bar-viz::after{
+  opacity:1;
+  animation:viz-breathe 2.6s ease-in-out infinite;
+}
+@keyframes viz-breathe{
+  0%,100%{opacity:.55}
+  50%{opacity:1}
 }
 
-/* =========================================================
-   TẠO CẢM GIÁC BAR MỎNG / TỰ NHIÊN
-========================================================= */
+/* PHOTO / TEXT PLACEHOLDER (real rules further below) */
 
-.status-bar-viz .bar:nth-child(3n){
-  width:2.5px;
-  flex-basis:2.5px;
-}
-
-.status-bar-viz .bar:nth-child(5n){
-  width:1.5px;
-  flex-basis:1.5px;
-  opacity:.72;
-}
-
-.status-bar-viz .bar:nth-child(7n){
-  opacity:.55;
-}
-
-/* một số bar cao hơn một chút */
-.status-bar-viz .bar:nth-child(9n){
-  filter:brightness(1.08);
-}
-
-.status-bar-viz .bar:nth-child(13n){
-  filter:brightness(.9);
-}
-
-/* =========================================================
-   PAUSE
-========================================================= */
-
-.status-bar.is-paused .bar{
-  transform:scaleY(.06);
-  opacity:.25;
-  box-shadow:none;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:480px){
-
-  .status-bar-viz{
-    height:30px;
-    gap:1.5px;
-    padding:0 4px;
-  }
-
-  .status-bar-viz .bar{
-    width:1.8px;
-    flex-basis:1.8px;
-  }
-
-  .status-bar-viz .bar:nth-child(3n){
-    width:2px;
-    flex-basis:2px;
-  }
-}
 .music-playbtn{
   position:relative;
   z-index:1;
@@ -2156,6 +2091,7 @@ footer#footer-bar:hover .foot-hint svg{
 /* EVENT LIST — rich rows */
 /* ===== DANH SÁCH SỰ KIỆN ===== */
 .vn-calendar-events{
+  position:relative;
   display:flex;
   flex-direction:column;
   gap:7px;
@@ -2168,6 +2104,10 @@ footer#footer-bar:hover .foot-hint svg{
   padding-right:5px;
 
   scroll-behavior:smooth;
+
+  /* làm mờ dần đáy danh sách để gợi ý còn nội dung bên dưới */
+  mask-image:linear-gradient(to bottom,#000 calc(100% - 26px),transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 26px),transparent 100%);
 }
 
 /* Mỗi thẻ cao hơn một chút để đọc rõ */
@@ -2189,12 +2129,25 @@ footer#footer-bar:hover .foot-hint svg{
   transition:background .15s ease,border-color .15s ease,transform .12s ease,box-shadow .15s ease;
   position:relative;overflow:hidden;cursor:pointer;
 }
+.vn-calendar-event::before{
+  content:"";
+  position:absolute;
+  left:0;top:8px;bottom:8px;
+  width:3px;
+  border-radius:0 3px 3px 0;
+  background:var(--event-color);
+  opacity:0;
+  transform:scaleY(.4);
+  transform-origin:center;
+  transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.56,.64,1);
+}
 .vn-calendar-event:hover{
   background:color-mix(in srgb,var(--event-color) 10%,rgba(255,255,255,.3));
   border-color:color-mix(in srgb,var(--event-color) 38%,rgba(74,51,54,.1));
   transform:translateX(3px);
   box-shadow:0 8px 18px -14px rgba(74,51,54,.4);
 }
+.vn-calendar-event:hover::before{opacity:1;transform:scaleY(1)}
 .vn-calendar-event.kind-official{--event-color:#e0555f}
 .vn-calendar-event.kind-lunar{--event-color:#e2a85c}
 .vn-calendar-event.kind-international{--event-color:#5f9bd6}
@@ -2250,14 +2203,25 @@ footer#footer-bar:hover .foot-hint svg{
   .vn-count-box{padding:8px 2px 7px}
   .vn-count-value{font-size:14.5px}
   .vn-calendar-event{
-    grid-template-columns:24px 40px minmax(0,1fr);
-    gap:8px;
-    padding:9px 10px;
+    grid-template-columns:26px 40px minmax(0,1fr);
+    grid-template-rows:auto auto;
+    row-gap:4px;
+    column-gap:9px;
+    padding:10px 11px 9px;
   }
-  .vn-calendar-event-left{
-    grid-column:3;
-    text-align:left;
+  .vn-calendar-event-icon{
+    grid-row:1 / span 2;
+    align-self:flex-start;
     margin-top:1px;
+  }
+  .vn-calendar-event-date{grid-row:1}
+  .vn-calendar-event-info{grid-row:1;grid-column:3}
+  .vn-calendar-event-left{
+    grid-row:2;
+    grid-column:2 / -1;
+    text-align:left;
+    margin-top:0;
+    opacity:.82;
   }
   .vn-calendar-event-name{font-size:11px}
   .vn-calendar-event-meta{font-size:7.5px}
@@ -2459,8 +2423,8 @@ footer#footer-bar:hover .foot-hint svg{
   }
 
   .vn-calendar-event{
-    min-height:60px;
-    padding:10px;
+    min-height:68px;
+    padding:10px 11px 9px;
   }
 
   .vn-calendar-event-name{
@@ -2946,64 +2910,24 @@ social: [
 <div aria-hidden="true" class="status-bar" id="status-bar">
 <span class="status-bar-handle" id="status-bar-handle">@itsrealkhanz</span>
 <div aria-hidden="true" class="status-bar-viz" id="status-bar-viz">
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
-  <span class="bar"></span>
+  <svg class="waveform-svg" viewBox="0 0 1000 80" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="waveGradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#cf6478" stop-opacity="0.1"></stop>
+        <stop offset="12%" stop-color="#cf6478" stop-opacity="0.85"></stop>
+        <stop offset="50%" stop-color="#e2a85c"></stop>
+        <stop offset="88%" stop-color="#cf6478" stop-opacity="0.85"></stop>
+        <stop offset="100%" stop-color="#cf6478" stop-opacity="0.1"></stop>
+      </linearGradient>
+      <linearGradient id="waveGlow" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#cf6478" stop-opacity="0"></stop>
+        <stop offset="50%" stop-color="#e2a85c" stop-opacity=".35"></stop>
+        <stop offset="100%" stop-color="#cf6478" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+    <path id="waveform-path-glow" fill="none" stroke="url(#waveGlow)" stroke-width="7" stroke-linecap="round"></path>
+    <path id="waveform-path" fill="none" stroke="url(#waveGradient)" stroke-width="2.2" stroke-linecap="round"></path>
+  </svg>
 </div>
 <span class="status-bar-note" id="status-bar-note">
 <span aria-hidden="true" class="status-bar-note-icon">♪</span>
