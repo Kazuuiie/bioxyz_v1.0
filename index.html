@@ -1098,6 +1098,75 @@ button.dmp-icon{cursor:pointer}
   transition:transform .06s ease;
   will-change:transform;
 }
+  .status-bar-viz{
+  position:relative;
+  flex:1;
+  min-width:0;
+  height:34px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:2px;
+  padding:0 6px;
+
+  overflow:hidden;
+}
+
+/* đường giữa */
+.status-bar-viz::before{
+  content:"";
+  position:absolute;
+  left:6px;
+  right:6px;
+  top:50%;
+
+  height:1px;
+
+  background:rgba(255,248,238,.12);
+
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+
+/* từng bar */
+.status-bar-viz .bar{
+  position:relative;
+  z-index:1;
+
+  width:2.5px;
+  height:100%;
+
+  border-radius:3px;
+
+  background:linear-gradient(
+    180deg,
+    var(--raspberry),
+    var(--mustard),
+    var(--raspberry)
+  );
+
+  transform-origin:center center;
+
+  /*
+    scaleY sẽ phóng từ chính giữa
+  */
+  transform:scaleY(.08);
+
+  transition:
+    transform .06s ease,
+    opacity .15s ease;
+
+  will-change:transform;
+
+  flex:0 0 auto;
+}
+
+/* khi pause */
+.status-bar.is-paused .bar{
+  opacity:.3;
+}
 .music-playbtn{
   position:relative;
   z-index:1;
