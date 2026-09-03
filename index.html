@@ -327,27 +327,32 @@ main{
   flex-shrink:0;
   animation:vn-pulse-dot 1.8s ease-in-out infinite;
 }
-.status-bar-viz{
+.status-bar-wave{
+  position:relative;
   flex:1;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  gap:3px;
-  height:20px;
   min-width:0;
-  padding:0 6px;
+  height:30px;
+  padding:0 8px;
   overflow:hidden;
+  display:flex;
+  align-items:center;
 }
-.status-bar-viz .bar{
-  width:2.5px;
+
+.waveform-svg{
+  width:100%;
   height:100%;
-  border-radius:1px;
-  background:linear-gradient(180deg,var(--raspberry),var(--mustard));
-  transform-origin:bottom center!important;
-  transform:scaleY(.08);
-  transition:transform .06s ease;
-  will-change:transform;
-  flex-shrink:0;
+  display:block;
+  overflow:visible;
+}
+
+#waveform-path{
+  opacity:.95;
+  filter:drop-shadow(0 0 3px rgba(207,100,120,.25));
+  transition:opacity .25s ease;
+}
+
+.status-bar.is-paused #waveform-path{
+  opacity:.3;
 }
 .status-bar-note{
   flex-shrink:0;
@@ -2804,19 +2809,26 @@ social: [
 <div class="status-bar-wrap" id="status-bar-wrap">
 <div aria-hidden="true" class="status-bar" id="status-bar">
 <span class="status-bar-handle" id="status-bar-handle">@itsrealkhanz</span>
-<div aria-hidden="true" class="status-bar-viz" id="status-bar-viz">
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
-<span class="bar"></span>
+<div aria-hidden="true" class="status-bar-wave" id="status-bar-viz">
+  <svg class="waveform-svg" viewBox="0 0 1000 80" preserveAspectRatio="none">
+    <path
+      id="waveform-path"
+      d=""
+      fill="none"
+      stroke="url(#waveGradient)"
+      stroke-width="3"
+      stroke-linecap="round"
+      vector-effect="non-scaling-stroke"
+    />
+
+    <defs>
+      <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#cf6478"/>
+        <stop offset="50%" stop-color="#e2a85c"/>
+        <stop offset="100%" stop-color="#cf6478"/>
+      </linearGradient>
+    </defs>
+  </svg>
 </div>
 <span class="status-bar-note" id="status-bar-note">
 <span aria-hidden="true" class="status-bar-note-icon">♪</span>
