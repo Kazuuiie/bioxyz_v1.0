@@ -2737,6 +2737,12 @@ drawIdleWaveform();
   const subEl = document.getElementById('vn-calendar-sub');
   const syncEl = document.getElementById('vn-calendar-sync');
   const filterEl = document.getElementById('vn-calendar-filter');
+  const calendarGridEl = document.getElementById('vn-calendar-grid');
+  const calendarMonthEl = document.getElementById('vn-calendar-month');
+  const calendarYearEl = document.getElementById('vn-calendar-year');
+  const calendarPrevBtn = document.getElementById('vn-calendar-prev-month');
+  const calendarNextBtn = document.getElementById('vn-calendar-next-month');
+  const calendarTodayBtn = document.getElementById('vn-calendar-today');
   const detail = document.getElementById('vn-calendar-detail');
   const detailPanel = detail?.querySelector('.vn-calendar-detail-panel');
   const detailCloseBtn = document.getElementById('vn-calendar-detail-close');
@@ -2753,6 +2759,12 @@ drawIdleWaveform();
   if (!nextCard || !nextName || !nextDates || !nextCount || !listEl) return;
 
   let selectedEvent = null;
+  const calendarInitDate = new Date();
+  let calendarViewYear = calendarInitDate.getFullYear();
+  let calendarViewMonth = calendarInitDate.getMonth() + 1;
+  let calendarViewEvents = [];
+  const calendarYearCache = new Map();
+  let calendarSelectedISO = `${calendarInitDate.getFullYear()}-${String(calendarInitDate.getMonth()+1).padStart(2,'0')}-${String(calendarInitDate.getDate()).padStart(2,'0')}`;
 
   /* ================= DỮ LIỆU SỰ KIỆN ================= */
   const EVENTS = [
@@ -2839,7 +2851,10 @@ drawIdleWaveform();
   function vnYear(date = new Date()) { return vnParts(date).year; }
 
   function vnDate(year, month, day, hour=0, minute=0, second=0, ms=0) {
-    return new Date(Date.UTC(year, month - 1, day, hour - 7, minute, second, ms));
+    const value = new Date(0);
+    value.setUTCFullYear(Number(year), Number(month) - 1, Number(day));
+    value.setUTCHours(Number(hour) - 7, Number(minute), Number(second), Number(ms));
+    return value;
   }
 
   const dateFormatter = new Intl.DateTimeFormat('vi-VN', {timeZone:TIME_ZONE,day:'2-digit',month:'2-digit',year:'numeric'});
@@ -2934,6 +2949,12 @@ drawIdleWaveform();
       }
 
       resolvedEvents = results.sort((a,b) => a.start.getTime() - b.start.getTime());
+      const grouped = new Map();
+      resolvedEvents.forEach(event => {
+        if (!grouped.has(event.year)) grouped.set(event.year, []);
+        grouped.get(event.year).push(event);
+      });
+      grouped.forEach((value, year) => calendarYearCache.set(year, value));
       updateSubtitle();
     } finally { building = false; }
   }
@@ -2978,7 +2999,198 @@ drawIdleWaveform();
     if (kind) el.classList.add(`kind-${kind}`);
   }
 
-  function setCountdown(target, now) {
+  function isoKey(year, month, day) {
+    return `${String(year).padStart(4,'0')}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  }
+
+  function isValidCalendarYear(year) {
+    return Number.isInteger(year) && year >= 1 && year <= 9999;
+  }
+
+  async function getEventsForYear(year) {
+    if (!isValidCalendarYear(year)) return [];
+    if (calendarYearCache.has(year)) return calendarYearCache.get(year);
+
+    const jobs = EVENTS.map(async event => {
+      try { return await resolveEvent(event, year); }
+      catch { return null; }
+    });
+
+    const results = (await Promise.all(jobs))
+      .filter(Boolean)
+      .sort((a,b) => a.start.getTime() - b.start.getTime());
+
+    calendarYearCache.set(year, results);
+    return results;
+  }
+
+  function calendarUTCDate(year, monthIndex, day = 1) {
+    const value = new Date(0);
+    value.setUTCFullYear(Number(year), Number(monthIndex), Number(day));
+    value.setUTCHours(0, 0, 0, 0);
+    return value;
+  }
+
+  function monthDays(year, month) {
+    return calendarUTCDate(year, Number(month), 0).getUTCDate();
+  }
+
+  function getMonthEvents(events, year, month) {
+    let items = events.filter(event => event.year === year && event.month === month);
+    if (currentFilter !== 'all') items = items.filter(event => event.kind === currentFilter);
+    return items.sort((a,b) => a.day - b.day || a.start.getTime() - b.start.getTime());
+  }
+
+  function renderCalendarGrid(events, now = new Date()) {
+    if (!calendarGridEl) return;
+    const todayParts = vnParts(now);
+    const first = calendarUTCDate(calendarViewYear, calendarViewMonth - 1, 1);
+    const mondayIndex = (first.getUTCDay() + 6) % 7;
+    const totalDays = monthDays(calendarViewYear, calendarViewMonth);
+    const prevMonth = calendarViewMonth === 1 ? 12 : calendarViewMonth - 1;
+    const prevYear = calendarViewMonth === 1 ? calendarViewYear - 1 : calendarViewYear;
+    const prevDays = monthDays(prevYear, prevMonth);
+    const eventMap = new Map();
+
+    events.forEach(event => {
+      const key = event.iso;
+      if (!eventMap.has(key)) eventMap.set(key, []);
+      eventMap.get(key).push(event);
+    });
+
+    const cells = [];
+    for (let i = 0; i < 42; i++) {
+      let day = i - mondayIndex + 1;
+      let year = calendarViewYear;
+      let month = calendarViewMonth;
+      let muted = false;
+
+      if (day < 1) {
+        day = prevDays + day;
+        month = prevMonth;
+        year = prevYear;
+        muted = true;
+      } else if (day > totalDays) {
+        day -= totalDays;
+        month = calendarViewMonth === 12 ? 1 : calendarViewMonth + 1;
+        year = calendarViewMonth === 12 ? calendarViewYear + 1 : calendarViewYear;
+        muted = true;
+      }
+
+      const key = isoKey(year, month, day);
+      const dayEvents = eventMap.get(key) || [];
+      const isToday = year === todayParts.year && month === todayParts.month && day === todayParts.day;
+      const isSelected = key === calendarSelectedISO;
+      const classes = ['vn-calendar-day'];
+      if (muted) classes.push('is-muted');
+      if (isToday) classes.push('is-today');
+      if (isSelected) classes.push('is-selected');
+      if (dayEvents.length) classes.push('has-event');
+
+      const dots = dayEvents.slice(0,3).map(event => `<span class="vn-calendar-day-dot kind-${escapeHTML(event.kind)}"></span>`).join('');
+      cells.push(`<button type="button" class="${classes.join(' ')}" data-calendar-date="${key}" aria-label="${day}/${month}/${year}${dayEvents.length ? ` · ${dayEvents.length} sự kiện` : ''}">
+        <span class="vn-calendar-day-number">${day}</span>
+        <span class="vn-calendar-day-dots">${dots}</span>
+      </button>`);
+    }
+
+    calendarGridEl.innerHTML = cells.join('');
+
+    if (calendarMonthEl) calendarMonthEl.value = String(calendarViewMonth);
+    if (calendarYearEl) calendarYearEl.value = String(calendarViewYear);
+    if (yearLabelEl) yearLabelEl.textContent = String(calendarViewYear);
+  }
+
+  function renderCalendarMonthList(now = new Date()) {
+    const events = getMonthEvents(calendarViewEvents, calendarViewYear, calendarViewMonth);
+    if (listCountEl) listCountEl.textContent = String(events.length);
+    if (yearLabelEl) yearLabelEl.textContent = String(calendarViewYear);
+
+    if (!events.length) {
+      listEl.innerHTML = '<div class="vn-calendar-empty">Không có sự kiện trong tháng này.</div>';
+      return;
+    }
+
+    listEl.innerHTML = events.map(event => {
+      const status = eventStatus(event, now);
+      const right = status === 'ongoing'
+        ? '<span class="vn-calendar-live">đang diễn ra</span>'
+        : status === 'upcoming'
+          ? `còn ${Math.max(0, Math.ceil((event.start.getTime() - now.getTime()) / 86400000))} ngày`
+          : 'đã qua';
+      return `<div class="vn-calendar-event ${status} kind-${escapeHTML(event.kind)}" data-event-id="${escapeHTML(event.id)}" data-event-iso="${escapeHTML(event.iso)}" tabindex="0" role="button" aria-label="Xem chi tiết ${escapeHTML(event.title)}">
+        <div class="vn-calendar-event-icon" aria-hidden="true">${escapeHTML(event.icon)}</div>
+        <div class="vn-calendar-event-date">${pad2(event.day)}/${pad2(event.month)}</div>
+        <div class="vn-calendar-event-info">
+          <p class="vn-calendar-event-name">${escapeHTML(event.title)}</p>
+          <p class="vn-calendar-event-meta">${formatMeta(event)}</p>
+        </div>
+        <div class="vn-calendar-event-left">${right}</div>
+      </div>`;
+    }).join('');
+  }
+
+  async function renderCalendarView(now = new Date()) {
+    const events = await getEventsForYear(calendarViewYear);
+    calendarViewEvents = events;
+    renderCalendarGrid(events, now);
+    renderCalendarMonthList(now);
+  }
+
+  function shiftCalendarMonth(delta) {
+    let month = calendarViewMonth + delta;
+    let year = calendarViewYear;
+    while (month < 1) { month += 12; year--; }
+    while (month > 12) { month -= 12; year++; }
+    if (!isValidCalendarYear(year)) return;
+    calendarViewYear = year;
+    calendarViewMonth = month;
+    calendarSelectedISO = isoKey(year, month, 1);
+    renderCalendarView(new Date());
+  }
+
+  function selectCalendarDay(iso) {
+    const selectedParts = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso);
+    if (!selectedParts) return;
+    const clickedMonth = Number(selectedParts[1]);
+    const clickedYear = Number(iso.slice(0,4));
+
+    if (clickedYear !== calendarViewYear || clickedMonth !== calendarViewMonth) {
+      calendarViewYear = clickedYear;
+      calendarViewMonth = clickedMonth;
+    }
+
+    calendarSelectedISO = iso;
+    if (calendarGridEl) {
+      calendarGridEl.querySelectorAll('.vn-calendar-day').forEach(day => {
+        day.classList.toggle('is-selected', day.dataset.calendarDate === iso);
+      });
+    }
+    const items = calendarViewEvents.filter(event => event.iso === iso && (currentFilter === 'all' || event.kind === currentFilter));
+    if (items.length && listEl) {
+      const firstItem = listEl.querySelector(`[data-event-id="${CSS.escape(items[0].id)}"]`);
+      if (firstItem) {
+        firstItem.scrollIntoView({behavior:'smooth',block:'nearest'});
+        firstItem.classList.add('vn-calendar-event-pulse');
+        setTimeout(() => firstItem.classList.remove('vn-calendar-event-pulse'), 450);
+      }
+    }
+  }
+
+  function setCalendarDate(year, month, keepDay = true) {
+    year = Number(year);
+    month = Number(month);
+    if (!isValidCalendarYear(year) || month < 1 || month > 12) return;
+    calendarViewYear = year;
+    calendarViewMonth = month;
+    const maxDay = monthDays(year, month);
+    const currentDay = keepDay ? Number(calendarSelectedISO.slice(8,10)) : 1;
+    const day = Math.min(Math.max(1, currentDay), maxDay);
+    calendarSelectedISO = isoKey(year, month, day);
+    renderCalendarView(new Date());
+  }
+
+    function setCountdown(target, now) {
     const value = countdown(target, now);
     const days = document.getElementById('vn-days');
     const hours = document.getElementById('vn-hours');
@@ -3001,6 +3213,7 @@ drawIdleWaveform();
 
   function resetDetail() {
     selectedEvent = null;
+    if (nextCard) nextCard.classList.remove('detail-hidden');
     if (!detail) return;
     detail.classList.remove('open');
     detail.setAttribute('aria-hidden', 'true');
@@ -3054,6 +3267,8 @@ drawIdleWaveform();
     if (!detail || !event) return;
     selectedEvent = event;
     applyKindClass(nextCard, event.kind);
+    applyKindClass(detail, event.kind);
+    nextCard.classList.add('detail-hidden');
 
     if (detailTitle) detailTitle.textContent = `${event.icon} ${event.title}`;
     if (detailMeta) detailMeta.innerHTML = formatMeta(event);
@@ -3109,33 +3324,6 @@ drawIdleWaveform();
     if (status !== 'ongoing') setCountdown(next.start, now);
   }
 
-  function renderList(now) {
-    const events = visibleEvents(now);
-    if (listCountEl) listCountEl.textContent = String(events.length);
-    if (yearLabelEl) yearLabelEl.textContent = String(events[0]?.year || vnYear(now));
-
-    if (!events.length) {
-      listEl.innerHTML = '<div class="vn-calendar-empty">Không có sự kiện phù hợp trong khoảng thời gian này.</div>';
-      return;
-    }
-
-    listEl.innerHTML = events.map(event => {
-      const status = eventStatus(event, now);
-      const right = status === 'ongoing'
-        ? '<span class="vn-calendar-live">đang diễn ra</span>'
-        : `còn ${Math.max(0, Math.ceil((event.start.getTime() - now.getTime()) / 86400000))} ngày`;
-      return `<div class="vn-calendar-event ${status} kind-${escapeHTML(event.kind)}" data-event-id="${escapeHTML(event.id)}" tabindex="0" role="button" aria-label="Xem chi tiết ${escapeHTML(event.title)}">
-        <div class="vn-calendar-event-icon" aria-hidden="true">${escapeHTML(event.icon)}</div>
-        <div class="vn-calendar-event-date">${pad2(event.day)}/${pad2(event.month)}</div>
-        <div class="vn-calendar-event-info">
-          <p class="vn-calendar-event-name">${escapeHTML(event.title)}</p>
-          <p class="vn-calendar-event-meta">${formatMeta(event)}</p>
-        </div>
-        <div class="vn-calendar-event-left">${right}</div>
-      </div>`;
-    }).join('');
-  }
-
   function updateSubtitle() {
     if (subEl) subEl.textContent = currentFilter === 'all'
       ? 'Lịch dương + âm · UTC+7'
@@ -3144,16 +3332,10 @@ drawIdleWaveform();
 
   let lastRenderedListDay = '';
 
-  function render(now = new Date(), forceList = true) {
-    removeEnded(now);
+  function render(now = new Date()) {
     updateSubtitle();
     renderNext(now);
-    const parts = vnParts(now);
-    const dayKey = `${parts.year}-${parts.month}-${parts.day}`;
-    if (forceList || dayKey !== lastRenderedListDay) {
-      lastRenderedListDay = dayKey;
-      renderList(now);
-    }
+    renderCalendarView(now);
   }
 
   // Cho phép taskbar gọi render lại ngay khi chuyển sang khung Lịch.
@@ -3164,7 +3346,7 @@ drawIdleWaveform();
       currentFilter = filterEl.value || 'all';
       lastNextId = null;
       lastNextStatus = null;
-      render();
+      render(new Date());
     });
   }
 
@@ -3173,7 +3355,7 @@ drawIdleWaveform();
       const item = event.target.closest('.vn-calendar-event');
       if (!item) return;
       const id = item.getAttribute('data-event-id');
-      const selected = resolvedEvents.find(e => e.id === id);
+      const selected = calendarViewEvents.find(e => e.id === id);
       if (selected) openDetail(selected);
     });
 
@@ -3183,12 +3365,46 @@ drawIdleWaveform();
       if (!item) return;
       event.preventDefault();
       const id = item.getAttribute('data-event-id');
-      const selected = resolvedEvents.find(e => e.id === id);
+      const selected = calendarViewEvents.find(e => e.id === id);
       if (selected) openDetail(selected);
     });
   }
 
-  if (detailCloseBtn) {
+  if (calendarPrevBtn) calendarPrevBtn.addEventListener('click', () => shiftCalendarMonth(-1));
+  if (calendarNextBtn) calendarNextBtn.addEventListener('click', () => shiftCalendarMonth(1));
+  if (calendarTodayBtn) calendarTodayBtn.addEventListener('click', () => {
+    const today = vnParts(new Date());
+    calendarViewYear = today.year;
+    calendarViewMonth = today.month;
+    calendarSelectedISO = isoKey(today.year, today.month, today.day);
+    renderCalendarView(new Date());
+  });
+  if (calendarMonthEl) calendarMonthEl.addEventListener('change', () => {
+    setCalendarDate(calendarViewYear, Number(calendarMonthEl.value), false);
+  });
+  if (calendarYearEl) {
+    const applyTypedYear = () => {
+      const value = Number(calendarYearEl.value);
+      if (!isValidCalendarYear(value)) {
+        calendarYearEl.value = String(calendarViewYear);
+        return;
+      }
+      setCalendarDate(value, calendarViewMonth, false);
+    };
+    calendarYearEl.addEventListener('change', applyTypedYear);
+    calendarYearEl.addEventListener('keydown', event => {
+      if (event.key === 'Enter') { event.preventDefault(); applyTypedYear(); calendarYearEl.blur(); }
+    });
+  }
+  if (calendarGridEl) {
+    calendarGridEl.addEventListener('click', event => {
+      const day = event.target.closest('.vn-calendar-day');
+      if (!day) return;
+      selectCalendarDay(day.dataset.calendarDate);
+    });
+  }
+
+    if (detailCloseBtn) {
     detailCloseBtn.addEventListener('click', event => {
       event.stopPropagation();
       resetDetail();
@@ -3244,8 +3460,7 @@ drawIdleWaveform();
 
     if (dayKey !== lastDayKey) {
       lastDayKey = dayKey;
-      removeEnded(now);
-      renderList(now);
+      renderCalendarView(now);
     }
 
     if (syncEl) syncEl.textContent = 'Cập nhật theo thời gian thực (UTC+7)';
