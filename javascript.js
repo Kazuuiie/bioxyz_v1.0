@@ -119,7 +119,7 @@ function renderCategoryFilters() {
 if (albumCover && bioConfig.avatar) {
   albumCover.src = bioConfig.avatar;
 }
-(function initTerminalDimensions() {
+(function initTerminalSize() {
   const terminalPath = document.getElementById('terminal-path');
   const card = document.querySelector('.card');
 
@@ -147,17 +147,13 @@ if (albumCover && bioConfig.avatar) {
     return 'bio';
   }
 
-  function updateTerminalDimensions() {
+  function updateTerminalSize() {
     const frame = getActiveFrame();
     if (!frame) return;
 
     const rect = frame.getBoundingClientRect();
 
-    /*
-     * Quy đổi pixel -> kích thước terminal giả lập.
-     * 1 ký tự ngang ~ 8px
-     * 1 dòng dọc ~ 16px
-     */
+    // Pixel -> kích thước terminal giả lập
     const cols = Math.max(20, Math.round(rect.width / 8));
     const rows = Math.max(12, Math.round(rect.height / 16));
 
@@ -167,32 +163,30 @@ if (albumCover && bioConfig.avatar) {
       `${name}@terminal — ${cols}x${rows}`;
   }
 
-  updateTerminalDimensions();
+  // lần đầu
+  updateTerminalSize();
 
+  // khi kích thước card thay đổi
   const observer = new ResizeObserver(() => {
-    requestAnimationFrame(updateTerminalDimensions);
+    requestAnimationFrame(updateTerminalSize);
   });
 
   observer.observe(card);
 
-  window.addEventListener('resize', updateTerminalDimensions);
+  // khi resize browser
+  window.addEventListener('resize', updateTerminalSize);
 
-  /*
-   * Khi đổi Home / Calendar / Social
-   */
+  // khi chuyển Home / Calendar / Social
   document.querySelectorAll('.taskbar-item').forEach(button => {
     button.addEventListener('click', () => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(updateTerminalDimensions);
+        requestAnimationFrame(updateTerminalSize);
       });
     });
   });
 
-  /*
-   * Cho các script khác gọi khi cần
-   */
-  window.__updateTerminalDimensions =
-    updateTerminalDimensions;
+  // Cho code khác gọi lại khi cần
+  window.__updateTerminalSize = updateTerminalSize;
 })();
 /* ============ MUSIC ============ */
 
