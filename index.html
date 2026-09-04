@@ -1863,17 +1863,13 @@ footer#footer-bar:hover .foot-hint svg{
   transform:rotate(180deg);
 }
 
-/* ===== SHARED FRAME TERMINAL FOOTERS ===== */
-.frame-terminal-footer{
+/* ===== FRAME TERMINAL FOOTERS — same master style as Home ===== */
+.frame-footer-bar{
   display:flex;
   align-items:center;
   gap:10px;
   text-align:left;
   margin-top:14px;
-  margin-left:-30px;
-  margin-right:-30px;
-  width:calc(100% + 60px);
-  box-sizing:border-box;
   padding:12px 18px;
   background:var(--paper-dim);
   background-image:var(--texture);
@@ -1883,32 +1879,44 @@ footer#footer-bar:hover .foot-hint svg{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
   color:var(--ink-soft);
-  cursor:default;
+  margin-left:-30px;
+  margin-right:-30px;
+  width:calc(100% + 60px);
+  cursor:pointer;
   transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,border-color .25s ease;
 }
-.frame-terminal-footer:hover{
+.frame-footer-bar:hover{
   transform:translateY(-3px);
   border-color:rgba(207,100,120,.35);
   box-shadow:0 24px 44px -20px rgba(74,51,54,.4);
 }
-.frame-terminal-footer:active{
-  transform:translateY(-1px) scale(.995);
+.frame-footer-bar:active{transform:translateY(-1px) scale(.995);}
+.frame-footer-bar:focus-visible{outline:2px solid var(--raspberry);outline-offset:2px;}
+.frame-footer-bar .foot-dots{display:flex;gap:6px;flex-shrink:0;}
+.frame-footer-bar .foot-dots .dot{
+  width:11px;height:11px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12);
 }
-.frame-terminal-footer .foot-text::before{content:"$";flex-shrink:0;color:var(--raspberry);opacity:.85}
-.frame-terminal-footer .foot-static{
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-weight:600;
+.frame-footer-bar .foot-dots .dot.r{background:var(--raspberry)}
+.frame-footer-bar .foot-dots .dot.y{background:var(--mustard)}
+.frame-footer-bar .foot-dots .dot.g{background:var(--sage)}
+.frame-footer-bar .foot-text{
+  flex:1;min-width:0;display:flex;align-items:baseline;gap:6px;
+  white-space:nowrap;overflow:hidden;
 }
-.frame-terminal-footer .foot-hint{margin-left:auto;color:var(--ink-soft)}
-.terminal-footer-arrow{display:inline-block;font-size:12px;line-height:1;transition:transform .25s ease,color .25s ease}
-.frame-terminal-footer:hover .terminal-footer-arrow{transform:translate(2px,-2px);color:var(--raspberry)}
+.frame-footer-bar .foot-text::before{content:"$";flex-shrink:0;color:var(--raspberry);opacity:.8;}
+.frame-footer-bar .foot-typed{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+.frame-footer-bar .foot-cursor{display:inline-block;width:6px;margin-left:1px;color:var(--raspberry);animation:foot-cursor-blink 1s step-end infinite;}
+.frame-footer-bar .foot-hint{
+  flex-shrink:0;display:flex;align-items:center;gap:5px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.04em;
+  color:var(--ink-soft);opacity:.75;
+}
+.frame-footer-bar .foot-hint svg{width:11px;height:11px;flex-shrink:0;transition:transform .35s ease;}
+.frame-footer-bar:hover .foot-hint{opacity:1;color:var(--raspberry);}
+.frame-footer-bar:hover .foot-hint svg{transform:rotate(180deg);}
 @media(max-width:640px){
-  .frame-terminal-footer{
-    margin-left:-16px;
-    margin-right:-16px;
-    width:calc(100% + 32px);
-    padding:10px 13px;
-    font-size:10px;
-  }
+  .frame-footer-bar{margin-left:-14px;margin-right:-14px;width:calc(100% + 28px);}
 }
 
 /* ===== SOCIAL FRAME ===== */
@@ -1919,13 +1927,6 @@ footer#footer-bar:hover .foot-hint svg{
   letter-spacing:.08em;
   color:var(--ink-soft);
   margin:2px 0 16px;
-}
-.social-intro::before{
-  content:"$ ls ./social";
-  display:block;
-  color:var(--raspberry);
-  margin-bottom:4px;
-  opacity:.8;
 }
 .social-grid{
   display:flex;
@@ -1992,20 +1993,13 @@ footer#footer-bar:hover .foot-hint svg{
 /* ===== CALENDAR FRAME (embedded, redesigned) ===== */
 .cal-frame-intro{
   text-align:center;
-  margin:2px 0 16px;
+  margin:2px 0 10px;
 }
 .cal-frame-eyebrow{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
   letter-spacing:.08em;
   color:var(--ink-soft);
-}
-.cal-frame-eyebrow::before{
-  content:"$ cat lich_su_kien.log";
-  display:block;
-  color:var(--raspberry);
-  margin-bottom:4px;
-  opacity:.8;
 }
 
 .vn-calendar-panel{
@@ -3377,26 +3371,27 @@ social: [
 </div>
 </div>
 
-</div>
-<footer class="frame-terminal-footer calendar-terminal-footer reveal" aria-label="Calendar terminal">
-<span aria-hidden="true" class="dots foot-dots">
-<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-</span>
-<span class="foot-text"><span class="foot-static">cal --view</span><span class="foot-cursor" aria-hidden="true">▌</span></span>
-<span class="foot-hint">calendar <span class="terminal-footer-arrow">↗</span></span>
+<footer aria-label="Nhấn để chạy lệnh terminal" class="frame-footer-bar" role="button" tabindex="0">
+  <span aria-hidden="true" class="dots foot-dots">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+  </span>
+  <span class="foot-text"><span class="foot-typed">cal --view</span><span class="foot-cursor">▌</span></span>
+  <span aria-hidden="true" class="foot-hint">calendar ↗</span>
 </footer>
+
+</div>
 <!-- ===================== /FRAME: CALENDAR ===================== -->
 
 <!-- ===================== FRAME: SOCIAL ===================== -->
 <div class="frame frame-social" data-frame="social" id="frame-social">
 <p class="social-intro">tìm mình ở đây</p>
 <div class="social-grid" id="social-grid"></div>
-<footer class="frame-terminal-footer social-terminal-footer reveal" aria-label="Social terminal">
-<span aria-hidden="true" class="dots foot-dots">
-<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-</span>
-<span class="foot-text"><span class="foot-static">ls ./social</span><span class="foot-cursor" aria-hidden="true">▌</span></span>
-<span class="foot-hint">social <span class="terminal-footer-arrow">↗</span></span>
+<footer aria-label="Nhấn để chạy lệnh terminal" class="frame-footer-bar" role="button" tabindex="0">
+  <span aria-hidden="true" class="dots foot-dots">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+  </span>
+  <span class="foot-text"><span class="foot-typed">ls ./social</span><span class="foot-cursor">▌</span></span>
+  <span aria-hidden="true" class="foot-hint">social ↗</span>
 </footer>
 </div>
 <!-- ===================== /FRAME: SOCIAL ===================== -->
