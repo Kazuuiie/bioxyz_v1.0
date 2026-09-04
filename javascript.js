@@ -119,7 +119,81 @@ function renderCategoryFilters() {
 if (albumCover && bioConfig.avatar) {
   albumCover.src = bioConfig.avatar;
 }
+(function initTerminalDimensions() {
+  const terminalPath = document.getElementById('terminal-path');
+  const card = document.querySelector('.card');
 
+  if (!terminalPath || !card) return;
+
+  function getActiveFrame() {
+    return document.querySelector('.frame.active');
+  }
+
+  function getTerminalName(frame) {
+    if (!frame) return 'bio';
+
+    if (frame.classList.contains('frame-home')) {
+      return 'bio';
+    }
+
+    if (frame.classList.contains('frame-calendar')) {
+      return 'cal';
+    }
+
+    if (frame.classList.contains('frame-social')) {
+      return 'social';
+    }
+
+    return 'bio';
+  }
+
+  function updateTerminalDimensions() {
+    const frame = getActiveFrame();
+    if (!frame) return;
+
+    const rect = frame.getBoundingClientRect();
+
+    /*
+     * Quy đổi pixel -> kích thước terminal giả lập.
+     * 1 ký tự ngang ~ 8px
+     * 1 dòng dọc ~ 16px
+     */
+    const cols = Math.max(20, Math.round(rect.width / 8));
+    const rows = Math.max(12, Math.round(rect.height / 16));
+
+    const name = getTerminalName(frame);
+
+    terminalPath.textContent =
+      `${name}@terminal — ${cols}x${rows}`;
+  }
+
+  updateTerminalDimensions();
+
+  const observer = new ResizeObserver(() => {
+    requestAnimationFrame(updateTerminalDimensions);
+  });
+
+  observer.observe(card);
+
+  window.addEventListener('resize', updateTerminalDimensions);
+
+  /*
+   * Khi đổi Home / Calendar / Social
+   */
+  document.querySelectorAll('.taskbar-item').forEach(button => {
+    button.addEventListener('click', () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(updateTerminalDimensions);
+      });
+    });
+  });
+
+  /*
+   * Cho các script khác gọi khi cần
+   */
+  window.__updateTerminalDimensions =
+    updateTerminalDimensions;
+})();
 /* ============ MUSIC ============ */
 
 const tracks =
