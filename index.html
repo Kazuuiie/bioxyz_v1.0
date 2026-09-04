@@ -24,6 +24,14 @@
     radial-gradient(circle at 12% -6%,rgba(255,255,255,0.35),transparent 52%),
     radial-gradient(circle at 100% 108%,rgba(207,100,120,0.07),transparent 58%),
     radial-gradient(circle at 90% 0%,rgba(226,168,92,0.06),transparent 46%);
+    --cal-bg: rgba(10, 12, 18, 0.55);
+    --cal-header-bg: rgba(10, 12, 18, 0.35);
+    --cal-day-bg: rgba(255, 255, 255, 0.025);
+    --cal-day-hover: rgba(255, 255, 255, 0.07);
+    --cal-day-active: rgba(255, 255, 255, 0.10);
+    --cal-event-bg: rgba(255, 255, 255, 0.035);
+    --cal-next-bg: rgba(10, 12, 18, 0.48);
+    --cal-detail-bg: rgba(10, 12, 18, 0.48);
 }
 
 *{box-sizing:border-box}
@@ -1959,7 +1967,7 @@ footer#footer-bar:hover .foot-hint svg{
   width:100%;
   border-radius:18px;
   overflow:hidden;
-  background-color:var(--paper-dim);
+  background-color:var(--cal-bg);
   background-image:var(--texture);
   border:1px solid var(--line);
   box-shadow:var(--shadow);
