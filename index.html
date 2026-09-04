@@ -40,7 +40,7 @@ html,body{max-width:100%;overflow-x:hidden}
 body{
   margin:0;
   min-height:100vh;
-  font-family:'DM Sans','Segoe UI Emoji','Noto Color Emoji','Apple Color Emoji',sans-serif;
+  font-family:'DM Sans',sans-serif;
   color:var(--ink);
   background:var(--bg-a);
   user-select:none;
@@ -2300,7 +2300,6 @@ footer#footer-bar:hover .foot-hint svg{
 }
 .vn-calendar-filter{
   appearance:none;-webkit-appearance:none;cursor:pointer;
-  font-family:'Segoe UI Emoji','Noto Color Emoji','Apple Color Emoji','DM Sans',sans-serif;
   padding:5px 26px 5px 12px;border-radius:999px;
   border:1px solid rgba(74,51,54,.14);
   color:var(--ink);background:
@@ -2312,6 +2311,21 @@ footer#footer-bar:hover .foot-hint svg{
 }
 .vn-calendar-filter:hover{border-color:rgba(207,100,120,.35);background-color:rgba(207,100,120,.08)}
 .vn-calendar-filter option{background:#fbe7cf;color:var(--ink)}
+
+.vn-filter-flag{
+  display:none;
+  width:22px;
+  height:15px;
+  flex:0 0 22px;
+  border-radius:3px;
+  background-color:#da251d;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='30' viewBox='0 0 44 30'%3E%3Crect width='44' height='30' fill='%23da251d'/%3E%3Cpath fill='%23ff0' d='m22 5.3 2.25 6.93h7.28l-5.89 4.28 2.25 6.93L22 19.16l-5.89 4.28 2.25-6.93-5.89-4.28h7.28z'/%3E%3C/svg%3E");
+  background-size:cover;
+  background-position:center;
+  box-shadow:inset 0 0 0 1px rgba(74,51,54,.12),0 1px 3px rgba(74,51,54,.12);
+}
+.vn-filter-flag.is-vn{display:block}
+
 /* =========================================================
    EVENT LIST
 ========================================================= */
@@ -3326,13 +3340,14 @@ social: [
 <span id="vn-calendar-section-label"><strong id="vn-calendar-list-count">0</strong> · SỰ KIỆN TRONG THÁNG</span>
 <span class="vn-calendar-list-controls">
 <span id="vn-calendar-year-label">2026</span>
+<span aria-hidden="true" class="vn-filter-flag" id="vn-filter-flag"></span>
 <select aria-label="Lọc loại sự kiện" class="vn-calendar-filter" id="vn-calendar-filter">
 <option value="all">Tất cả</option>
-<option value="official">&#x1F1FB;&#x1F1F3; Chính thức</option>
-<option value="lunar">🌙 Âm lịch</option>
-<option value="international">🌐 Quốc tế</option>
-<option value="vietnam">&#x1F1FB;&#x1F1F3; Việt Nam</option>
-<option value="special">⭐ Đặc biệt</option>
+<option value="official">Chính thức</option>
+<option value="lunar">Âm lịch</option>
+<option value="international">Quốc tế</option>
+<option value="vietnam">Việt Nam</option>
+<option value="special">Đặc biệt</option>
 </select>
 </span>
 </div>
@@ -3494,6 +3509,21 @@ social: [
 
 </div>
 <div aria-hidden="true" id="global-tooltip"></div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('vn-calendar-filter');
+  const flag = document.getElementById('vn-filter-flag');
+  if (!select || !flag) return;
+
+  const syncVNFlag = () => {
+    const isVN = select.value === 'official' || select.value === 'vietnam';
+    flag.classList.toggle('is-vn', isVN);
+  };
+
+  syncVNFlag();
+  select.addEventListener('change', syncVNFlag);
+});
+</script>
 <script src="javascript.js" defer></script>
 </body>
 </html>
