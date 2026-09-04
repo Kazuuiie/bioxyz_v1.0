@@ -3170,6 +3170,13 @@ drawIdleWaveform();
     if (yearLabelEl) yearLabelEl.textContent = String(calendarViewYear);
   }
 
+  function renderEventIcon(event) {
+    if (event?.id === 'giai-phong-mien-nam') {
+      return '<span class=\"vn-flag-icon\" aria-label=\"Cờ Việt Nam\"></span>';
+    }
+    return escapeHTML(event?.icon || '');
+  }
+
   function renderCalendarMonthList(now = new Date()) {
     const events = getMonthEvents(calendarViewEvents, calendarViewYear, calendarViewMonth);
     if (listCountEl) listCountEl.textContent = String(events.length);
@@ -3188,7 +3195,7 @@ drawIdleWaveform();
           ? `còn ${Math.max(0, Math.ceil((event.start.getTime() - now.getTime()) / 86400000))} ngày`
           : 'đã qua';
       return `<div class="vn-calendar-event ${status} kind-${escapeHTML(event.kind)}" data-event-id="${escapeHTML(event.id)}" data-event-iso="${escapeHTML(event.iso)}" tabindex="0" role="button" aria-label="Xem chi tiết ${escapeHTML(event.title)}">
-        <div class="vn-calendar-event-icon" aria-hidden="true">${escapeHTML(event.icon)}</div>
+        <div class="vn-calendar-event-icon" aria-hidden="true">${renderEventIcon(event)}</div>
         <div class="vn-calendar-event-date">${pad2(event.day)}/${pad2(event.month)}</div>
         <div class="vn-calendar-event-info">
           <p class="vn-calendar-event-name">${escapeHTML(event.title)}</p>
@@ -3310,7 +3317,7 @@ drawIdleWaveform();
     const event = selectedEvent;
     const status = eventStatus(event, now);
 
-    if (detailTitle) detailTitle.textContent = `${event.icon} ${event.title}`;
+    if (detailTitle) detailTitle.innerHTML = `${renderEventIcon(event)} <span>${escapeHTML(event.title)}</span>`;
     if (detailMeta) detailMeta.innerHTML = formatMeta(event);
     if (detailType) {
       detailType.textContent = detailTypeLabel(event);
@@ -3339,7 +3346,7 @@ drawIdleWaveform();
     applyKindClass(detail, event.kind);
     nextCard.classList.add('detail-hidden');
 
-    if (detailTitle) detailTitle.textContent = `${event.icon} ${event.title}`;
+    if (detailTitle) detailTitle.innerHTML = `${renderEventIcon(event)} <span>${escapeHTML(event.title)}</span>`;
     if (detailMeta) detailMeta.innerHTML = formatMeta(event);
     if (detailType) {
       detailType.textContent = detailTypeLabel(event);
@@ -3381,7 +3388,7 @@ drawIdleWaveform();
 
     if (idOrStatusChanged) {
       applyKindClass(nextCard, next.kind);
-      if (nextIconEl) nextIconEl.textContent = next.icon;
+      if (nextIconEl) nextIconEl.innerHTML = renderEventIcon(next);
       nextName.textContent = next.title;
       nextDates.innerHTML = formatMeta(next);
       nextCard.classList.toggle('is-ongoing', status === 'ongoing');
