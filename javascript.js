@@ -2840,7 +2840,8 @@ drawIdleWaveform();
     { id:'tet-duong-lich', title:'Tết Dương lịch', icon:'🎆', kind:'official', solar:{day:1,month:1} },
     { id:'thanh-lap-dang', title:'Ngày thành lập Đảng Cộng sản Việt Nam', icon:'🚩', kind:'official', solar:{day:3,month:2} },
     { id:'hung-vuong', title:'Giỗ Tổ Hùng Vương', icon:'⛩️', kind:'official', lunar:{day:10,month:3,leap:false}, lunarLabel:'10/03 Âm lịch' },
-    { id:'giai-phong-mien-nam', title:'Ngày Chiến thắng 30/4', icon:'🕊️', kind:'official', solar:{day:30,month:4} },
+    { id:'giai-phong-mien-nam', title:'Ngày Giải phóng Miền Nam, thống nhất đất nước', icon:'\uD83C\uDDFB\uD83C\uDDF3', kind:'official', solar:{day:30,month:4} },
+    { id:'quoc-te-lao-dong', title:'Quốc Tế Lao Động', icon:'🛠️',kind:'official', solar:{day:1,month:5} },
     { id:'quoc-khanh', title:'Quốc Khánh Việt Nam', icon:'🎇', kind:'official', solar:{day:2,month:9} },
     { id:'thuong-binh-liet-si', title:'Ngày Thương binh - Liệt sĩ', icon:'🕯️', kind:'official', solar:{day:27,month:7} },
 
